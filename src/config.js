@@ -1,4 +1,4 @@
-const CONTRACT_NAME = process.env.CONTRACT_NAME ||'pluminite-ui'
+const CONTRACT_NAME = process.env.CONTRACT_NAME ||'pluminite.one.testnet'
 
 function getConfig(env) {
   switch (env) {

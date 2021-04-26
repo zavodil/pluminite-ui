@@ -1,7 +1,7 @@
 // This file does two things:
 //
-// 1. Compile the Rust contract using cargo (see buildCmd below). This will
-//    create a wasm file in the 'build' folder.
+// 1. Compile the AssemblyScript contract using the scripts in package.json
+//    (see buildCmd below). This will create a wasm file in the 'build' folder.
 // 2. Create a symbolic link (symlink) to the generated wasm file in the root
 //    project's `out` folder, for easy use with near-cli.
 //
@@ -17,20 +17,17 @@ const path = require('path')
 const calledFromDir = sh.pwd().toString()
 
 // For the duration of this script, we want to operate from within the
-// Rust project's folder. Let's change into that directory.
+// AssemblyScript project's folder. Let's change into that directory.
 sh.cd(__dirname)
-
-// You can call this script with `node compile.js` or `node compile.js
-// --debug`. Let's set a variable to track whether `--debug` was used.
-const debug = process.argv.pop() === '--debug'
 
 // You can call this script with `node compile.js` or `node compile.js --debug`.
 // Let's set a variable to track whether `--debug` was used.
-// Note: see other flags in ./cargo/config. Unfortunately, you cannot set the
-// `--target option` in Cargo.toml.
+const debug = process.argv.pop() === '--debug'
+
+// Use the correct build command based on the `--debug` flag
 const buildCmd = debug
-  ? 'cargo build --target wasm32-unknown-unknown'
-  : 'cargo build --target wasm32-unknown-unknown --release'
+  ? 'npm run build:debug'
+  : 'npm run build'
 
 // Execute the build command, storing exit code for later use
 const { code } = sh.exec(buildCmd)
@@ -42,12 +39,11 @@ const { code } = sh.exec(buildCmd)
 if (code === 0 && calledFromDir !== __dirname) {
   const linkDir = `${calledFromDir}/out`
   const link = `${calledFromDir}/out/main.wasm`
-  const packageName = require('fs').readFileSync(`${__dirname}/Cargo.toml`).toString().match(/name = "([^"]+)"/)[1]
-  const outFile = `./target/wasm32-unknown-unknown/${debug ? 'debug' : 'release'}/${packageName}.wasm`
+  const packageName = require(`${__dirname}/package.json`).name
+  const outFile = `./build/${debug ? 'debug' : 'release'}/${packageName}.wasm`
   sh.mkdir('-p', linkDir)
   sh.rm('-f', link)
   const linkPath = path.relative(linkDir, outFile)
-
   sh.ln('-s', linkPath, link)
 }
 

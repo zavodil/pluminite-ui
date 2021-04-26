@@ -1,27 +1,26 @@
-pluminite-ui Smart Contract
+pluminite Smart Contract
 ==================
 
-A [smart contract] written in [Rust] for an app initialized with [create-near-app]
+A [smart contract] written in [AssemblyScript] for an app initialized with [create-near-app]
 
 
 Quick Start
 ===========
 
-Before you compile this code, you will need to install Rust with [correct target]
+Before you compile this code, you will need to install [Node.js] ≥ 12
 
 
 Exploring The Code
 ==================
 
-1. The main smart contract code lives in `src/lib.rs`. You can compile it with
-   the `./compile` script.
+1. The main smart contract code lives in `assembly/index.ts`. You can compile
+   it with the `./compile` script.
 2. Tests: You can run smart contract tests with the `./test` script. This runs
-   standard Rust tests using [cargo] with a `--nocapture` flag so that you
-   can see any debug info you print to the console.
+   standard AssemblyScript tests using [as-pect].
 
 
   [smart contract]: https://docs.near.org/docs/roles/developer/contracts/intro
-  [Rust]: https://www.rust-lang.org/
+  [AssemblyScript]: https://www.assemblyscript.org/
   [create-near-app]: https://github.com/near/create-near-app
-  [correct target]: https://github.com/near/near-sdk-rs#pre-requisites
-  [cargo]: https://doc.rust-lang.org/book/ch01-03-hello-cargo.html
+  [Node.js]: https://nodejs.org/en/download/package-manager/
+  [as-pect]: https://www.npmjs.com/package/@as-pect/cli
