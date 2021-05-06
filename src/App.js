@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-    HashRouter as Router,
+    BrowserRouter as Router,
     Switch,
     Route
 } from 'react-router-dom'
@@ -11,7 +11,7 @@ import SignUp from './components/SignUp'
 export default function App() {
     return (
         <div className='app'>
-            <Router>
+            <Router basename={process.env.PUBLIC_URL}>
                 <Navigation/>
                     <Switch>
                       <Route exact path="/" component={Home}/>
