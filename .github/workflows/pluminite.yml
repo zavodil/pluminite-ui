@@ -26,14 +26,12 @@ jobs:
       - run: rustup target add wasm32-unknown-unknown
       - run: yarn install --frozen-lockfile
       - run: yarn build:contract
-      - run: cd contract && cargo metadata --no-deps --format-version 1 > out/metadata.json
 
       - uses: actions/upload-artifact@v2
         with:
           name: pluminite_nft
           path: |
             out/main.wasm
-            out/metadata.json
 
   deploy:
     needs: build-contract
