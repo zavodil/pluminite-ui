@@ -31,6 +31,7 @@ body {
 
 .content {
     flex: 1 0 auto;
+    margin-top: -93px;
 }
 
 .footer {
@@ -68,7 +69,8 @@ code {
     --black: #444444; */
     --purple: #250055;
     --plum: #1D0535;
-    --periwinkle: #8287FF;
+    --periwinkle-base: 130, 135, 255;
+    --periwinkle: rgb(var(--periwinkle-base));
     --lavendar: #F8DDFF;
     --pink: #FF79ED;
     --background: #23024B;
@@ -86,6 +88,7 @@ code {
   cursor: pointer;
   border: 0;
   transition: 100ms;
+  font-family: 'Comfortaa', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
 button:hover, .button:hover {
