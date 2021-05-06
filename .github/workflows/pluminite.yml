@@ -24,8 +24,9 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - run: rustup target add wasm32-unknown-unknown
+      - run: yarn install --frozen-lockfile
       - run: yarn build:contract
-      - run: cd contract && cargo metadata --no-deps --format-version 1 > target/wasm32-unknown-unknown/release/metadata.json
+      - run: cd contract && cargo metadata --no-deps --format-version 1 > out/metadata.json
 
       - uses: actions/upload-artifact@v2
         with:
@@ -35,6 +36,7 @@ jobs:
             out/metadata.json
 
   deploy:
+    needs: build-contract
     if: ${{ github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
     steps:
@@ -49,4 +51,4 @@ jobs:
       - run: yarn build:web
       - run: git remote set-url origin https://git:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git
       - run: yarn gh-pages-clean
-      - run: yarn deploy:pages
+      - run: yarn deploy:pages --user "Github Workflow Bot <noemail@epam.github.io>"
