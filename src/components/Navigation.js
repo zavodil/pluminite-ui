@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, useRouteMatch } from 'react-router-dom'
 
 const Container = styled('div')`
     z-index: 1;
@@ -18,6 +18,20 @@ const Container = styled('div')`
         :first-of-type {
             margin-right: 20px;
         }
+    }
+    
+    .query-account {
+        margin-right: 40px;
+        color: var(--lavendar);
+        font-size: 18px;
+        text-decoration: none;
+    }
+
+    .button-connect {
+        padding: 16px 20px;
+        border: var(--lavendar) 1px solid;
+        background-color: var(--plum);
+        color: var(--lavendar);
     }
 
     @media (max-width: 767px) {
@@ -40,15 +54,22 @@ const Container = styled('div')`
     }
 `
 
-export default function Navigation() {
+export default function Navigation () {
+    const isSignUpPage = !!useRouteMatch("/sign-up");
+
     return (
         <Container>
             <div className='left'>
                 Pluminite
             </div>
             <div className='right'>
-                <Link to='/sign-up' className='button'>Publish Art</Link>
-                <Link to='/sign-up' className='button'>Buy Art</Link>
+                {isSignUpPage ? (<>
+                    <Link to='/sign-up' className='query-account'>Already have a NEAR account?</Link>
+                    <Link to='/sign-up' className='button button-connect'>Connect Wallet</Link>
+                </>) : (<>
+                    <Link to='/sign-up' className='button'>Publish Art</Link>
+                    <Link to='/sign-up' className='button'>Buy Art</Link>
+                </>)}
             </div>
         </Container>
     )
