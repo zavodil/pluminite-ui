@@ -1,0 +1,52 @@
+name: NEAR NFT Checker
+
+on:
+  # We want to trigger the build & test pipelines in every branch.
+  push:
+    # But do no run the pipeline when only `md` files are modified.
+    paths-ignore:
+      - '**.md'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+
+  build-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            contract/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - run: rustup target add wasm32-unknown-unknown
+      - run: yarn install --frozen-lockfile
+      - run: yarn build:contract
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: pluminite_nft
+          path: |
+            out/main.wasm
+
+  deploy:
+    needs: build-contract
+    if: ${{ github.ref == 'refs/heads/master' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+      - uses: actions/download-artifact@v2
+
+      - run: yarn install --frozen-lockfile
+      - run: yarn build:web
+      - run: git remote set-url origin https://git:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git
+      - run: yarn gh-pages-clean
+      - run: yarn deploy:pages --user "Near <hello@near.org>"
