@@ -23,6 +23,7 @@ jobs:
             contract/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
+      - run: rustup target add wasm32-unknown-unknown
       - run: yarn install --frozen-lockfile
       - run: yarn build:contract
 
@@ -48,4 +49,4 @@ jobs:
       - run: yarn build:web
       - run: git remote set-url origin https://git:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git
       - run: yarn gh-pages-clean
-      - run: yarn deploy:pages --user "Github Workflow Bot <noemail@epam.github.io>"
+      - run: yarn deploy:pages --user "Near <hello@near.org>"
