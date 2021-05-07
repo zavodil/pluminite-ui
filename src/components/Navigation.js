@@ -1,6 +1,8 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Link, useRouteMatch } from 'react-router-dom'
+import React, { useContext } from 'react';
+import styled from 'styled-components';
+import { Link, useRouteMatch } from 'react-router-dom';
+
+import { NearContext } from '../contexts';
 
 const Container = styled('div')`
     z-index: 1;
@@ -19,7 +21,7 @@ const Container = styled('div')`
             margin-right: 20px;
         }
     }
-    
+
     .connect-query {
         margin-right: 40px;
         color: var(--lavendar);
@@ -32,6 +34,10 @@ const Container = styled('div')`
         border: var(--lavendar) 1px solid;
         background-color: var(--plum);
         color: var(--lavendar);
+    }
+    
+    .account-id {
+        cursor: pointer;
     }
 
     @media (max-width: 767px) {
@@ -55,6 +61,16 @@ const Container = styled('div')`
 `
 
 export default function Navigation () {
+    const { nearContent, user, signIn, signOut } = useContext(NearContext);
+
+    const signInAction = () => {
+        signIn();
+    };
+
+    const signOutAction = () => {
+        signOut();
+    };
+
     const isSignUpPage = !!useRouteMatch("/sign-up");
 
     return (
@@ -63,13 +79,18 @@ export default function Navigation () {
                 Pluminite
             </div>
             <div className='right'>
-                {isSignUpPage ? (<>
-                    <span className='connect-query'>Already have a NEAR account?</span>
-                    <Link to='/sign-up' className='button button-connect'>Connect Wallet</Link>
-                </>) : (<>
-                    <Link to='/sign-up' className='button'>Publish Art</Link>
-                    <Link to='/sign-up' className='button'>Buy Art</Link>
-                </>)}
+                {user
+                    ? (<span className='account-id'>Hi, {user.accountId} :)</span>)
+                    : isSignUpPage
+                        ? (<>
+                            <span className='connect-query'>Already have a NEAR account?</span>
+                            <button className='button button-connect' onClick={signInAction}>Connect Wallet</button>
+                        </>)
+                        : (<>
+                            <Link to='/sign-up' className='button'>Publish Art</Link>
+                            <Link to='/sign-up' className='button'>Buy Art</Link>
+                        </>)
+                }
             </div>
         </Container>
     )
