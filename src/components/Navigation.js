@@ -20,7 +20,7 @@ const Container = styled('div')`
         }
     }
     
-    .query-account {
+    .connect-query {
         margin-right: 40px;
         color: var(--lavendar);
         font-size: 18px;
@@ -64,7 +64,7 @@ export default function Navigation () {
             </div>
             <div className='right'>
                 {isSignUpPage ? (<>
-                    <Link to='/sign-up' className='query-account'>Already have a NEAR account?</Link>
+                    <span className='connect-query'>Already have a NEAR account?</span>
                     <Link to='/sign-up' className='button button-connect'>Connect Wallet</Link>
                 </>) : (<>
                     <Link to='/sign-up' className='button'>Publish Art</Link>
