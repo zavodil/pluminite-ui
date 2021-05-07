@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
 import { Link, useRouteMatch } from 'react-router-dom';
+import styled from 'styled-components';
 
 import { NearContext } from '../contexts';
+
+import Dropdown from './common/Dropdown';
 
 const Container = styled('div')`
     z-index: 1;
@@ -35,9 +37,20 @@ const Container = styled('div')`
         background-color: var(--plum);
         color: var(--lavendar);
     }
+
+    .account-display {
+        color: var(--bubble-gum);
+    }
+
+    .account-display-id {
+        text-decoration: underline;
+    }
     
-    .account-id {
-        cursor: pointer;
+    .nav__link--dropdown {
+        display: block;
+        padding: 10px;
+        color: var(--lavendar);
+        text-decoration: none;
     }
 
     @media (max-width: 767px) {
@@ -60,8 +73,15 @@ const Container = styled('div')`
     }
 `
 
+const AccountDisplay = ({ text, handleOnClick, className }) =>
+    (
+        <span className={`account-display ${className}`} onClick={handleOnClick}>
+            Hi, <span className='account-display-id'>{text}</span> :)
+        </span>
+    );
+
 export default function Navigation () {
-    const { nearContent, user, signIn, signOut } = useContext(NearContext);
+    const { user, signIn, signOut } = useContext(NearContext);
 
     const signInAction = () => {
         signIn();
@@ -80,7 +100,11 @@ export default function Navigation () {
             </div>
             <div className='right'>
                 {user
-                    ? (<span className='account-id'>Hi, {user.accountId} :)</span>)
+                    ? (<Dropdown dropdownBase={AccountDisplay} title={`${user.accountId}`} stretchable>
+                        <Link className='nav__link nav__link--dropdown' to='#' onClick={() => signOutAction()}>
+                            Log out
+                        </Link>
+                    </Dropdown>)
                     : isSignUpPage
                         ? (<>
                             <span className='connect-query'>Already have a NEAR account?</span>
