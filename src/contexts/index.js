@@ -1,6 +1,3 @@
 import { NearContext, NearContextProvider } from './near';
 
-export {
-  NearContext,
-  NearContextProvider,
-};
+export { NearContext, NearContextProvider };

@@ -1,28 +1,28 @@
-beforeAll(async function () {
+/* eslint no-undef: "off" */
+
+beforeAll(async () => {
   // NOTE: nearlib and nearConfig are made available by near-cli/test_environment
-  const near = await nearlib.connect(nearConfig)
-  window.accountId = nearConfig.contractName
+  const near = await nearlib.connect(nearConfig);
+  window.accountId = nearConfig.contractName;
   window.contract = await near.loadContract(nearConfig.contractName, {
     viewMethods: ['getGreeting'],
     changeMethods: [],
-    sender: window.accountId
-  })
+    sender: window.accountId,
+  });
 
   window.walletConnection = {
-    requestSignIn() {
-    },
-    signOut() {
-    },
+    requestSignIn() {},
+    signOut() {},
     isSignedIn() {
-      return true
+      return true;
     },
     getAccountId() {
-      return window.accountId
-    }
-  }
-})
+      return window.accountId;
+    },
+  };
+});
 
 test('getGreeting', async () => {
-  const message = await window.contract.getGreeting({ accountId: window.accountId })
-  expect(message).toEqual('Hello')
-})
+  const message = await window.contract.getGreeting({ accountId: window.accountId });
+  expect(message).toEqual('Hello');
+});

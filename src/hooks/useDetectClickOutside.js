@@ -7,7 +7,7 @@ export default function useDetectClickOutside(ref, action) {
         action();
       }
     },
-    [ref, action],
+    [ref, action]
   );
 
   useEffect(() => {

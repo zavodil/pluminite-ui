@@ -8,7 +8,8 @@
   },
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
+    "jest/globals": true
   },
   "globals": {
     "window": true
@@ -34,8 +35,10 @@
     "eslint-plugin-import",
     "eslint-plugin-jsx",
     "eslint-plugin-react",
-    "eslint-plugin-react-hooks"
+    "eslint-plugin-react-hooks",
+    "jest"
   ],
+  "ignorePatterns": ["dist/"],
   "rules": {
     "import/no-named-as-default": 0,
     "import/prefer-default-export": "off",

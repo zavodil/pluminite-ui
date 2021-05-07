@@ -88,9 +88,9 @@ export const NearContextProvider = ({ currentUser, nearConfig, wallet, near, chi
 };
 
 NearContextProvider.propTypes = {
-    nearConfig: NearConfigTypeShape.isRequired,
-    near: NearTypeShape.isRequired,
-    wallet: WalletTypeShape.isRequired,
-    currentUser: UserTypeShape,
-    children: ReactChildrenTypeRequired,
+  nearConfig: NearConfigTypeShape.isRequired,
+  near: NearTypeShape.isRequired,
+  wallet: WalletTypeShape.isRequired,
+  currentUser: UserTypeShape,
+  children: ReactChildrenTypeRequired,
 };
