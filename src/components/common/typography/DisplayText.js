@@ -8,6 +8,7 @@ const StyledH1 = styled('h1')`
   text-align: center;
   font-size: ${(props) => (props.isBig ? '100px' : '63px')};
   margin-bottom: 20px;
+  text-transform: uppercase;
 
   @media (max-width: 767px) {
     margin-top: 30px;
