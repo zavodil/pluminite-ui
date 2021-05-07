@@ -1,5 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+
+import { DisplayText } from './common/typography';
+
 import DiamondIcon from '../assets/DiamondIcon';
 import art from '../assets/art.png';
 
@@ -43,17 +46,6 @@ const Container = styled('div')`
     }
   }
 
-  h1 {
-    text-align: center;
-    font-size: 100px;
-    margin-bottom: 20px;
-
-    @media (max-width: 767px) {
-      margin-top: 30px;
-      font-size: 70px;
-    }
-  }
-
   .desc {
     text-align: center;
     font-size: 24px;
@@ -69,7 +61,7 @@ const Container = styled('div')`
 export default function SignUp() {
   return (
     <Container>
-      <h1 className="border-text">RARE ART GEMS</h1>
+      <DisplayText isBig>RARE ART GEMS</DisplayText>
       <div className="desc">Create, buy, and sell art with Cryptocurrency</div>
       <DiamondIcon />
       <div className="items-container">

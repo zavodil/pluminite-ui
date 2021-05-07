@@ -32,6 +32,7 @@ body {
 .content {
     flex: 1 0 auto;
     margin-top: -93px;
+    padding-top: 93px;
 }
 
 .footer {
@@ -39,13 +40,13 @@ body {
 }
 
 h1 {
-  font-family: 'Montserrat';
+  font-family: 'Montserrat', sans-serif;
 }
 
 .border-text {
   -webkit-text-stroke: 1px var(--pink);
   color: var(--background);
-  text-shadow: 0px 0px 3px #ba0dd7;
+  text-shadow: 0 0 3px #ba0dd7;
 }
 
 code {

@@ -1,6 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
+
+import { ReactChildrenTypeRequired } from '../../../../types/ReactChildrenTypes';
 
 const StyledLi = styled('li')`
   cursor: pointer;
@@ -9,8 +10,7 @@ const StyledLi = styled('li')`
 const DropdownItem = ({ children }) => <StyledLi className="dropdown-item">{children}</StyledLi>;
 
 DropdownItem.propTypes = {
-  children: PropTypes.node.isRequired,
-  isDivider: PropTypes.bool,
+  children: ReactChildrenTypeRequired,
 };
 
 export default DropdownItem;
