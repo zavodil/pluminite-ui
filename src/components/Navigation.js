@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { NearContext } from '../contexts';
 
 import Dropdown from './common/Dropdown';
+import Button from './common/Button';
 
 const Container = styled('div')`
   z-index: 1;
@@ -119,12 +120,12 @@ export default function Navigation() {
           </>
         ) : (
           <>
-            <Link to="/sign-up" className="button">
-              Publish Art
-            </Link>
-            <Link to="/sign-up" className="button">
-              Buy Art
-            </Link>
+            <Button isPrimary>
+              <Link to="/sign-up">Sign up</Link>
+            </Button>
+            <Button isSecondary>
+              <Link to="/log-in">Log in with NEAR</Link>
+            </Button>
           </>
         )}
       </div>

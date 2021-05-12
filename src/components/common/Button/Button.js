@@ -6,11 +6,12 @@ import styled from 'styled-components';
 import { ReactChildrenType } from '../../../types/ReactChildrenTypes';
 
 const StyledButton = styled('button')`
-  padding: 10px 15px;
+  padding: 16px 20px;
   border: 1px solid var(--lavendar);
   border-radius: var(--radius-default);
   font-family: 'Comfortaa', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
     'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-size: 16px;
   text-decoration: none;
   cursor: pointer;
   transition: 100ms;
