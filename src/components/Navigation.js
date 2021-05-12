@@ -11,10 +11,14 @@ import Button from './common/Button';
 const Container = styled('div')`
   z-index: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
   padding: 24px;
 
   .left {
+    height: 52px;
+    line-height: 52px;
     font-size: 20px;
     font-weight: 300;
     cursor: default;
@@ -26,7 +30,6 @@ const Container = styled('div')`
   }
 
   .right {
-    margin-top: 40px;
     margin-left: 20px;
   }
 
@@ -52,6 +55,8 @@ const Container = styled('div')`
 
   .account-display {
     color: var(--bubble-gum);
+    height: 52px;
+    line-height: 52px;
   }
 
   .account-display-id {
@@ -82,8 +87,6 @@ const Container = styled('div')`
     flex-direction: row;
 
     .left {
-      height: 52px;
-      line-height: 52px;
       font-size: 30px;
     }
 
@@ -105,6 +108,7 @@ AccountDisplay.propTypes = {
   className: PropTypes.string,
 };
 
+// Use with SignUpSpare if needed
 // const SignUpPageNavigation = (signInAction) => (
 //   <>
 //     <span className="connect-query">Already have a NEAR account?</span>
