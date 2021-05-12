@@ -43,12 +43,6 @@ h1 {
   font-family: 'Montserrat', sans-serif;
 }
 
-.border-text {
-  -webkit-text-stroke: 1px var(--pink);
-  color: var(--background);
-  text-shadow: 0 0 3px #ba0dd7;
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
