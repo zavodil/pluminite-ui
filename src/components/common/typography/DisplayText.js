@@ -7,7 +7,8 @@ import { ReactChildrenTypeRequired } from '../../../types/ReactChildrenTypes';
 const StyledContainer = styled('div')`
   position: relative;
   width: fit-content;
-  margin: 0 auto 20px;
+  margin-top: 0;
+  margin-bottom: 20px;
 
   .display-text {
     font-family: 'Staatliches', sans-serif;

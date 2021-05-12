@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import Button from './common/Button';
 import { DisplayText } from './common/typography';
 
 import DiamondIcon from '../assets/DiamondIcon';
@@ -54,17 +55,16 @@ const Container = styled('div')`
     line-height: 36px;
   }
 
+  .pop-up {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+  }
+
   @media (min-width: 767px) {
     .description-container {
       margin-left: 0;
       margin-bottom: 60px;
-    }
-
-    .desc {
-      text-align: center;
-    }
-
-    .diamond {
       text-align: center;
     }
   }
@@ -107,6 +107,11 @@ export default function SignUp() {
             <button>Bid $55</button>
           </div>
         </div>
+      </div>
+      <div className="pop-up">
+        <Button isSecondary>
+          <a href="https://github.com/zavodil/pluminite-ui">Pluminite is Open-Source. Contribute :)</a>
+        </Button>
       </div>
     </Container>
   );
