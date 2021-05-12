@@ -11,16 +11,20 @@ import Button from './common/Button';
 const Container = styled('div')`
   z-index: 1;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 30px;
+  flex-direction: column;
+  padding: 24px;
 
   .left {
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 300;
   }
 
-  .button {
+  .right {
+    margin-top: 40px;
+    margin-left: 20px;
+  }
+
+  button {
     :first-of-type {
       margin-right: 20px;
     }
@@ -55,22 +59,17 @@ const Container = styled('div')`
     text-decoration: none;
   }
 
-  @media (max-width: 767px) {
-    padding: 0 15px;
-    height: 62px;
+  @media (min-width: 767px) {
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
 
     .left {
-      font-size: 24px;
+      font-size: 30px;
     }
 
     .right {
-      .button {
-        font-size: 13px;
-
-        :first-of-type {
-          margin-right: 10px;
-        }
-      }
+      margin: 0;
     }
   }
 `;
