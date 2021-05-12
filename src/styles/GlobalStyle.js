@@ -1,6 +1,35 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
+  :root {
+    /* --green: #6FD65E;
+    --green-light: #D5FFCE;
+    --pink: #EB5BEE;
+    --pink-light: #feccff;
+    --pink-lighter: #FFE5E5;
+    --blue: #1472FF;
+    --blue-light: #B6D3FF;
+    --gray-darker: #808080;
+    --gray-dark: #A7A7A7;
+    --gray: #E0E0E0;
+    --gray-light: #EDEDED;
+    --gray-lighter: #F3F3F3;
+    --gray-lighest: #F8F9FB;
+    --black: #444444; */
+    --purple: #250055;
+    --plum: #1D0535;
+    --periwinkle-base: 130, 135, 255;
+    --periwinkle: rgb(var(--periwinkle-base));
+    --lavendar-base: 248, 221, 255;
+    --lavendar: rgb(var(--lavendar-base));
+    --pink: #FF79ED;
+    --background: #23024B;
+    --background-dark: #1F043C;
+    --bubble-gum: #FF79ED;
+
+    --radius-default: 8px;
+  }
+  
   * {
     box-sizing: border-box;
   }
@@ -39,38 +68,14 @@ const GlobalStyle = createGlobalStyle`
   .footer {
     flex-shrink: 0;
   }
+  
+  a {
+    color: var(--periwinkle);
+    text-decoration: none;
+  }
 
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-  }
-
-  :root {
-    /* --green: #6FD65E;
-    --green-light: #D5FFCE;
-    --pink: #EB5BEE;
-    --pink-light: #feccff;
-    --pink-lighter: #FFE5E5;
-    --blue: #1472FF;
-    --blue-light: #B6D3FF;
-    --gray-darker: #808080;
-    --gray-dark: #A7A7A7;
-    --gray: #E0E0E0;
-    --gray-light: #EDEDED;
-    --gray-lighter: #F3F3F3;
-    --gray-lighest: #F8F9FB;
-    --black: #444444; */
-    --purple: #250055;
-    --plum: #1D0535;
-    --periwinkle-base: 130, 135, 255;
-    --periwinkle: rgb(var(--periwinkle-base));
-    --lavendar-base: 248, 221, 255;
-    --lavendar: rgb(var(--lavendar-base));
-    --pink: #FF79ED;
-    --background: #23024B;
-    --background-dark: #1F043C;
-    --bubble-gum: #FF79ED;
-
-    --radius-default: 8px;
   }
 `;
 

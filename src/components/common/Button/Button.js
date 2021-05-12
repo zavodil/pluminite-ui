@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { ReactChildrenType } from '../../../types/ReactChildrenTypes';
 
 const StyledButton = styled('button')`
+  max-width: 350px;
   padding: 16px 20px;
   border: 1px solid var(--lavendar);
   border-radius: var(--radius-default);

@@ -65,6 +65,8 @@ const Container = styled('div')`
     flex-direction: row;
 
     .left {
+      height: 50px;
+      line-height: 50px;
       font-size: 30px;
     }
 
@@ -86,48 +88,48 @@ AccountDisplay.propTypes = {
   className: PropTypes.string,
 };
 
-export default function Navigation() {
-  const { user, signIn, signOut } = useContext(NearContext);
+// const SignUpPageNavigation = (signInAction) => (
+//   <>
+//     <span className="connect-query">Already have a NEAR account?</span>
+//     <button className="button button-connect" onClick={signInAction}>
+//       Connect Wallet
+//     </button>
+//   </>
+// );
 
-  const signInAction = () => {
-    signIn();
-  };
+export default function Navigation() {
+  const { user, signOut } = useContext(NearContext);
 
   const signOutAction = () => {
     signOut();
   };
 
-  const isSignUpPage = !!useRouteMatch('/sign-up');
+  const isSignUpInPage = !!useRouteMatch('/sign-up') || !!useRouteMatch('/log-in');
 
   return (
     <Container>
       <div className="left">Pluminite</div>
-      <div className="right">
-        {/* eslint-disable-next-line no-nested-ternary */}
-        {user ? (
-          <Dropdown dropdownBase={AccountDisplay} title={`${user.accountId}`} stretchable>
-            <Link className="nav__link nav__link--dropdown" to="#" onClick={() => signOutAction()}>
-              Log out
-            </Link>
-          </Dropdown>
-        ) : isSignUpPage ? (
-          <>
-            <span className="connect-query">Already have a NEAR account?</span>
-            <button className="button button-connect" onClick={signInAction}>
-              Connect Wallet
-            </button>
-          </>
-        ) : (
-          <>
-            <Button isPrimary isLink>
-              <Link to="/sign-up">Sign up</Link>
-            </Button>
-            <Button isSecondary isLink>
-              <Link to="/log-in">Log in with NEAR</Link>
-            </Button>
-          </>
-        )}
-      </div>
+      {!isSignUpInPage && (
+        <div className="right">
+          {/* eslint-disable-next-line no-nested-ternary */}
+          {user ? (
+            <Dropdown dropdownBase={AccountDisplay} title={`${user.accountId}`} stretchable>
+              <Link className="nav__link nav__link--dropdown" to="#" onClick={() => signOutAction()}>
+                Log out
+              </Link>
+            </Dropdown>
+          ) : (
+            <>
+              <Button isPrimary isLink>
+                <Link to="/sign-up">Sign up</Link>
+              </Button>
+              <Button isSecondary isLink>
+                <Link to="/log-in">Log in with NEAR</Link>
+              </Button>
+            </>
+          )}
+        </div>
+      )}
     </Container>
   );
 }
