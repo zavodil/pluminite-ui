@@ -72,7 +72,7 @@ const Container = styled('div')`
 
     .left {
       height: 52px;
-      line-height: 50px;
+      line-height: 52px;
       font-size: 30px;
     }
 

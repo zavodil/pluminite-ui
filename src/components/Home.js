@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import Button from './common/Button';
+import { NearContext } from '../contexts';
+
 import { DisplayText } from './common/typography';
+import { Contribute, Mint } from './common/popups';
 
 import DiamondIcon from '../assets/DiamondIcon';
 import art from '../assets/art.png';
@@ -70,7 +72,9 @@ const Container = styled('div')`
   }
 `;
 
-export default function SignUp() {
+export default function Home() {
+  const { user } = useContext(NearContext);
+
   return (
     <Container>
       <div className="description-container">
@@ -108,11 +112,7 @@ export default function SignUp() {
           </div>
         </div>
       </div>
-      <div className="pop-up">
-        <Button isSecondary isLink>
-          <a href="https://github.com/zavodil/pluminite-ui">Pluminite is Open-Source. Contribute :)</a>
-        </Button>
-      </div>
+      <div className="pop-up">{user ? <Mint /> : <Contribute />}</div>
     </Container>
   );
 }
