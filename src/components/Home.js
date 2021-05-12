@@ -75,7 +75,7 @@ export default function SignUp() {
     <Container>
       <div className="description-container">
         <DisplayText isBig>RARE ART GEMS</DisplayText>
-        <div className="desc">Create, buy, and sell art with Cryptocurrency</div>
+        <div className="desc">Create, buy, and sell NFT&apos;s with Cryptocurrency</div>
         <div className="diamond">
           <DiamondIcon />
         </div>
