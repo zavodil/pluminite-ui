@@ -39,10 +39,6 @@ body {
   flex-shrink: 0;
 }
 
-h1 {
-  font-family: 'Montserrat', sans-serif;
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
@@ -74,21 +70,4 @@ code {
   --bubble-gum: #FF79ED;
 
   --radius-default: 8px;
-}
-
-.button, button {
-  padding: 10px 15px;
-  background-color: var(--lavendar);
-  color: var(--plum);
-  border-radius: var(--radius-default);
-  text-decoration: none;
-  cursor: pointer;
-  border: 0;
-  transition: 100ms;
-  font-family: 'Comfortaa', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-}
-
-button:hover, .button:hover {
-  background-color: var(--pink);
-  color: white;
 }
