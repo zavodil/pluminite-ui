@@ -1,32 +1,63 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import bgSignup from '../assets/bg-signup.png';
+import { NearContext } from '../contexts';
 
-import Step0 from './SignUp/Step0';
-import Step1 from './SignUp/Step1';
+import HeadingText from './common/typography/HeadingText';
+import Button from './common/Button';
+import SeparatorHorizontal from './common/Separator/SeparatorHorizontal';
+
+import bgSignup from '../assets/bg-signup.png';
 
 const Container = styled('div')`
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 0 28px;
+  padding: 100px 28px 0;
+
+  .trouble {
+    margin-top: 40px;
+  }
 
   @media (min-width: 767px) {
+    padding-top: 0;
+    align-items: center;
+    justify-content: center;
     background: url(${bgSignup}) no-repeat bottom left fixed;
   }
 `;
 
-const steps = [Step0, Step1];
-
 export default function SignUp() {
-  const [step, setStep] = useState(0);
+  const { signIn, signUp } = useContext(NearContext);
 
-  const CurrentStep = steps[step];
+  const signInAction = () => {
+    signIn();
+  };
+
+  const signUpAction = () => {
+    signUp();
+  };
 
   return (
     <Container>
-      <CurrentStep startNextStep={() => setStep(step + 1)} />
+      <HeadingText>Let’s go</HeadingText>
+      <p>Already have a NEAR account?</p>
+      <Button isPrimary isLink>
+        <Link to="#" onClick={() => signInAction()}>
+          Connect NEAR Wallet
+        </Link>
+      </Button>
+      <SeparatorHorizontal>OR</SeparatorHorizontal>
+      <p>Need a NEAR wallet?</p>
+      <Button isPrimary isLink>
+        <Link to="#" onClick={() => signUpAction()}>
+          Create a NEAR Wallet
+        </Link>
+      </Button>
+      <p className="trouble">
+        Having trouble making a wallet? Email us at <a href="mailto:info@pluminite.com">info@pluminite.com</a>.
+      </p>
     </Container>
   );
 }

@@ -13,13 +13,14 @@ const Container = styled('div')`
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 0 28px;
+  padding: 100px 28px 0;
 
   .sign-up-offer {
     margin-top: 40px;
   }
 
   @media (min-width: 767px) {
+    padding-top: 0;
     align-items: center;
     justify-content: center;
     background: url(${bgSignup}) no-repeat bottom left fixed;
