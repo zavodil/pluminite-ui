@@ -7,10 +7,14 @@ import Step0 from './SignUp/Step0';
 import Step1 from './SignUp/Step1';
 
 const Container = styled('div')`
-  height: 100%;
   display: flex;
   flex-direction: column;
-  background: url(${bgSignup}) no-repeat bottom left fixed;
+  height: 100%;
+  padding: 0 28px;
+
+  @media (min-width: 767px) {
+    background: url(${bgSignup}) no-repeat bottom left fixed;
+  }
 `;
 
 const steps = [Step0, Step1];

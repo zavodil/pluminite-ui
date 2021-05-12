@@ -15,7 +15,7 @@ const StyledContainer = styled('div')`
     text-transform: uppercase;
     color: var(--background);
     letter-spacing: 4px;
-    line-height: 105px;
+    line-height: ${(props) => (props.isBig ? '105px' : 'normal')};
     margin: 0;
   }
 

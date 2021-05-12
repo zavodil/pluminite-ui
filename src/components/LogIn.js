@@ -20,7 +20,6 @@ const Container = styled('div')`
   }
 
   @media (min-width: 767px) {
-    margin-top: -93px;
     align-items: center;
     justify-content: center;
     background: url(${bgSignup}) no-repeat bottom left fixed;

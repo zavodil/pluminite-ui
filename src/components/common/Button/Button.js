@@ -45,8 +45,9 @@ const StyledButton = styled('button')`
   }
 `;
 
-const Button = ({ children, isPrimary = false, isSecondary = false, isLink = false }) => (
+const Button = ({ children, isPrimary = false, isSecondary = false, isLink = false, ...props }) => (
   <StyledButton
+    {...props}
     className={classNames('button', {
       'button--primary': isPrimary,
       'button--secondary': isSecondary,

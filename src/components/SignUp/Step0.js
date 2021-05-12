@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
+import Button from '../common/Button';
+
 import { flexCenter } from '../../styles/mixins';
 
 const StyledDiv = styled('div')`
@@ -15,6 +17,7 @@ const StyledDiv = styled('div')`
   .form-group {
     display: flex;
     flex-direction: column;
+    margin-bottom: 50px;
   }
 
   label {
@@ -39,13 +42,6 @@ const StyledDiv = styled('div')`
     line-height: 21px;
     color: var(--periwinkle);
   }
-
-  .name-submit {
-    height: 56px;
-    margin-top: 50px;
-    font-size: 16px;
-    line-height: 24px;
-  }
 `;
 
 const Step0 = ({ startNextStep }) => (
@@ -59,9 +55,9 @@ const Step0 = ({ startNextStep }) => (
           carefully. :)
         </div>
       </div>
-      <button className="button name-submit" type="submit" onClick={startNextStep}>
+      <Button type="submit" onClick={startNextStep} isPrimary>
         Create Guest Account
-      </button>
+      </Button>
     </form>
   </StyledDiv>
 );
