@@ -7,8 +7,6 @@ import App from './App';
 import { initContract } from './utils';
 import { NearContextProvider } from './contexts';
 
-import './index.css';
-
 window.nearInitPromise = initContract()
   .then(({ currentUser, nearConfig, walletConnection, near }) => {
     const app = (

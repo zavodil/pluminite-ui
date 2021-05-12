@@ -6,7 +6,6 @@ import { NearContext } from '../contexts';
 
 import HeadingText from './common/typography/HeadingText';
 import Button from './common/Button';
-import SeparatorHorizontal from './common/Separator/SeparatorHorizontal';
 
 import bgSignup from '../assets/bg-signup.png';
 
@@ -16,7 +15,7 @@ const Container = styled('div')`
   height: 100%;
   padding: 100px 28px 0;
 
-  .trouble {
+  .sign-up-offer {
     margin-top: 40px;
   }
 
@@ -28,35 +27,24 @@ const Container = styled('div')`
   }
 `;
 
-export default function SignUp() {
-  const { signIn, signUp } = useContext(NearContext);
+export default function LogIn() {
+  const { signIn } = useContext(NearContext);
 
   const signInAction = () => {
     signIn();
   };
 
-  const signUpAction = () => {
-    signUp();
-  };
-
   return (
     <Container>
       <HeadingText>Let’s go</HeadingText>
-      <p>Already have a NEAR account?</p>
+      <p>Log In with your NEAR wallet</p>
       <Button isPrimary isLink>
         <Link to="#" onClick={() => signInAction()}>
           Connect NEAR Wallet
         </Link>
       </Button>
-      <SeparatorHorizontal>OR</SeparatorHorizontal>
-      <p>Need a NEAR wallet?</p>
-      <Button isPrimary isLink>
-        <Link to="#" onClick={() => signUpAction()}>
-          Create a NEAR Wallet
-        </Link>
-      </Button>
-      <p className="trouble">
-        Having trouble making a wallet? Email us at <a href="mailto:info@pluminite.com">info@pluminite.com</a>.
+      <p className="sign-up-offer">
+        Don’t have a NEAR wallet? No worries, sign up for a wallet <Link to="/sign-up">here</Link>.
       </p>
     </Container>
   );

@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
+import { NearContext } from '../contexts';
+
 import { DisplayText } from './common/typography';
+import { Contribute, Mint } from './common/popups';
 
 import DiamondIcon from '../assets/DiamondIcon';
 import art from '../assets/art.png';
@@ -9,10 +12,10 @@ import art from '../assets/art.png';
 const Container = styled('div')`
   padding: 15px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 100px auto 0;
 
-  .items-container {
-    margin-top: 60px;
+  .description-container {
+    margin-left: 30px;
   }
 
   .items {
@@ -26,6 +29,7 @@ const Container = styled('div')`
     position: relative;
     transition: 250ms;
     margin: 15px 5px;
+
     :hover {
       transform: scale(1.01);
     }
@@ -47,23 +51,39 @@ const Container = styled('div')`
   }
 
   .desc {
-    text-align: center;
+    margin-bottom: 20px;
     font-size: 24px;
     font-weight: 300;
+    line-height: 36px;
   }
 
-  > svg {
-    display: block;
-    margin: 20px auto 0 auto;
+  .pop-up {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  @media (min-width: 767px) {
+    .description-container {
+      margin-left: 0;
+      margin-bottom: 60px;
+      text-align: center;
+    }
   }
 `;
 
-export default function SignUp() {
+export default function Home() {
+  const { user } = useContext(NearContext);
+
   return (
     <Container>
-      <DisplayText isBig>RARE ART GEMS</DisplayText>
-      <div className="desc">Create, buy, and sell art with Cryptocurrency</div>
-      <DiamondIcon />
+      <div className="description-container">
+        <DisplayText isBig>RARE ART GEMS</DisplayText>
+        <div className="desc">Create, buy, and sell NFT&apos;s with Cryptocurrency</div>
+        <div className="diamond">
+          <DiamondIcon />
+        </div>
+      </div>
       <div className="items-container">
         <div className="items">
           <div className="item">
@@ -92,6 +112,7 @@ export default function SignUp() {
           </div>
         </div>
       </div>
+      <div className="pop-up">{user ? <Mint /> : <Contribute />}</div>
     </Container>
   );
 }

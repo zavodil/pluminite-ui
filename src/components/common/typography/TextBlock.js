@@ -14,7 +14,9 @@ const StyledDiv = styled('div')`
 
   .text-block-title {
     margin: 0;
+    font-family: 'Staatliches', sans-serif;
     font-size: 31px;
+    font-weight: 400;
     text-transform: uppercase;
   }
 

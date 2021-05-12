@@ -6,20 +6,34 @@ import styled from 'styled-components';
 import { NearContext } from '../contexts';
 
 import Dropdown from './common/Dropdown';
+import Button from './common/Button';
 
 const Container = styled('div')`
   z-index: 1;
   display: flex;
-  align-items: center;
+  flex-direction: row;
   justify-content: space-between;
-  padding: 30px;
+  flex-wrap: wrap;
+  padding: 24px;
 
   .left {
-    font-size: 30px;
+    height: 52px;
+    line-height: 52px;
+    font-size: 20px;
     font-weight: 300;
+    cursor: default;
+    user-select: none;
+
+    a {
+      color: var(--lavendar);
+    }
   }
 
-  .button {
+  .right {
+    margin-left: 20px;
+  }
+
+  button {
     :first-of-type {
       margin-right: 20px;
     }
@@ -41,35 +55,43 @@ const Container = styled('div')`
 
   .account-display {
     color: var(--bubble-gum);
+    height: 52px;
+    line-height: 52px;
   }
 
   .account-display-id {
     text-decoration: underline;
   }
 
-  .nav__link--dropdown {
-    display: block;
-    padding: 10px;
-    color: var(--lavendar);
-    text-decoration: none;
+  .dropdown-item {
+    :first-child {
+      margin-top: 17px;
+    }
+
+    :last-child {
+      margin-bottom: 17px;
+    }
   }
 
-  @media (max-width: 767px) {
-    padding: 0 15px;
-    height: 62px;
+  .nav__link--dropdown {
+    display: block;
+    padding: 14px 30px;
+    color: var(--lavendar);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 767px) {
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
 
     .left {
-      font-size: 24px;
+      font-size: 30px;
     }
 
     .right {
-      .button {
-        font-size: 13px;
-
-        :first-of-type {
-          margin-right: 10px;
-        }
-      }
+      margin: 0;
     }
   }
 `;
@@ -86,48 +108,65 @@ AccountDisplay.propTypes = {
   className: PropTypes.string,
 };
 
-export default function Navigation() {
-  const { user, signIn, signOut } = useContext(NearContext);
+// Use with SignUpSpare if needed
+// const SignUpPageNavigation = (signInAction) => (
+//   <>
+//     <span className="connect-query">Already have a NEAR account?</span>
+//     <button className="button button-connect" onClick={signInAction}>
+//       Connect Wallet
+//     </button>
+//   </>
+// );
 
-  const signInAction = () => {
-    signIn();
-  };
+export default function Navigation() {
+  const { user, signOut } = useContext(NearContext);
 
   const signOutAction = () => {
     signOut();
   };
 
-  const isSignUpPage = !!useRouteMatch('/sign-up');
+  const isHomePage = useRouteMatch('/').isExact;
+  const isSignUpInPage = !!useRouteMatch('/sign-up') || !!useRouteMatch('/log-in');
 
   return (
     <Container>
-      <div className="left">Pluminite</div>
-      <div className="right">
-        {/* eslint-disable-next-line no-nested-ternary */}
-        {user ? (
-          <Dropdown dropdownBase={AccountDisplay} title={`${user.accountId}`} stretchable>
-            <Link className="nav__link nav__link--dropdown" to="#" onClick={() => signOutAction()}>
-              Log out
-            </Link>
-          </Dropdown>
-        ) : isSignUpPage ? (
-          <>
-            <span className="connect-query">Already have a NEAR account?</span>
-            <button className="button button-connect" onClick={signInAction}>
-              Connect Wallet
-            </button>
-          </>
+      <div className="left">
+        {isHomePage ? (
+          'Pluminite'
         ) : (
-          <>
-            <Link to="/sign-up" className="button">
-              Publish Art
-            </Link>
-            <Link to="/sign-up" className="button">
-              Buy Art
-            </Link>
-          </>
+          <Link css="color: var(--lavendar)" to="/">
+            Pluminite
+          </Link>
         )}
       </div>
+      {!isSignUpInPage && (
+        <div className="right">
+          {/* eslint-disable-next-line no-nested-ternary */}
+          {user ? (
+            <Dropdown dropdownBase={AccountDisplay} title={`${user.accountId}`} stretchable>
+              <Link className="nav__link nav__link--dropdown" to="/mint">
+                Mint a Gem
+              </Link>
+              <Link className="nav__link nav__link--dropdown" to="/profile">
+                View profile
+              </Link>
+              <span className="nav__link nav__link--dropdown">Balance: WIPⓃ ~$WIP USD</span>
+              <Link className="nav__link nav__link--dropdown" to="#" onClick={() => signOutAction()}>
+                Log out
+              </Link>
+            </Dropdown>
+          ) : (
+            <>
+              <Button isPrimary isLink>
+                <Link to="/sign-up">Sign up</Link>
+              </Button>
+              <Button isSecondary isLink>
+                <Link to="/log-in">Log in with NEAR</Link>
+              </Button>
+            </>
+          )}
+        </div>
+      )}
     </Container>
   );
 }
