@@ -25,3 +25,10 @@ export const absoluteTopLeft = (top = 0, left = 0) =>
     top: ${top};
     left: ${left};
   `;
+
+export const absoluteTopRight = (top = 0, right = 0) =>
+  css`
+    position: absolute;
+    top: ${top};
+    right: ${right};
+  `;

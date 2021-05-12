@@ -7,14 +7,13 @@ import { useDetectClickOutside } from '../../../hooks';
 
 import DropdownItem from './DropdownItem';
 
-import { disFlexColumn, absoluteTopLeft } from '../../../styles/mixins';
+import { disFlexColumn, absoluteTopRight } from '../../../styles/mixins';
 
 import { ReactChildrenType } from '../../../types/ReactChildrenTypes';
 import StylesType from '../../../types/StylesType';
 
 const Container = styled('div')`
   position: relative;
-  text-align: center;
   z-index: 2;
 
   .dropdown__title {
@@ -25,11 +24,11 @@ const Container = styled('div')`
 
   .dropdown__list {
     ${disFlexColumn('flex-start', 'stretch')};
-    ${absoluteTopLeft('100%', 0)}
+    ${absoluteTopRight('100%')}
 
     list-style-type: none;
     min-width: 100%;
-    padding: 17px 20px;
+    padding: 0;
     margin-top: 20px;
     border-radius: 8px;
     border: 1px solid var(--bubble-gum);

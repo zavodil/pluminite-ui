@@ -58,11 +58,22 @@ const Container = styled('div')`
     text-decoration: underline;
   }
 
+  .dropdown-item {
+    :first-child {
+      margin-top: 17px;
+    }
+
+    :last-child {
+      margin-bottom: 17px;
+    }
+  }
+
   .nav__link--dropdown {
     display: block;
-    padding: 10px;
+    padding: 14px 30px;
     color: var(--lavendar);
     text-decoration: none;
+    white-space: nowrap;
   }
 
   @media (min-width: 767px) {
@@ -129,6 +140,13 @@ export default function Navigation() {
           {/* eslint-disable-next-line no-nested-ternary */}
           {user ? (
             <Dropdown dropdownBase={AccountDisplay} title={`${user.accountId}`} stretchable>
+              <Link className="nav__link nav__link--dropdown" to="/mint">
+                Mint a Gem
+              </Link>
+              <Link className="nav__link nav__link--dropdown" to="/profile">
+                View profile
+              </Link>
+              <span className="nav__link nav__link--dropdown">Balance: WIPⓃ ~$WIP USD</span>
               <Link className="nav__link nav__link--dropdown" to="#" onClick={() => signOutAction()}>
                 Log out
               </Link>
