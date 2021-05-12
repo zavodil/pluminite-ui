@@ -7,8 +7,6 @@ import { ReactChildrenTypeRequired } from '../../../types/ReactChildrenTypes';
 const StyledContainer = styled('div')`
   position: relative;
   width: fit-content;
-  margin-top: 0;
-  margin-bottom: 20px;
 
   .display-text {
     font-family: 'Staatliches', sans-serif;
@@ -19,12 +17,6 @@ const StyledContainer = styled('div')`
     letter-spacing: 4px;
     line-height: 105px;
     margin: 0;
-
-    @media (min-width: 767px) {
-      font-size: ${(props) => (props.isBig ? '165px' : '63px')};
-      letter-spacing: 13px;
-      line-height: normal;
-    }
   }
 
   .display-text-shadow-1 {
@@ -36,6 +28,16 @@ const StyledContainer = styled('div')`
     top: 0;
     left: 0;
     text-shadow: 0 0 14px rgba(186, 13, 215, 0.31);
+  }
+
+  @media (min-width: 767px) {
+    margin: 0 auto 20px;
+
+    .display-text {
+      font-size: ${(props) => (props.isBig ? '165px' : '63px')};
+      letter-spacing: 13px;
+      line-height: normal;
+    }
   }
 `;
 

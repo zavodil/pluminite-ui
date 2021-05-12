@@ -119,10 +119,10 @@ export default function Navigation() {
           </>
         ) : (
           <>
-            <Button isPrimary>
+            <Button isPrimary isLink>
               <Link to="/sign-up">Sign up</Link>
             </Button>
-            <Button isSecondary>
+            <Button isSecondary isLink>
               <Link to="/log-in">Log in with NEAR</Link>
             </Button>
           </>

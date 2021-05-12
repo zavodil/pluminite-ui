@@ -109,7 +109,7 @@ export default function SignUp() {
         </div>
       </div>
       <div className="pop-up">
-        <Button isSecondary>
+        <Button isSecondary isLink>
           <a href="https://github.com/zavodil/pluminite-ui">Pluminite is Open-Source. Contribute :)</a>
         </Button>
       </div>
