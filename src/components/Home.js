@@ -11,8 +11,8 @@ const Container = styled('div')`
   max-width: 1200px;
   margin: 0 auto;
 
-  .items-container {
-    margin-top: 60px;
+  .description-container {
+    margin-left: 30px;
   }
 
   .items {
@@ -26,6 +26,7 @@ const Container = styled('div')`
     position: relative;
     transition: 250ms;
     margin: 15px 5px;
+
     :hover {
       transform: scale(1.01);
     }
@@ -47,23 +48,38 @@ const Container = styled('div')`
   }
 
   .desc {
-    text-align: center;
+    margin-bottom: 20px;
     font-size: 24px;
     font-weight: 300;
+    line-height: 36px;
   }
 
-  > svg {
-    display: block;
-    margin: 20px auto 0 auto;
+  @media (min-width: 767px) {
+    .description-container {
+      margin-left: 0;
+      margin-bottom: 60px;
+    }
+
+    .desc {
+      text-align: center;
+    }
+
+    .diamond {
+      text-align: center;
+    }
   }
 `;
 
 export default function SignUp() {
   return (
     <Container>
-      <DisplayText isBig>RARE ART GEMS</DisplayText>
-      <div className="desc">Create, buy, and sell art with Cryptocurrency</div>
-      <DiamondIcon />
+      <div className="description-container">
+        <DisplayText isBig>RARE ART GEMS</DisplayText>
+        <div className="desc">Create, buy, and sell art with Cryptocurrency</div>
+        <div className="diamond">
+          <DiamondIcon />
+        </div>
+      </div>
       <div className="items-container">
         <div className="items">
           <div className="item">
