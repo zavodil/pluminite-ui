@@ -17,6 +17,12 @@ const Container = styled('div')`
   .left {
     font-size: 20px;
     font-weight: 300;
+    cursor: default;
+    user-select: none;
+
+    a {
+      color: var(--lavendar);
+    }
   }
 
   .right {
@@ -65,7 +71,7 @@ const Container = styled('div')`
     flex-direction: row;
 
     .left {
-      height: 50px;
+      height: 52px;
       line-height: 50px;
       font-size: 30px;
     }
@@ -104,11 +110,20 @@ export default function Navigation() {
     signOut();
   };
 
+  const isHomePage = useRouteMatch('/').isExact;
   const isSignUpInPage = !!useRouteMatch('/sign-up') || !!useRouteMatch('/log-in');
 
   return (
     <Container>
-      <div className="left">Pluminite</div>
+      <div className="left">
+        {isHomePage ? (
+          'Pluminite'
+        ) : (
+          <Link css="color: var(--lavendar)" to="/">
+            Pluminite
+          </Link>
+        )}
+      </div>
       {!isSignUpInPage && (
         <div className="right">
           {/* eslint-disable-next-line no-nested-ternary */}
