@@ -5,9 +5,9 @@ import { NearContext } from '../contexts';
 
 import { HeadingText, SmallText } from './common/typography';
 import { Input, InputNear, InputRoyalty } from './common/forms';
+import Button from './common/Button';
 
 import bgSignup from '../assets/bg-signup.png';
-import Button from './common/Button';
 
 const Container = styled('div')`
   display: flex;
@@ -15,12 +15,18 @@ const Container = styled('div')`
   height: 100%;
   padding: 100px 28px 120px;
 
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
   h2 {
     margin-bottom: 0;
+    text-align: center;
   }
 
   .freebies {
-    height: 70px;
+    min-height: 70px;
   }
 
   .collaborator {
@@ -29,6 +35,8 @@ const Container = styled('div')`
 
   .button-bottom {
     position: fixed;
+    display: flex;
+    justify-content: center;
     bottom: 0;
     right: 0;
     left: 0;
@@ -38,14 +46,11 @@ const Container = styled('div')`
 
     button {
       width: 100%;
-      max-width: none;
+      max-width: 400px;
     }
   }
 
   @media (min-width: 767px) {
-    padding-top: 0;
-    align-items: center;
-    justify-content: center;
     background: url(${bgSignup}) no-repeat bottom left fixed;
   }
 `;
@@ -55,20 +60,22 @@ export default function Mint() {
 
   return (
     <Container>
-      <HeadingText>Mint a Gem</HeadingText>
-      <div className="freebies">
-        <SmallText>
-          We&apos;ll front the cost of your first 3 mints. You&apos;ll need to make a sale to cover your first 3 mints
-          or add funds to your NEAR wallet to continue minting more NFTs.
-        </SmallText>
-      </div>
-      <Input name="gem_title" labelText="Gem Title" isRequired />
-      <Input name="description" labelText="Description" isRequired />
-      <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
-      <InputRoyalty name="royalty" labelText="Royalty Fee" isRequired asideText={`@${user.accountId}`} />
-      <span className="collaborator">+ Add Collaborator</span>
-      <div className="button-bottom">
-        <Button isPrimary>Next Step: Upload Artwork</Button>
+      <div className="container">
+        <HeadingText>Mint a Gem</HeadingText>
+        <div className="freebies">
+          <SmallText>
+            We&apos;ll front the cost of your first 3 mints. You&apos;ll need to make a sale to cover your first 3 mints
+            or add funds to your NEAR wallet to continue minting more NFTs.
+          </SmallText>
+        </div>
+        <Input name="gem_title" labelText="Gem Title" isRequired />
+        <Input name="description" labelText="Description" isRequired />
+        <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
+        <InputRoyalty name="royalty" labelText="Royalty Fee" isRequired asideText={`@${user.accountId}`} />
+        <span className="collaborator">+ Add Collaborator</span>
+        <div className="button-bottom">
+          <Button isPrimary>Next Step: Upload Artwork</Button>
+        </div>
       </div>
     </Container>
   );
