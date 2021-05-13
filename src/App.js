@@ -3,12 +3,13 @@ import { HashRouter as Router, Switch } from 'react-router-dom';
 
 import { NearContext } from './contexts';
 
-import { GuestPage, Page } from './router';
+import { GuestPage, Page, UserPage } from './router';
 
 import Navigation from './components/Navigation';
 import Home from './components/Home';
 import SignUp from './components/SignUp';
 import LogIn from './components/LogIn';
+import Mint from './components/Mint';
 
 import GlobalStyle from './styles/GlobalStyle';
 
@@ -39,6 +40,14 @@ export default function App() {
                 path="/log-in"
                 component={LogIn}
                 title="Log in"
+                isAuthenticated={isAuthenticated}
+                isLoading={isLoading}
+              />
+              <UserPage
+                exact
+                path="/mint"
+                component={Mint}
+                title="Mint a Gem"
                 isAuthenticated={isAuthenticated}
                 isLoading={isLoading}
               />
