@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 
 import Page from './Page';
 
-const UserPage = ({ isAuthenticated, ...rest }) => {
+const UserPage = ({ isAuthenticated, isLoading, ...rest }) => {
+  if (isLoading) {
+    return null;
+  }
+
   if (isAuthenticated) {
     return <Page {...rest} />;
   }
@@ -13,6 +17,7 @@ const UserPage = ({ isAuthenticated, ...rest }) => {
 };
 
 UserPage.propTypes = {
+  isLoading: PropTypes.bool,
   isAuthenticated: PropTypes.oneOfType([PropTypes.bool.isRequired, PropTypes.instanceOf(null)]),
 };
 

@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 
 import Page from './Page';
 
-const GuestPage = ({ isAuthenticated, ...rest }) => {
+const GuestPage = ({ isAuthenticated, isLoading, ...rest }) => {
+  if (isLoading) {
+    return null;
+  }
+
   if (isAuthenticated) {
     return <Redirect to="/" />;
   }
@@ -13,6 +17,7 @@ const GuestPage = ({ isAuthenticated, ...rest }) => {
 };
 
 GuestPage.propTypes = {
+  isLoading: PropTypes.bool,
   isAuthenticated: PropTypes.oneOfType([PropTypes.bool.isRequired, PropTypes.instanceOf(null)]),
 };
 
