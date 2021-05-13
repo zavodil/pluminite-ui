@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { NearContext } from '../contexts';
 
-import HeadingText from './common/typography/HeadingText';
+import { HeadingText } from './common/typography';
 import Button from './common/Button';
 
 import bgSignup from '../assets/bg-signup.png';
