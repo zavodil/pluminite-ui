@@ -44,7 +44,6 @@ export default function App() {
                 isLoading={isLoading}
               />
               <UserPage
-                exact
                 path="/mint"
                 component={Mint}
                 title="Mint a Gem"
