@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { NearContext } from '../../contexts';
@@ -44,6 +45,7 @@ const Container = styled('div')`
 
 export default function MintDescribe() {
   const { user } = useContext(NearContext);
+  const match = useRouteMatch();
 
   return (
     <Container>
@@ -60,7 +62,11 @@ export default function MintDescribe() {
       <InputRoyalty name="royalty" labelText="Royalty Fee" isRequired asideText={`@${user.accountId}`} />
       <span className="collaborator">+ Add Collaborator</span>
       <div className="button-bottom">
-        <Button isPrimary>Next Step: Upload Artwork</Button>
+        <Button isPrimary isLink>
+          <Link to={`${match.path}/upload`} onClick={() => {}}>
+            Next Step: Upload Artwork
+          </Link>
+        </Button>
       </div>
     </Container>
   );

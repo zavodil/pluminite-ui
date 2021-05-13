@@ -3,6 +3,7 @@ import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
 import MintDescribe from './Mint/MintDescribe';
+import MintUpload from './Mint/MintUpload';
 
 import bgSignup from '../assets/bg-signup.png';
 
@@ -58,10 +59,12 @@ export default function Mint() {
   return (
     <Container>
       <Switch>
+        <Route path={`${match.path}/upload`}>
+          <MintUpload />
+        </Route>
         <Route path={match.path}>
           <MintDescribe />
         </Route>
-        <Route path={`${match.path}/upload`} />
       </Switch>
     </Container>
   );
