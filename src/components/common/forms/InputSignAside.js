@@ -60,6 +60,7 @@ const StyledContainer = styled('div')`
     font-size: 18px;
     line-height: 24px;
     color: darkgray;
+    cursor: default;
   }
 `;
 
