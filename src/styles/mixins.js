@@ -32,3 +32,17 @@ export const absoluteTopRight = (top = 0, right = 0) =>
     top: ${top};
     right: ${right};
   `;
+
+export const hideArrowsForNumberInput = css`
+  // Chrome, Safari, Edge, Opera
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  // Firefox
+  [type='number'] {
+    -moz-appearance: textfield;
+  }
+`;
