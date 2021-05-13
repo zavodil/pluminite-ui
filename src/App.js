@@ -1,5 +1,7 @@
 import React from 'react';
-import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import { HashRouter as Router, Switch } from 'react-router-dom';
+
+import { Page } from './router';
 
 import Navigation from './components/Navigation';
 import Home from './components/Home';
@@ -17,9 +19,9 @@ export default function App() {
           <Navigation />
           <div className="content">
             <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/sign-up" component={SignUp} />
-              <Route exact path="/log-in" component={LogIn} />
+              <Page exact path="/" component={Home} />
+              <Page exact path="/sign-up" component={SignUp} title="Sign up" />
+              <Page exact path="/log-in" component={LogIn} title="Log in" />
             </Switch>
           </div>
           <div className="footer" />

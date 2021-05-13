@@ -1,3 +1,4 @@
 import useDetectClickOutside from './useDetectClickOutside';
+import useDocumentTitle from './useDocumentTitle';
 
-export { useDetectClickOutside };
+export { useDetectClickOutside, useDocumentTitle };
