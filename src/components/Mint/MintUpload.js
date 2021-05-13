@@ -8,10 +8,25 @@ import Button from '../common/Button';
 const Container = styled('div')`
   max-width: 600px;
   margin: 0 auto;
+  width: 100%;
 
   h2 {
     margin-bottom: 0;
     text-align: center;
+  }
+
+  .select {
+    width: 100%;
+    border-radius: var(--radius-default);
+    position: relative;
+    // todo: use variables for 'rx='8' ry='8' (border-radius) stroke='%23${'F8DDFF'}' (lavendar)'
+    background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='8' ry='8' stroke='%23${'F8DDFF'}' stroke-width='3' stroke-dasharray='10 10' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+
+    :after {
+      content: '';
+      display: block;
+      padding-bottom: 100%;
+    }
   }
 
   .button-bottom {
@@ -38,7 +53,7 @@ export default function MintDescribe() {
   return (
     <Container>
       <HeadingText>Upload Art</HeadingText>
-      <div className="select"></div>
+      <div className="select" />
       <div className="button-bottom">
         <Button isPrimary isLink>
           <Link to={`${match.path}/upload`} onClick={() => {}}>
