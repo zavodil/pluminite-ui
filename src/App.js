@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { HashRouter as Router, Switch } from 'react-router-dom';
 
-import { Page } from './router';
+import { NearContext } from './contexts';
+
+import { Page, GuestPage } from './router';
 
 import Navigation from './components/Navigation';
 import Home from './components/Home';
@@ -11,6 +13,10 @@ import LogIn from './components/LogIn';
 import GlobalStyle from './styles/GlobalStyle';
 
 export default function App() {
+  const { user } = useContext(NearContext);
+
+  const isAuthenticated = !!user;
+
   return (
     <>
       <GlobalStyle />
@@ -20,8 +26,8 @@ export default function App() {
           <div className="content">
             <Switch>
               <Page exact path="/" component={Home} />
-              <Page exact path="/sign-up" component={SignUp} title="Sign up" />
-              <Page exact path="/log-in" component={LogIn} title="Log in" />
+              <GuestPage exact path="/sign-up" component={SignUp} title="Sign up" isAuthenticated={isAuthenticated} />
+              <GuestPage exact path="/log-in" component={LogIn} title="Log in" isAuthenticated={isAuthenticated} />
             </Switch>
           </div>
           <div className="footer" />
