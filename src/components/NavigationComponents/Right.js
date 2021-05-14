@@ -6,6 +6,7 @@ import { NearContext } from '../../contexts';
 
 import UserDropdown from './UserDropdown';
 import Button from '../common/Button';
+import Hamburger from '../common/Hamburger';
 
 const StyledContainer = styled('div')`
   margin-left: 20px;
@@ -37,6 +38,7 @@ const StyledContainer = styled('div')`
 
 const Right = () => {
   const isSignUpInPage = !!useRouteMatch('/sign-up') || !!useRouteMatch('/log-in');
+  const isProfilePage = useRouteMatch('/profile');
 
   if (isSignUpInPage) {
     return null;
@@ -44,22 +46,25 @@ const Right = () => {
 
   const { user } = useContext(NearContext);
 
-  return (
-    <StyledContainer>
-      {user ? (
-        <UserDropdown />
-      ) : (
-        <>
-          <Button isPrimary isLink>
-            <Link to="/sign-up">Sign up</Link>
-          </Button>
-          <Button isSecondary isLink>
-            <Link to="/log-in">Log in with NEAR</Link>
-          </Button>
-        </>
-      )}
-    </StyledContainer>
-  );
-};
+  let toRender;
 
+  if (isProfilePage) {
+    toRender = <Hamburger />;
+  } else if (user) {
+    toRender = <UserDropdown />;
+  } else {
+    toRender = (
+      <>
+        <Button isPrimary isLink>
+          <Link to="/sign-up">Sign up</Link>
+        </Button>
+        <Button isSecondary isLink>
+          <Link to="/log-in">Log in with NEAR</Link>
+        </Button>
+      </>
+    );
+  }
+
+  return <StyledContainer>{toRender}</StyledContainer>;
+};
 export default Right;

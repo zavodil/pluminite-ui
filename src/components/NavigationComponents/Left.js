@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link, useRouteMatch } from 'react-router-dom';
+
+import { NearContext } from '../../contexts';
 
 const StyledContainer = styled('div')`
   height: 52px;
@@ -21,8 +23,20 @@ const StyledContainer = styled('div')`
 
 const Left = () => {
   const isHomePage = useRouteMatch('/').isExact;
+  const isProfilePage = useRouteMatch('/profile');
+  const { user } = useContext(NearContext);
 
-  return <StyledContainer>{isHomePage ? 'Pluminite' : <Link to="/">Pluminite</Link>}</StyledContainer>;
+  let toRender;
+
+  if (isHomePage) {
+    toRender = 'Pluminite';
+  } else if (isProfilePage && user?.accountId) {
+    toRender = user.accountId;
+  } else {
+    toRender = <Link to="/">Pluminite</Link>;
+  }
+
+  return <StyledContainer>{toRender}</StyledContainer>;
 };
 
 export default Left;
