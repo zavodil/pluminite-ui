@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { HeadingText } from '../common/typography';
@@ -30,9 +30,7 @@ const Container = styled('div')`
   }
 `;
 
-const MintReview = ({ imageDataUrl, bid }) => {
-  const match = useRouteMatch();
-
+const MintReview = ({ imageDataUrl, bid, onCompleteLink }) => {
   return (
     <Container>
       <HeadingText>Yay!</HeadingText>
@@ -40,9 +38,7 @@ const MintReview = ({ imageDataUrl, bid }) => {
       <ArtItem dataUrl={imageDataUrl} bid={bid} />
       <div className="button-bottom">
         <Button isPrimary isLink>
-          <Link to={`${match.path}/profile`} onClick={() => {}}>
-            Mint NFT
-          </Link>
+          <Link to={onCompleteLink}>Mint NFT</Link>
         </Button>
       </div>
     </Container>
@@ -52,6 +48,7 @@ const MintReview = ({ imageDataUrl, bid }) => {
 MintReview.propTypes = {
   imageDataUrl: PropTypes.string,
   bid: PropTypes.string,
+  onCompleteLink: PropTypes.string,
 };
 
 export default MintReview;

@@ -57,13 +57,13 @@ export default function Mint() {
     <Container>
       <Switch>
         <Route path={`${match.path}/upload`}>
-          <MintUpload onUpload={setImageDataUrl} />
+          <MintUpload onUpload={setImageDataUrl} onCompleteLink={`${match.path}/review`} />
         </Route>
         <Route path={`${match.path}/review`}>
-          <MintReview imageDataUrl={imageDataUrl} />
+          <MintReview imageDataUrl={imageDataUrl} onCompleteLink="/profile" />
         </Route>
         <Route path={match.path}>
-          <MintDescribe />
+          <MintDescribe onCompleteLink={`${match.path}/upload`} />
         </Route>
       </Switch>
     </Container>

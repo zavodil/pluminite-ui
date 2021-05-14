@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { NearContext } from '../../contexts';
@@ -38,9 +39,8 @@ const Container = styled('div')`
   }
 `;
 
-export default function MintDescribe() {
+const MintDescribe = ({ onCompleteLink }) => {
   const { user } = useContext(NearContext);
-  const match = useRouteMatch();
 
   return (
     <Container>
@@ -58,11 +58,15 @@ export default function MintDescribe() {
       <span className="collaborator">+ Add Collaborator</span>
       <div className="button-bottom">
         <Button isPrimary isLink>
-          <Link to={`${match.path}/upload`} onClick={() => {}}>
-            Next Step: Upload Artwork
-          </Link>
+          <Link to={onCompleteLink}>Next Step: Upload Artwork</Link>
         </Button>
       </div>
     </Container>
   );
-}
+};
+
+MintDescribe.propTypes = {
+  onCompleteLink: PropTypes.string,
+};
+
+export default MintDescribe;

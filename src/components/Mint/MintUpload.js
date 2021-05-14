@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { HeadingText } from '../common/typography';
@@ -30,18 +30,14 @@ const Container = styled('div')`
   }
 `;
 
-const MintUpload = ({ onUpload }) => {
-  const match = useRouteMatch();
-
+const MintUpload = ({ onUpload, onCompleteLink }) => {
   return (
     <Container>
       <HeadingText>Upload Art</HeadingText>
       <ArtDropzone onUpload={onUpload} />
       <div className="button-bottom">
         <Button isPrimary isLink>
-          <Link to={`${match.path}/review`} onClick={() => {}}>
-            Last Step: Review
-          </Link>
+          <Link to={onCompleteLink}>Last Step: Review</Link>
         </Button>
       </div>
     </Container>
@@ -50,6 +46,7 @@ const MintUpload = ({ onUpload }) => {
 
 MintUpload.propTypes = {
   onUpload: PropTypes.func,
+  onCompleteLink: PropTypes.string,
 };
 
 export default MintUpload;
