@@ -56,8 +56,8 @@ export default function MintDescribe() {
       <div className="select" />
       <div className="button-bottom">
         <Button isPrimary isLink>
-          <Link to={`${match.path}/upload`} onClick={() => {}}>
-            Next Step: Upload Artwork
+          <Link to={`${match.path}/review`} onClick={() => {}}>
+            Last Step: Review
           </Link>
         </Button>
       </div>
