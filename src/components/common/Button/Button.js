@@ -32,6 +32,11 @@ const StyledButton = styled('button')`
     padding: 0;
   }
 
+  &.button--small {
+    padding: 5px 20px;
+    border-radius: 4px;
+  }
+
   :hover {
     background-color: var(--pink);
     color: white;
@@ -45,13 +50,14 @@ const StyledButton = styled('button')`
   }
 `;
 
-const Button = ({ children, isPrimary = false, isSecondary = false, isLink = false, ...props }) => (
+const Button = ({ children, isPrimary = false, isSecondary = false, isLink = false, isSmall = false, ...props }) => (
   <StyledButton
     {...props}
     className={classNames('button', {
       'button--primary': isPrimary,
       'button--secondary': isSecondary,
       'button--link': isLink,
+      'button--small': isSmall,
     })}
   >
     {children}
@@ -63,6 +69,7 @@ Button.propTypes = {
   isPrimary: PropTypes.bool,
   isSecondary: PropTypes.bool,
   isLink: PropTypes.bool,
+  isSmall: PropTypes.bool,
 };
 
 export default Button;
