@@ -17,7 +17,7 @@ const MintUpload = ({ onUpload, onCompleteLink }) => {
     <Container>
       <HeadingText>Upload Art</HeadingText>
       <ArtDropzone onUpload={onUpload} />
-      <ButtonBottom link={onCompleteLink} />
+      <ButtonBottom link={onCompleteLink} text="Last Step: Review" />
     </Container>
   );
 };

@@ -18,7 +18,7 @@ const MintReview = ({ imageDataUrl, bid, onCompleteLink }) => {
       <HeadingText>Yay!</HeadingText>
       <p>This is how your NFT will appear on the marketplace. You cannot remove an NFT once it is minted.</p>
       <ArtItem dataUrl={imageDataUrl} bid={bid} />
-      <ButtonBottom link={onCompleteLink} />
+      <ButtonBottom link={onCompleteLink} text="Mint NFT" />
     </Container>
   );
 };

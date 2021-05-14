@@ -38,7 +38,7 @@ const MintDescribe = ({ onCompleteLink }) => {
       <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
       <InputRoyalty name="royalty" labelText="Royalty Fee" isRequired asideText={`@${user.accountId}`} />
       <span className="collaborator">+ Add Collaborator</span>
-      <ButtonBottom link={onCompleteLink} />
+      <ButtonBottom link={onCompleteLink} text="Next Step: Upload Artwork" />
     </Container>
   );
 };

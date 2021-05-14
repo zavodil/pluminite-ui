@@ -22,16 +22,17 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const ButtonBottom = ({ link }) => (
+const ButtonBottom = ({ link, text }) => (
   <StyledContainer className="button-bottom">
     <Button isPrimary isLink>
-      <Link to={link}>Next Step: Upload Artwork</Link>
+      <Link to={link}>{text}</Link>
     </Button>
   </StyledContainer>
 );
 
 ButtonBottom.propTypes = {
-  link: PropTypes.string,
+  link: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
 };
 
 export default ButtonBottom;
