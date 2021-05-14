@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
-import MintDescribe from './Mint/MintDescribe';
-import MintUpload from './Mint/MintUpload';
-import MintReview from './Mint/MintReview';
+import { MintDescribe, MintUpload, MintReview } from './MintSteps';
 
 import bgSignup from '../assets/bg-signup.png';
 
