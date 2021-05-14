@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { HashRouter as Router, Switch } from 'react-router-dom';
+import { ToastContainer, Zoom } from 'react-toastify';
 
 import { NearContext } from './contexts';
 
@@ -12,6 +13,7 @@ import LogIn from './components/LogIn';
 import Mint from './components/Mint';
 
 import GlobalStyle from './styles/GlobalStyle';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function App() {
   const { user, isLoading } = useContext(NearContext);
@@ -54,6 +56,7 @@ export default function App() {
           </div>
           <div className="footer" />
         </Router>
+        <ToastContainer transition={Zoom} />
       </div>
     </>
   );

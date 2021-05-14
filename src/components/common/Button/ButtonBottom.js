@@ -22,9 +22,9 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const ButtonBottom = ({ link, text }) => (
+const ButtonBottom = ({ link, text, onButtonClick = () => {} }) => (
   <StyledContainer className="button-bottom">
-    <Button isPrimary isLink>
+    <Button isPrimary isLink onClick={onButtonClick}>
       <Link to={link}>{text}</Link>
     </Button>
   </StyledContainer>
@@ -33,6 +33,7 @@ const ButtonBottom = ({ link, text }) => (
 ButtonBottom.propTypes = {
   link: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
+  onButtonClick: PropTypes.func,
 };
 
 export default ButtonBottom;
