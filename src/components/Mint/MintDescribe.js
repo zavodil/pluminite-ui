@@ -12,11 +12,6 @@ const Container = styled('div')`
   max-width: 600px;
   margin: 0 auto;
 
-  h2 {
-    margin-bottom: 0;
-    text-align: center;
-  }
-
   .freebies {
     min-height: 70px;
   }

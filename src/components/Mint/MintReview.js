@@ -10,11 +10,6 @@ const Container = styled('div')`
   margin: 0 auto;
   width: 100%;
 
-  h2 {
-    margin-bottom: 0;
-    text-align: center;
-  }
-
   .button-bottom {
     position: fixed;
     display: flex;
