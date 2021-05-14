@@ -43,7 +43,6 @@ export const NearContextProvider = ({ currentUser, nearConfig, wallet, near, chi
     wallet.requestSignIn(
       nearConfig.contractName,
       'NEAR Pluminite',
-      `${origin}/${hash ? '#' : ''}/mint`.replaceAll(/([^:]\/)\/+/g, '$1')
     );
   };
   const signOut = () => {
