@@ -29,7 +29,7 @@ const Container = styled('div')`
   }
 `;
 
-export default function MintDescribe() {
+function MintUpload() {
   const match = useRouteMatch();
 
   return (
@@ -46,3 +46,5 @@ export default function MintDescribe() {
     </Container>
   );
 }
+
+export default MintUpload;
