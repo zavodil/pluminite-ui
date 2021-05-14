@@ -10,8 +10,9 @@ const placeholderBid = 55;
 
 const StyledContainer = styled('div')`
   position: relative;
-  transition: 250ms;
+  width: fit-content;
   margin: 15px 5px;
+  transition: 250ms;
 
   :hover {
     transform: scale(1.01);
