@@ -5,9 +5,9 @@ import { NearContext } from '../contexts';
 
 import { DisplayText } from './common/typography';
 import { Contribute, Mint } from './common/popups';
+import ArtItem from './common/ArtItem';
 
 import DiamondIcon from '../assets/DiamondIcon';
-import art from '../assets/art.png';
 
 const Container = styled('div')`
   padding: 15px;
@@ -86,30 +86,9 @@ export default function Home() {
       </div>
       <div className="items-container">
         <div className="items">
-          <div className="item">
-            <img src={art} alt="art" />
-            <button>Bid $55</button>
-          </div>
-          <div className="item">
-            <img src={art} alt="art" />
-            <button>Bid $55</button>
-          </div>
-          <div className="item">
-            <img src={art} alt="art" />
-            <button>Bid $55</button>
-          </div>
-          <div className="item">
-            <img src={art} alt="art" />
-            <button>Bid $55</button>
-          </div>
-          <div className="item">
-            <img src={art} alt="art" />
-            <button>Bid $55</button>
-          </div>
-          <div className="item">
-            <img src={art} alt="art" />
-            <button>Bid $55</button>
-          </div>
+          {Array.from({ length: 10 }).map((_, i) => (
+            <ArtItem key={i} />
+          ))}
         </div>
       </div>
       <div className="pop-up">{user ? <Mint /> : <Contribute />}</div>
