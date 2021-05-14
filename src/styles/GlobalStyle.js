@@ -26,6 +26,7 @@ const GlobalStyle = createGlobalStyle`
     --background: #23024B;
     --background-dark: #1F043C;
     --bubble-gum: #FF79ED;
+    --green: #00FF38;
 
     --radius-default: 8px;
   }

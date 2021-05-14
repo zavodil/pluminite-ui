@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { toast } from 'react-toastify';
 
 import { HeadingText } from '../common/typography';
+import { Message } from '../common/messages';
 import ArtItem from '../common/ArtItem';
 import ButtonBottom from '../common/Button/ButtonBottom';
 
@@ -15,7 +16,7 @@ const Container = styled('div')`
 
 const MintReview = ({ imageDataUrl, bid, onCompleteLink }) => {
   const showMintSuccessMessage = () => {
-    toast('Your NFT is on the marketplace. Mint another gem →', {
+    toast.success(<Message>Your NFT is on the marketplace. Mint another gem →</Message>, {
       position: 'bottom-right',
       hideProgressBar: true,
       closeOnClick: false,

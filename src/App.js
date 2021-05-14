@@ -1,16 +1,20 @@
 import React, { useContext } from 'react';
 import { HashRouter as Router, Switch } from 'react-router-dom';
-import { ToastContainer, Zoom } from 'react-toastify';
+import { Zoom } from 'react-toastify';
 
 import { NearContext } from './contexts';
 
 import { GuestPage, Page, UserPage } from './router';
+
+import StyledToastContainer from './StyledToastContainer';
 
 import Navigation from './components/Navigation';
 import Home from './components/Home';
 import SignUp from './components/SignUp';
 import LogIn from './components/LogIn';
 import Mint from './components/Mint';
+
+import CloseButton from './components/common/Button/CloseButton';
 
 import GlobalStyle from './styles/GlobalStyle';
 import 'react-toastify/dist/ReactToastify.css';
@@ -56,7 +60,7 @@ export default function App() {
           </div>
           <div className="footer" />
         </Router>
-        <ToastContainer transition={Zoom} />
+        <StyledToastContainer transition={Zoom} closeButton={<CloseButton className="Toastify__close-button" />} />
       </div>
     </>
   );
