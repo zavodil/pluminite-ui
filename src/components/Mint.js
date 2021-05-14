@@ -12,36 +12,6 @@ const Container = styled('div')`
   height: 100%;
   padding: 100px 28px 120px;
 
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  .freebies {
-    min-height: 70px;
-  }
-
-  .collaborator {
-    cursor: pointer;
-  }
-
-  .button-bottom {
-    position: fixed;
-    display: flex;
-    justify-content: center;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    padding: 20px 13px;
-    background-color: var(--plum);
-    box-shadow: 0 0 74px rgba(190, 20, 205, 0.45);
-
-    button {
-      width: 100%;
-      max-width: 400px;
-    }
-  }
-
   @media (min-width: 767px) {
     background: url(${bgSignup}) no-repeat bottom left fixed;
   }
