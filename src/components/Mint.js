@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import MintDescribe from './Mint/MintDescribe';
 import MintUpload from './Mint/MintUpload';
+import MintReview from './Mint/MintReview';
 
 import bgSignup from '../assets/bg-signup.png';
 
@@ -61,6 +62,9 @@ export default function Mint() {
       <Switch>
         <Route path={`${match.path}/upload`}>
           <MintUpload />
+        </Route>
+        <Route path={`${match.path}/review`}>
+          <MintReview />
         </Route>
         <Route path={match.path}>
           <MintDescribe />
