@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { NearContext } from '../../contexts';
 
 import { HeadingText, SmallText } from '../common/typography';
 import { Input, InputNear, InputRoyalty } from '../common/forms';
-import Button from '../common/Button';
+import ButtonBottom from '../common/Button/ButtonBottom';
 
 const Container = styled('div')`
   max-width: 600px;
@@ -19,23 +18,6 @@ const Container = styled('div')`
 
   .collaborator {
     cursor: pointer;
-  }
-
-  .button-bottom {
-    position: fixed;
-    display: flex;
-    justify-content: center;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    padding: 20px 13px;
-    background-color: var(--plum);
-    box-shadow: 0 0 74px rgba(190, 20, 205, 0.45);
-
-    button {
-      width: 100%;
-      max-width: 400px;
-    }
   }
 `;
 
@@ -56,11 +38,7 @@ const MintDescribe = ({ onCompleteLink }) => {
       <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
       <InputRoyalty name="royalty" labelText="Royalty Fee" isRequired asideText={`@${user.accountId}`} />
       <span className="collaborator">+ Add Collaborator</span>
-      <div className="button-bottom">
-        <Button isPrimary isLink>
-          <Link to={onCompleteLink}>Next Step: Upload Artwork</Link>
-        </Button>
-      </div>
+      <ButtonBottom link={onCompleteLink} />
     </Container>
   );
 };
