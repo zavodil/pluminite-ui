@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 
@@ -41,7 +42,7 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const ArtDropzone = () => {
+const ArtDropzone = ({ onUpload }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [imageDataUrl, setImageDataUrl] = useState(null);
   const [isError, setIsError] = useState(false);
@@ -65,6 +66,7 @@ const ArtDropzone = () => {
     reader.onload = () => {
       setIsLoading(false);
       setImageDataUrl(reader.result);
+      onUpload(reader.result);
     };
     reader.readAsDataURL(file);
   }, []);
@@ -92,6 +94,10 @@ const ArtDropzone = () => {
       <p className="advice extra-text">We advise a 1:1 ratio. Max file size WIP.</p>
     </StyledContainer>
   );
+};
+
+ArtDropzone.propTypes = {
+  onUpload: PropTypes.func,
 };
 
 export default ArtDropzone;

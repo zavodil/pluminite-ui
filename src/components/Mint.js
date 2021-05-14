@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -51,15 +51,16 @@ const Container = styled('div')`
 
 export default function Mint() {
   const match = useRouteMatch();
+  const [imageDataUrl, setImageDataUrl] = useState(null);
 
   return (
     <Container>
       <Switch>
         <Route path={`${match.path}/upload`}>
-          <MintUpload />
+          <MintUpload onUpload={setImageDataUrl} />
         </Route>
         <Route path={`${match.path}/review`}>
-          <MintReview />
+          <MintReview imageDataUrl={imageDataUrl} />
         </Route>
         <Route path={match.path}>
           <MintDescribe />
