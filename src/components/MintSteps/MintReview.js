@@ -16,13 +16,7 @@ const Container = styled('div')`
 
 const MintReview = ({ imageDataUrl, bid, onCompleteLink }) => {
   const showMintSuccessMessage = () => {
-    toast.success(<MintSuccessMessage />, {
-      position: 'bottom-right',
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-    });
+    toast.success(<MintSuccessMessage />);
   };
 
   return (

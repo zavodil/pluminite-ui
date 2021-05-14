@@ -59,7 +59,13 @@ export default function App() {
             </Switch>
           </div>
           <div className="footer" />
-          <StyledToastContainer transition={Zoom} closeButton={<CloseButton className="Toastify__close-button" />} />
+          <StyledToastContainer
+            position="bottom-right"
+            hideProgressBar
+            closeOnClick={false}
+            transition={Zoom}
+            closeButton={<CloseButton className="Toastify__close-button" />}
+          />
         </Router>
       </div>
     </>
