@@ -1,3 +1,4 @@
 import Message from './Message';
+import MintSuccessMessage from './MintSuccessMessage';
 
-export { Message };
+export { Message, MintSuccessMessage };

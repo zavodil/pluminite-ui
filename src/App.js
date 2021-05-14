@@ -59,8 +59,8 @@ export default function App() {
             </Switch>
           </div>
           <div className="footer" />
+          <StyledToastContainer transition={Zoom} closeButton={<CloseButton className="Toastify__close-button" />} />
         </Router>
-        <StyledToastContainer transition={Zoom} closeButton={<CloseButton className="Toastify__close-button" />} />
       </div>
     </>
   );
