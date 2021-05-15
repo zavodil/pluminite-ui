@@ -38,7 +38,7 @@ const ArtItem = ({ dataUrl, bid }) => (
   <StyledContainer>
     <img src={dataUrl || placeholderDataUrl} alt="art" />
     <Button isPrimary isSmall>
-      Bid ${bid || placeholderBid}
+      Bid {bid || placeholderBid}Ⓝ
     </Button>
   </StyledContainer>
 );
