@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import Dropdown from '../common/Dropdown';
 import Hamburger from '../common/Hamburger';
+import Balance from './Balance';
 
 const DropdownBase = ({ handleOnClick, className }) => <Hamburger className={className} onClick={handleOnClick} />;
 
@@ -43,6 +44,7 @@ const ProfileUserMenu = () => {
         <Link className="nav__link nav__link--dropdown" to="/mint">
           Mint a Gem
         </Link>
+        <Balance className="nav__link nav__link--dropdown" />
       </Dropdown>
     </StyledContainer>
   );

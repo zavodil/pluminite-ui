@@ -40,15 +40,15 @@ const Right = () => {
   const isSignUpInPage = !!useRouteMatch('/sign-up') || !!useRouteMatch('/log-in');
   const isProfilePage = useRouteMatch('/profile');
 
+  const { user } = useContext(NearContext);
+
   if (isSignUpInPage) {
     return null;
   }
 
-  const { user } = useContext(NearContext);
-
   let toRender;
 
-  if (isProfilePage) {
+  if (isProfilePage && user) {
     toRender = <ProfileUserMenu />;
   } else if (user) {
     toRender = <UserMenu />;
