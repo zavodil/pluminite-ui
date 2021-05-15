@@ -1,16 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { utils } from 'near-api-js';
 
 import { NearContext } from '../../contexts';
 
 import Dropdown from '../common/Dropdown';
-
-import { getUSDsFromNear } from '../../apis';
-
-const { formatNearAmount } = utils.format;
+import Balance from './Balance';
 
 const StyledSpan = styled('span')`
   color: var(--bubble-gum);
@@ -56,16 +52,6 @@ const StyledContainer = styled('div')`
 
 const UserMenu = () => {
   const { user, signOut } = useContext(NearContext);
-  const [USDs, setUSDs] = useState(null);
-
-  const nearFormatted = formatNearAmount(user.balance);
-  const nearRounded = Math.round(nearFormatted * 1000) / 1000;
-
-  useEffect(() => {
-    getUSDsFromNear(nearRounded).then((usdsFromNears) => {
-      setUSDs(usdsFromNears);
-    });
-  }, []);
 
   const signOutAction = () => {
     signOut();
@@ -80,9 +66,7 @@ const UserMenu = () => {
         <Link className="nav__link nav__link--dropdown" to="/profile">
           View profile
         </Link>
-        <span className="nav__link nav__link--dropdown">
-          Balance: {nearRounded}Ⓝ {USDs && `~$${Math.round(USDs * 1000) / 1000} USD`}
-        </span>
+        <Balance className="nav__link nav__link--dropdown" />
         <Link className="nav__link nav__link--dropdown" to="#" onClick={() => signOutAction()}>
           Log out
         </Link>
