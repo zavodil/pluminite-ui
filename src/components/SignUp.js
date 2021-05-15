@@ -8,8 +8,6 @@ import { HeadingText } from './common/typography';
 import Button from './common/Button';
 import SeparatorHorizontal from './common/Separator/SeparatorHorizontal';
 
-import bgSignup from '../assets/bg-signup.png';
-
 const Container = styled('div')`
   display: flex;
   flex-direction: column;
@@ -24,7 +22,6 @@ const Container = styled('div')`
     padding-top: 0;
     align-items: center;
     justify-content: center;
-    background: url(${bgSignup}) no-repeat bottom left fixed;
   }
 `;
 
