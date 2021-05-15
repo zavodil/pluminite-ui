@@ -12,12 +12,12 @@ const Container = styled('div')`
   width: 100%;
 `;
 
-const MintUpload = ({ onUpload, onCompleteLink }) => {
+const MintUpload = ({ onUpload, onCompleteLink, imageDataUrl }) => {
   return (
     <Container>
       <HeadingText>Upload Art</HeadingText>
       <ArtDropzone onUpload={onUpload} />
-      <ButtonBottom link={onCompleteLink} text="Last Step: Review" />
+      <ButtonBottom link={onCompleteLink} text="Last Step: Review" isDisabled={!imageDataUrl} />
     </Container>
   );
 };
@@ -25,6 +25,7 @@ const MintUpload = ({ onUpload, onCompleteLink }) => {
 MintUpload.propTypes = {
   onUpload: PropTypes.func,
   onCompleteLink: PropTypes.string,
+  imageDataUrl: PropTypes.string,
 };
 
 export default MintUpload;

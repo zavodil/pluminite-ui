@@ -37,7 +37,15 @@ const StyledButton = styled('button')`
     border-radius: 4px;
   }
 
-  :hover {
+  &.button--disabled {
+    cursor: default;
+
+    a {
+      cursor: default;
+    }
+  }
+
+  :not(.button--disabled):hover {
     background-color: var(--pink);
     color: white;
   }
@@ -50,7 +58,7 @@ const StyledButton = styled('button')`
   }
 `;
 
-const Button = ({ children, isPrimary = false, isSecondary = false, isLink = false, isSmall = false, ...props }) => (
+const Button = ({ children, isPrimary, isSecondary, isLink, isSmall, isDisabled, ...props }) => (
   <StyledButton
     {...props}
     className={classNames('button', {
@@ -58,6 +66,7 @@ const Button = ({ children, isPrimary = false, isSecondary = false, isLink = fal
       'button--secondary': isSecondary,
       'button--link': isLink,
       'button--small': isSmall,
+      'button--disabled': isDisabled,
     })}
   >
     {children}
@@ -70,6 +79,15 @@ Button.propTypes = {
   isSecondary: PropTypes.bool,
   isLink: PropTypes.bool,
   isSmall: PropTypes.bool,
+  isDisabled: PropTypes.bool,
+};
+
+Button.defaultProps = {
+  isPrimary: false,
+  isSecondary: false,
+  isLink: false,
+  isSmall: false,
+  isDisabled: false,
 };
 
 export default Button;
