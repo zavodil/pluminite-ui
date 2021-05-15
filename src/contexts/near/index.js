@@ -38,11 +38,11 @@ export const NearContextProvider = ({ currentUser, nearConfig, wallet, near, chi
   };
 
   const signIn = () => {
-    const { origin, hash } = window.location;
-
     wallet.requestSignIn(
       nearConfig.contractName,
-      'NEAR Pluminite',
+      'NEAR Pluminite'
+      // todo: fix redirect link for gh-pages
+      // `${window.location.origin}/${window.location.hash ? '#' : ''}/mint`.replaceAll(/([^:]\/)\/+/g, '$1')
     );
   };
   const signOut = () => {

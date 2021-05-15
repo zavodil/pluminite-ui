@@ -29,14 +29,10 @@ const Container = styled('div')`
 `;
 
 export default function SignUp() {
-  const { signIn, signUp } = useContext(NearContext);
+  const { signIn, nearContent } = useContext(NearContext);
 
   const signInAction = () => {
     signIn();
-  };
-
-  const signUpAction = () => {
-    signUp();
   };
 
   return (
@@ -51,9 +47,11 @@ export default function SignUp() {
       <SeparatorHorizontal>OR</SeparatorHorizontal>
       <p>Need a NEAR wallet?</p>
       <Button isPrimary isLink>
-        <Link to="#" onClick={() => signUpAction()}>
-          Create a NEAR Wallet
-        </Link>
+        {nearContent?.config?.walletUrl ? (
+          <a href={`${nearContent.config.walletUrl}/create`}>Create a NEAR Wallet</a>
+        ) : (
+          <Link to={'#'}>Create a NEAR Wallet</Link>
+        )}
       </Button>
       <p className="trouble">
         Having trouble making a wallet? Email us at <a href="mailto:info@pluminite.com">info@pluminite.com</a>.

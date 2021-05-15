@@ -2,6 +2,7 @@ const CONTRACT_NAME = process.env.CONTRACT_NAME || 'pluminite.one.testnet';
 
 function getConfig(env) {
   switch (env) {
+    // todo: use mainnet on production as well
     case 'mainnet':
       return {
         networkId: 'mainnet',
