@@ -13,6 +13,7 @@ import Home from './components/Home';
 import SignUp from './components/SignUp';
 import LogIn from './components/LogIn';
 import Mint from './components/Mint';
+import Profile from './components/Profile';
 
 import CloseButton from './components/common/Button/CloseButton';
 
@@ -53,6 +54,14 @@ export default function App() {
                 path="/mint"
                 component={Mint}
                 title="Mint a Gem"
+                isAuthenticated={isAuthenticated}
+                isLoading={isLoading}
+              />
+              <UserPage
+                exact
+                path="/profile"
+                component={Profile}
+                title={user?.accountId || 'Profile'}
                 isAuthenticated={isAuthenticated}
                 isLoading={isLoading}
               />
