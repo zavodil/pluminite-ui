@@ -66,7 +66,9 @@ const UserMenu = () => {
         <Link className="nav__link nav__link--dropdown" to="/profile">
           View profile
         </Link>
-        <Balance className="nav__link nav__link--dropdown" />
+        <div className="nav__link nav__link--dropdown">
+          Balance: <Balance />
+        </div>
         <Link className="nav__link nav__link--dropdown" to="#" onClick={() => signOutAction()}>
           Log out
         </Link>
