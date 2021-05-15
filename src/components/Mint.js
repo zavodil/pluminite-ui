@@ -7,7 +7,7 @@ import { MintDescribe, MintUpload, MintReview } from './MintSteps';
 const Container = styled('div')`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: calc(100% - 90px);
   padding: 100px 28px 120px;
 `;
 

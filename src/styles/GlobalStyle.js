@@ -63,6 +63,12 @@ const GlobalStyle = createGlobalStyle`
   .content {
     flex: 1 0 auto;
     margin-top: -93px;
+    
+    .buttons-bottom {
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
+    }
   }
 
   .footer {

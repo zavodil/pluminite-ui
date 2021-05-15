@@ -5,16 +5,14 @@ import styled from 'styled-components';
 
 import Button from './Button';
 
+import { Portal } from '../utils';
+
 const StyledContainer = styled('div')`
-  position: fixed;
   display: flex;
   justify-content: center;
-  bottom: 0;
-  right: 0;
-  left: 0;
   padding: 20px 13px;
   background-color: var(--plum);
-  box-shadow: 0 0 74px rgba(190, 20, 205, 0.45);
+  box-shadow: 0 -36px 36px rgba(190, 20, 205, 0.22);
 
   button {
     width: 100%;
@@ -29,11 +27,13 @@ const ButtonBottom = ({ link, text, onButtonClick, isDisabled }) => {
   };
 
   return (
-    <StyledContainer className="button-bottom">
-      <Button isPrimary isDisabled={isDisabled} {...buttonProps}>
-        {isDisabled ? text : <Link to={link}>{text}</Link>}
-      </Button>
-    </StyledContainer>
+    <Portal mountClassName="buttons-bottom">
+      <StyledContainer className="button-bottom">
+        <Button isPrimary isDisabled={isDisabled} {...buttonProps}>
+          {isDisabled ? text : <Link to={link}>{text}</Link>}
+        </Button>
+      </StyledContainer>
+    </Portal>
   );
 };
 

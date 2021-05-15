@@ -67,6 +67,7 @@ export default function App() {
                 isLoading={isLoading}
               />
             </Switch>
+            <div className="buttons-bottom" />
           </div>
           <Footer />
           <StyledToastContainer

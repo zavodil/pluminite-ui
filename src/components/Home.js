@@ -58,9 +58,11 @@ const Container = styled('div')`
   }
 
   .pop-up {
-    position: fixed;
+    position: sticky;
     bottom: 10px;
     right: 10px;
+    width: fit-content;
+    margin-left: auto;
   }
 
   @media (min-width: 767px) {
