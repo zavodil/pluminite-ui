@@ -5,7 +5,7 @@ import { NearContext } from '../contexts';
 
 import { DisplayText } from './common/typography';
 import { Contribute, Mint } from './common/popups';
-import ArtItem from './common/ArtItem';
+import { ArtItemPriced } from './common/art';
 
 import DiamondIcon from '../assets/DiamondIcon';
 
@@ -87,7 +87,7 @@ export default function Home() {
       <div className="items-container">
         <div className="items">
           {Array.from({ length: 10 }).map((_, i) => (
-            <ArtItem key={i} />
+            <ArtItemPriced key={i} />
           ))}
         </div>
       </div>

@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import defaultProfilePicture from '../assets/default-profile-picture.png';
 import Balance from './NavigationComponents/Balance';
 import Button from './common/Button';
-import ArtItem from './common/ArtItem';
+import { ArtItemEditable } from './common/art';
 
 const Container = styled('div')`
   display: flex;
@@ -135,20 +135,8 @@ export default function Profile() {
           </div>
         </div>
         <div className="tabs-content">
-          {gemsTabActive === 'own' && (
-            <div>
-              {Array.from({ length: 2 }).map((_, i) => (
-                <ArtItem key={i} />
-              ))}
-            </div>
-          )}
-          {gemsTabActive === 'made' && (
-            <div>
-              {Array.from({ length: 4 }).map((_, i) => (
-                <ArtItem key={i} />
-              ))}
-            </div>
-          )}
+          {gemsTabActive === 'own' && Array.from({ length: 4 }).map((_, i) => <ArtItemEditable key={i} />)}
+          {gemsTabActive === 'made' && Array.from({ length: 4 }).map((_, i) => <ArtItemEditable key={i} />)}
         </div>
       </div>
     </Container>
