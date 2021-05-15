@@ -95,6 +95,13 @@ const Container = styled('div')`
       }
     }
   }
+
+  .tabs-content {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+  }
 `;
 
 export default function Profile() {
