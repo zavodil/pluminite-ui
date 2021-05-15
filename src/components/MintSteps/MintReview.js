@@ -23,7 +23,7 @@ const MintReview = ({ imageDataUrl, bid, onCompleteLink }) => {
     <Container>
       <HeadingText>Yay!</HeadingText>
       <p>This is how your NFT will appear on the marketplace. You cannot remove an NFT once it is minted.</p>
-      <ArtItem dataUrl={imageDataUrl} bid={bid} />
+      <ArtItem dataUrl={imageDataUrl} bid={bid} bidAvailable={false} />
       <ButtonBottom link={onCompleteLink} text="Mint NFT" onButtonClick={showMintSuccessMessage} />
     </Container>
   );
@@ -31,7 +31,7 @@ const MintReview = ({ imageDataUrl, bid, onCompleteLink }) => {
 
 MintReview.propTypes = {
   imageDataUrl: PropTypes.string,
-  bid: PropTypes.string,
+  bid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onCompleteLink: PropTypes.string,
 };
 

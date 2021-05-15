@@ -4,8 +4,10 @@ import styled from 'styled-components';
 
 import Button from './Button';
 
+// todo: remove for production
 import placeholderDataUrl from '../../assets/art.png';
 
+// todo: remove for production
 const placeholderBid = 55;
 
 const StyledContainer = styled('div')`
@@ -34,18 +36,27 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const ArtItem = ({ dataUrl, bid }) => (
+const ArtItem = ({ dataUrl, bid, bidAvailable }) => (
   <StyledContainer>
     <img src={dataUrl || placeholderDataUrl} alt="art" />
-    <Button isPrimary isSmall>
-      Bid {bid || placeholderBid}Ⓝ
+    <Button isPrimary isSmall isDisabled={!bidAvailable}>
+      Bid {bid}Ⓝ
     </Button>
   </StyledContainer>
 );
 
 ArtItem.propTypes = {
   dataUrl: PropTypes.string,
-  bid: PropTypes.string,
+  bid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  bidAvailable: PropTypes.bool,
+};
+
+ArtItem.defaultProps = {
+  // todo: remove for production
+  dataUrl: placeholderDataUrl,
+  // todo: remove for production
+  bid: placeholderBid,
+  bidAvailable: true,
 };
 
 export default ArtItem;
