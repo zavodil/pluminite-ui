@@ -13,6 +13,10 @@ const Container = styled('div')`
   height: 100%;
   padding: 100px 28px 120px;
 
+  > * {
+    margin: 0 0 25px;
+  }
+
   .summary {
     display: flex;
     flex-direction: row;
@@ -51,6 +55,46 @@ const Container = styled('div')`
       }
     }
   }
+
+  .tabs-titles {
+    display: flex;
+    margin-bottom: 30px;
+
+    .tabs-title {
+      position: relative;
+      text-transform: uppercase;
+      font-family: 'Staatliches', sans-serif;
+      font-size: 18px;
+      line-height: 24px;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+
+      :first-of-type {
+        margin-right: 40px;
+      }
+
+      :hover {
+        color: var(--bubble-gum);
+      }
+
+      &--active {
+        color: var(--bubble-gum);
+
+        :after {
+          content: '';
+          position: absolute;
+          right: 0;
+          bottom: -10px;
+          left: 0;
+          width: 33%;
+          height: 4px;
+          margin: auto;
+          background-color: var(--bubble-gum);
+          border-radius: var(--radius-default);
+        }
+      }
+    }
+  }
 `;
 
 export default function Profile() {
@@ -69,8 +113,8 @@ export default function Profile() {
           <span className="summary-block-bottom">Your Funds</span>
         </div>
       </div>
-      <p>You haven’t added a description yet.</p>
-      <Button isPrimary>Edit Profile</Button>
+      <p className="profile-description">You haven’t added a description yet.</p>
+      <Button isSecondary>Edit Profile</Button>
       <div className="tabs">
         <div className="tabs-titles">
           <div
@@ -89,22 +133,22 @@ export default function Profile() {
           >
             Gems I made
           </div>
-          <div className="tabs-content">
-            {gemsTabActive === 'own' && (
-              <div>
-                {Array.from({ length: 2 }).map((_, i) => (
-                  <ArtItem key={i} />
-                ))}
-              </div>
-            )}
-            {gemsTabActive === 'made' && (
-              <div>
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <ArtItem key={i} />
-                ))}
-              </div>
-            )}
-          </div>
+        </div>
+        <div className="tabs-content">
+          {gemsTabActive === 'own' && (
+            <div>
+              {Array.from({ length: 2 }).map((_, i) => (
+                <ArtItem key={i} />
+              ))}
+            </div>
+          )}
+          {gemsTabActive === 'made' && (
+            <div>
+              {Array.from({ length: 4 }).map((_, i) => (
+                <ArtItem key={i} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </Container>
