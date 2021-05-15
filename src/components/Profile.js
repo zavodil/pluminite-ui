@@ -11,6 +11,7 @@ const Container = styled('div')`
   display: flex;
   flex-direction: column;
   height: 100%;
+  max-width: 767px;
   padding: 100px 28px 120px;
 
   > * {
@@ -100,7 +101,27 @@ const Container = styled('div')`
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+  }
+
+  @media (min-width: 767px) {
+    margin: 0 auto;
+    align-items: center;
+
+    > * {
+      margin: 0 0 50px;
+    }
+
+    > .button {
+      width: 350px;
+    }
+
+    .tabs-titles {
+      justify-content: center;
+    }
+
+    .tabs-content {
+      justify-content: space-evenly;
+    }
   }
 `;
 
@@ -143,7 +164,7 @@ export default function Profile() {
         </div>
         <div className="tabs-content">
           {gemsTabActive === 'own' && Array.from({ length: 4 }).map((_, i) => <ArtItemEditable key={i} />)}
-          {gemsTabActive === 'made' && Array.from({ length: 4 }).map((_, i) => <ArtItemEditable key={i} />)}
+          {gemsTabActive === 'made' && Array.from({ length: 12 }).map((_, i) => <ArtItemEditable key={i} />)}
         </div>
       </div>
     </Container>
