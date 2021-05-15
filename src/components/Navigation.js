@@ -8,11 +8,11 @@ const Container = styled('div')`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
   padding: 24px;
 
   @media (min-width: 767px) {
-    align-items: center;
     justify-content: space-between;
     flex-direction: row;
   }
