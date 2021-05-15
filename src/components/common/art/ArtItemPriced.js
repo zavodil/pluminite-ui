@@ -7,7 +7,7 @@ import ArtItem from './ArtItem';
 const placeholderBid = 55;
 
 const ArtItemPriced = ({ bid, bidAvailable, ...props }) => (
-  <ArtItem buttonText={`Bid {${bid}}Ⓝ`} isButtonDisabled={!bidAvailable} {...props} />
+  <ArtItem buttonText={`Bid ${bid}Ⓝ`} isButtonDisabled={!bidAvailable} {...props} />
 );
 
 ArtItemPriced.propTypes = {
