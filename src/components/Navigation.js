@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { Left, Right } from './NavigationComponents';
 
-const Container = styled('div')`
+const Container = styled('header')`
   z-index: 1;
   display: flex;
   flex-direction: row;

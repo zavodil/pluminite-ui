@@ -9,6 +9,7 @@ import { GuestPage, Page, UserPage } from './router';
 import StyledToastContainer from './StyledToastContainer';
 
 import Navigation from './components/Navigation';
+import Footer from './components/Footer';
 import Home from './components/Home';
 import SignUp from './components/SignUp';
 import LogIn from './components/LogIn';
@@ -67,7 +68,7 @@ export default function App() {
               />
             </Switch>
           </div>
-          <div className="footer" />
+          <Footer />
           <StyledToastContainer
             position="bottom-right"
             hideProgressBar
