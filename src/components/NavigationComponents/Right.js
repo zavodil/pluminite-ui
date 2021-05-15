@@ -6,7 +6,7 @@ import { NearContext } from '../../contexts';
 
 import UserMenu from './UserMenu';
 import Button from '../common/Button';
-import Hamburger from '../common/Hamburger';
+import ProfileUserMenu from './ProfileUserMenu';
 
 const StyledContainer = styled('div')`
   margin-left: 20px;
@@ -49,7 +49,7 @@ const Right = () => {
   let toRender;
 
   if (isProfilePage) {
-    toRender = <Hamburger />;
+    toRender = <ProfileUserMenu />;
   } else if (user) {
     toRender = <UserMenu />;
   } else {

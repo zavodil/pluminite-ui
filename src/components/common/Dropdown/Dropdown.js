@@ -88,7 +88,7 @@ const Dropdown = React.forwardRef(({ dropdownBase, title = '', listStyles = {}, 
 Dropdown.displayName = 'Dropdown';
 Dropdown.propTypes = {
   dropdownBase: PropTypes.func,
-  title: PropTypes.oneOfType([PropTypes.string, ReactChildrenType]).isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, ReactChildrenType]),
   listStyles: StylesType,
   children: ReactChildrenType,
 };
