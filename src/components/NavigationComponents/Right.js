@@ -4,7 +4,7 @@ import { Link, useRouteMatch } from 'react-router-dom';
 
 import { NearContext } from '../../contexts';
 
-import UserDropdown from './UserDropdown';
+import UserMenu from './UserMenu';
 import Button from '../common/Button';
 import Hamburger from '../common/Hamburger';
 
@@ -51,7 +51,7 @@ const Right = () => {
   if (isProfilePage) {
     toRender = <Hamburger />;
   } else if (user) {
-    toRender = <UserDropdown />;
+    toRender = <UserMenu />;
   } else {
     toRender = (
       <>

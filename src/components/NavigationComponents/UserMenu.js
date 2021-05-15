@@ -54,7 +54,7 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const UserDropdown = () => {
+const UserMenu = () => {
   const { user, signOut } = useContext(NearContext);
   const [USDs, setUSDs] = useState(null);
 
@@ -91,4 +91,4 @@ const UserDropdown = () => {
   );
 };
 
-export default UserDropdown;
+export default UserMenu;

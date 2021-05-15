@@ -1,5 +1,5 @@
 import Left from './Left';
 import Right from './Right';
-import UserDropdown from './UserDropdown';
+import UserMenu from './UserMenu';
 
-export { Left, Right, UserDropdown };
+export { Left, Right, UserMenu };
