@@ -16,10 +16,10 @@ const StyledContainer = styled('div')`
   box-shadow: var(--shadow-primary);
 `;
 
-const Mint = () => {
+const MintPlus = () => {
   const history = useHistory();
 
   return <StyledContainer onClick={() => history.push('/mint')}>+</StyledContainer>;
 };
 
-export default Mint;
+export default MintPlus;

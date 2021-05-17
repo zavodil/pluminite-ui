@@ -1,4 +1,4 @@
 import Contribute from './Contribute';
-import Mint from './Mint';
+import MintPlus from './MintPlus';
 
-export { Contribute, Mint };
+export { Contribute, MintPlus };

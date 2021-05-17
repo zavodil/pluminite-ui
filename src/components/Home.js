@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { NearContext } from '../contexts';
 
 import { DisplayText } from './common/typography';
-import { Contribute, Mint } from './common/popups';
+import { Contribute, MintPlus } from './common/popups';
 import { ArtItemPriced } from './common/art';
 
 import DiamondIcon from '../assets/DiamondIcon';
@@ -93,7 +93,7 @@ export default function Home() {
           ))}
         </div>
       </div>
-      <div className="pop-up">{user ? <Mint /> : <Contribute />}</div>
+      <div className="pop-up">{user ? <MintPlus /> : <Contribute />}</div>
     </Container>
   );
 }
