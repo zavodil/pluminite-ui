@@ -23,7 +23,7 @@ const StyledContainer = styled('div')`
 
 const Left = () => {
   const isHomePage = useRouteMatch('/').isExact;
-  const isProfilePage = useRouteMatch('/profile');
+  const isProfilePage = useRouteMatch('/profile').isExact;
   const { user } = useContext(NearContext);
 
   let toRender;
