@@ -13,6 +13,7 @@ const StyledContainer = styled('div')`
   line-height: 80px;
   cursor: pointer;
   user-select: none;
+  box-shadow: var(--shadow-primary);
 `;
 
 const Mint = () => {

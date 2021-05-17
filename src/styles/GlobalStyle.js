@@ -30,6 +30,9 @@ const GlobalStyle = createGlobalStyle`
     
     --success: #00FF38;
     --error: #FF5F5F;
+    
+    --shadow-primary: 0 0 14px #BA0DD7;
+    --shadow-secondary: 0 0 14px rgba(186, 13, 215, 0.6);
 
     --radius-default: 8px;
   }

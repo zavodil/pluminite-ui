@@ -25,7 +25,7 @@ const StyledButton = styled('button')`
 
     :not(.button--disabled):hover {
       background-color: var(--pink);
-      box-shadow: 0 0 14px #ba0dd7;
+      box-shadow: var(--shadow-primary);
     }
   }
 
@@ -35,7 +35,7 @@ const StyledButton = styled('button')`
 
     :not(.button--disabled):hover {
       background-color: #320d57;
-      box-shadow: 0 0 14px rgba(186, 13, 215, 0.6);
+      box-shadow: var(--shadow-secondary);
     }
   }
 
