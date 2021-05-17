@@ -12,10 +12,15 @@ const Container = styled('div')`
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 100px 28px 0;
+  padding: 100px 28px 100px;
 
   .trouble {
     margin-top: 40px;
+  }
+
+  p {
+    font-size: 18px;
+    line-height: 20px;
   }
 
   @media (min-width: 767px) {
