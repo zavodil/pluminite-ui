@@ -99,7 +99,7 @@ export default function Profile() {
         <div className="profile">
           <p className="account-id">{user.accountId}</p>
           <Button isSecondary isSmall className="button-change-profile">
-            Change Profile Picture
+            <a>Change Profile Picture</a>
           </Button>
         </div>
       </div>
@@ -109,7 +109,7 @@ export default function Profile() {
         <Balance className="balance-text" precision={1} />
       </div>
       <StickedToBottom isSecondary>
-        <StyledButton isSecondary isLink>
+        <StyledButton isSecondary>
           <Link to="/profile">Cancel</Link>
         </StyledButton>
         <StyledButton isPrimary>Save</StyledButton>

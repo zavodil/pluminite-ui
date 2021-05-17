@@ -143,7 +143,7 @@ export default function Profile() {
         </div>
       </div>
       <p className="profile-description">You haven’t added a description yet.</p>
-      <Button isSecondary isLink>
+      <Button isSecondary>
         <Link to="/profile/edit">Edit Profile</Link>
       </Button>
       <div className="tabs">

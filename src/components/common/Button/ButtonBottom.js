@@ -13,15 +13,14 @@ const StyledButton = styled(Button)`
 
 const ButtonBottom = ({ link, text, onButtonClick, isDisabled }) => {
   const buttonProps = {
-    isLink: link && !isDisabled,
     onClick: isDisabled ? () => {} : onButtonClick,
+    isDisabled,
+    isPrimary: true,
   };
 
   return (
     <StickedToBottom isPrimary>
-      <StyledButton isPrimary isDisabled={isDisabled} {...buttonProps}>
-        {isDisabled ? text : <Link to={link}>{text}</Link>}
-      </StyledButton>
+      <StyledButton {...buttonProps}>{isDisabled ? text : <Link to={link}>{text}</Link>}</StyledButton>
     </StickedToBottom>
   );
 };

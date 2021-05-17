@@ -55,10 +55,10 @@ const Right = () => {
   } else {
     toRender = (
       <>
-        <Button isPrimary isLink>
+        <Button isPrimary>
           <Link to="/sign-up">Sign up</Link>
         </Button>
-        <Button isSecondary isLink>
+        <Button isSecondary>
           <Link to="/log-in">Log in with NEAR</Link>
         </Button>
       </>

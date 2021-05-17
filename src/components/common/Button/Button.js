@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
@@ -58,26 +59,29 @@ const StyledButton = styled('button')`
   }
 `;
 
-const Button = ({ children, isPrimary, isSecondary, isLink, isSmall, isDisabled, className, ...props }) => (
-  <StyledButton
-    {...props}
-    className={classNames('button', className, {
-      'button--primary': isPrimary,
-      'button--secondary': isSecondary,
-      'button--link': isLink,
-      'button--small': isSmall,
-      'button--disabled': isDisabled,
-    })}
-  >
-    {children}
-  </StyledButton>
-);
+const Button = ({ children, isPrimary, isSecondary, isSmall, isDisabled, className, ...props }) => {
+  const isLink = !Array.isArray(children) && (children.type === Link || children.type === 'a');
+
+  return (
+    <StyledButton
+      {...props}
+      className={classNames('button', className, {
+        'button--primary': isPrimary,
+        'button--secondary': isSecondary,
+        'button--link': isLink,
+        'button--small': isSmall,
+        'button--disabled': isDisabled,
+      })}
+    >
+      {children}
+    </StyledButton>
+  );
+};
 
 Button.propTypes = {
   children: ReactChildrenType,
   isPrimary: PropTypes.bool,
   isSecondary: PropTypes.bool,
-  isLink: PropTypes.bool,
   isSmall: PropTypes.bool,
   isDisabled: PropTypes.bool,
   className: PropTypes.string,
@@ -86,7 +90,6 @@ Button.propTypes = {
 Button.defaultProps = {
   isPrimary: false,
   isSecondary: false,
-  isLink: false,
   isSmall: false,
   isDisabled: false,
 };
