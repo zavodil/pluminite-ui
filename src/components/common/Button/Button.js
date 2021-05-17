@@ -22,11 +22,21 @@ const StyledButton = styled('button')`
     border-color: var(--lavendar);
     background-color: var(--lavendar);
     color: var(--plum);
+
+    :not(.button--disabled):hover {
+      background-color: var(--pink);
+      box-shadow: 0 0 14px #ba0dd7;
+    }
   }
 
   &.button--secondary {
     background-color: var(--plum);
     color: var(--lavendar);
+
+    :not(.button--disabled):hover {
+      background-color: #320d57;
+      box-shadow: 0 0 14px rgba(186, 13, 215, 0.6);
+    }
   }
 
   &.button--link {
@@ -44,11 +54,6 @@ const StyledButton = styled('button')`
     a {
       cursor: default;
     }
-  }
-
-  :not(.button--disabled):hover {
-    background-color: var(--pink);
-    color: white;
   }
 
   a {
