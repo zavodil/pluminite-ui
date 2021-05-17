@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import classNames from 'classnames';
 
@@ -137,12 +138,14 @@ export default function Profile() {
           <span className="summary-block-bottom">Pieces Sold</span>
         </div>
         <div className="summary-block">
-          <Balance className="summary-block-top" />
+          <Balance className="summary-block-top" precision={2} />
           <span className="summary-block-bottom">Your Funds</span>
         </div>
       </div>
       <p className="profile-description">You haven’t added a description yet.</p>
-      <Button isSecondary>Edit Profile</Button>
+      <Button isSecondary isLink>
+        <Link to="/profile/edit">Edit Profile</Link>
+      </Button>
       <div className="tabs">
         <div className="tabs-titles">
           <div
