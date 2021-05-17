@@ -111,7 +111,7 @@ export default function Profile() {
       <Textarea name="bio" labelText="Bio" rows={4} maxLength={PROFILE.BIO_MAX_LENGTH} />
       <div className="balance">
         <p className="balance-label">Your Funds</p>
-        <Balance className="balance-text" precision={1} />
+        <Balance precision={1} />
       </div>
       <StickedToBottom isSecondary>
         <StyledButton isSecondary>

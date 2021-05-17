@@ -11,13 +11,18 @@ import { getUSDsFromNear } from '../../apis';
 const StyledSpan = styled('span')`
   display: inline-flex;
   align-items: center;
+  font-family: 'Staatliches', sans-serif;
 
   span {
     white-space: nowrap;
   }
 
-  span:first-child {
+  .nears {
     margin-right: 4px;
+  }
+
+  .usds {
+    font-size: 0.75em;
   }
 `;
 
@@ -35,7 +40,7 @@ const Balance = ({ precision, ...props }) => {
   }, []);
 
   return (
-    <StyledSpan {...props}>
+    <StyledSpan className="balance-text" {...props}>
       <span className="nears">{nearRounded} Ⓝ</span>{' '}
       <span className="usds">{USDs && `~$${round(USDs, precision)} USD`}</span>
     </StyledSpan>
