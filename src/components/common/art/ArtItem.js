@@ -2,11 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import Button from './Button';
+import Button from '../Button';
 
-import placeholderDataUrl from '../../assets/art.png';
-
-const placeholderBid = 55;
+// todo: remove for production
+import placeholderDataUrl from '../../../assets/art.png';
 
 const StyledContainer = styled('div')`
   position: relative;
@@ -34,18 +33,19 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const ArtItem = ({ dataUrl, bid }) => (
+const ArtItem = ({ dataUrl, buttonText, isButtonDisabled }) => (
   <StyledContainer>
     <img src={dataUrl || placeholderDataUrl} alt="art" />
-    <Button isPrimary isSmall>
-      Bid ${bid || placeholderBid}
+    <Button isPrimary isSmall isDisabled={isButtonDisabled}>
+      {buttonText}
     </Button>
   </StyledContainer>
 );
 
 ArtItem.propTypes = {
   dataUrl: PropTypes.string,
-  bid: PropTypes.string,
+  buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  isButtonDisabled: PropTypes.bool,
 };
 
 export default ArtItem;

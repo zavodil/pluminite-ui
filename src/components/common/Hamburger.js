@@ -17,8 +17,8 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const Hamburger = () => (
-  <StyledContainer>
+const Hamburger = ({ ...props }) => (
+  <StyledContainer {...props}>
     <span className="bar" />
     <span className="bar" />
   </StyledContainer>

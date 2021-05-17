@@ -52,14 +52,18 @@ const Dropdown = React.forwardRef(({ dropdownBase, title = '', listStyles = {}, 
     },
   }));
 
-  const handleOpen = () => {
+  const switchDropdown = () => {
     setIsOpened(!isOpened);
+  };
+
+  const closeDropdown = () => {
+    setIsOpened(false);
   };
 
   const dropdownRef = useRef(null);
 
   const handleClickOutside = () => {
-    setIsOpened(false);
+    closeDropdown();
   };
 
   useDetectClickOutside(dropdownRef, handleClickOutside);
@@ -72,8 +76,8 @@ const Dropdown = React.forwardRef(({ dropdownBase, title = '', listStyles = {}, 
         })}
         ref={dropdownRef}
       >
-        <DropdownBase text={title} handleOnClick={() => handleOpen()} className="dropdown__title" />
-        <ul className="dropdown__list" style={listStyles}>
+        <DropdownBase text={title} handleOnClick={() => switchDropdown()} className="dropdown__title" />
+        <ul className="dropdown__list" style={listStyles} onClick={closeDropdown}>
           {children.length > 1 ? (
             children.map((child, index) => <DropdownItem key={`dropdown-item-${index}`}>{child}</DropdownItem>)
           ) : (
@@ -88,7 +92,7 @@ const Dropdown = React.forwardRef(({ dropdownBase, title = '', listStyles = {}, 
 Dropdown.displayName = 'Dropdown';
 Dropdown.propTypes = {
   dropdownBase: PropTypes.func,
-  title: PropTypes.oneOfType([PropTypes.string, ReactChildrenType]).isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, ReactChildrenType]),
   listStyles: StylesType,
   children: ReactChildrenType,
 };

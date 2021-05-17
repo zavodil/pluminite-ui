@@ -6,9 +6,7 @@ import InputSignAside from './InputSignAside';
 
 import { useDebounce } from '../../../hooks';
 
-const defaultRoyalty = 5;
-const minRoyalty = 0;
-const maxRoyalty = 97;
+import { APP } from '../../../constants';
 
 const StyledContainer = styled('div')`
   .aside {
@@ -17,14 +15,14 @@ const StyledContainer = styled('div')`
 `;
 
 const InputRoyalty = ({ labelText, isRequired = true, name, asideText }) => {
-  const [royalty, setRoyalty] = useState(defaultRoyalty);
+  const [royalty, setRoyalty] = useState(APP.DEFAULT_ROYALTY);
   const debouncedRoyalty = useDebounce(royalty, 500);
 
   useEffect(() => {
-    if (debouncedRoyalty < minRoyalty) {
-      setRoyalty(minRoyalty);
-    } else if (debouncedRoyalty > maxRoyalty) {
-      setRoyalty(maxRoyalty);
+    if (debouncedRoyalty < APP.MIN_ROYALTY) {
+      setRoyalty(APP.MIN_ROYALTY);
+    } else if (debouncedRoyalty > APP.MAX_ROYALTY) {
+      setRoyalty(APP.MAX_ROYALTY);
     }
   }, [debouncedRoyalty]);
 
@@ -38,8 +36,8 @@ const InputRoyalty = ({ labelText, isRequired = true, name, asideText }) => {
         asideText={asideText}
         inputOnChange={setRoyalty}
         detailsText="The royalty is the amount you earn from each resale of your NFT. You can customize royalty splits with collaborators or anyone else with a NEAR wallet."
-        min={minRoyalty}
-        max={maxRoyalty}
+        min={APP.MIN_ROYALTY}
+        max={APP.MAX_ROYALTY}
         value={royalty}
       />
     </StyledContainer>

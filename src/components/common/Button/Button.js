@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
@@ -21,11 +22,21 @@ const StyledButton = styled('button')`
     border-color: var(--lavendar);
     background-color: var(--lavendar);
     color: var(--plum);
+
+    :not(.button--disabled):hover {
+      background-color: var(--pink);
+      box-shadow: var(--shadow-primary);
+    }
   }
 
   &.button--secondary {
     background-color: var(--plum);
     color: var(--lavendar);
+
+    :not(.button--disabled):hover {
+      background-color: #320d57;
+      box-shadow: var(--shadow-secondary);
+    }
   }
 
   &.button--link {
@@ -37,9 +48,12 @@ const StyledButton = styled('button')`
     border-radius: 4px;
   }
 
-  :hover {
-    background-color: var(--pink);
-    color: white;
+  &.button--disabled {
+    cursor: default;
+
+    a {
+      cursor: default;
+    }
   }
 
   a {
@@ -50,26 +64,39 @@ const StyledButton = styled('button')`
   }
 `;
 
-const Button = ({ children, isPrimary = false, isSecondary = false, isLink = false, isSmall = false, ...props }) => (
-  <StyledButton
-    {...props}
-    className={classNames('button', {
-      'button--primary': isPrimary,
-      'button--secondary': isSecondary,
-      'button--link': isLink,
-      'button--small': isSmall,
-    })}
-  >
-    {children}
-  </StyledButton>
-);
+const Button = ({ children, isPrimary, isSecondary, isSmall, isDisabled, className, ...props }) => {
+  const isLink = !Array.isArray(children) && (children.type === Link || children.type === 'a');
+
+  return (
+    <StyledButton
+      {...props}
+      className={classNames('button', className, {
+        'button--primary': isPrimary,
+        'button--secondary': isSecondary,
+        'button--link': isLink,
+        'button--small': isSmall,
+        'button--disabled': isDisabled,
+      })}
+    >
+      {children}
+    </StyledButton>
+  );
+};
 
 Button.propTypes = {
   children: ReactChildrenType,
   isPrimary: PropTypes.bool,
   isSecondary: PropTypes.bool,
-  isLink: PropTypes.bool,
   isSmall: PropTypes.bool,
+  isDisabled: PropTypes.bool,
+  className: PropTypes.string,
+};
+
+Button.defaultProps = {
+  isPrimary: false,
+  isSecondary: false,
+  isSmall: false,
+  isDisabled: false,
 };
 
 export default Button;

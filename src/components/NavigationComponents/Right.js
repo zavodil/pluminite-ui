@@ -4,9 +4,9 @@ import { Link, useRouteMatch } from 'react-router-dom';
 
 import { NearContext } from '../../contexts';
 
-import UserDropdown from './UserDropdown';
+import UserMenu from './UserMenu';
 import Button from '../common/Button';
-import Hamburger from '../common/Hamburger';
+import ProfileUserMenu from './ProfileUserMenu';
 
 const StyledContainer = styled('div')`
   margin-left: 20px;
@@ -40,25 +40,25 @@ const Right = () => {
   const isSignUpInPage = !!useRouteMatch('/sign-up') || !!useRouteMatch('/log-in');
   const isProfilePage = useRouteMatch('/profile');
 
+  const { user } = useContext(NearContext);
+
   if (isSignUpInPage) {
     return null;
   }
 
-  const { user } = useContext(NearContext);
-
   let toRender;
 
-  if (isProfilePage) {
-    toRender = <Hamburger />;
+  if (isProfilePage && user) {
+    toRender = <ProfileUserMenu />;
   } else if (user) {
-    toRender = <UserDropdown />;
+    toRender = <UserMenu />;
   } else {
     toRender = (
       <>
-        <Button isPrimary isLink>
+        <Button isPrimary>
           <Link to="/sign-up">Sign up</Link>
         </Button>
-        <Button isSecondary isLink>
+        <Button isSecondary>
           <Link to="/log-in">Log in with NEAR</Link>
         </Button>
       </>

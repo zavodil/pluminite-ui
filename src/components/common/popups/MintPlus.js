@@ -13,12 +13,13 @@ const StyledContainer = styled('div')`
   line-height: 80px;
   cursor: pointer;
   user-select: none;
+  box-shadow: var(--shadow-primary);
 `;
 
-const Mint = () => {
+const MintPlus = () => {
   const history = useHistory();
 
   return <StyledContainer onClick={() => history.push('/mint')}>+</StyledContainer>;
 };
 
-export default Mint;
+export default MintPlus;

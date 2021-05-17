@@ -5,13 +5,17 @@ import { toast } from 'react-toastify';
 
 import { HeadingText } from '../common/typography';
 import { MintSuccessMessage } from '../common/messages';
-import ArtItem from '../common/ArtItem';
+import { ArtItemPriced } from '../common/art';
 import ButtonBottom from '../common/Button/ButtonBottom';
 
 const Container = styled('div')`
   max-width: 600px;
   margin: 0 auto;
   width: 100%;
+
+  h2 {
+    margin-bottom: 0;
+  }
 `;
 
 const MintReview = ({ imageDataUrl, bid, onCompleteLink }) => {
@@ -23,7 +27,7 @@ const MintReview = ({ imageDataUrl, bid, onCompleteLink }) => {
     <Container>
       <HeadingText>Yay!</HeadingText>
       <p>This is how your NFT will appear on the marketplace. You cannot remove an NFT once it is minted.</p>
-      <ArtItem dataUrl={imageDataUrl} bid={bid} />
+      <ArtItemPriced dataUrl={imageDataUrl} bid={bid} bidAvailable={false} />
       <ButtonBottom link={onCompleteLink} text="Mint NFT" onButtonClick={showMintSuccessMessage} />
     </Container>
   );
@@ -31,7 +35,7 @@ const MintReview = ({ imageDataUrl, bid, onCompleteLink }) => {
 
 MintReview.propTypes = {
   imageDataUrl: PropTypes.string,
-  bid: PropTypes.string,
+  bid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onCompleteLink: PropTypes.string,
 };
 

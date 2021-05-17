@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import { NearContext } from '../contexts';
 
 import { DisplayText } from './common/typography';
-import { Contribute, Mint } from './common/popups';
-import ArtItem from './common/ArtItem';
+import { Contribute, MintPlus } from './common/popups';
+import { ArtItemPriced } from './common/art';
 
 import DiamondIcon from '../assets/DiamondIcon';
 
@@ -58,9 +58,11 @@ const Container = styled('div')`
   }
 
   .pop-up {
-    position: fixed;
+    position: sticky;
     bottom: 10px;
     right: 10px;
+    width: fit-content;
+    margin-left: auto;
   }
 
   @media (min-width: 767px) {
@@ -87,11 +89,11 @@ export default function Home() {
       <div className="items-container">
         <div className="items">
           {Array.from({ length: 10 }).map((_, i) => (
-            <ArtItem key={i} />
+            <ArtItemPriced key={i} />
           ))}
         </div>
       </div>
-      <div className="pop-up">{user ? <Mint /> : <Contribute />}</div>
+      <div className="pop-up">{user ? <MintPlus /> : <Contribute />}</div>
     </Container>
   );
 }

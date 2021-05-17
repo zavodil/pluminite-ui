@@ -37,11 +37,20 @@ const StyledToastContainer = styled(ToastContainer)`
   }
 
   .Toastify__toast--success {
-    border-color: var(--green);
+    border-color: var(--success);
 
     .Toastify__close-button > svg {
-      fill: var(--green);
-      stroke: var(--green);
+      fill: var(--success);
+      stroke: var(--success);
+    }
+  }
+
+  .Toastify__toast--error {
+    border-color: var(--error);
+
+    .Toastify__close-button > svg {
+      fill: var(--error);
+      stroke: var(--error);
     }
   }
 
