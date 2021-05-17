@@ -8,7 +8,7 @@ import { Textarea } from './common/forms';
 
 import { NearContext } from '../contexts';
 
-const bioMaxLength = 160;
+import { PROFILE } from '../constants';
 
 const Container = styled('div')`
   display: flex;
@@ -65,7 +65,7 @@ export default function Profile() {
           <Button isPrimary>Change Profile Picture</Button>
         </div>
       </div>
-      <Textarea name="bio" labelText="Bio" rows={4} maxLength={bioMaxLength} />
+      <Textarea name="bio" labelText="Bio" rows={4} maxLength={PROFILE.BIO_MAX_LENGTH} />
       <p>Your Funds</p>
       <Balance />
     </Container>
