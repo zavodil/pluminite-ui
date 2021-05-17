@@ -13,6 +13,11 @@ const Container = styled('div')`
   height: 100%;
   padding: 100px 28px 0;
 
+  p {
+    font-size: 18px;
+    line-height: 20px;
+  }
+
   .sign-up-offer {
     margin-top: 40px;
   }
