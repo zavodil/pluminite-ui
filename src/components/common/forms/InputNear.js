@@ -6,7 +6,7 @@ import InputSignAside from './InputSignAside';
 import { useDebounce } from '../../../hooks';
 import { getUSDsFromNear } from '../../../apis';
 
-const minNears = 0;
+import { APP } from '../../../constants';
 
 const InputNear = ({ labelText, isRequired = true, name }) => {
   const [nears, setNears] = useState('');
@@ -17,9 +17,9 @@ const InputNear = ({ labelText, isRequired = true, name }) => {
   useEffect(() => {
     if (debouncedNears !== '') {
       let nearsForExchange;
-      if (debouncedNears < minNears) {
-        setNears(minNears);
-        nearsForExchange = minNears;
+      if (debouncedNears < APP.MIN_NEARS) {
+        setNears(APP.MIN_NEARS);
+        nearsForExchange = APP.MIN_NEARS;
       } else {
         nearsForExchange = debouncedNears;
       }
@@ -46,7 +46,7 @@ const InputNear = ({ labelText, isRequired = true, name }) => {
       isRequired={isRequired}
       inputOnChange={setNears}
       asideText={USDs !== null && !isSearching ? `~${Math.round(USDs * 1000) / 1000} USD` : null}
-      min={minNears}
+      min={APP.MIN_NEARS}
       value={nears}
     />
   );
