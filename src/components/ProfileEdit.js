@@ -17,23 +17,29 @@ const Container = styled('div')`
   max-width: 767px;
   padding: 100px 28px 120px;
 
-  > * {
-    margin: 0 0 25px;
-  }
-
   .summary {
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-bottom: 30px;
 
-    > * {
+    .picture {
+      width: 82px;
+      height: 82px;
+      border-radius: 100%;
       margin-right: 40px;
     }
 
-    .picture {
-      width: 62px;
-      height: 62px;
-      border-radius: 100%;
+    .profile {
+      flex-grow: 1;
+
+      .account-id {
+        margin: 0 0 12px;
+      }
+
+      .button-change-profile {
+        width: 100%;
+      }
     }
   }
 
@@ -59,10 +65,12 @@ export default function Profile() {
   return (
     <Container>
       <div className="summary">
-        <img className="picture" src={defaultProfilePicture} alt="profile picture" width="62" height="62" />
+        <img className="picture" src={defaultProfilePicture} alt="profile picture" width="82" height="82" />
         <div className="profile">
-          <p>{user.accountId}</p>
-          <Button isPrimary>Change Profile Picture</Button>
+          <p className="account-id">{user.accountId}</p>
+          <Button isSecondary isSmall className="button-change-profile">
+            Change Profile Picture
+          </Button>
         </div>
       </div>
       <Textarea name="bio" labelText="Bio" rows={4} maxLength={PROFILE.BIO_MAX_LENGTH} />

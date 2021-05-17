@@ -58,10 +58,10 @@ const StyledButton = styled('button')`
   }
 `;
 
-const Button = ({ children, isPrimary, isSecondary, isLink, isSmall, isDisabled, ...props }) => (
+const Button = ({ children, isPrimary, isSecondary, isLink, isSmall, isDisabled, className, ...props }) => (
   <StyledButton
     {...props}
-    className={classNames('button', {
+    className={classNames('button', className, {
       'button--primary': isPrimary,
       'button--secondary': isSecondary,
       'button--link': isLink,
@@ -80,6 +80,7 @@ Button.propTypes = {
   isLink: PropTypes.bool,
   isSmall: PropTypes.bool,
   isDisabled: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 Button.defaultProps = {
