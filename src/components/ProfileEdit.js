@@ -4,8 +4,11 @@ import styled from 'styled-components';
 import defaultProfilePicture from '../assets/default-profile-picture.png';
 import Balance from './NavigationComponents/Balance';
 import Button from './common/Button';
+import { Textarea } from './common/forms';
 
 import { NearContext } from '../contexts';
+
+const bioMaxLength = 160;
 
 const Container = styled('div')`
   display: flex;
@@ -41,6 +44,12 @@ const Container = styled('div')`
     > * {
       margin: 0 0 50px;
     }
+
+    textarea {
+      width: 700px;
+      max-width: 700px;
+      min-width: 700px;
+    }
   }
 `;
 
@@ -56,8 +65,7 @@ export default function Profile() {
           <Button isPrimary>Change Profile Picture</Button>
         </div>
       </div>
-      <label>Bio</label>
-      <textarea name="bio" required />
+      <Textarea name="bio" labelText="Bio" rows={4} maxLength={bioMaxLength} />
       <p>Your Funds</p>
       <Balance />
     </Container>
