@@ -3,21 +3,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { StickedToBottom } from '../layout';
 import Button from './Button';
 
-import { Portal } from '../utils';
-
-const StyledContainer = styled('div')`
-  display: flex;
-  justify-content: center;
-  padding: 20px 13px;
-  background-color: var(--plum);
-  box-shadow: 0 -36px 36px rgba(190, 20, 205, 0.22);
-
-  button {
-    width: 100%;
-    max-width: 400px;
-  }
+const StyledButton = styled(Button)`
+  width: 100%;
+  max-width: 400px;
 `;
 
 const ButtonBottom = ({ link, text, onButtonClick, isDisabled }) => {
@@ -27,18 +18,16 @@ const ButtonBottom = ({ link, text, onButtonClick, isDisabled }) => {
   };
 
   return (
-    <Portal mountClassName="buttons-bottom">
-      <StyledContainer className="button-bottom">
-        <Button isPrimary isDisabled={isDisabled} {...buttonProps}>
-          {isDisabled ? text : <Link to={link}>{text}</Link>}
-        </Button>
-      </StyledContainer>
-    </Portal>
+    <StickedToBottom isPrimary>
+      <StyledButton isPrimary isDisabled={isDisabled} {...buttonProps}>
+        {isDisabled ? text : <Link to={link}>{text}</Link>}
+      </StyledButton>
+    </StickedToBottom>
   );
 };
 
 ButtonBottom.propTypes = {
-  link: PropTypes.string.isRequired,
+  link: PropTypes.string,
   text: PropTypes.string.isRequired,
   onButtonClick: PropTypes.func,
   isDisabled: PropTypes.bool,

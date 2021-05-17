@@ -18,6 +18,7 @@ const GlobalStyle = createGlobalStyle`
     --black: #444444; */
     --purple: #250055;
     --plum: #1D0535;
+    --plum-light: #2E0458;
     --periwinkle-base: 130, 135, 255;
     --periwinkle: rgb(var(--periwinkle-base));
     --lavendar-base: 248, 221, 255;
@@ -64,7 +65,7 @@ const GlobalStyle = createGlobalStyle`
     flex: 1 0 auto;
     margin-top: -93px;
     
-    .buttons-bottom {
+    .sticked-to-bottom {
       position: sticky;
       bottom: 0;
       z-index: 2;

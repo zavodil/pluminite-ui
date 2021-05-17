@@ -13,7 +13,7 @@ import { PROFILE } from '../constants';
 const Container = styled('div')`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: calc(100% - 90px);
   max-width: 767px;
   padding: 100px 28px 120px;
 
