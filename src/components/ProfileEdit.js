@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
 import defaultProfilePicture from '../assets/default-profile-picture.png';
@@ -92,6 +93,10 @@ const StyledButton = styled(Button)`
 export default function Profile() {
   const { user } = useContext(NearContext);
 
+  const processSave = () => {
+    toast.success('Success! Your profile was saved!');
+  };
+
   return (
     <Container>
       <div className="summary">
@@ -112,7 +117,11 @@ export default function Profile() {
         <StyledButton isSecondary>
           <Link to="/profile">Cancel</Link>
         </StyledButton>
-        <StyledButton isPrimary>Save</StyledButton>
+        <StyledButton isPrimary>
+          <Link to="/profile" onClick={processSave}>
+            Save
+          </Link>
+        </StyledButton>
       </StickedToBottom>
     </Container>
   );
