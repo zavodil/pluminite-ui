@@ -27,7 +27,9 @@ const GlobalStyle = createGlobalStyle`
     --background: #23024B;
     --background-dark: #1F043C;
     --bubble-gum: #FF79ED;
-    --green: #00FF38;
+    
+    --success: #00FF38;
+    --error: #FF5F5F;
 
     --radius-default: 8px;
   }
