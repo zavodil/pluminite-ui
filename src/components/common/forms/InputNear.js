@@ -8,6 +8,8 @@ import { getUSDsFromNear } from '../../../apis';
 
 import { APP } from '../../../constants';
 
+import { round } from '../../../utils/numbers';
+
 const InputNear = ({ labelText, isRequired = true, name }) => {
   const [nears, setNears] = useState('');
   const [USDs, setUSDs] = useState(null);
@@ -45,7 +47,7 @@ const InputNear = ({ labelText, isRequired = true, name }) => {
       sign="Ⓝ"
       isRequired={isRequired}
       inputOnChange={setNears}
-      asideText={USDs !== null && !isSearching ? `~${Math.round(USDs * 1000) / 1000} USD` : null}
+      asideText={USDs !== null && !isSearching ? `~${round(USDs, 2)} USD` : null}
       min={APP.MIN_NEARS}
       value={nears}
     />

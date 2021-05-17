@@ -43,6 +43,25 @@ const Container = styled('div')`
     }
   }
 
+  .balance {
+    .balance-label {
+      margin: 0 0 10px;
+    }
+
+    .balance-text {
+      font-family: 'Staatliches', sans-serif;
+      color: var(--periwinkle);
+    }
+
+    .nears {
+      font-size: 66px;
+    }
+
+    .usds {
+      font-size: 34px;
+    }
+  }
+
   @media (min-width: 767px) {
     margin: 0 auto;
     align-items: center;
@@ -74,8 +93,10 @@ export default function Profile() {
         </div>
       </div>
       <Textarea name="bio" labelText="Bio" rows={4} maxLength={PROFILE.BIO_MAX_LENGTH} />
-      <p>Your Funds</p>
-      <Balance />
+      <div className="balance">
+        <p className="balance-label">Your Funds</p>
+        <Balance className="balance-text" precision={1} />
+      </div>
     </Container>
   );
 }
