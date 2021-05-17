@@ -15,6 +15,7 @@ import SignUp from './components/SignUp';
 import LogIn from './components/LogIn';
 import Mint from './components/Mint';
 import Profile from './components/Profile';
+import ProfileEdit from './components/ProfileEdit';
 
 import CloseButton from './components/common/Button/CloseButton';
 
@@ -63,6 +64,14 @@ export default function App() {
                 path="/profile"
                 component={Profile}
                 title={user?.accountId || 'Profile'}
+                isAuthenticated={isAuthenticated}
+                isLoading={isLoading}
+              />
+              <UserPage
+                exact
+                path="/profile/edit"
+                component={ProfileEdit}
+                title={user?.accountId ? `${user?.accountId} | Edit` : 'Edit Profile'}
                 isAuthenticated={isAuthenticated}
                 isLoading={isLoading}
               />
