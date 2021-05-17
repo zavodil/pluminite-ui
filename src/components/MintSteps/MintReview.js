@@ -12,6 +12,10 @@ const Container = styled('div')`
   max-width: 600px;
   margin: 0 auto;
   width: 100%;
+
+  h2 {
+    margin-bottom: 0;
+  }
 `;
 
 const MintReview = ({ imageDataUrl, bid, onCompleteLink }) => {
