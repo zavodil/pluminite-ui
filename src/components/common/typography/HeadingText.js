@@ -7,6 +7,7 @@ const StyledH2 = styled('h2')`
   margin-top: 25px;
   font-family: 'Staatliches', sans-serif;
   font-size: 66px;
+  font-weight: normal;
   text-transform: uppercase;
   color: var(--bubble-gum);
 
