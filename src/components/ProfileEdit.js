@@ -1,7 +1,10 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import defaultProfilePicture from '../assets/default-profile-picture.png';
+
+import { StickedToBottom } from './common/layout';
 import Balance from './NavigationComponents/Balance';
 import Button from './common/Button';
 import { Textarea } from './common/forms';
@@ -78,6 +81,14 @@ const Container = styled('div')`
   }
 `;
 
+const StyledButton = styled(Button)`
+  width: 50%;
+
+  :first-of-type {
+    margin-right: 10px;
+  }
+`;
+
 export default function Profile() {
   const { user } = useContext(NearContext);
 
@@ -97,6 +108,12 @@ export default function Profile() {
         <p className="balance-label">Your Funds</p>
         <Balance className="balance-text" precision={1} />
       </div>
+      <StickedToBottom isSecondary>
+        <StyledButton isSecondary isLink>
+          <Link to="/profile">Cancel</Link>
+        </StyledButton>
+        <StyledButton isPrimary>Save</StyledButton>
+      </StickedToBottom>
     </Container>
   );
 }
