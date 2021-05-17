@@ -6,7 +6,7 @@ const Container = styled('footer')`
   padding: 24px;
   background-color: var(--plum);
   box-shadow: 0 0 74px rgba(190, 20, 205, 0.45);
-  font-size: 20px;
+  font-size: 16px;
 
   .top {
     display: flex;
@@ -26,6 +26,10 @@ const Container = styled('footer')`
 
   .bottom {
     text-align: center;
+  }
+
+  @media (min-width: 767px) {
+    font-size: 20px;
   }
 `;
 
