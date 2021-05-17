@@ -42,7 +42,9 @@ const Textarea = ({ labelText, isRequired, name, rows, maxLength }) => {
   const [textareaValue, setTextareaValue] = useState('');
 
   const onTextChange = (e) => {
-    setTextareaValue(e.target.value);
+    if (!maxLength || e.target.value.length <= maxLength) {
+      setTextareaValue(e.target.value);
+    }
   };
 
   return (
