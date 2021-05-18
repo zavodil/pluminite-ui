@@ -38,6 +38,7 @@ const StyledToastContainer = styled(ToastContainer)`
 
   .Toastify__toast--success {
     border-color: var(--success);
+    background-color: var(--success-bg);
 
     .Toastify__close-button > svg {
       fill: var(--success);
