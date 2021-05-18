@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import classNames from 'classnames';
 
 import defaultProfilePicture from '../assets/default-profile-picture.png';
 import Balance from './NavigationComponents/Balance';
 import Button from './common/Button';
 import { ArtItemEditable } from './common/art';
+import { Tabs } from './common/tabs';
 
 const Container = styled('div')`
   display: flex;
@@ -58,47 +58,7 @@ const Container = styled('div')`
     }
   }
 
-  .tabs-titles {
-    display: flex;
-    margin-bottom: 30px;
-
-    .tabs-title {
-      position: relative;
-      text-transform: uppercase;
-      font-family: var(--font-secondary);
-      font-size: 18px;
-      line-height: 24px;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-
-      :first-of-type {
-        margin-right: 40px;
-      }
-
-      :hover {
-        color: var(--bubble-gum);
-      }
-
-      &--active {
-        color: var(--bubble-gum);
-
-        :after {
-          content: '';
-          position: absolute;
-          right: 0;
-          bottom: -10px;
-          left: 0;
-          width: 33%;
-          height: 4px;
-          margin: auto;
-          background-color: var(--bubble-gum);
-          border-radius: var(--radius-default);
-        }
-      }
-    }
-  }
-
-  .tabs-content {
+  .tabs-tab.tabs-tab--active {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -116,19 +76,13 @@ const Container = styled('div')`
       width: 350px;
     }
 
-    .tabs-titles {
-      justify-content: center;
-    }
-
-    .tabs-content {
+    .tabs-tab.tabs-tab--active {
       justify-content: space-evenly;
     }
   }
 `;
 
 export default function Profile() {
-  const [gemsTabActive, setGemsTabActive] = useState('own');
-
   return (
     <Container>
       <div className="summary">
@@ -146,30 +100,12 @@ export default function Profile() {
       <Button isSecondary>
         <Link to="/profile/edit">Edit Profile</Link>
       </Button>
-      <div className="tabs">
-        <div className="tabs-titles">
-          <div
-            className={classNames('tabs-title', {
-              'tabs-title--active': gemsTabActive === 'own',
-            })}
-            onClick={() => setGemsTabActive('own')}
-          >
-            Gems I own
-          </div>
-          <div
-            className={classNames('tabs-title', {
-              'tabs-title--active': gemsTabActive === 'made',
-            })}
-            onClick={() => setGemsTabActive('made')}
-          >
-            Gems I made
-          </div>
-        </div>
-        <div className="tabs-content">
-          {gemsTabActive === 'own' && Array.from({ length: 4 }).map((_, i) => <ArtItemEditable key={i} />)}
-          {gemsTabActive === 'made' && Array.from({ length: 12 }).map((_, i) => <ArtItemEditable key={i} />)}
-        </div>
-      </div>
+      <Tabs
+        tabsArray={[
+          { title: 'Gems I own', content: Array.from({ length: 4 }).map((_, i) => <ArtItemEditable key={i} />) },
+          { title: 'Gems I made', content: Array.from({ length: 12 }).map((_, i) => <ArtItemEditable key={i} />) },
+        ]}
+      />
     </Container>
   );
 }
