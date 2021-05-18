@@ -15,7 +15,7 @@ const Container = styled('div')`
   flex-direction: column;
   min-height: calc(100% - 173px);
   max-width: 767px;
-  padding: 100px 28px 120px;
+  padding: 100px 28px 60px;
 
   .gem-title {
     margin-bottom: 5px;
@@ -80,6 +80,7 @@ const StyledBid = styled('div')`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  max-width: 767px;
 
   .bid-top {
     width: 100%;
