@@ -16,6 +16,7 @@ import LogIn from './components/LogIn';
 import Mint from './components/Mint';
 import Profile from './components/Profile';
 import ProfileEdit from './components/ProfileEdit';
+import Gem from './components/Gem';
 
 import CloseButton from './components/common/Button/CloseButton';
 
@@ -71,6 +72,13 @@ export default function App() {
                 exact
                 path="/profile/edit"
                 component={ProfileEdit}
+                title={user?.accountId ? `${user?.accountId} | Edit` : 'Edit Profile'}
+                isAuthenticated={isAuthenticated}
+                isLoading={isLoading}
+              />
+              <UserPage
+                path="/gem/:gemId"
+                component={Gem}
                 title={user?.accountId ? `${user?.accountId} | Edit` : 'Edit Profile'}
                 isAuthenticated={isAuthenticated}
                 isLoading={isLoading}
