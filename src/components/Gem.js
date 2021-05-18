@@ -1,6 +1,7 @@
 import React from 'react';
-// import { useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import { toast } from 'react-toastify';
 
 import { StickedToBottom } from './common/layout';
 import Button from './common/Button';
@@ -147,6 +148,13 @@ export default function Gem() {
   ];
 
   const bidUSDs = withUSDs(bidNears);
+  const history = useHistory();
+
+  const processBid = () => {
+    toast.success('You own a new gem!', { position: 'top-right' });
+    // todo: use real gem id
+    history.push('/profile?gem-id=12');
+  };
 
   return (
     <Container>
@@ -204,7 +212,7 @@ export default function Gem() {
               {bidUSDs && <span className="bid-sum-usds">~${round(bidUSDs, 0)} USD</span>}
             </div>
           </div>
-          <Button className="bid-button" isPrimary>
+          <Button className="bid-button" isPrimary onClick={processBid}>
             Bid {bidNears}Ⓝ on Gem
           </Button>
         </StyledBid>
