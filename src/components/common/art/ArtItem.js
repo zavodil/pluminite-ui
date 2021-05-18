@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from '../Button';
@@ -7,7 +8,8 @@ import Button from '../Button';
 // todo: remove for production
 import placeholderDataUrl from '../../../assets/art.png';
 
-const StyledContainer = styled('div')`
+const StyledLink = styled(Link)`
+  display: block;
   position: relative;
   width: fit-content;
   margin: 15px 5px;
@@ -34,12 +36,13 @@ const StyledContainer = styled('div')`
 `;
 
 const ArtItem = ({ dataUrl, buttonText, isButtonDisabled }) => (
-  <StyledContainer>
+  // todo: fix :gemId after integration with nft contract
+  <StyledLink to="/gem/121212121212">
     <img src={dataUrl || placeholderDataUrl} alt="art" />
     <Button isPrimary isSmall isDisabled={isButtonDisabled}>
       {buttonText}
     </Button>
-  </StyledContainer>
+  </StyledLink>
 );
 
 ArtItem.propTypes = {
