@@ -3,10 +3,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { StickedToBottom } from './common/layout';
-import Balance from './NavigationComponents/Balance';
 import Button from './common/Button';
 import { TitleText } from './common/typography';
 import { Tabs } from './common/tabs';
+
+import { withUSDs } from '../hooks';
+import { round } from '../utils/numbers';
 
 const Container = styled('div')`
   display: flex;
@@ -75,6 +77,33 @@ const StyledBid = styled('div')`
     margin: 0;
   }
 
+  .bid-sum {
+    display: flex;
+    align-items: center;
+    font-family: var(--font-secondary);
+    color: var(--bubble-gum);
+
+    &-nears {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 20px;
+
+      &--amount {
+        font-size: 36px;
+        margin-right: 5px;
+      }
+
+      &--sign {
+        font-size: 18px;
+      }
+    }
+
+    &-usds {
+      font-size: 18px;
+      opacity: 0.7;
+    }
+  }
+
   .bid-button {
     width: 100%;
   }
@@ -82,6 +111,10 @@ const StyledBid = styled('div')`
 
 export default function Gem() {
   // const { gemId } = useParams();
+  // todo: use real data after nft contract integration
+  const bidNears = 15;
+
+  const bidUSDs = withUSDs(bidNears);
 
   return (
     <Container>
@@ -107,10 +140,16 @@ export default function Gem() {
               <p className="bid-title">Starting Bid</p>
               <p className="bid-user">by bluesygma.near</p>
             </div>
-            <Balance className="bid-sum" precision={0} />
+            <div className="bid-sum">
+              <span className="bid-sum-nears">
+                <span className="bid-sum-nears--amount">{bidNears}</span>
+                <span className="bid-sum-nears--sign">Ⓝ</span>
+              </span>
+              {bidUSDs && <span className="bid-sum-usds">~${round(bidUSDs, 0)} USD</span>}
+            </div>
           </div>
           <Button className="bid-button" isPrimary>
-            Bid 5Ⓝ on Gem
+            Bid {bidUSDs}Ⓝ on Gem
           </Button>
         </StyledBid>
       </StickedToBottom>
