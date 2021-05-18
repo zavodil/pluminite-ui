@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
@@ -6,7 +6,8 @@ import { formatNearAmount } from 'near-api-js/lib/utils/format';
 import { round } from '../../utils/numbers';
 
 import { NearContext } from '../../contexts';
-import { getUSDsFromNear } from '../../apis';
+
+import { withUSDs } from '../../hooks';
 
 const StyledSpan = styled('span')`
   display: inline-flex;
@@ -28,16 +29,11 @@ const StyledSpan = styled('span')`
 
 const Balance = ({ precision, ...props }) => {
   const { user } = useContext(NearContext);
-  const [USDs, setUSDs] = useState(null);
 
   const nearFormatted = formatNearAmount(user.balance);
   const nearRounded = round(nearFormatted, precision);
 
-  useEffect(() => {
-    getUSDsFromNear(nearRounded).then((usdsFromNears) => {
-      setUSDs(usdsFromNears);
-    });
-  }, []);
+  const USDs = withUSDs(nearRounded);
 
   return (
     <StyledSpan className="balance-text" {...props}>
