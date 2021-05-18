@@ -9,7 +9,7 @@ const StyledContainer = styled('div')`
   width: fit-content;
 
   .display-text {
-    font-family: 'Staatliches', sans-serif;
+    font-family: var(--font-secondary);
     font-size: ${(props) => (props.isBig ? '100px' : '63px')};
     font-weight: 700;
     text-transform: uppercase;

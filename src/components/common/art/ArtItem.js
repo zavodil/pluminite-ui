@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from '../Button';
@@ -7,7 +8,8 @@ import Button from '../Button';
 // todo: remove for production
 import placeholderDataUrl from '../../../assets/art.png';
 
-const StyledContainer = styled('div')`
+const StyledLink = styled(Link)`
+  display: block;
   position: relative;
   width: fit-content;
   margin: 15px 5px;
@@ -33,14 +35,17 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const ArtItem = ({ dataUrl, buttonText, isButtonDisabled }) => (
-  <StyledContainer>
-    <img src={dataUrl || placeholderDataUrl} alt="art" />
-    <Button isPrimary isSmall isDisabled={isButtonDisabled}>
-      {buttonText}
-    </Button>
-  </StyledContainer>
-);
+// todo: fix :gemId after integration with nft contract
+const ArtItem = forwardRef(function ArtItemWithRef({ dataUrl, buttonText, isButtonDisabled }, ref) {
+  return (
+    <StyledLink to="/gem/121212121212">
+      <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" />
+      <Button isPrimary isSmall isDisabled={isButtonDisabled}>
+        {buttonText}
+      </Button>
+    </StyledLink>
+  );
+});
 
 ArtItem.propTypes = {
   dataUrl: PropTypes.string,

@@ -1,7 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import ArtItem from './ArtItem';
 
-const ArtItemEditable = ({ ...props }) => <ArtItem buttonText="Edit" {...props} />;
+// todo: art items are not editable
+const ArtItemEditable = ({ forwardedRef, ...props }) => <ArtItem ref={forwardedRef} buttonText="Edit" {...props} />;
+
+ArtItemEditable.propTypes = {
+  forwardedRef: PropTypes.object,
+};
 
 export default ArtItemEditable;
