@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 
 import { NearContext } from '../../contexts';
 
 import UserMenu from './UserMenu';
 import Button from '../common/Button';
 import ProfileUserMenu from './ProfileUserMenu';
+import CloseButton from '../common/Button/CloseButton';
 
 const StyledContainer = styled('div')`
   margin-left: 20px;
@@ -31,6 +32,15 @@ const StyledContainer = styled('div')`
     color: var(--lavendar);
   }
 
+  .gem-close {
+    cursor: pointer;
+
+    > svg {
+      stroke: var(--lavendar);
+      fill: var(--lavendar);
+    }
+  }
+
   @media (min-width: 767px) {
     margin: 0;
   }
@@ -39,8 +49,11 @@ const StyledContainer = styled('div')`
 const Right = () => {
   const isSignUpInPage = !!useRouteMatch('/sign-up') || !!useRouteMatch('/log-in');
   const isProfilePage = useRouteMatch('/profile');
+  const isGemPage = useRouteMatch('/gem');
 
   const { user } = useContext(NearContext);
+
+  const history = useHistory();
 
   if (isSignUpInPage) {
     return null;
@@ -50,6 +63,8 @@ const Right = () => {
 
   if (isProfilePage && user) {
     toRender = <ProfileUserMenu />;
+  } else if (isGemPage) {
+    toRender = <CloseButton className="gem-close" processCLick={() => history.goBack()} />;
   } else if (user) {
     toRender = <UserMenu />;
   } else {
