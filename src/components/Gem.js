@@ -53,6 +53,21 @@ const Container = styled('div')`
     }
   }
 
+  .royalty {
+    text-align: right;
+    margin-bottom: 25px;
+
+    &-user {
+      margin-right: 25px;
+    }
+
+    &-royalty {
+      font-size: 34px;
+      font-family: var(--font-secondary);
+      color: rgba(var(--bubble-gum-base), 0.7);
+    }
+  }
+
   @media (min-width: 767px) {
     margin: 0 auto;
     align-items: center;
@@ -125,6 +140,10 @@ export default function Gem() {
     { type: 'sale', date: 1601137272257, seller: 'bluesygma.near', buyer: 'crasskitty.near' },
     { type: 'mint', date: 1591037272257, creator: 'bluesygma.near' },
   ];
+  const royalties = [
+    { userId: 'bluesygma.near', royalty: '5%' },
+    { userId: 'crasskitty.near', royalty: '5%' },
+  ];
 
   const bidUSDs = withUSDs(bidNears);
 
@@ -158,7 +177,15 @@ export default function Gem() {
               </div>
             )),
           },
-          { title: 'Royalties' },
+          {
+            title: 'Royalties',
+            content: royalties.map(({ userId, royalty }, index) => (
+              <div key={index} className="royalty">
+                <span className="royalty-user">{userId}</span>
+                <span className="royalty-royalty">{royalty}</span>
+              </div>
+            )),
+          },
         ]}
       />
       <StickedToBottom isSecondary>
@@ -177,7 +204,7 @@ export default function Gem() {
             </div>
           </div>
           <Button className="bid-button" isPrimary>
-            Bid {bidUSDs}Ⓝ on Gem
+            Bid {bidNears}Ⓝ on Gem
           </Button>
         </StyledBid>
       </StickedToBottom>
