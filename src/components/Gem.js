@@ -6,6 +6,8 @@ import { StickedToBottom } from './common/layout';
 import Balance from './NavigationComponents/Balance';
 import Button from './common/Button';
 import { TitleText } from './common/typography';
+import { Tabs } from './common/tabs';
+import { ArtItemEditable } from './common/art';
 
 const Container = styled('div')`
   display: flex;
@@ -20,10 +22,19 @@ const Container = styled('div')`
 
   .users {
     color: rgba(var(--lavendar-base), 0.7);
+    margin-bottom: 40px;
 
     p {
       margin: 0 0 5px;
+
+      :last-of-type {
+        margin-bottom: 0;
+      }
     }
+  }
+
+  .tabs-titles {
+    margin-bottom: 40px;
   }
 
   @media (min-width: 767px) {
@@ -42,6 +53,16 @@ export default function Gem() {
         <p>by bluesygma.near</p>
         <p>owned by bluesygma.near</p>
       </div>
+      <Tabs
+        tabsArray={[
+          {
+            title: 'Description',
+            content: 'Keep it short',
+          },
+          { title: 'History' },
+          { title: 'Royalties' },
+        ]}
+      />
     </Container>
   );
 }
