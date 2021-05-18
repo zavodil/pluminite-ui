@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -7,6 +7,8 @@ import Balance from './NavigationComponents/Balance';
 import Button from './common/Button';
 import { ArtItemEditable } from './common/art';
 import { Tabs } from './common/tabs';
+
+import { useQuery } from '../hooks';
 
 const Container = styled('div')`
   display: flex;
@@ -83,6 +85,19 @@ const Container = styled('div')`
 `;
 
 export default function Profile() {
+  const ownedGemRef = useRef();
+  const query = useQuery();
+
+  useEffect(() => {
+    if (ownedGemRef?.current) {
+      setTimeout(() => {
+        requestAnimationFrame(() => ownedGemRef.current.scrollIntoView({ behavior: 'smooth' }));
+      }, 10);
+    }
+  }, []);
+
+  const ownedGemId = query.get('gem-id');
+
   return (
     <Container>
       <div className="summary">
@@ -102,8 +117,18 @@ export default function Profile() {
       </Button>
       <Tabs
         tabsArray={[
-          { title: 'Gems I own', content: Array.from({ length: 4 }).map((_, i) => <ArtItemEditable key={i} />) },
-          { title: 'Gems I made', content: Array.from({ length: 12 }).map((_, i) => <ArtItemEditable key={i} />) },
+          {
+            title: 'Gems I own',
+            // todo: after integration with NFT contract compare ownedGemId with real gem ids
+            content: Array.from({ length: 14 }).map((_, i) => (
+              <ArtItemEditable forwardedRef={ownedGemId === String(i) ? ownedGemRef : null} key={i} />
+            )),
+          },
+          {
+            title: 'Gems I made',
+            // todo: after integration with NFT contract set ArtItem id to gemId
+            content: Array.from({ length: 2 }).map((_, i) => <ArtItemEditable key={i} />),
+          },
         ]}
       />
     </Container>

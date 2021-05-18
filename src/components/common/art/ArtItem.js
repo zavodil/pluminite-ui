@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -35,15 +35,17 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const ArtItem = ({ dataUrl, buttonText, isButtonDisabled }) => (
-  // todo: fix :gemId after integration with nft contract
-  <StyledLink to="/gem/121212121212">
-    <img src={dataUrl || placeholderDataUrl} alt="art" />
-    <Button isPrimary isSmall isDisabled={isButtonDisabled}>
-      {buttonText}
-    </Button>
-  </StyledLink>
-);
+// todo: fix :gemId after integration with nft contract
+const ArtItem = forwardRef(function ArtItemWithRef({ dataUrl, buttonText, isButtonDisabled }, ref) {
+  return (
+    <StyledLink to="/gem/121212121212">
+      <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" />
+      <Button isPrimary isSmall isDisabled={isButtonDisabled}>
+        {buttonText}
+      </Button>
+    </StyledLink>
+  );
+});
 
 ArtItem.propTypes = {
   dataUrl: PropTypes.string,
