@@ -11,7 +11,7 @@ import { getUSDsFromNear } from '../../apis';
 const StyledSpan = styled('span')`
   display: inline-flex;
   align-items: center;
-  font-family: 'Staatliches', sans-serif;
+  font-family: var(--font-secondary);
 
   span {
     white-space: nowrap;

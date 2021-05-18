@@ -65,7 +65,7 @@ const Container = styled('div')`
     .tabs-title {
       position: relative;
       text-transform: uppercase;
-      font-family: 'Staatliches', sans-serif;
+      font-family: var(--font-secondary);
       font-size: 18px;
       line-height: 24px;
       letter-spacing: 0.04em;

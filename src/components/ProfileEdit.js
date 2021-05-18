@@ -53,7 +53,7 @@ const Container = styled('div')`
     }
 
     .balance-text {
-      font-family: 'Staatliches', sans-serif;
+      font-family: var(--font-secondary);
       color: var(--periwinkle);
     }
 

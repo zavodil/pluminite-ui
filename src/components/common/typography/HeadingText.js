@@ -5,7 +5,7 @@ import { ReactChildrenTypeRequired } from '../../../types/ReactChildrenTypes';
 
 const StyledH2 = styled('h2')`
   margin-top: 25px;
-  font-family: 'Staatliches', sans-serif;
+  font-family: var(--font-secondary);
   font-size: 66px;
   font-weight: normal;
   text-transform: uppercase;

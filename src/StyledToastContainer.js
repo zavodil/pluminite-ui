@@ -25,8 +25,7 @@ const StyledToastContainer = styled(ToastContainer)`
     border-radius: var(--radius-default);
     background-color: var(--plum);
     color: var(--lavendar);
-    font-family: 'Comfortaa', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
-      'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: var(--font-primary);
     font-size: 18px;
     line-height: 20px;
     cursor: default;

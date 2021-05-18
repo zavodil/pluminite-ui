@@ -11,8 +11,7 @@ const StyledButton = styled('button')`
   padding: 16px 20px;
   border: 1px solid var(--lavendar);
   border-radius: var(--radius-default);
-  font-family: 'Comfortaa', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
-    'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: var(--font-primary);
   font-size: 16px;
   text-decoration: none;
   cursor: pointer;

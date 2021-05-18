@@ -37,6 +37,9 @@ const GlobalStyle = createGlobalStyle`
     --shadow-secondary: 0 0 14px rgba(186, 13, 215, 0.6);
 
     --radius-default: 8px;
+    
+    --font-primary: 'Comfortaa', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    --font-secondary: 'Staatliches', sans-serif;
   }
   
   * {
@@ -50,7 +53,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     height: 100%;
     margin: 0;
-    font-family: 'Comfortaa', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: var(--font-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: 16px;
