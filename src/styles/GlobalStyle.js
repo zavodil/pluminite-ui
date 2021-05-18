@@ -26,22 +26,23 @@ const GlobalStyle = createGlobalStyle`
     --pink: #FF79ED;
     --background: #23024B;
     --background-dark: #1F043C;
-    --bubble-gum: #FF79ED;
-    
+    --bubble-gum-base: 255, 121, 237;
+    --bubble-gum: rgb(var(--bubble-gum-base));
+
     --success: #00FF38;
     --error: #FF5F5F;
-    
+
     --success-bg: #1F1C45;
-    
+
     --shadow-primary: 0 0 14px #BA0DD7;
     --shadow-secondary: 0 0 14px rgba(186, 13, 215, 0.6);
 
     --radius-default: 8px;
-    
+
     --font-primary: 'Comfortaa', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     --font-secondary: 'Staatliches', sans-serif;
   }
-  
+
   * {
     box-sizing: border-box;
   }
@@ -74,7 +75,7 @@ const GlobalStyle = createGlobalStyle`
   .content {
     flex: 1 0 auto;
     margin-top: -93px;
-    
+
     .sticked-to-bottom {
       position: sticky;
       bottom: 0;
@@ -85,7 +86,7 @@ const GlobalStyle = createGlobalStyle`
   .footer {
     flex-shrink: 0;
   }
-  
+
   a {
     color: var(--periwinkle);
     text-decoration: none;

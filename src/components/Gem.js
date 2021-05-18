@@ -38,12 +38,18 @@ const Container = styled('div')`
     margin-bottom: 40px;
   }
 
-  .bid {
-    width: 100%;
+  .history-event {
+    padding: 20px 0;
+    font-size: 16px;
+    line-height: 24px;
 
-    &-top {
-      display: flex;
-      justify-content: space-between;
+    :first-of-type {
+      padding-top: 0;
+    }
+
+    :not(:last-of-type) {
+      //border-bottom: 1px solid var(--bubble-gum);
+      border-bottom: 1px solid rgba(var(--bubble-gum-base), 0.2);
     }
   }
 
@@ -113,6 +119,12 @@ export default function Gem() {
   // const { gemId } = useParams();
   // todo: use real data after nft contract integration
   const bidNears = 15;
+  const historyData = [
+    { type: 'bid', date: 1621337272257, amount: 10, bidder: 'mattlokc.near' },
+    { type: 'startPriceUpdate', date: 1611237272257, updater: 'crasskitty.near' },
+    { type: 'sale', date: 1601137272257, seller: 'bluesygma.near', buyer: 'crasskitty.near' },
+    { type: 'mint', date: 1591037272257, creator: 'bluesygma.near' },
+  ];
 
   const bidUSDs = withUSDs(bidNears);
 
@@ -129,7 +141,23 @@ export default function Gem() {
             title: 'Description',
             content: 'Keep it short',
           },
-          { title: 'History' },
+          {
+            title: 'History',
+            content: historyData.map((event, index) => (
+              <div key={index} className="history-event">
+                {event.type === 'bid' &&
+                  `${event.bidder} bid ${event.amount}Ⓝ on ${new Intl.DateTimeFormat().format(new Date(event.date))}`}
+                {event.type === 'startPriceUpdate' &&
+                  `${event.updater} updated the starting price on ${new Intl.DateTimeFormat().format(
+                    new Date(event.date)
+                  )}`}
+                {event.type === 'sale' &&
+                  `${event.seller} sold to ${event.buyer} on ${new Intl.DateTimeFormat().format(new Date(event.date))}`}
+                {event.type === 'mint' &&
+                  `${event.creator} minted “Art Title” on ${new Intl.DateTimeFormat().format(new Date(event.date))}`}
+              </div>
+            )),
+          },
           { title: 'Royalties' },
         ]}
       />
