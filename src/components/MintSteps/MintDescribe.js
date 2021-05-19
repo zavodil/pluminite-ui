@@ -43,32 +43,37 @@ const CollaboratorContainer = styled('div')`
   }
 `;
 
-const Collaborator = () => {
+const Collaborator = ({ number }) => {
   const [collaboratorName, setCollaboratorName] = useState('');
 
-  const onCollaboratorInputChange = (e) => {
-    const collaboratorNewName = e.target.value;
-    setCollaboratorName(collaboratorNewName);
+  const onCollaboratorInputChange = (value) => {
+    setCollaboratorName(value);
   };
 
   return (
     <CollaboratorContainer>
-      <InputSign className="collaborator-royalty" name="royalty" isRequired sign="%" />
+      <InputSign className="collaborator-royalty" name={`royalty-${number}`} isRequired sign="%" />
       <InputSign
         className="collaborator-id"
         type="text"
         sign="@"
         placement="left"
-        name="royalty"
+        name={`collaborator-id-${number}`}
         isRequired
         inputOnChange={onCollaboratorInputChange}
+        value={collaboratorName}
       />
     </CollaboratorContainer>
   );
 };
 
+Collaborator.propTypes = {
+  number: PropTypes.number,
+};
+
 const MintDescribe = ({ onCompleteLink }) => {
   const { user } = useContext(NearContext);
+  const [collaboratorsNumber, setCollaboratorsNumber] = useState(0);
 
   return (
     <Container>
@@ -83,8 +88,12 @@ const MintDescribe = ({ onCompleteLink }) => {
       <Input name="description" labelText="Description" isRequired />
       <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
       <InputRoyalty name="royalty" labelText="Royalty Fee" isRequired asideText={`@${user.accountId}`} />
-      <Collaborator />
-      <Button className="collaborator-add">+ Add Collaborator</Button>
+      {Array.from({ length: collaboratorsNumber }).map((_, index) => (
+        <Collaborator key={index} number={index} />
+      ))}
+      <Button className="collaborator-add" onClick={() => setCollaboratorsNumber((prevNumber) => prevNumber + 1)}>
+        + Add Collaborator
+      </Button>
       <p className="fee-description">
         Pluminite will take a 5% fee for all sales to continue building the Pluminite community.
       </p>
