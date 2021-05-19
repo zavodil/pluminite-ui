@@ -56,7 +56,7 @@ const CollaboratorContainer = styled('div')`
   }
 `;
 
-const Collaborator = ({ number }) => {
+const Collaborator = ({ number, onRemoveButtonClick }) => {
   const [collaboratorName, setCollaboratorName] = useState('');
 
   const onCollaboratorInputChange = (value) => {
@@ -84,18 +84,25 @@ const Collaborator = ({ number }) => {
         onChange={(e) => onCollaboratorInputChange(e.target.value)}
         value={collaboratorName}
       />
-      <RemoveIcon />
+      <RemoveIcon onClick={onRemoveButtonClick} />
     </CollaboratorContainer>
   );
 };
 
 Collaborator.propTypes = {
   number: PropTypes.number,
+  onRemoveButtonClick: PropTypes.func,
 };
 
 const MintDescribe = ({ onCompleteLink }) => {
   const { user } = useContext(NearContext);
-  const [collaboratorsNumber, setCollaboratorsNumber] = useState(0);
+  const [collaboratorsNumber, setCollaboratorsNumber] = useState([]);
+
+  const addCollaborator = () => setCollaboratorsNumber((prevNumber) => [...prevNumber, {}]);
+
+  const removeCollaborator = (index) => {
+    setCollaboratorsNumber((prevCollaborators) => prevCollaborators.filter((_, i) => i !== index));
+  };
 
   return (
     <Container>
@@ -110,11 +117,17 @@ const MintDescribe = ({ onCompleteLink }) => {
       <Input name="description" labelText="Description" isRequired />
       <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
       <InputRoyalty name="royalty" labelText="Royalty Fee" isRequired asideText={`@${user.accountId}`} isSmall />
-      {Array.from({ length: collaboratorsNumber }).map((_, index) => (
-        <Collaborator key={index} number={index} />
+      {collaboratorsNumber.map(({ royalty, userId }, index) => (
+        <Collaborator
+          key={index}
+          number={index}
+          royalty={royalty}
+          userId={userId}
+          onRemoveButtonClick={() => removeCollaborator(index)}
+        />
       ))}
-      {collaboratorsNumber + 1 < APP.MAX_COLLABORATORS && (
-        <Button className="collaborator-add" onClick={() => setCollaboratorsNumber((prevNumber) => prevNumber + 1)}>
+      {collaboratorsNumber.length + 1 < APP.MAX_COLLABORATORS && (
+        <Button className="collaborator-add" onClick={addCollaborator}>
           + Add Collaborator
         </Button>
       )}
