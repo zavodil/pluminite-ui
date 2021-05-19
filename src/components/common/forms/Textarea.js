@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
+import { SmallText } from '../typography';
+
 const StyledContainer = styled('div')`
   position: relative;
   display: flex;
@@ -36,15 +38,25 @@ const StyledContainer = styled('div')`
     user-select: none;
     cursor: default;
   }
+
+  .small-text {
+    position: absolute;
+    bottom: -25px;
+  }
 `;
 
 const Textarea = ({ labelText, isRequired, name, rows, maxLength }) => {
   const [textareaValue, setTextareaValue] = useState('');
+  const [maxLengthExceeded, setMaxLengthExceeded] = useState(false);
 
   const onTextChange = (e) => {
-    if (!maxLength || e.target.value.length <= maxLength) {
-      setTextareaValue(e.target.value);
+    if (maxLength && e.target.value.length > maxLength) {
+      setMaxLengthExceeded(true);
+    } else {
+      setMaxLengthExceeded(false);
     }
+
+    setTextareaValue(e.target.value);
   };
 
   return (
@@ -55,7 +67,6 @@ const Textarea = ({ labelText, isRequired, name, rows, maxLength }) => {
         required={isRequired}
         autoComplete="off"
         rows={rows}
-        maxLength={maxLength}
         onChange={onTextChange}
         value={textareaValue}
       />
@@ -63,6 +74,9 @@ const Textarea = ({ labelText, isRequired, name, rows, maxLength }) => {
         <div className="max-length">
           {textareaValue.length} / {maxLength}
         </div>
+      )}
+      {maxLength && maxLengthExceeded && (
+        <SmallText isError>Sorry, it looks like you’ve exceeded the character limit</SmallText>
       )}
     </StyledContainer>
   );
