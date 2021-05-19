@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { HashRouter as Router, Switch } from 'react-router-dom';
-import { Zoom } from 'react-toastify';
+import { toast, Zoom } from 'react-toastify';
 
 import { NearContext } from './contexts';
 
@@ -88,7 +88,7 @@ export default function App() {
           </div>
           <Footer />
           <StyledToastContainer
-            position="bottom-right"
+            position={toast.POSITION.BOTTOM_RIGHT}
             hideProgressBar
             closeOnClick={false}
             transition={Zoom}
