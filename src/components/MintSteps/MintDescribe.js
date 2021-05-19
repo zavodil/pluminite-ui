@@ -56,13 +56,7 @@ const CollaboratorContainer = styled('div')`
   }
 `;
 
-const Collaborator = ({ number, onRemoveButtonClick }) => {
-  const [collaboratorName, setCollaboratorName] = useState('');
-
-  const onCollaboratorInputChange = (value) => {
-    setCollaboratorName(value);
-  };
-
+const Collaborator = ({ number, userId, royalty, onRemoveButtonClick, onCollaboratorChange }) => {
   return (
     <CollaboratorContainer>
       <InputSign
@@ -72,6 +66,8 @@ const Collaborator = ({ number, onRemoveButtonClick }) => {
         isRequired
         isSmall
         sign="%"
+        onChange={(e) => onCollaboratorChange(number, userId, e.target.value)}
+        value={royalty || ''}
       />
       <InputSign
         className="collaborator-id"
@@ -81,8 +77,8 @@ const Collaborator = ({ number, onRemoveButtonClick }) => {
         name={`collaborator-id-${number}`}
         isRequired
         isSmall
-        onChange={(e) => onCollaboratorInputChange(e.target.value)}
-        value={collaboratorName}
+        onChange={(e) => onCollaboratorChange(number, e.target.value, royalty)}
+        value={userId || ''}
       />
       <RemoveIcon onClick={onRemoveButtonClick} />
     </CollaboratorContainer>
@@ -91,17 +87,31 @@ const Collaborator = ({ number, onRemoveButtonClick }) => {
 
 Collaborator.propTypes = {
   number: PropTypes.number,
+  userId: PropTypes.string,
+  royalty: PropTypes.string,
   onRemoveButtonClick: PropTypes.func,
+  onCollaboratorChange: PropTypes.func,
 };
 
 const MintDescribe = ({ onCompleteLink }) => {
   const { user } = useContext(NearContext);
-  const [collaboratorsNumber, setCollaboratorsNumber] = useState([]);
+  const [collaborators, setCollaborators] = useState([]);
 
-  const addCollaborator = () => setCollaboratorsNumber((prevNumber) => [...prevNumber, {}]);
+  const addCollaborator = () => setCollaborators((prevNumber) => [...prevNumber, {}]);
 
   const removeCollaborator = (index) => {
-    setCollaboratorsNumber((prevCollaborators) => prevCollaborators.filter((_, i) => i !== index));
+    setCollaborators((prevCollaborators) => prevCollaborators.filter((_, i) => i !== index));
+  };
+
+  const updateCollaborator = (index, userId, royalty) => {
+    setCollaborators((prevCollaborators) => [
+      ...prevCollaborators.slice(0, index),
+      {
+        royalty,
+        userId,
+      },
+      ...prevCollaborators.slice(index + 1),
+    ]);
   };
 
   return (
@@ -117,16 +127,17 @@ const MintDescribe = ({ onCompleteLink }) => {
       <Input name="description" labelText="Description" isRequired />
       <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
       <InputRoyalty name="royalty" labelText="Royalty Fee" isRequired asideText={`@${user.accountId}`} isSmall />
-      {collaboratorsNumber.map(({ royalty, userId }, index) => (
+      {collaborators.map(({ royalty, userId }, index) => (
         <Collaborator
           key={index}
           number={index}
           royalty={royalty}
           userId={userId}
           onRemoveButtonClick={() => removeCollaborator(index)}
+          onCollaboratorChange={updateCollaborator}
         />
       ))}
-      {collaboratorsNumber.length + 1 < APP.MAX_COLLABORATORS && (
+      {collaborators.length + 1 < APP.MAX_COLLABORATORS && (
         <Button className="collaborator-add" onClick={addCollaborator}>
           + Add Collaborator
         </Button>
