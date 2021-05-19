@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { NearContext } from '../../contexts';
 
 import { HeadingText, SmallText } from '../common/typography';
-import { Input, InputNear, InputRoyalty } from '../common/forms';
+import { Input, InputNear, InputRoyalty, InputSign } from '../common/forms';
 import ButtonBottom from '../common/Button/ButtonBottom';
 import Button from '../common/Button';
 
@@ -31,6 +31,42 @@ const Container = styled('div')`
   }
 `;
 
+const CollaboratorContainer = styled('div')`
+  display: flex;
+
+  > *:first-child {
+    margin-right: 22px;
+  }
+
+  .collaborator-id {
+    min-width: 200px;
+  }
+`;
+
+const Collaborator = () => {
+  const [collaboratorName, setCollaboratorName] = useState('');
+
+  const onCollaboratorInputChange = (e) => {
+    const collaboratorNewName = e.target.value;
+    setCollaboratorName(collaboratorNewName);
+  };
+
+  return (
+    <CollaboratorContainer>
+      <InputSign className="collaborator-royalty" name="royalty" isRequired sign="%" />
+      <InputSign
+        className="collaborator-id"
+        type="text"
+        sign="@"
+        placement="left"
+        name="royalty"
+        isRequired
+        inputOnChange={onCollaboratorInputChange}
+      />
+    </CollaboratorContainer>
+  );
+};
+
 const MintDescribe = ({ onCompleteLink }) => {
   const { user } = useContext(NearContext);
 
@@ -47,6 +83,7 @@ const MintDescribe = ({ onCompleteLink }) => {
       <Input name="description" labelText="Description" isRequired />
       <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
       <InputRoyalty name="royalty" labelText="Royalty Fee" isRequired asideText={`@${user.accountId}`} />
+      <Collaborator />
       <Button className="collaborator-add">+ Add Collaborator</Button>
       <p className="fee-description">
         Pluminite will take a 5% fee for all sales to continue building the Pluminite community.
