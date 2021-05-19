@@ -76,7 +76,7 @@ Textarea.propTypes = {
   maxLength: PropTypes.number,
 };
 
-Textarea.defaultValues = {
+Textarea.defaultProps = {
   isRequired: true,
 };
 
