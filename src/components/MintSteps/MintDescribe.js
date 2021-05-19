@@ -35,6 +35,17 @@ const Container = styled('div')`
     font-size: 13px;
     line-height: 18px;
   }
+
+  .error-messages {
+    margin: 35px 0 40px;
+  }
+
+  .error-message {
+    padding: 20px 25px;
+    border: 1px solid var(--error);
+    border-radius: var(--radius-default);
+    background-color: var(--error-bg);
+  }
 `;
 
 const CollaboratorContainer = styled('div')`
@@ -50,6 +61,10 @@ const CollaboratorContainer = styled('div')`
     margin-bottom: 0;
   }
 
+  .collaborator-royalty {
+    width: 90px;
+  }
+
   .collaborator-id {
     min-width: 200px;
   }
@@ -62,6 +77,7 @@ const CollaboratorContainer = styled('div')`
 const Collaborator = ({ number, userId, royalty, onRemoveButtonClick, onCollaboratorChange }) => {
   const [userIdValue, setUserIdValue] = useState(userId);
   const [royaltyValue, setRoyaltyValue] = useState(royalty);
+  const [royaltyIsError, setRoyaltyIsError] = useState(false);
 
   const debouncedUserIdValue = useDebounce(userIdValue, 500);
   const debouncedRoyaltyValue = useDebounce(royaltyValue, 500);
@@ -71,18 +87,13 @@ const Collaborator = ({ number, userId, royalty, onRemoveButtonClick, onCollabor
   }, [debouncedUserIdValue]);
 
   useEffect(() => {
-    let royaltyValueToUse;
-
-    if (debouncedRoyaltyValue < APP.MIN_ROYALTY) {
-      royaltyValueToUse = String(APP.MIN_ROYALTY);
-    } else if (debouncedRoyaltyValue > APP.MAX_ROYALTY) {
-      royaltyValueToUse = String(APP.MAX_ROYALTY);
+    if (debouncedRoyaltyValue < APP.MIN_ROYALTY || debouncedRoyaltyValue > APP.MAX_ROYALTY) {
+      setRoyaltyIsError(true);
     } else {
-      royaltyValueToUse = debouncedRoyaltyValue;
+      setRoyaltyIsError(false);
     }
 
-    setRoyaltyValue(royaltyValueToUse);
-    onCollaboratorChange(number, userId, royaltyValueToUse);
+    onCollaboratorChange(number, userId, debouncedRoyaltyValue);
   }, [debouncedRoyaltyValue]);
 
   return (
@@ -93,6 +104,7 @@ const Collaborator = ({ number, userId, royalty, onRemoveButtonClick, onCollabor
         name={`royalty-${number}`}
         isRequired
         isSmall
+        isError={royaltyIsError}
         sign="%"
         onChange={(e) => setRoyaltyValue(e.target.value)}
         value={royaltyValue || ''}
@@ -121,9 +133,14 @@ Collaborator.propTypes = {
   onCollaboratorChange: PropTypes.func,
 };
 
+const isToMuchRoyalties = (collaborators, userRoyalty) => {
+  return collaborators.reduce((acc, cv) => acc + +(cv.royalty || 0), 0) + +userRoyalty > APP.MAX_ROYALTY;
+};
+
 const MintDescribe = ({ onCompleteLink }) => {
   const { user } = useContext(NearContext);
   const [collaborators, setCollaborators] = useState([]);
+  const [userRoyalty, setUserRoyalty] = useState(APP.DEFAULT_ROYALTY);
 
   const addCollaborator = () => setCollaborators((prevNumber) => [...prevNumber, {}]);
 
@@ -154,7 +171,14 @@ const MintDescribe = ({ onCompleteLink }) => {
       <Input name="gem_title" labelText="Gem Title" isRequired />
       <Input name="description" labelText="Description" isRequired />
       <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
-      <InputRoyalty name="royalty" labelText="Royalty Fee" isRequired asideText={`@${user.accountId}`} isSmall />
+      <InputRoyalty
+        name="royalty"
+        labelText="Royalty Fee"
+        isRequired
+        asideText={`@${user.accountId}`}
+        isSmall
+        onChange={(e) => setUserRoyalty(e.target.value)}
+      />
       {collaborators.map(({ royalty, userId }, index) => (
         <Collaborator
           key={index}
@@ -165,6 +189,11 @@ const MintDescribe = ({ onCompleteLink }) => {
           onCollaboratorChange={updateCollaborator}
         />
       ))}
+      <div className="error-messages">
+        {isToMuchRoyalties(collaborators, userRoyalty) && (
+          <div className="error-message">You cannot exceed {APP.MAX_ROYALTY}% in royalties.</div>
+        )}
+      </div>
       {collaborators.length + 1 < APP.MAX_COLLABORATORS && (
         <Button className="collaborator-add" onClick={addCollaborator}>
           + Add Collaborator
