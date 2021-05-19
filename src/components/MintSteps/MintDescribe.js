@@ -100,6 +100,9 @@ const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaborato
         setUserIdIsError(!doesExist);
         onCollaboratorChange(number, { ...collaborator, userId: debouncedUserIdValue, accountExists: doesExist });
       });
+    } else {
+      setUserIdIsError(false);
+      onCollaboratorChange(number, { collaborator, userId: debouncedUserIdValue });
     }
   }, [debouncedUserIdValue]);
 
