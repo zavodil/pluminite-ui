@@ -31,7 +31,7 @@ const InputRoyalty = ({ ...rest }) => {
         type="number"
         sign="%"
         onChange={(e) => setRoyalty(e.target.value)}
-        detailsText="The royalty is the amount you earn from each resale of your NFT. You can customize royalty splits with collaborators or anyone else with a NEAR wallet."
+        detailsText="Royalty fees are how much you earn each time your art is resold. Typically people do between 5-10% If you collaborated, add your collaborator to get a cut too! "
         min={APP.MIN_ROYALTY}
         max={APP.MAX_ROYALTY}
         value={royalty}
