@@ -8,6 +8,7 @@ import { HeadingText, SmallText } from '../common/typography';
 import { Input, InputNear, InputRoyalty, InputSign } from '../common/forms';
 import ButtonBottom from '../common/Button/ButtonBottom';
 import Button from '../common/Button';
+import RemoveIcon from '../../assets/RemoveIcon';
 
 import { APP } from '../../constants';
 
@@ -35,9 +36,15 @@ const Container = styled('div')`
 
 const CollaboratorContainer = styled('div')`
   display: flex;
+  margin-bottom: 22px;
+  align-items: center;
 
-  > *:first-child {
+  > .form-group {
     margin-right: 22px;
+  }
+
+  .form-group {
+    margin-bottom: 0;
   }
 
   .collaborator-id {
@@ -56,6 +63,10 @@ const CollaboratorContainer = styled('div')`
     padding: 13px 12px;
     font-size: 13px;
     line-height: 20px;
+  }
+
+  .remove-icon {
+    cursor: pointer;
   }
 `;
 
@@ -79,6 +90,7 @@ const Collaborator = ({ number }) => {
         inputOnChange={onCollaboratorInputChange}
         value={collaboratorName}
       />
+      <RemoveIcon />
     </CollaboratorContainer>
   );
 };
