@@ -199,6 +199,7 @@ const MintDescribe = ({ onCompleteLink }) => {
           isRequired
           asideText={`@${user.accountId}`}
           isSmall
+          value={userRoyalty}
           onChange={(e) => setUserRoyalty(e.target.value)}
         />
       </div>
