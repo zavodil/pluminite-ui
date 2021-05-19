@@ -29,6 +29,12 @@ const Container = styled('div')`
     min-height: 70px;
   }
 
+  .user-royalty-input {
+    .form-group {
+      margin-bottom: 0;
+    }
+  }
+
   .collaborator-add {
     margin-bottom: 30px;
   }
@@ -53,7 +59,7 @@ const Container = styled('div')`
 
 const CollaboratorContainer = styled('div')`
   display: flex;
-  margin-bottom: 22px;
+  margin: 22px 0;
   align-items: center;
 
   > .form-group {
@@ -184,14 +190,16 @@ const MintDescribe = ({ onCompleteLink }) => {
       <Input name="gem_title" labelText="Gem Title" isRequired />
       <Input name="description" labelText="Description" isRequired />
       <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
-      <InputRoyalty
-        name="royalty"
-        labelText="Royalty Fee"
-        isRequired
-        asideText={`@${user.accountId}`}
-        isSmall
-        onChange={(e) => setUserRoyalty(e.target.value)}
-      />
+      <div className="user-royalty-input">
+        <InputRoyalty
+          name="royalty"
+          labelText="Royalty Fee"
+          isRequired
+          asideText={`@${user.accountId}`}
+          isSmall
+          onChange={(e) => setUserRoyalty(e.target.value)}
+        />
+      </div>
       {collaborators.map(({ royalty, userId }, index) => (
         <Collaborator
           key={`collaborator-${index}-${royalty}-${userId}`}

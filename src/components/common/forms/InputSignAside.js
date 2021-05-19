@@ -32,17 +32,18 @@ const StyledContainer = styled('div')`
     display: flex;
     align-items: center;
     margin-left: 22px;
+    font-size: ${({ isSmall }) => (isSmall ? '13px' : 'inherit')};
     color: var(--periwinkle);
   }
 `;
 
-const InputSignAside = ({ labelText, detailsText, asideText, ...rest }) => {
+const InputSignAside = ({ labelText, detailsText, asideText, isSmall, ...rest }) => {
   return (
-    <StyledContainer className="form-group">
+    <StyledContainer isSmall={isSmall} className="form-group">
       {labelText && <label>{labelText}</label>}
       {detailsText && <SmallText>{detailsText}</SmallText>}
       <div className="aside-wrapper">
-        <InputSign {...rest} />
+        <InputSign isSmall={isSmall} {...rest} />
         {asideText && <div className="aside">{asideText}</div>}
       </div>
     </StyledContainer>
@@ -53,6 +54,7 @@ InputSignAside.propTypes = {
   labelText: PropTypes.string,
   asideText: PropTypes.string,
   detailsText: PropTypes.string,
+  isSmall: PropTypes.bool,
 };
 
 export default InputSignAside;
