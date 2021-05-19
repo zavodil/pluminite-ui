@@ -15,6 +15,8 @@ import { APP } from '../../constants';
 
 import { useDebounce } from '../../hooks';
 
+import { doesAccountExists } from '../../apis';
+
 const Container = styled('div')`
   max-width: 600px;
   margin: 0 auto;
@@ -75,14 +77,27 @@ const CollaboratorContainer = styled('div')`
 `;
 
 const Collaborator = ({ number, userId, royalty, onRemoveButtonClick, onCollaboratorChange }) => {
+  const { nearContent } = useContext(NearContext);
+
   const [userIdValue, setUserIdValue] = useState(userId);
   const [royaltyValue, setRoyaltyValue] = useState(royalty);
   const [royaltyIsError, setRoyaltyIsError] = useState(false);
+  const [userIdIsError, setUserIdIsError] = useState(false);
 
   const debouncedUserIdValue = useDebounce(userIdValue, 500);
   const debouncedRoyaltyValue = useDebounce(royaltyValue, 500);
 
   useEffect(() => {
+    if (debouncedUserIdValue) {
+      doesAccountExists(debouncedUserIdValue, nearContent.connection).then((result) => {
+        if (result) {
+          setUserIdIsError(false);
+        } else {
+          setUserIdIsError(true);
+        }
+      });
+    }
+
     onCollaboratorChange(number, debouncedUserIdValue, royalty);
   }, [debouncedUserIdValue]);
 
@@ -117,6 +132,7 @@ const Collaborator = ({ number, userId, royalty, onRemoveButtonClick, onCollabor
         name={`collaborator-id-${number}`}
         isRequired
         isSmall
+        isError={userIdIsError}
         onChange={(e) => setUserIdValue(e.target.value)}
         value={userIdValue || ''}
       />
