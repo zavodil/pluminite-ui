@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -8,9 +8,12 @@ import { HeadingText, SmallText } from '../common/typography';
 import { Input, InputNear, InputRoyalty, InputSign } from '../common/forms';
 import ButtonBottom from '../common/Button/ButtonBottom';
 import Button from '../common/Button';
+
 import RemoveIcon from '../../assets/RemoveIcon';
 
 import { APP } from '../../constants';
+
+import { useDebounce } from '../../hooks';
 
 const Container = styled('div')`
   max-width: 600px;
@@ -57,6 +60,31 @@ const CollaboratorContainer = styled('div')`
 `;
 
 const Collaborator = ({ number, userId, royalty, onRemoveButtonClick, onCollaboratorChange }) => {
+  const [userIdValue, setUserIdValue] = useState(userId);
+  const [royaltyValue, setRoyaltyValue] = useState(royalty);
+
+  const debouncedUserIdValue = useDebounce(userIdValue, 500);
+  const debouncedRoyaltyValue = useDebounce(royaltyValue, 500);
+
+  useEffect(() => {
+    onCollaboratorChange(number, debouncedUserIdValue, royalty);
+  }, [debouncedUserIdValue]);
+
+  useEffect(() => {
+    let royaltyValueToUse;
+
+    if (debouncedRoyaltyValue < APP.MIN_ROYALTY) {
+      royaltyValueToUse = String(APP.MIN_ROYALTY);
+    } else if (debouncedRoyaltyValue > APP.MAX_ROYALTY) {
+      royaltyValueToUse = String(APP.MAX_ROYALTY);
+    } else {
+      royaltyValueToUse = debouncedRoyaltyValue;
+    }
+
+    setRoyaltyValue(royaltyValueToUse);
+    onCollaboratorChange(number, userId, royaltyValueToUse);
+  }, [debouncedRoyaltyValue]);
+
   return (
     <CollaboratorContainer>
       <InputSign
@@ -66,8 +94,8 @@ const Collaborator = ({ number, userId, royalty, onRemoveButtonClick, onCollabor
         isRequired
         isSmall
         sign="%"
-        onChange={(e) => onCollaboratorChange(number, userId, e.target.value)}
-        value={royalty || ''}
+        onChange={(e) => setRoyaltyValue(e.target.value)}
+        value={royaltyValue || ''}
       />
       <InputSign
         className="collaborator-id"
@@ -77,8 +105,8 @@ const Collaborator = ({ number, userId, royalty, onRemoveButtonClick, onCollabor
         name={`collaborator-id-${number}`}
         isRequired
         isSmall
-        onChange={(e) => onCollaboratorChange(number, e.target.value, royalty)}
-        value={userId || ''}
+        onChange={(e) => setUserIdValue(e.target.value)}
+        value={userIdValue || ''}
       />
       <RemoveIcon onClick={onRemoveButtonClick} />
     </CollaboratorContainer>
