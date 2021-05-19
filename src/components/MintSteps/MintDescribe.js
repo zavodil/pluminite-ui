@@ -7,6 +7,7 @@ import { NearContext } from '../../contexts';
 import { HeadingText, SmallText } from '../common/typography';
 import { Input, InputNear, InputRoyalty } from '../common/forms';
 import ButtonBottom from '../common/Button/ButtonBottom';
+import Button from '../common/Button';
 
 const Container = styled('div')`
   max-width: 600px;
@@ -20,9 +21,8 @@ const Container = styled('div')`
     min-height: 70px;
   }
 
-  .collaborator {
-    cursor: pointer;
-    margin: 0 0 30px;
+  .collaborator-add {
+    margin-bottom: 30px;
   }
 
   .fee-description {
@@ -47,7 +47,7 @@ const MintDescribe = ({ onCompleteLink }) => {
       <Input name="description" labelText="Description" isRequired />
       <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
       <InputRoyalty name="royalty" labelText="Royalty Fee" isRequired asideText={`@${user.accountId}`} />
-      <div className="collaborator">+ Add Collaborator</div>
+      <Button className="collaborator-add">+ Add Collaborator</Button>
       <p className="fee-description">
         Pluminite will take a 5% fee for all sales to continue building the Pluminite community.
       </p>

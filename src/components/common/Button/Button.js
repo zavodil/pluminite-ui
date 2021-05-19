@@ -17,6 +17,13 @@ const StyledButton = styled('button')`
   cursor: pointer;
   transition: 100ms;
 
+  &.button--bare {
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--lavendar);
+  }
+
   &.button--primary {
     border-color: var(--lavendar);
     background-color: var(--lavendar);
@@ -70,6 +77,7 @@ const Button = ({ children, isPrimary, isSecondary, isSmall, isDisabled, classNa
     <StyledButton
       {...props}
       className={classNames('button', className, {
+        'button--bare': !isPrimary && !isSecondary,
         'button--primary': isPrimary,
         'button--secondary': isSecondary,
         'button--link': isLink,
