@@ -21,16 +21,16 @@ const StyledContainer = styled('div')`
     padding: ${(props) => (props.isSmall ? '13px 12px' : '16px 14px')};
     font-family: Comfortaa, 'sans-serif';
     font-size: ${(props) => (props.isSmall ? '13px' : '18px')};
-    line-height: ${(props) => (props.isSmall ? '20px' : '24px')};
+    line-height: ${(props) => (props.isSmall ? '18px' : '24px')};
     color: darkgray;
     cursor: default;
   }
 `;
 
-const InputSign = ({ sign, placement, ...rest }) => {
+const InputSign = ({ sign, placement, isSmall, ...rest }) => {
   return (
-    <StyledContainer isSmall className="form-group" placement={placement}>
-      <Input autoComplete="off" {...rest} />
+    <StyledContainer isSmall={isSmall} className="form-group" placement={placement}>
+      <Input autoComplete="off" isSmall={isSmall} {...rest} />
       <div className="sign">{sign}</div>
     </StyledContainer>
   );
@@ -38,6 +38,7 @@ const InputSign = ({ sign, placement, ...rest }) => {
 
 InputSign.propTypes = {
   sign: PropTypes.string.isRequired,
+  isSmall: PropTypes.bool,
   placement: PropTypes.oneOf(['left', 'right']),
 };
 
