@@ -194,7 +194,7 @@ const MintDescribe = ({ onCompleteLink }) => {
       />
       {collaborators.map(({ royalty, userId }, index) => (
         <Collaborator
-          key={`collaborator-${index}`}
+          key={`collaborator-${index}-${royalty}-${userId}`}
           number={index}
           royalty={royalty}
           userId={userId}
