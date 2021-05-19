@@ -83,10 +83,8 @@ const CollaboratorContainer = styled('div')`
   }
 `;
 
-const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaboratorChange }) => {
+const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaboratorChange, connection }) => {
   const { userId, royalty } = collaborator;
-
-  const { nearContent } = useContext(NearContext);
 
   const [userIdValue, setUserIdValue] = useState(userId);
   const [royaltyValue, setRoyaltyValue] = useState(royalty);
@@ -98,7 +96,7 @@ const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaborato
 
   useEffect(() => {
     if (debouncedUserIdValue) {
-      doesAccountExists(debouncedUserIdValue, nearContent.connection).then((doesExist) => {
+      doesAccountExists(debouncedUserIdValue, connection).then((doesExist) => {
         setUserIdIsError(!doesExist);
         onCollaboratorChange(number, { ...collaborator, userId: debouncedUserIdValue, accountExists: doesExist });
       });
@@ -153,6 +151,7 @@ Collaborator.propTypes = {
   }),
   onRemoveButtonClick: PropTypes.func,
   onCollaboratorChange: PropTypes.func,
+  connection: PropTypes.object,
 };
 
 const isToMuchRoyalties = (collaborators, userRoyalty) => {
@@ -160,7 +159,7 @@ const isToMuchRoyalties = (collaborators, userRoyalty) => {
 };
 
 const MintDescribe = ({ onCompleteLink }) => {
-  const { user } = useContext(NearContext);
+  const { user, nearContent } = useContext(NearContext);
   const [collaborators, setCollaborators] = useState([]);
   const [userRoyalty, setUserRoyalty] = useState(APP.DEFAULT_ROYALTY);
 
@@ -208,6 +207,7 @@ const MintDescribe = ({ onCompleteLink }) => {
             collaborator={collaborator}
             onRemoveButtonClick={() => removeCollaborator(index)}
             onCollaboratorChange={updateCollaborator}
+            connection={nearContent.connection}
           />
         );
       })}
