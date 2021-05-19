@@ -8,6 +8,10 @@ import { useDebounce } from '../../../hooks';
 import { APP } from '../../../constants';
 
 const StyledContainer = styled('div')`
+  .input {
+    width: 90px;
+  }
+
   .aside {
     color: #ffffff;
   }
