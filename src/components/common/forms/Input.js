@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
+import { hideArrowsForNumberInput } from '../../../styles/mixins';
+
 import { TextInputType } from '../../../types/InputTypes';
 
 const StyledContainer = styled('div')`
@@ -15,6 +17,8 @@ const StyledContainer = styled('div')`
   }
 
   input {
+    ${hideArrowsForNumberInput};
+
     height: 55px;
     padding: 16px 14px;
     border: none;
@@ -26,10 +30,10 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const Input = ({ labelText, type = 'text', isRequired = true, name }) => (
+const Input = ({ labelText, type = 'text', isRequired = true, name, ...rest }) => (
   <StyledContainer className="form-group">
     {labelText && <label>{labelText}</label>}
-    <input type={type} name={name} required={isRequired} autoComplete="off" />
+    <input type={type} name={name} required={isRequired} autoComplete="off" {...rest} />
   </StyledContainer>
 );
 
