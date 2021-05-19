@@ -31,7 +31,7 @@ const GlobalStyle = createGlobalStyle`
 
     --success: #00FF38;
     --error-base: 255, 95, 95;
-    --error: rgb(--error-base);
+    --error: rgb(var(--error-base));
 
     --success-bg: #1F1C45;
     --error-bg: rgba(255, 0, 31, 0.1);
