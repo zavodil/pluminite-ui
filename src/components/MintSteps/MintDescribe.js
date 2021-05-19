@@ -41,6 +41,20 @@ const CollaboratorContainer = styled('div')`
   .collaborator-id {
     min-width: 200px;
   }
+
+  .collaborator-royalty,
+  .collaborator-id {
+    height: 45px;
+    padding: 13px 30px 12px;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .sign {
+    padding: 13px 12px;
+    font-size: 13px;
+    line-height: 20px;
+  }
 `;
 
 const Collaborator = ({ number }) => {
@@ -52,7 +66,7 @@ const Collaborator = ({ number }) => {
 
   return (
     <CollaboratorContainer>
-      <InputSign className="collaborator-royalty" name={`royalty-${number}`} isRequired sign="%" />
+      <InputSign type="number" className="collaborator-royalty" name={`royalty-${number}`} isRequired sign="%" />
       <InputSign
         className="collaborator-id"
         type="text"

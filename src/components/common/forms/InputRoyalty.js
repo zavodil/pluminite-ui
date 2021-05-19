@@ -9,6 +9,19 @@ import { useDebounce } from '../../../hooks';
 import { APP } from '../../../constants';
 
 const StyledContainer = styled('div')`
+  input {
+    height: 45px;
+    padding: 13px 30px 12px;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .sign {
+    padding: 13px 12px;
+    font-size: 13px;
+    line-height: 20px;
+  }
+
   .aside {
     color: #ffffff;
   }
