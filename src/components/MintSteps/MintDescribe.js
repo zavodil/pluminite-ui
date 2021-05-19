@@ -83,7 +83,9 @@ const CollaboratorContainer = styled('div')`
   }
 `;
 
-const Collaborator = ({ number, userId, royalty, onRemoveButtonClick, onCollaboratorChange }) => {
+const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaboratorChange }) => {
+  const { userId, royalty } = collaborator;
+
   const { nearContent } = useContext(NearContext);
 
   const [userIdValue, setUserIdValue] = useState(userId);
@@ -98,7 +100,7 @@ const Collaborator = ({ number, userId, royalty, onRemoveButtonClick, onCollabor
     if (debouncedUserIdValue) {
       doesAccountExists(debouncedUserIdValue, nearContent.connection).then((doesExist) => {
         setUserIdIsError(!doesExist);
-        onCollaboratorChange(number, debouncedUserIdValue, royalty, doesExist);
+        onCollaboratorChange(number, { ...collaborator, userId: debouncedUserIdValue, accountExists: doesExist });
       });
     }
   }, [debouncedUserIdValue]);
@@ -110,7 +112,7 @@ const Collaborator = ({ number, userId, royalty, onRemoveButtonClick, onCollabor
       setRoyaltyIsError(false);
     }
 
-    onCollaboratorChange(number, userId, debouncedRoyaltyValue);
+    onCollaboratorChange(number, { ...collaborator, royalty: debouncedRoyaltyValue });
   }, [debouncedRoyaltyValue]);
 
   return (
@@ -145,8 +147,10 @@ const Collaborator = ({ number, userId, royalty, onRemoveButtonClick, onCollabor
 
 Collaborator.propTypes = {
   number: PropTypes.number,
-  userId: PropTypes.string,
-  royalty: PropTypes.string,
+  collaborator: PropTypes.shape({
+    userId: PropTypes.string,
+    royalty: PropTypes.string,
+  }),
   onRemoveButtonClick: PropTypes.func,
   onCollaboratorChange: PropTypes.func,
 };
@@ -160,20 +164,16 @@ const MintDescribe = ({ onCompleteLink }) => {
   const [collaborators, setCollaborators] = useState([]);
   const [userRoyalty, setUserRoyalty] = useState(APP.DEFAULT_ROYALTY);
 
-  const addCollaborator = () => setCollaborators((prevNumber) => [...prevNumber, {}]);
+  const addCollaborator = () => setCollaborators((prevNumber) => [...prevNumber, { key: new Date().getTime() }]);
 
   const removeCollaborator = (index) => {
     setCollaborators((prevCollaborators) => prevCollaborators.filter((_, i) => i !== index));
   };
 
-  const updateCollaborator = (index, userId, royalty, accountExists = true) => {
+  const updateCollaborator = (index, collaboratorNew) => {
     setCollaborators((prevCollaborators) => [
       ...prevCollaborators.slice(0, index),
-      {
-        royalty,
-        userId,
-        accountExists,
-      },
+      collaboratorNew,
       ...prevCollaborators.slice(index + 1),
     ]);
   };
@@ -200,16 +200,17 @@ const MintDescribe = ({ onCompleteLink }) => {
           onChange={(e) => setUserRoyalty(e.target.value)}
         />
       </div>
-      {collaborators.map(({ royalty, userId }, index) => (
-        <Collaborator
-          key={`collaborator-${index}-${royalty}-${userId}`}
-          number={index}
-          royalty={royalty}
-          userId={userId}
-          onRemoveButtonClick={() => removeCollaborator(index)}
-          onCollaboratorChange={updateCollaborator}
-        />
-      ))}
+      {collaborators.map((collaborator, index) => {
+        return (
+          <Collaborator
+            key={`collaborator-${collaborator.key}`}
+            number={index}
+            collaborator={collaborator}
+            onRemoveButtonClick={() => removeCollaborator(index)}
+            onCollaboratorChange={updateCollaborator}
+          />
+        );
+      })}
       <div className="error-messages">
         {isToMuchRoyalties(collaborators, userRoyalty) && (
           <div className="error-message">You cannot exceed {APP.MAX_ROYALTY}% in royalties.</div>
