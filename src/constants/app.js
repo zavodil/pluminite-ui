@@ -6,6 +6,8 @@ const APP = {
   MIN_NEARS: 0,
 
   MAX_COLLABORATORS: 10,
+
+  GEM_DESCRIPTION_MAX_LENGTH: 160,
 };
 
 export default APP;

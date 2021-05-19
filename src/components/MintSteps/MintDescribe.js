@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { NearContext } from '../../contexts';
 
 import { HeadingText, SmallText } from '../common/typography';
-import { Input, InputNear, InputRoyalty, InputSign } from '../common/forms';
+import { Input, InputNear, InputRoyalty, InputSign, Textarea } from '../common/forms';
 import ButtonBottom from '../common/Button/ButtonBottom';
 import Button from '../common/Button';
 
@@ -190,7 +190,7 @@ const MintDescribe = ({ onCompleteLink }) => {
         </SmallText>
       </div>
       <Input name="gem_title" labelText="Gem Title" isRequired />
-      <Input name="description" labelText="Description" isRequired />
+      <Textarea name="description" labelText="Description" rows={4} maxLength={APP.GEM_DESCRIPTION_MAX_LENGTH} />
       <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
       <div className="user-royalty-input">
         <InputRoyalty
