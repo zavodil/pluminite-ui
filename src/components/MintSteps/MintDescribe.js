@@ -43,6 +43,7 @@ const Container = styled('div')`
   }
 
   .error-message {
+    margin-bottom: 25px;
     padding: 20px 25px;
     border: 1px solid var(--error);
     border-radius: var(--radius-default);
@@ -89,16 +90,11 @@ const Collaborator = ({ number, userId, royalty, onRemoveButtonClick, onCollabor
 
   useEffect(() => {
     if (debouncedUserIdValue) {
-      doesAccountExists(debouncedUserIdValue, nearContent.connection).then((result) => {
-        if (result) {
-          setUserIdIsError(false);
-        } else {
-          setUserIdIsError(true);
-        }
+      doesAccountExists(debouncedUserIdValue, nearContent.connection).then((doesExist) => {
+        setUserIdIsError(!doesExist);
+        onCollaboratorChange(number, debouncedUserIdValue, royalty, doesExist);
       });
     }
-
-    onCollaboratorChange(number, debouncedUserIdValue, royalty);
   }, [debouncedUserIdValue]);
 
   useEffect(() => {
@@ -164,12 +160,13 @@ const MintDescribe = ({ onCompleteLink }) => {
     setCollaborators((prevCollaborators) => prevCollaborators.filter((_, i) => i !== index));
   };
 
-  const updateCollaborator = (index, userId, royalty) => {
+  const updateCollaborator = (index, userId, royalty, accountExists = true) => {
     setCollaborators((prevCollaborators) => [
       ...prevCollaborators.slice(0, index),
       {
         royalty,
         userId,
+        accountExists,
       },
       ...prevCollaborators.slice(index + 1),
     ]);
@@ -197,7 +194,7 @@ const MintDescribe = ({ onCompleteLink }) => {
       />
       {collaborators.map(({ royalty, userId }, index) => (
         <Collaborator
-          key={index}
+          key={`collaborator-${index}`}
           number={index}
           royalty={royalty}
           userId={userId}
@@ -209,6 +206,17 @@ const MintDescribe = ({ onCompleteLink }) => {
         {isToMuchRoyalties(collaborators, userRoyalty) && (
           <div className="error-message">You cannot exceed {APP.MAX_ROYALTY}% in royalties.</div>
         )}
+        {collaborators.map(({ userId, accountExists }, index) => {
+          if (!userId || accountExists) {
+            return null;
+          }
+
+          return (
+            <div key={`nonexistent-user-${index}`} className="error-message">
+              Wallet name &apos;{userId}&apos; not found
+            </div>
+          );
+        })}
       </div>
       {collaborators.length + 1 < APP.MAX_COLLABORATORS && (
         <Button className="collaborator-add" onClick={addCollaborator}>

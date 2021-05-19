@@ -89,7 +89,7 @@ export default function Home() {
       <div className="items-container">
         <div className="items">
           {Array.from({ length: 10 }).map((_, i) => (
-            <ArtItemPriced key={i} />
+            <ArtItemPriced key={`art-item-${i}`} />
           ))}
         </div>
       </div>

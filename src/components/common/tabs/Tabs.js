@@ -74,7 +74,7 @@ const Tabs = ({ tabsArray }) => {
         {tabsArray.map(({ title }, index) => {
           return (
             <div
-              key={index}
+              key={`tab-title-${index}`}
               className={classNames('tabs-title', {
                 'tabs-title--active': tabActiveIndex === index,
               })}
@@ -89,7 +89,7 @@ const Tabs = ({ tabsArray }) => {
         {tabsArray.map(({ content }, index) => {
           return (
             <div
-              key={index}
+              key={`tab-content-${index}`}
               className={classNames('tabs-tab', {
                 'tabs-tab--active': tabActiveIndex === index,
               })}

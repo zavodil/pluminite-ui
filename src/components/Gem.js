@@ -172,7 +172,7 @@ export default function Gem() {
           {
             title: 'History',
             content: historyData.map((event, index) => (
-              <div key={index} className="history-event">
+              <div key={`event-${index}`} className="history-event">
                 {event.type === 'bid' &&
                   `${event.bidder} bid ${event.amount}Ⓝ on ${new Intl.DateTimeFormat().format(new Date(event.date))}`}
                 {event.type === 'startPriceUpdate' &&
@@ -189,7 +189,7 @@ export default function Gem() {
           {
             title: 'Royalties',
             content: royalties.map(({ userId, royalty }, index) => (
-              <div key={index} className="royalty">
+              <div key={`royalty-${index}`} className="royalty">
                 <span className="royalty-user">{userId}</span>
                 <span className="royalty-royalty">{royalty}</span>
               </div>
