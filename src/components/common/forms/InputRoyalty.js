@@ -9,25 +9,12 @@ import { useDebounce } from '../../../hooks';
 import { APP } from '../../../constants';
 
 const StyledContainer = styled('div')`
-  input {
-    height: 45px;
-    padding: 13px 30px 12px;
-    font-size: 13px;
-    line-height: 18px;
-  }
-
-  .sign {
-    padding: 13px 12px;
-    font-size: 13px;
-    line-height: 20px;
-  }
-
   .aside {
     color: #ffffff;
   }
 `;
 
-const InputRoyalty = ({ labelText, isRequired = true, name, asideText }) => {
+const InputRoyalty = ({ labelText, isRequired = true, name, asideText, isSmall }) => {
   const [royalty, setRoyalty] = useState(APP.DEFAULT_ROYALTY);
   const debouncedRoyalty = useDebounce(royalty, 500);
 
@@ -46,6 +33,7 @@ const InputRoyalty = ({ labelText, isRequired = true, name, asideText }) => {
         name={name}
         sign="%"
         isRequired={isRequired}
+        isSmall={isSmall}
         asideText={asideText}
         inputOnChange={setRoyalty}
         detailsText="The royalty is the amount you earn from each resale of your NFT. You can customize royalty splits with collaborators or anyone else with a NEAR wallet."
@@ -62,6 +50,7 @@ InputRoyalty.propTypes = {
   asideText: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   isRequired: PropTypes.bool,
+  isSmall: PropTypes.bool,
 };
 
 export default InputRoyalty;

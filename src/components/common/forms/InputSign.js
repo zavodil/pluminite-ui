@@ -8,9 +8,9 @@ const StyledContainer = styled('div')`
   position: relative;
   width: fit-content;
 
-  input {
+  .input {
     width: 135px;
-    padding-${(props) => props.placement}: 40px;
+    padding-${(props) => props.placement}: ${(props) => (props.isSmall ? '30px' : '40px')};
     text-align: ${(props) => (props.placement === 'right' ? 'end' : 'start')};
   }
 
@@ -18,24 +18,25 @@ const StyledContainer = styled('div')`
     position: absolute;
     top: 0;
     ${(props) => props.placement}: 0;
-    padding: 16px 14px;
+    padding: ${(props) => (props.isSmall ? '13px 12px' : '16px 14px')};
     font-family: Comfortaa, 'sans-serif';
-    font-size: 18px;
-    line-height: 24px;
+    font-size: ${(props) => (props.isSmall ? '13px' : '18px')};
+    line-height: ${(props) => (props.isSmall ? '20px' : '24px')};
     color: darkgray;
     cursor: default;
   }
 `;
 
-const InputSign = ({ isRequired, name, sign, inputOnChange, placement, ...rest }) => {
+const InputSign = ({ isRequired, name, sign, inputOnChange, placement, isSmall, ...rest }) => {
   return (
-    <StyledContainer className="form-group" placement={placement}>
+    <StyledContainer isSmall className="form-group" placement={placement}>
       <Input
         name={name}
         required={isRequired}
         autoComplete="off"
         onChange={(e) => inputOnChange(e.target.value)}
         {...rest}
+        isSmall={isSmall}
       />
       <div className="sign">{sign}</div>
     </StyledContainer>
@@ -44,6 +45,7 @@ const InputSign = ({ isRequired, name, sign, inputOnChange, placement, ...rest }
 
 InputSign.propTypes = {
   isRequired: PropTypes.bool,
+  isSmall: PropTypes.bool,
   name: PropTypes.string.isRequired,
   sign: PropTypes.string.isRequired,
   inputOnChange: PropTypes.func,

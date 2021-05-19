@@ -51,20 +51,6 @@ const CollaboratorContainer = styled('div')`
     min-width: 200px;
   }
 
-  .collaborator-royalty,
-  .collaborator-id {
-    height: 45px;
-    padding: 13px 30px 12px;
-    font-size: 13px;
-    line-height: 18px;
-  }
-
-  .sign {
-    padding: 13px 12px;
-    font-size: 13px;
-    line-height: 20px;
-  }
-
   .remove-icon {
     cursor: pointer;
   }
@@ -79,7 +65,14 @@ const Collaborator = ({ number }) => {
 
   return (
     <CollaboratorContainer>
-      <InputSign type="number" className="collaborator-royalty" name={`royalty-${number}`} isRequired sign="%" />
+      <InputSign
+        type="number"
+        className="collaborator-royalty"
+        name={`royalty-${number}`}
+        isRequired
+        isSmall
+        sign="%"
+      />
       <InputSign
         className="collaborator-id"
         type="text"
@@ -87,6 +80,7 @@ const Collaborator = ({ number }) => {
         placement="left"
         name={`collaborator-id-${number}`}
         isRequired
+        isSmall
         inputOnChange={onCollaboratorInputChange}
         value={collaboratorName}
       />
@@ -115,7 +109,7 @@ const MintDescribe = ({ onCompleteLink }) => {
       <Input name="gem_title" labelText="Gem Title" isRequired />
       <Input name="description" labelText="Description" isRequired />
       <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
-      <InputRoyalty name="royalty" labelText="Royalty Fee" isRequired asideText={`@${user.accountId}`} />
+      <InputRoyalty name="royalty" labelText="Royalty Fee" isRequired asideText={`@${user.accountId}`} isSmall />
       {Array.from({ length: collaboratorsNumber }).map((_, index) => (
         <Collaborator key={index} number={index} />
       ))}

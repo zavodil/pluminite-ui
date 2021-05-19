@@ -44,6 +44,7 @@ const InputSignAside = ({
   sign,
   inputOnChange = () => {},
   asideText,
+  isSmall,
   ...rest
 }) => {
   return (
@@ -57,6 +58,7 @@ const InputSignAside = ({
           name={name}
           required={isRequired}
           inputOnChange={inputOnChange}
+          isSmall={isSmall}
           {...rest}
         />
         {asideText && <div className="aside">{asideText}</div>}
@@ -72,6 +74,7 @@ InputSignAside.propTypes = {
   sign: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   isRequired: PropTypes.bool,
+  isSmall: PropTypes.bool,
   inputOnChange: PropTypes.func,
 };
 

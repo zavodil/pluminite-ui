@@ -1,6 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import styled from 'styled-components';
 
 import { hideArrowsForNumberInput } from '../../../styles/mixins';
 
@@ -16,7 +17,7 @@ const StyledContainer = styled('div')`
     margin-bottom: 10px;
   }
 
-  input {
+  .input {
     ${hideArrowsForNumberInput};
 
     height: 55px;
@@ -28,21 +29,44 @@ const StyledContainer = styled('div')`
     font-family: var(--font-primary);
     font-size: 16px;
     color: white;
+
+    &--small {
+      height: 45px;
+      padding: 13px 12px;
+      font-size: 13px;
+      line-height: 18px;
+    }
   }
 `;
 
-const Input = ({ labelText, type = 'text', isRequired = true, name, ...rest }) => (
+const Input = ({ labelText, type = 'text', isRequired = true, name, isSmall, className, ...rest }) => (
   <StyledContainer className="form-group">
     {labelText && <label>{labelText}</label>}
-    <input type={type} name={name} required={isRequired} autoComplete="off" {...rest} />
+    <input
+      type={type}
+      name={name}
+      required={isRequired}
+      autoComplete="off"
+      className={classNames('input', className, {
+        'input--small': isSmall,
+      })}
+      {...rest}
+    />
   </StyledContainer>
 );
 
 Input.propTypes = {
   labelText: PropTypes.string,
   type: TextInputType,
-  name: PropTypes.string.isRequired,
   isRequired: PropTypes.bool,
+  name: PropTypes.string.isRequired,
+  isSmall: PropTypes.bool,
+  className: PropTypes.string,
+};
+
+Input.defaultProps = {
+  type: 'text',
+  isRequired: true,
 };
 
 export default Input;
