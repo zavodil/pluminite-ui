@@ -8,7 +8,7 @@ const Container = styled('div')`
   display: flex;
   flex-direction: column;
   min-height: calc(100% - 90px);
-  padding: 100px 28px 120px;
+  padding: 100px 28px 60px;
 `;
 
 export default function Mint() {

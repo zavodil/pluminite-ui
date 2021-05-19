@@ -22,6 +22,12 @@ const Container = styled('div')`
 
   .collaborator {
     cursor: pointer;
+    margin: 0 0 30px;
+  }
+
+  .fee-description {
+    font-size: 13px;
+    line-height: 18px;
   }
 `;
 
@@ -41,7 +47,10 @@ const MintDescribe = ({ onCompleteLink }) => {
       <Input name="description" labelText="Description" isRequired />
       <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
       <InputRoyalty name="royalty" labelText="Royalty Fee" isRequired asideText={`@${user.accountId}`} />
-      <span className="collaborator">+ Add Collaborator</span>
+      <div className="collaborator">+ Add Collaborator</div>
+      <p className="fee-description">
+        Pluminite will take a 5% fee for all sales to continue building the Pluminite community.
+      </p>
       <ButtonBottom link={onCompleteLink} text="Next Step: Upload Artwork" />
     </Container>
   );
