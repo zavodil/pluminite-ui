@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 
 import InputSignAside from './InputSignAside';
 
@@ -10,7 +9,7 @@ import { APP } from '../../../constants';
 
 import { round } from '../../../utils/numbers';
 
-const InputNear = ({ labelText, isRequired = true, name }) => {
+const InputNear = ({ ...rest }) => {
   const [nears, setNears] = useState('');
   const [USDs, setUSDs] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
@@ -42,22 +41,15 @@ const InputNear = ({ labelText, isRequired = true, name }) => {
 
   return (
     <InputSignAside
-      labelText={labelText}
-      name={name}
+      type="number"
       sign="Ⓝ"
-      isRequired={isRequired}
-      inputOnChange={setNears}
+      onChange={(e) => setNears(e.target.value)}
       asideText={USDs !== null && !isSearching ? `~${round(USDs, 2)} USD` : null}
       min={APP.MIN_NEARS}
       value={nears}
+      {...rest}
     />
   );
-};
-
-InputNear.propTypes = {
-  labelText: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  isRequired: PropTypes.bool,
 };
 
 export default InputNear;

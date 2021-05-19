@@ -81,7 +81,7 @@ const Collaborator = ({ number }) => {
         name={`collaborator-id-${number}`}
         isRequired
         isSmall
-        inputOnChange={onCollaboratorInputChange}
+        onChange={(e) => onCollaboratorInputChange(e.target.value)}
         value={collaboratorName}
       />
       <RemoveIcon />

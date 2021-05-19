@@ -39,7 +39,7 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const Input = ({ labelText, type = 'text', isRequired = true, name, isSmall, className, ...rest }) => (
+const Input = ({ labelText, type, isRequired, name, isSmall, className, ...rest }) => (
   <StyledContainer className="form-group">
     {labelText && <label>{labelText}</label>}
     <input

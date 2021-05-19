@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import InputSignAside from './InputSignAside';
@@ -14,7 +13,7 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const InputRoyalty = ({ labelText, isRequired = true, name, asideText, isSmall }) => {
+const InputRoyalty = ({ ...rest }) => {
   const [royalty, setRoyalty] = useState(APP.DEFAULT_ROYALTY);
   const debouncedRoyalty = useDebounce(royalty, 500);
 
@@ -29,28 +28,17 @@ const InputRoyalty = ({ labelText, isRequired = true, name, asideText, isSmall }
   return (
     <StyledContainer>
       <InputSignAside
-        labelText={labelText}
-        name={name}
+        type="number"
         sign="%"
-        isRequired={isRequired}
-        isSmall={isSmall}
-        asideText={asideText}
-        inputOnChange={setRoyalty}
+        onChange={(e) => setRoyalty(e.target.value)}
         detailsText="The royalty is the amount you earn from each resale of your NFT. You can customize royalty splits with collaborators or anyone else with a NEAR wallet."
         min={APP.MIN_ROYALTY}
         max={APP.MAX_ROYALTY}
         value={royalty}
+        {...rest}
       />
     </StyledContainer>
   );
-};
-
-InputRoyalty.propTypes = {
-  labelText: PropTypes.string,
-  asideText: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  isRequired: PropTypes.bool,
-  isSmall: PropTypes.bool,
 };
 
 export default InputRoyalty;

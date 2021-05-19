@@ -27,34 +27,21 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const InputSign = ({ isRequired, name, sign, inputOnChange, placement, isSmall, ...rest }) => {
+const InputSign = ({ sign, placement, ...rest }) => {
   return (
     <StyledContainer isSmall className="form-group" placement={placement}>
-      <Input
-        name={name}
-        required={isRequired}
-        autoComplete="off"
-        onChange={(e) => inputOnChange(e.target.value)}
-        {...rest}
-        isSmall={isSmall}
-      />
+      <Input autoComplete="off" {...rest} />
       <div className="sign">{sign}</div>
     </StyledContainer>
   );
 };
 
 InputSign.propTypes = {
-  isRequired: PropTypes.bool,
-  isSmall: PropTypes.bool,
-  name: PropTypes.string.isRequired,
   sign: PropTypes.string.isRequired,
-  inputOnChange: PropTypes.func,
   placement: PropTypes.oneOf(['left', 'right']),
 };
 
 InputSign.defaultProps = {
-  isRequired: true,
-  inputOnChange: () => {},
   placement: 'right',
 };
 
