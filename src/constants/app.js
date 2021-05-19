@@ -4,6 +4,8 @@ const APP = {
   MAX_ROYALTY: 97,
 
   MIN_NEARS: 0,
+
+  MAX_COLLABORATORS: 10,
 };
 
 export default APP;

@@ -9,6 +9,8 @@ import { Input, InputNear, InputRoyalty, InputSign } from '../common/forms';
 import ButtonBottom from '../common/Button/ButtonBottom';
 import Button from '../common/Button';
 
+import { APP } from '../../constants';
+
 const Container = styled('div')`
   max-width: 600px;
   margin: 0 auto;
@@ -105,9 +107,11 @@ const MintDescribe = ({ onCompleteLink }) => {
       {Array.from({ length: collaboratorsNumber }).map((_, index) => (
         <Collaborator key={index} number={index} />
       ))}
-      <Button className="collaborator-add" onClick={() => setCollaboratorsNumber((prevNumber) => prevNumber + 1)}>
-        + Add Collaborator
-      </Button>
+      {collaboratorsNumber + 1 < APP.MAX_COLLABORATORS && (
+        <Button className="collaborator-add" onClick={() => setCollaboratorsNumber((prevNumber) => prevNumber + 1)}>
+          + Add Collaborator
+        </Button>
+      )}
       <p className="fee-description">
         Pluminite will take a 5% fee for all sales to continue building the Pluminite community.
       </p>
