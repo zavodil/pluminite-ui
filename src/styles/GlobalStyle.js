@@ -30,9 +30,11 @@ const GlobalStyle = createGlobalStyle`
     --bubble-gum: rgb(var(--bubble-gum-base));
 
     --success: #00FF38;
-    --error: #FF5F5F;
+    --error-base: 255, 95, 95;
+    --error: rgb(--error-base);
 
     --success-bg: #1F1C45;
+    --error-bg: rgba(255, 0, 31, 0.1);
 
     --shadow-primary: 0 0 14px #BA0DD7;
     --shadow-secondary: 0 0 14px rgba(186, 13, 215, 0.6);

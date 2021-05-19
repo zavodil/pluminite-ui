@@ -36,10 +36,14 @@ const StyledContainer = styled('div')`
       font-size: 13px;
       line-height: 18px;
     }
+
+    &--error {
+      background-color: rgba(var(--error-base), 0.4);
+    }
   }
 `;
 
-const Input = ({ labelText, type, isRequired, name, isSmall, className, ...rest }) => (
+const Input = ({ labelText, type, isRequired, name, isSmall, isError, className, ...rest }) => (
   <StyledContainer className="form-group">
     {labelText && <label>{labelText}</label>}
     <input
@@ -49,6 +53,7 @@ const Input = ({ labelText, type, isRequired, name, isSmall, className, ...rest 
       autoComplete="off"
       className={classNames('input', className, {
         'input--small': isSmall,
+        'input--error': isError,
       })}
       {...rest}
     />
@@ -61,6 +66,7 @@ Input.propTypes = {
   isRequired: PropTypes.bool,
   name: PropTypes.string.isRequired,
   isSmall: PropTypes.bool,
+  isError: PropTypes.bool,
   className: PropTypes.string,
 };
 
