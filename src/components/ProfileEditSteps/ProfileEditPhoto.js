@@ -13,6 +13,13 @@ const Container = styled('div')`
     margin-bottom: 10px;
   }
 
+  img {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
   .sub-title {
     margin: 0 0 20px;
   }
