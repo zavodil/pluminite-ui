@@ -18,7 +18,7 @@ const StyledSpan = styled('span')`
     white-space: nowrap;
   }
 
-  .nears {
+  .nears-sign {
     margin-right: 4px;
   }
 
@@ -37,7 +37,7 @@ const Balance = ({ precision, ...props }) => {
 
   return (
     <StyledSpan className="balance-text" {...props}>
-      <span className="nears">{nearRounded} Ⓝ</span>{' '}
+      <span className="nears">{nearRounded}</span> <span className="nears-sign">Ⓝ</span>{' '}
       <span className="usds">{USDs && `~$${round(USDs, precision)} USD`}</span>
     </StyledSpan>
   );

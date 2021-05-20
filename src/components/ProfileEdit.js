@@ -58,11 +58,21 @@ const Container = styled('div')`
     }
 
     .nears {
-      font-size: 66px;
+      font-size: 36px;
+      line-height: 24px;
+      margin-right: 8px;
+    }
+
+    .nears-sign {
+      font-size: 18px;
+      line-height: 18px;
+      margin-right: 16px;
     }
 
     .usds {
-      font-size: 34px;
+      font-size: 18px;
+      line-height: 24px;
+      opacity: 70%;
     }
   }
 
