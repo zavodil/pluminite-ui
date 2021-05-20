@@ -42,7 +42,7 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText }, ref) => {
+const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText }, customRef) => {
   const [isLoading, setIsLoading] = useState(false);
   const [imageDataUrl, setImageDataUrl] = useState(null);
   const [isError, setIsError] = useState(false);
@@ -75,19 +75,19 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText }, ref) => {
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { ref, ...dropzoneProps } = getRootProps();
 
   return (
     <StyledContainer>
       {imageDataUrl ? (
         <img src={imageDataUrl} alt="selected art" />
       ) : (
-        <div className="select square-with-border" {...getRootProps()}>
+        <div className="select square-with-border" ref={customRef || ref} {...dropzoneProps}>
           {isDragActive ? 'Drop files here.' : <Button isSecondary>{buttonText}</Button>}
           <input
             {...getInputProps({
               multiple: false,
               accept: 'image/*',
-              ref,
             })}
           />
         </div>
