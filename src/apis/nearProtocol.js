@@ -1,11 +1,13 @@
 import { Account } from 'near-api-js';
 
-export const doesAccountExists = async (userId, connection) => {
+export const doesAccountExist = async (userId, connection) => {
   try {
-    return !!(await new Account(connection, userId).state());
+    await new Account(connection, userId).state();
+    return true;
   } catch (error) {
-    // console.error(error);
+    if (error.toString().indexOf('does not exist while viewing') !== -1) {
+      return false;
+    }
+    throw error;
   }
-
-  return false;
 };

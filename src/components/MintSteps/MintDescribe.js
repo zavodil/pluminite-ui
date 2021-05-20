@@ -15,7 +15,7 @@ import { APP } from '../../constants';
 
 import { useDebounce } from '../../hooks';
 
-import { doesAccountExists } from '../../apis';
+import { doesAccountExist } from '../../apis';
 
 const Container = styled('div')`
   max-width: 600px;
@@ -96,7 +96,7 @@ const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaborato
 
   useEffect(() => {
     if (debouncedUserIdValue) {
-      doesAccountExists(debouncedUserIdValue, connection).then((doesExist) => {
+      doesAccountExist(debouncedUserIdValue, connection).then((doesExist) => {
         setUserIdIsError(!doesExist);
         onCollaboratorChange(number, { ...collaborator, userId: debouncedUserIdValue, accountExists: doesExist });
       });
