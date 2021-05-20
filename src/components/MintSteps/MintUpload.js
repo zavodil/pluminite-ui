@@ -6,13 +6,15 @@ import { HeadingText } from '../common/typography';
 import FileDropzone from '../common/FileDropzone';
 import ButtonBottom from '../common/Button/ButtonBottom';
 
+import { NftTypeRequired } from '../../types/NftTypes';
+
 const Container = styled('div')`
   max-width: 600px;
   margin: 0 auto;
   width: 100%;
 `;
 
-const MintUpload = ({ onUpload, onCompleteLink, imageDataUrl }) => {
+const MintUpload = ({ onUpload, onCompleteLink, nft }) => {
   return (
     <Container>
       <HeadingText>Upload Art</HeadingText>
@@ -22,7 +24,7 @@ const MintUpload = ({ onUpload, onCompleteLink, imageDataUrl }) => {
         adviceText="We advise a 1:1 ratio. Max file size 16 Mb."
         maxSizeMb={16}
       />
-      <ButtonBottom link={onCompleteLink} text="Last Step: Review" isDisabled={!imageDataUrl} />
+      <ButtonBottom link={onCompleteLink} text="Last Step: Review" isDisabled={!nft.artDataUrl} />
     </Container>
   );
 };
@@ -31,6 +33,7 @@ MintUpload.propTypes = {
   onUpload: PropTypes.func,
   onCompleteLink: PropTypes.string,
   imageDataUrl: PropTypes.string,
+  nft: NftTypeRequired,
 };
 
 export default MintUpload;

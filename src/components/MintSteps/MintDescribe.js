@@ -18,6 +18,8 @@ import { useDebounce } from '../../hooks';
 
 import { doesAccountExist } from '../../apis';
 
+import { NftTypeRequired } from '../../types/NftTypes';
+
 const Container = styled('div')`
   max-width: 600px;
   margin: 0 auto;
@@ -176,10 +178,12 @@ const isMintAllowed = (user) => {
   return !hasEnoughNears(user) && hasExceededPrepaidMints();
 };
 
-const MintDescribe = ({ onCompleteLink }) => {
+const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
   const { user, nearContent } = useContext(NearContext);
-  const [collaborators, setCollaborators] = useState([]);
+
   const [userRoyalty, setUserRoyalty] = useState(APP.DEFAULT_ROYALTY);
+  const [collaborators, setCollaborators] = useState([]);
+
   const [userRoyaltyIsError, setUserRoyaltyIsError] = useState(false);
 
   useEffect(() => {
@@ -187,6 +191,7 @@ const MintDescribe = ({ onCompleteLink }) => {
       setUserRoyaltyIsError(true);
     } else {
       setUserRoyaltyIsError(false);
+      setNftField('creatorRoyalty', String(userRoyalty));
     }
   }, [userRoyalty]);
 
@@ -212,6 +217,21 @@ const MintDescribe = ({ onCompleteLink }) => {
     ]);
   };
 
+  useEffect(() => setNftField('accountId', user.accountId), []);
+
+  useEffect(() => {
+    setNft((nftOld) => {
+      return {
+        ...nftOld,
+        collaborators: collaborators
+          .filter(({ userId, accountExists }) => userId && accountExists)
+          .map(({ userId, royalty }) => {
+            return { userId, royalty };
+          }),
+      };
+    });
+  }, [collaborators]);
+
   return (
     <Container>
       <HeadingText>Mint a Gem</HeadingText>
@@ -229,15 +249,31 @@ const MintDescribe = ({ onCompleteLink }) => {
           </SmallText>
         )}
       </div>
-      <Input name="gem_title" labelText="Gem Title" isRequired isDisabled={isDisabled} />
+      <Input
+        name="gem_title"
+        labelText="Gem Title"
+        isRequired
+        isDisabled={isDisabled}
+        value={nft.title || ''}
+        onChange={(e) => setNftField('title', e.target.value)}
+      />
       <Textarea
         name="description"
         labelText="Description"
         rows={4}
         maxLength={APP.GEM_DESCRIPTION_MAX_LENGTH}
         isDisabled={isDisabled}
+        textInitial={nft.description || ''}
+        onTextChange={(value) => setNftField('description', value)}
       />
-      <InputNear name="starting_bid" labelText="Starting Bid" isRequired isDisabled={isDisabled} />
+      <InputNear
+        name="starting_bid"
+        labelText="Starting Bid"
+        isRequired
+        isDisabled={isDisabled}
+        nearsInitial={nft.startingBid || ''}
+        onNearsChange={(value) => setNftField('startingBid', value)}
+      />
       <div className="user-royalty-input">
         <InputRoyalty
           name="royalty"
@@ -293,7 +329,10 @@ const MintDescribe = ({ onCompleteLink }) => {
 };
 
 MintDescribe.propTypes = {
-  onCompleteLink: PropTypes.string,
+  onCompleteLink: PropTypes.string.isRequired,
+  nft: NftTypeRequired,
+  setNft: PropTypes.func.isRequired,
+  setNftField: PropTypes.func.isRequired,
 };
 
 export default MintDescribe;

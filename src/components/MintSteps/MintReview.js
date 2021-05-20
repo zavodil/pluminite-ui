@@ -7,6 +7,7 @@ import { HeadingText } from '../common/typography';
 import { MintSuccessMessage } from '../common/messages';
 import { ArtItemPriced } from '../common/art';
 import ButtonBottom from '../common/Button/ButtonBottom';
+import { NftTypeRequired } from '../../types/NftTypes';
 
 const Container = styled('div')`
   max-width: 600px;
@@ -18,7 +19,7 @@ const Container = styled('div')`
   }
 `;
 
-const MintReview = ({ imageDataUrl, bid, onCompleteLink }) => {
+const MintReview = ({ onCompleteLink, nft }) => {
   const showMintSuccessMessage = () => {
     toast.success(<MintSuccessMessage />);
   };
@@ -27,16 +28,15 @@ const MintReview = ({ imageDataUrl, bid, onCompleteLink }) => {
     <Container>
       <HeadingText>Yay!</HeadingText>
       <p>This is how your NFT will appear on the marketplace. You cannot remove an NFT once it is minted.</p>
-      <ArtItemPriced dataUrl={imageDataUrl} bid={bid} bidAvailable={false} />
+      <ArtItemPriced dataUrl={nft.artDataUrl} bid={nft.startingBid} bidAvailable={false} />
       <ButtonBottom link={onCompleteLink} text="Mint NFT" onButtonClick={showMintSuccessMessage} />
     </Container>
   );
 };
 
 MintReview.propTypes = {
-  imageDataUrl: PropTypes.string,
-  bid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onCompleteLink: PropTypes.string,
+  nft: NftTypeRequired,
 };
 
 export default MintReview;

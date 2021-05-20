@@ -13,19 +13,27 @@ const Container = styled('div')`
 
 export default function Mint() {
   const match = useRouteMatch();
-  const [imageDataUrl, setImageDataUrl] = useState(null);
+  const [nft, setNft] = useState({});
+
+  const setNftField = (field, value) => {
+    setNft((nftOld) => ({ ...nftOld, [field]: value }));
+  };
 
   return (
     <Container>
       <Switch>
         <Route path={`${match.path}/upload`}>
-          <MintUpload onUpload={setImageDataUrl} onCompleteLink={`${match.path}/review`} imageDataUrl={imageDataUrl} />
+          <MintUpload
+            onUpload={(imageDataUrl) => setNftField('artDataUrl', imageDataUrl)}
+            onCompleteLink={`${match.path}/review`}
+            nft={nft}
+          />
         </Route>
         <Route path={`${match.path}/review`}>
-          <MintReview imageDataUrl={imageDataUrl} onCompleteLink="/profile" />
+          <MintReview onCompleteLink="/profile" nft={nft} />
         </Route>
         <Route path={match.path}>
-          <MintDescribe onCompleteLink={`${match.path}/upload`} />
+          <MintDescribe onCompleteLink={`${match.path}/upload`} nft={nft} setNft={setNft} setNftField={setNftField} />
         </Route>
       </Switch>
     </Container>
