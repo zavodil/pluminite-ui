@@ -180,6 +180,15 @@ const MintDescribe = ({ onCompleteLink }) => {
   const { user, nearContent } = useContext(NearContext);
   const [collaborators, setCollaborators] = useState([]);
   const [userRoyalty, setUserRoyalty] = useState(APP.DEFAULT_ROYALTY);
+  const [userRoyaltyIsError, setUserRoyaltyIsError] = useState(false);
+
+  useEffect(() => {
+    if (userRoyalty && (userRoyalty < APP.MIN_CREATOR_ROYALTY || userRoyalty > APP.MAX_ROYALTY)) {
+      setUserRoyaltyIsError(true);
+    } else {
+      setUserRoyaltyIsError(false);
+    }
+  }, [userRoyalty]);
 
   const isDisabled = isMintAllowed(user);
 
@@ -239,6 +248,7 @@ const MintDescribe = ({ onCompleteLink }) => {
           value={userRoyalty}
           onChange={(e) => setUserRoyalty(e.target.value)}
           isDisabled={isDisabled}
+          isError={userRoyaltyIsError}
         />
       </div>
       {collaborators.map((collaborator, index) => {
