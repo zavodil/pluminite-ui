@@ -9,6 +9,7 @@ const StyledContainer = styled('div')`
   display: flex;
   flex-direction: column;
   margin-bottom: 50px;
+  opacity: ${({ isDisabled }) => (isDisabled ? '50%' : '100%')};
 
   .form-group {
     margin-bottom: 0;
@@ -37,13 +38,13 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const InputSignAside = ({ labelText, detailsText, asideText, isSmall, ...rest }) => {
+const InputSignAside = ({ labelText, detailsText, asideText, isSmall, isDisabled, ...rest }) => {
   return (
-    <StyledContainer isSmall={isSmall} className="form-group">
+    <StyledContainer isSmall={isSmall} isDisabled={isDisabled} className="form-group">
       {labelText && <label>{labelText}</label>}
       {detailsText && <SmallText>{detailsText}</SmallText>}
       <div className="aside-wrapper">
-        <InputSign isSmall={isSmall} {...rest} />
+        <InputSign isSmall={isSmall} disabled={isDisabled} {...rest} />
         {asideText && <div className="aside">{asideText}</div>}
       </div>
     </StyledContainer>
@@ -55,6 +56,7 @@ InputSignAside.propTypes = {
   asideText: PropTypes.string,
   detailsText: PropTypes.string,
   isSmall: PropTypes.bool,
+  isDisabled: PropTypes.bool,
 };
 
 export default InputSignAside;
