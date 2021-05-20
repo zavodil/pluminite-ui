@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { HeadingText } from '../common/typography';
-import ArtDropzone from '../common/ArtDropzone';
+import FileDropzone from '../common/FileDropzone';
 import ButtonBottom from '../common/Button/ButtonBottom';
 
 const Container = styled('div')`
@@ -16,7 +16,11 @@ const MintUpload = ({ onUpload, onCompleteLink, imageDataUrl }) => {
   return (
     <Container>
       <HeadingText>Upload Art</HeadingText>
-      <ArtDropzone onUpload={onUpload} />
+      <FileDropzone
+        onUpload={onUpload}
+        buttonText="Select Art"
+        adviceText="We advise a 1:1 ratio. Max file size WIP."
+      />
       <ButtonBottom link={onCompleteLink} text="Last Step: Review" isDisabled={!imageDataUrl} />
     </Container>
   );

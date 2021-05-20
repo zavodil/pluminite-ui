@@ -42,7 +42,7 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const ArtDropzone = ({ onUpload }) => {
+const FileDropzone = ({ onUpload, buttonText, adviceText }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [imageDataUrl, setImageDataUrl] = useState(null);
   const [isError, setIsError] = useState(false);
@@ -66,7 +66,10 @@ const ArtDropzone = ({ onUpload }) => {
     reader.onload = () => {
       setIsLoading(false);
       setImageDataUrl(reader.result);
-      onUpload(reader.result);
+
+      if (onUpload) {
+        onUpload(reader.result);
+      }
     };
     reader.readAsDataURL(file);
   }, []);
@@ -79,7 +82,7 @@ const ArtDropzone = ({ onUpload }) => {
         <img src={imageDataUrl} alt="selected art" />
       ) : (
         <div className="select square-with-border" {...getRootProps()}>
-          {isDragActive ? 'Drop files here.' : <Button isSecondary>Select Art</Button>}
+          {isDragActive ? 'Drop files here.' : <Button isSecondary>{buttonText}</Button>}
           <input
             {...getInputProps({
               multiple: false,
@@ -89,15 +92,17 @@ const ArtDropzone = ({ onUpload }) => {
         </div>
       )}
       {filename && <p className="extra-text">{filename}</p>}
-      {isLoading && <p className="extra-text">Loading Art...</p>}
+      {isLoading && <p className="extra-text">Loading...</p>}
       {isError && <p className="extra-text">Something is wrong. Try again.</p>}
-      <p className="advice extra-text">We advise a 1:1 ratio. Max file size WIP.</p>
+      {adviceText && <p className="advice extra-text">{adviceText}</p>}
     </StyledContainer>
   );
 };
 
-ArtDropzone.propTypes = {
+FileDropzone.propTypes = {
   onUpload: PropTypes.func,
+  buttonText: PropTypes.string.isRequired,
+  adviceText: PropTypes.string,
 };
 
-export default ArtDropzone;
+export default FileDropzone;
