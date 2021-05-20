@@ -6,8 +6,17 @@ import styled from 'styled-components';
 import { StickedToBottom } from '../common/layout';
 import Button from '../common/Button';
 import FileDropzone from '../common/FileDropzone';
+import { HeadingSmallText } from '../common/typography';
 
 const Container = styled('div')`
+  .heading-small {
+    margin-bottom: 10px;
+  }
+
+  .sub-title {
+    margin: 0 0 20px;
+  }
+
   .advice {
     color: var(--lavendar);
     text-align: left;
@@ -34,6 +43,8 @@ function ProfileEditPhoto({ processSave }) {
 
   return (
     <Container>
+      <HeadingSmallText>Upload a profile photo</HeadingSmallText>
+      <p className="sub-title">choose a photo from your device</p>
       <FileDropzone
         buttonText="Select a photo"
         adviceText="Photos with a 1:1 ratio work best, that are under 1mb in size."
