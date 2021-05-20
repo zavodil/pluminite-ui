@@ -1,8 +1,9 @@
 import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import { ProfileEditBio } from './ProfileEditSteps';
+import { ProfileEditBio, ProfileEditPhoto } from './ProfileEditSteps';
 
 const Container = styled('div')`
   display: flex;
@@ -20,14 +21,18 @@ const Container = styled('div')`
 export default function ProfileEdit() {
   const match = useRouteMatch();
 
+  const processSave = () => {
+    toast.success('Success! Your profile was saved!');
+  };
+
   return (
     <Container>
       <Switch>
-        <Route path={`${match.path}/upload-profile-photo`}>
-          <div>Upload a profile photo</div>
+        <Route path={`${match.path}/upload-photo`}>
+          <ProfileEditPhoto processSave={processSave} />
         </Route>
-        <Route path={match.path}>
-          <ProfileEditBio />
+        <Route path={`${match.path}`}>
+          <ProfileEditBio uploadPhotoLink={`${match.path}/upload-photo`} processSave={processSave} />
         </Route>
       </Switch>
     </Container>

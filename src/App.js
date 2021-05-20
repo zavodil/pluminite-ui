@@ -69,7 +69,6 @@ export default function App() {
                 isLoading={isLoading}
               />
               <UserPage
-                exact
                 path="/profile/edit"
                 component={ProfileEdit}
                 title={user?.accountId ? `${user?.accountId} | Edit` : 'Edit Profile'}

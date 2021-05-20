@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
 import defaultProfilePicture from '../../assets/default-profile-picture.png';
@@ -91,12 +91,8 @@ const StyledButton = styled(Button)`
   }
 `;
 
-export default function ProfileEditBio() {
+function ProfileEditBio({ uploadPhotoLink, processSave }) {
   const { user } = useContext(NearContext);
-
-  const processSave = () => {
-    toast.success('Success! Your profile was saved!');
-  };
 
   return (
     <Container>
@@ -105,7 +101,7 @@ export default function ProfileEditBio() {
         <div className="profile">
           <p className="account-id">{user.accountId}</p>
           <Button isSecondary isSmall className="button-change-profile">
-            <a>Change Profile Picture</a>
+            <Link to={uploadPhotoLink}>Change Profile Picture</Link>
           </Button>
         </div>
       </div>
@@ -127,3 +123,10 @@ export default function ProfileEditBio() {
     </Container>
   );
 }
+
+ProfileEditBio.propTypes = {
+  uploadPhotoLink: PropTypes.string.isRequired,
+  processSave: PropTypes.func.isRequired,
+};
+
+export default ProfileEditBio;
