@@ -9,6 +9,7 @@ const StyledContainer = styled('div')`
   display: flex;
   flex-direction: column;
   margin-bottom: 50px;
+  opacity: ${({ isDisabled }) => (isDisabled ? '50%' : '100%')};
 
   label {
     line-height: 24px;
@@ -45,11 +46,15 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const Textarea = ({ labelText, isRequired, name, rows, maxLength }) => {
+const Textarea = ({ name, rows, maxLength, labelText, isRequired, isDisabled }) => {
   const [textareaValue, setTextareaValue] = useState('');
   const [maxLengthExceeded, setMaxLengthExceeded] = useState(false);
 
   const onTextChange = (e) => {
+    if (isDisabled) {
+      return;
+    }
+
     if (maxLength && e.target.value.length > maxLength) {
       setMaxLengthExceeded(true);
     } else {
@@ -60,7 +65,7 @@ const Textarea = ({ labelText, isRequired, name, rows, maxLength }) => {
   };
 
   return (
-    <StyledContainer className="form-group">
+    <StyledContainer isDisabled={isDisabled} className="form-group">
       {labelText && <label>{labelText}</label>}
       <textarea
         name={name}
@@ -69,6 +74,7 @@ const Textarea = ({ labelText, isRequired, name, rows, maxLength }) => {
         rows={rows}
         onChange={onTextChange}
         value={textareaValue}
+        disabled={isDisabled}
       />
       {maxLength && (
         <div className="max-length">
@@ -83,11 +89,12 @@ const Textarea = ({ labelText, isRequired, name, rows, maxLength }) => {
 };
 
 Textarea.propTypes = {
-  labelText: PropTypes.string,
   name: PropTypes.string.isRequired,
-  isRequired: PropTypes.bool,
   rows: PropTypes.number,
   maxLength: PropTypes.number,
+  labelText: PropTypes.string,
+  isRequired: PropTypes.bool,
+  isDisabled: PropTypes.bool,
 };
 
 Textarea.defaultProps = {
