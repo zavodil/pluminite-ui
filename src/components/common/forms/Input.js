@@ -15,6 +15,10 @@ const StyledContainer = styled('div')`
   label {
     line-height: 24px;
     margin-bottom: 10px;
+
+    &.label--disabled {
+      opacity: 50%;
+    }
   }
 
   .input {
@@ -40,12 +44,24 @@ const StyledContainer = styled('div')`
     &--error {
       background-color: rgba(var(--error-base), 0.4);
     }
+
+    &--disabled {
+      opacity: 50%;
+    }
   }
 `;
 
-const Input = ({ labelText, type, isRequired, name, isSmall, isError, className, ...rest }) => (
-  <StyledContainer className="form-group">
-    {labelText && <label>{labelText}</label>}
+const Input = ({ type, name, labelText, isRequired, isSmall, isError, isDisabled, className, ...rest }) => (
+  <StyledContainer isDisabled={isDisabled} className="form-group">
+    {labelText && (
+      <label
+        className={classNames({
+          'label--disabled': isDisabled,
+        })}
+      >
+        {labelText}
+      </label>
+    )}
     <input
       type={type}
       name={name}
@@ -54,19 +70,22 @@ const Input = ({ labelText, type, isRequired, name, isSmall, isError, className,
       className={classNames('input', className, {
         'input--small': isSmall,
         'input--error': isError,
+        'input--disabled': isDisabled,
       })}
+      disabled={isDisabled}
       {...rest}
     />
   </StyledContainer>
 );
 
 Input.propTypes = {
-  labelText: PropTypes.string,
   type: TextInputType,
-  isRequired: PropTypes.bool,
   name: PropTypes.string.isRequired,
+  labelText: PropTypes.string,
+  isRequired: PropTypes.bool,
   isSmall: PropTypes.bool,
   isError: PropTypes.bool,
+  isDisabled: PropTypes.bool,
   className: PropTypes.string,
 };
 
