@@ -47,7 +47,11 @@ function ProfileEditPhoto({ processSave }) {
       <p className="sub-title">choose a photo from your device</p>
       <FileDropzone
         buttonText="Select a photo"
-        adviceText="Photos with a 1:1 ratio work best, that are under 1mb in size."
+        adviceText={
+          imageDataUrl
+            ? 'This will be your profile picture '
+            : 'Photos with a 1:1 ratio work best, that are under 1mb in size.'
+        }
         onUpload={setImageDataUrl}
         ref={inputRef}
       />
