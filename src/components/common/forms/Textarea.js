@@ -46,22 +46,23 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const Textarea = ({ name, rows, maxLength, labelText, isRequired, isDisabled }) => {
-  const [textareaValue, setTextareaValue] = useState('');
+const Textarea = ({ name, rows, maxLength, labelText, textInitial, onTextChange, isRequired, isDisabled }) => {
+  const [textareaValue, setTextareaValue] = useState(textInitial || '');
   const [maxLengthExceeded, setMaxLengthExceeded] = useState(false);
 
-  const onTextChange = (e) => {
+  const processTextChange = (value) => {
     if (isDisabled) {
       return;
     }
 
-    if (maxLength && e.target.value.length > maxLength) {
+    if (maxLength && value.length > maxLength) {
       setMaxLengthExceeded(true);
     } else {
       setMaxLengthExceeded(false);
+      onTextChange(value);
     }
 
-    setTextareaValue(e.target.value);
+    setTextareaValue(value);
   };
 
   return (
@@ -72,7 +73,7 @@ const Textarea = ({ name, rows, maxLength, labelText, isRequired, isDisabled }) 
         required={isRequired}
         autoComplete="off"
         rows={rows}
-        onChange={onTextChange}
+        onChange={(e) => processTextChange(e.target.value)}
         value={textareaValue}
         disabled={isDisabled}
       />
@@ -93,12 +94,15 @@ Textarea.propTypes = {
   rows: PropTypes.number,
   maxLength: PropTypes.number,
   labelText: PropTypes.string,
+  textInitial: PropTypes.string,
+  onTextChange: PropTypes.func,
   isRequired: PropTypes.bool,
   isDisabled: PropTypes.bool,
 };
 
 Textarea.defaultProps = {
   isRequired: true,
+  onTextChange: () => {},
 };
 
 export default Textarea;
