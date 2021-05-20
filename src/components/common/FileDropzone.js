@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { forwardRef, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
@@ -42,7 +42,7 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const FileDropzone = ({ onUpload, buttonText, adviceText }) => {
+const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText }, ref) => {
   const [isLoading, setIsLoading] = useState(false);
   const [imageDataUrl, setImageDataUrl] = useState(null);
   const [isError, setIsError] = useState(false);
@@ -87,6 +87,7 @@ const FileDropzone = ({ onUpload, buttonText, adviceText }) => {
             {...getInputProps({
               multiple: false,
               accept: 'image/*',
+              ref,
             })}
           />
         </div>
@@ -97,7 +98,7 @@ const FileDropzone = ({ onUpload, buttonText, adviceText }) => {
       {adviceText && <p className="advice extra-text">{adviceText}</p>}
     </StyledContainer>
   );
-};
+});
 
 FileDropzone.propTypes = {
   onUpload: PropTypes.func,
