@@ -42,7 +42,7 @@ function ProfileEditPhoto({ processSave }) {
       />
       <StickedToBottom isSecondary>
         <StyledButton isSecondary>
-          <Link to="/profile">Cancel</Link>
+          <Link to="/profile/edit">Cancel</Link>
         </StyledButton>
         {imageDataUrl ? (
           <StyledButton isPrimary>
