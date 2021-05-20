@@ -45,13 +45,24 @@ const StyledButton = styled('button')`
     }
   }
 
-  &.button--link {
-    padding: 0;
+  a {
+    display: block;
+    padding: 16px 20px;
+    text-decoration: none;
+    color: inherit;
   }
 
   &.button--small {
     padding: 5px 20px;
-    border-radius: 4px;
+    border-radius: calc(var(--radius-default) / 2);
+
+    a {
+      padding: 5px 20px;
+    }
+  }
+
+  &.button--link {
+    padding: 0;
   }
 
   &.button--disabled {
@@ -61,13 +72,6 @@ const StyledButton = styled('button')`
     a {
       cursor: default;
     }
-  }
-
-  a {
-    display: block;
-    padding: 16px 20px;
-    text-decoration: none;
-    color: inherit;
   }
 `;
 
