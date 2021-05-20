@@ -41,10 +41,8 @@ export default function SignUp() {
     <Container>
       <HeadingText>Let’s go</HeadingText>
       <p>Already have a NEAR account?</p>
-      <Button isPrimary>
-        <Link to="#" onClick={() => signInAction()}>
-          Connect NEAR Wallet
-        </Link>
+      <Button isPrimary onClick={() => signInAction()}>
+        Connect NEAR Wallet
       </Button>
       <SeparatorHorizontal>OR</SeparatorHorizontal>
       <p>Need a NEAR wallet?</p>

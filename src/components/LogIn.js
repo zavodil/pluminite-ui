@@ -40,10 +40,8 @@ export default function LogIn() {
     <Container>
       <HeadingText>Let’s go</HeadingText>
       <p>Log In with your NEAR wallet</p>
-      <Button isPrimary>
-        <Link to="#" onClick={() => signInAction()}>
-          Connect NEAR Wallet
-        </Link>
+      <Button isPrimary onClick={() => signInAction()}>
+        Connect NEAR Wallet
       </Button>
       <p className="sign-up-offer">
         Don’t have a NEAR wallet? No worries, sign up for a wallet <Link to="/sign-up">here</Link>.
