@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
 import { NearContext } from '../../contexts';
 
@@ -161,6 +162,10 @@ const isToMuchRoyalties = (collaborators, userRoyalty) => {
   return collaborators.reduce((acc, cv) => acc + +(cv.royalty || 0), 0) + +userRoyalty > APP.MAX_ROYALTY;
 };
 
+const hasEnoughNears = (user) => {
+  return Number(formatNearAmount(user.balance)) > APP.MIN_NEARS_TO_MINT;
+};
+
 const MintDescribe = ({ onCompleteLink }) => {
   const { user, nearContent } = useContext(NearContext);
   const [collaborators, setCollaborators] = useState([]);
@@ -184,10 +189,12 @@ const MintDescribe = ({ onCompleteLink }) => {
     <Container>
       <HeadingText>Mint a Gem</HeadingText>
       <div className="freebies">
-        <SmallText>
-          We&apos;ll front the cost of your first 3 mints. You&apos;ll need to make a sale to cover your first 3 mints
-          or add funds to your NEAR wallet to continue minting more NFTs.
-        </SmallText>
+        {!hasEnoughNears(user) && (
+          <SmallText>
+            We&apos;ll front the cost of your first 3 mints. You&apos;ll need to make a sale to cover your first 3 mints
+            or add funds to your NEAR wallet to continue minting more NFTs.
+          </SmallText>
+        )}
       </div>
       <Input name="gem_title" labelText="Gem Title" isRequired />
       <Textarea name="description" labelText="Description" rows={4} maxLength={APP.GEM_DESCRIPTION_MAX_LENGTH} />

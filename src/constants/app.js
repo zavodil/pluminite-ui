@@ -4,6 +4,7 @@ const APP = {
   MAX_ROYALTY: 90,
 
   MIN_NEARS: 0,
+  MIN_NEARS_TO_MINT: 0.05,
 
   MAX_COLLABORATORS: 10,
 
