@@ -46,3 +46,22 @@ export const hideArrowsForNumberInput = css`
     -moz-appearance: textfield;
   }
 `;
+
+export const square = css`
+  position: relative;
+  width: 100%;
+
+  :after {
+    content: '';
+    display: block;
+    padding-bottom: 100%;
+  }
+
+  img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius-default);
+  }
+`;

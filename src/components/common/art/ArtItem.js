@@ -8,24 +8,22 @@ import Button from '../Button';
 // todo: remove for production
 import placeholderDataUrl from '../../../assets/art.png';
 
+import { square } from '../../../styles/mixins';
+
 const StyledLink = styled(Link)`
   display: block;
   position: relative;
-  width: fit-content;
+  width: 400px;
   margin: 15px 5px;
+  border-radius: var(--radius-default);
   transition: 250ms;
 
   :hover {
     transform: scale(1.01);
   }
 
-  img {
-    border-radius: 8px;
-    max-width: 100%;
-
-    @media (min-width: 1100px) {
-      max-width: 320px;
-    }
+  .image-container {
+    ${square};
   }
 
   button {
@@ -33,13 +31,19 @@ const StyledLink = styled(Link)`
     right: 20px;
     bottom: 20px;
   }
+
+  @media (min-width: 1100px) {
+    width: 320px;
+  }
 `;
 
 // todo: fix :gemId after integration with nft contract
 const ArtItem = forwardRef(function ArtItemWithRef({ dataUrl, buttonText, isButtonDisabled }, ref) {
   return (
     <StyledLink to="/gem/121212121212">
-      <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" />
+      <div className="image-container">
+        <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" />
+      </div>
       <Button isPrimary isSmall isDisabled={isButtonDisabled}>
         {buttonText}
       </Button>

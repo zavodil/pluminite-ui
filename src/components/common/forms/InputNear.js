@@ -10,17 +10,22 @@ import { APP } from '../../../constants';
 
 import { round } from '../../../utils/numbers';
 
-const InputNear = ({ labelText, isRequired = true, name }) => {
-  const [nears, setNears] = useState('');
+const InputNear = ({ nearsInitial, onNearsChange, ...rest }) => {
+  const [nears, setNears] = useState(nearsInitial || '');
   const [USDs, setUSDs] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const debouncedNears = useDebounce(nears, 500);
+
+  const processNearsChange = (value) => {
+    setNears(value);
+    onNearsChange(value);
+  };
 
   useEffect(() => {
     if (debouncedNears !== '') {
       let nearsForExchange;
       if (debouncedNears < APP.MIN_NEARS) {
-        setNears(APP.MIN_NEARS);
+        processNearsChange(APP.MIN_NEARS);
         nearsForExchange = APP.MIN_NEARS;
       } else {
         nearsForExchange = debouncedNears;
@@ -42,22 +47,26 @@ const InputNear = ({ labelText, isRequired = true, name }) => {
 
   return (
     <InputSignAside
-      labelText={labelText}
-      name={name}
+      type="number"
       sign="Ⓝ"
-      isRequired={isRequired}
-      inputOnChange={setNears}
+      onChange={(e) => processNearsChange(e.target.value)}
       asideText={USDs !== null && !isSearching ? `~${round(USDs, 2)} USD` : null}
       min={APP.MIN_NEARS}
       value={nears}
+      {...rest}
     />
   );
 };
 
 InputNear.propTypes = {
-  labelText: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  isRequired: PropTypes.bool,
+  nears: PropTypes.string,
+  nearsInitial: PropTypes.string,
+  onNearsChange: PropTypes.func,
+  setNears: PropTypes.func,
+};
+
+InputNear.defaultProps = {
+  onNearsChange: () => {},
 };
 
 export default InputNear;

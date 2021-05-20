@@ -121,13 +121,13 @@ export default function Profile() {
             title: 'Gems I own',
             // todo: after integration with NFT contract compare ownedGemId with real gem ids
             content: Array.from({ length: 14 }).map((_, i) => (
-              <ArtItemEditable forwardedRef={ownedGemId === String(i) ? ownedGemRef : null} key={i} />
+              <ArtItemEditable forwardedRef={ownedGemId === String(i) ? ownedGemRef : null} key={`art-item-own-${i}`} />
             )),
           },
           {
             title: 'Gems I made',
             // todo: after integration with NFT contract set ArtItem id to gemId
-            content: Array.from({ length: 2 }).map((_, i) => <ArtItemEditable key={i} />),
+            content: Array.from({ length: 2 }).map((_, i) => <ArtItemEditable key={`art-item-made-${i}`} />),
           },
         ]}
       />

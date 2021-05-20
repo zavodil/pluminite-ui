@@ -17,6 +17,13 @@ const StyledButton = styled('button')`
   cursor: pointer;
   transition: 100ms;
 
+  &.button--bare {
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--lavendar);
+  }
+
   &.button--primary {
     border-color: var(--lavendar);
     background-color: var(--lavendar);
@@ -38,28 +45,33 @@ const StyledButton = styled('button')`
     }
   }
 
-  &.button--link {
-    padding: 0;
-  }
-
-  &.button--small {
-    padding: 5px 20px;
-    border-radius: 4px;
-  }
-
-  &.button--disabled {
-    cursor: default;
-
-    a {
-      cursor: default;
-    }
-  }
-
   a {
     display: block;
     padding: 16px 20px;
     text-decoration: none;
     color: inherit;
+  }
+
+  &.button--small {
+    padding: 5px 20px;
+    border-radius: calc(var(--radius-default) / 2);
+
+    a {
+      padding: 5px 20px;
+    }
+  }
+
+  &.button--link {
+    padding: 0;
+  }
+
+  &.button--disabled {
+    cursor: default;
+    opacity: 50%;
+
+    a {
+      cursor: default;
+    }
   }
 `;
 
@@ -70,6 +82,7 @@ const Button = ({ children, isPrimary, isSecondary, isSmall, isDisabled, classNa
     <StyledButton
       {...props}
       className={classNames('button', className, {
+        'button--bare': !isPrimary && !isSecondary,
         'button--primary': isPrimary,
         'button--secondary': isSecondary,
         'button--link': isLink,

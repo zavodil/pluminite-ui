@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
+import { SmallText } from '../typography';
+
 const StyledContainer = styled('div')`
   position: relative;
   display: flex;
   flex-direction: column;
   margin-bottom: 50px;
+  opacity: ${({ isDisabled }) => (isDisabled ? '50%' : '100%')};
 
   label {
     line-height: 24px;
@@ -36,48 +39,70 @@ const StyledContainer = styled('div')`
     user-select: none;
     cursor: default;
   }
+
+  .small-text {
+    position: absolute;
+    bottom: -25px;
+  }
 `;
 
-const Textarea = ({ labelText, isRequired, name, rows, maxLength }) => {
-  const [textareaValue, setTextareaValue] = useState('');
+const Textarea = ({ name, rows, maxLength, labelText, textInitial, onTextChange, isRequired, isDisabled }) => {
+  const [textareaValue, setTextareaValue] = useState(textInitial || '');
+  const [maxLengthExceeded, setMaxLengthExceeded] = useState(false);
 
-  const onTextChange = (e) => {
-    if (!maxLength || e.target.value.length <= maxLength) {
-      setTextareaValue(e.target.value);
+  const processTextChange = (value) => {
+    if (isDisabled) {
+      return;
     }
+
+    if (maxLength && value.length > maxLength) {
+      setMaxLengthExceeded(true);
+    } else {
+      setMaxLengthExceeded(false);
+      onTextChange(value);
+    }
+
+    setTextareaValue(value);
   };
 
   return (
-    <StyledContainer className="form-group">
+    <StyledContainer isDisabled={isDisabled} className="form-group">
       {labelText && <label>{labelText}</label>}
       <textarea
         name={name}
         required={isRequired}
         autoComplete="off"
         rows={rows}
-        maxLength={maxLength}
-        onChange={onTextChange}
+        onChange={(e) => processTextChange(e.target.value)}
         value={textareaValue}
+        disabled={isDisabled}
       />
       {maxLength && (
         <div className="max-length">
           {textareaValue.length} / {maxLength}
         </div>
       )}
+      {maxLength && maxLengthExceeded && (
+        <SmallText isError>Sorry, it looks like you’ve exceeded the character limit</SmallText>
+      )}
     </StyledContainer>
   );
 };
 
 Textarea.propTypes = {
-  labelText: PropTypes.string,
   name: PropTypes.string.isRequired,
-  isRequired: PropTypes.bool,
   rows: PropTypes.number,
   maxLength: PropTypes.number,
+  labelText: PropTypes.string,
+  textInitial: PropTypes.string,
+  onTextChange: PropTypes.func,
+  isRequired: PropTypes.bool,
+  isDisabled: PropTypes.bool,
 };
 
-Textarea.defaultValues = {
+Textarea.defaultProps = {
   isRequired: true,
+  onTextChange: () => {},
 };
 
 export default Textarea;
