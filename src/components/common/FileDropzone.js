@@ -6,31 +6,28 @@ import styled from 'styled-components';
 
 import Button from './Button';
 
+import { square } from '../../styles/mixins';
+
 const StyledContainer = styled('div')`
-  .square-with-border {
+  .image-container {
+    ${square};
+
+    img {
+      border-radius: var(--radius-default);
+    }
+  }
+
+  .input-container {
+    ${square};
+
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 3px;
     border-radius: var(--radius-default);
     // todo: use variables for 'rx='8' ry='8' (border-radius) stroke='%23${'F8DDFF'}' (lavendar)'
     background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='8' ry='8' stroke='%23${'F8DDFF'}' stroke-width='3' stroke-dasharray='10 10' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
-    width: 100%;
-
-    :after {
-      content: '';
-      display: block;
-      padding-bottom: 100%;
-    }
-  }
-
-  img {
-    width: 100%;
-    border-radius: var(--radius-default);
-  }
-
-  .select {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
     cursor: pointer;
   }
 
@@ -92,9 +89,11 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
   return (
     <StyledContainer>
       {imageDataUrl ? (
-        <img src={imageDataUrl} alt="selected art" />
+        <div className="image-container">
+          <img src={imageDataUrl} alt="selected file" />
+        </div>
       ) : (
-        <div className="select square-with-border" ref={customRef || ref} {...dropzoneProps}>
+        <div className="input-container" ref={customRef || ref} {...dropzoneProps}>
           {isDragActive ? 'Drop files here.' : <Button isSecondary>{buttonText}</Button>}
           <input
             {...getInputProps({
