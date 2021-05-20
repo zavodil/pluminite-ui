@@ -1,7 +1,8 @@
 import React, { forwardRef, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
+import { toast } from 'react-toastify';
+import styled from 'styled-components';
 
 import Button from './Button';
 
@@ -42,17 +43,28 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileName }, customRef) => {
+const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileName, maxSizeMb }, customRef) => {
   const [isLoading, setIsLoading] = useState(false);
   const [imageDataUrl, setImageDataUrl] = useState(null);
   const [isError, setIsError] = useState(false);
   const [filename, setFilename] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
+    const file = acceptedFiles[0];
+
+    if (maxSizeMb) {
+      const fileSizeMb = (file.size / (1024 * 1024)).toFixed(2);
+
+      if (fileSizeMb > maxSizeMb) {
+        toast.error('Max file size exceeded.');
+
+        return;
+      }
+    }
+
     setIsLoading(true);
     setIsError(false);
 
-    const file = acceptedFiles[0];
     setFilename(file.name);
 
     const reader = new FileReader();
@@ -105,6 +117,7 @@ FileDropzone.propTypes = {
   buttonText: PropTypes.string.isRequired,
   adviceText: PropTypes.string,
   showFileName: PropTypes.bool,
+  maxSizeMb: PropTypes.number,
 };
 
 FileDropzone.defaultProps = {

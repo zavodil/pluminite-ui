@@ -8,6 +8,8 @@ import Button from '../common/Button';
 import FileDropzone from '../common/FileDropzone';
 import { HeadingSmallText } from '../common/typography';
 
+import { PROFILE } from '../../constants';
+
 const Container = styled('div')`
   .heading-small {
     margin-bottom: 10px;
@@ -62,6 +64,7 @@ function ProfileEditPhoto({ processSave }) {
         onUpload={setImageDataUrl}
         ref={inputRef}
         showFileName={false}
+        maxSizeMb={PROFILE.PHOTO_MAX_SIZE_MB}
       />
       <StickedToBottom isSecondary>
         <StyledButton isSecondary>
