@@ -166,12 +166,27 @@ const hasEnoughNears = (user) => {
   return Number(formatNearAmount(user.balance)) > APP.MIN_NEARS_TO_MINT;
 };
 
+// todo: fix once nft contract integrated and there is a way to get the number of prepaid mints
+const hasExceededPrepaidMints = () => false;
+
+const isMintAllowed = (user) => {
+  return !hasEnoughNears(user) && hasExceededPrepaidMints();
+};
+
 const MintDescribe = ({ onCompleteLink }) => {
   const { user, nearContent } = useContext(NearContext);
   const [collaborators, setCollaborators] = useState([]);
   const [userRoyalty, setUserRoyalty] = useState(APP.DEFAULT_ROYALTY);
 
-  const addCollaborator = () => setCollaborators((prevNumber) => [...prevNumber, { key: new Date().getTime() }]);
+  const isDisabled = isMintAllowed(user);
+
+  const addCollaborator = () => {
+    if (isDisabled) {
+      return;
+    }
+
+    setCollaborators((prevNumber) => [...prevNumber, { key: new Date().getTime() }]);
+  };
 
   const removeCollaborator = (index) => {
     setCollaborators((prevCollaborators) => prevCollaborators.filter((_, i) => i !== index));
@@ -189,16 +204,28 @@ const MintDescribe = ({ onCompleteLink }) => {
     <Container>
       <HeadingText>Mint a Gem</HeadingText>
       <div className="freebies">
-        {!hasEnoughNears(user) && (
+        {!hasEnoughNears(user) && !isDisabled && (
           <SmallText>
             We&apos;ll front the cost of your first 3 mints. You&apos;ll need to make a sale to cover your first 3 mints
             or add funds to your NEAR wallet to continue minting more NFTs.
           </SmallText>
         )}
+        {isDisabled && (
+          <SmallText isError>
+            We&apos;ve fronted the cost of your first 3 mints. Sell one of those NFTs or send $NEAR to your wallet to
+            mint more.
+          </SmallText>
+        )}
       </div>
-      <Input name="gem_title" labelText="Gem Title" isRequired />
-      <Textarea name="description" labelText="Description" rows={4} maxLength={APP.GEM_DESCRIPTION_MAX_LENGTH} />
-      <InputNear name="starting_bid" labelText="Starting Bid" isRequired />
+      <Input name="gem_title" labelText="Gem Title" isRequired isDisabled={isDisabled} />
+      <Textarea
+        name="description"
+        labelText="Description"
+        rows={4}
+        maxLength={APP.GEM_DESCRIPTION_MAX_LENGTH}
+        isDisabled={isDisabled}
+      />
+      <InputNear name="starting_bid" labelText="Starting Bid" isRequired isDisabled={isDisabled} />
       <div className="user-royalty-input">
         <InputRoyalty
           name="royalty"
@@ -208,6 +235,7 @@ const MintDescribe = ({ onCompleteLink }) => {
           isSmall
           value={userRoyalty}
           onChange={(e) => setUserRoyalty(e.target.value)}
+          isDisabled={isDisabled}
         />
       </div>
       {collaborators.map((collaborator, index) => {
@@ -239,14 +267,14 @@ const MintDescribe = ({ onCompleteLink }) => {
         })}
       </div>
       {collaborators.length + 1 < APP.MAX_COLLABORATORS && (
-        <Button className="collaborator-add" onClick={addCollaborator}>
+        <Button className="collaborator-add" onClick={addCollaborator} isDisabled={isDisabled}>
           + Add Collaborator
         </Button>
       )}
       <p className="fee-description">
         Pluminite will take a 5% fee for all sales to continue building the Pluminite community.
       </p>
-      <ButtonBottom link={onCompleteLink} text="Next Step: Upload Artwork" />
+      <ButtonBottom link={onCompleteLink} text="Next Step: Upload Artwork" isDisabled={isDisabled} />
     </Container>
   );
 };
