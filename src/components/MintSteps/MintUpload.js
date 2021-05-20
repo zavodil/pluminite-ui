@@ -19,7 +19,8 @@ const MintUpload = ({ onUpload, onCompleteLink, imageDataUrl }) => {
       <FileDropzone
         onUpload={onUpload}
         buttonText="Select Art"
-        adviceText="We advise a 1:1 ratio. Max file size WIP."
+        adviceText="We advise a 1:1 ratio. Max file size 16 Mb."
+        maxSizeMb={16}
       />
       <ButtonBottom link={onCompleteLink} text="Last Step: Review" isDisabled={!imageDataUrl} />
     </Container>
