@@ -17,6 +17,24 @@ const Container = styled('div')`
   h2 {
     margin-bottom: 0;
   }
+
+  .clarification {
+    margin-bottom: 40px;
+    line-height: 24px;
+  }
+
+  .text {
+    margin-bottom: 25px;
+    line-height: 24px;
+  }
+
+  .sub-header {
+    color: var(--periwinkle);
+  }
+
+  a {
+    width: 100%;
+  }
 `;
 
 const MintReview = ({ onCompleteLink, nft }) => {
@@ -27,7 +45,13 @@ const MintReview = ({ onCompleteLink, nft }) => {
   return (
     <Container>
       <HeadingText>Yay!</HeadingText>
-      <p>This is how your NFT will appear on the marketplace. You cannot remove an NFT once it is minted.</p>
+      <p className="clarification">
+        This is how your NFT will appear on the marketplace. You cannot remove an NFT once it is minted.
+      </p>
+      <p className="sub-header">Art piece title</p>
+      <p className="text">{nft.title}</p>
+      <p className="sub-header">Art piece description</p>
+      <p className="text">{nft.description}</p>
       <ArtItemPriced dataUrl={nft.artDataUrl} bid={nft.startingBid} bidAvailable={false} />
       <ButtonBottom link={onCompleteLink} text="Mint NFT" onButtonClick={showMintSuccessMessage} />
     </Container>
