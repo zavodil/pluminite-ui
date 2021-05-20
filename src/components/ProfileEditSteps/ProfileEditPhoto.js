@@ -54,6 +54,7 @@ function ProfileEditPhoto({ processSave }) {
         }
         onUpload={setImageDataUrl}
         ref={inputRef}
+        showFileName={false}
       />
       <StickedToBottom isSecondary>
         <StyledButton isSecondary>

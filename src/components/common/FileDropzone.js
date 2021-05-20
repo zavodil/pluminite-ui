@@ -42,7 +42,7 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText }, customRef) => {
+const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileName }, customRef) => {
   const [isLoading, setIsLoading] = useState(false);
   const [imageDataUrl, setImageDataUrl] = useState(null);
   const [isError, setIsError] = useState(false);
@@ -92,7 +92,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText }, customRef
           />
         </div>
       )}
-      {filename && <p className="extra-text">{filename}</p>}
+      {filename && showFileName && <p className="extra-text">{filename}</p>}
       {isLoading && <p className="extra-text">Loading...</p>}
       {isError && <p className="extra-text">Something is wrong. Try again.</p>}
       {adviceText && <p className="advice extra-text">{adviceText}</p>}
@@ -104,6 +104,11 @@ FileDropzone.propTypes = {
   onUpload: PropTypes.func,
   buttonText: PropTypes.string.isRequired,
   adviceText: PropTypes.string,
+  showFileName: PropTypes.bool,
+};
+
+FileDropzone.defaultProps = {
+  showFileName: true,
 };
 
 export default FileDropzone;
