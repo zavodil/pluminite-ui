@@ -108,7 +108,10 @@ const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaborato
   }, [debouncedUserIdValue]);
 
   useEffect(() => {
-    if (debouncedRoyaltyValue < APP.MIN_ROYALTY || debouncedRoyaltyValue > APP.MAX_ROYALTY) {
+    if (
+      debouncedRoyaltyValue &&
+      (debouncedRoyaltyValue < APP.MIN_COLLABORATOR_ROYALTY || debouncedRoyaltyValue > APP.MAX_ROYALTY)
+    ) {
       setRoyaltyIsError(true);
     } else {
       setRoyaltyIsError(false);
