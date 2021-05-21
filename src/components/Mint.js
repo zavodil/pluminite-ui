@@ -30,7 +30,7 @@ export default function Mint() {
           />
         </Route>
         <Route path={`${match.path}/review`}>
-          <MintReview onCompleteLink="/profile" nft={nft} />
+          <MintReview onCompleteLink="/profile" nft={nft} backLink={`${match.path}/upload`} />
         </Route>
         <Route path={match.path}>
           <MintDescribe onCompleteLink={`${match.path}/upload`} nft={nft} setNft={setNft} setNftField={setNftField} />

@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 
 import { HeadingText } from '../common/typography';
 import { MintSuccessMessage } from '../common/messages';
 import { ArtItemPriced } from '../common/art';
-import ButtonBottom from '../common/Button/ButtonBottom';
+import { StickedToBottom } from '../common/layout';
+import Button from '../common/Button';
+
 import { NftTypeRequired } from '../../types/NftTypes';
 
 const Container = styled('div')`
@@ -37,7 +40,15 @@ const Container = styled('div')`
   }
 `;
 
-const MintReview = ({ onCompleteLink, nft }) => {
+const StyledButton = styled(Button)`
+  width: 50%;
+
+  :first-of-type {
+    margin-right: 10px;
+  }
+`;
+
+const MintReview = ({ onCompleteLink, backLink, nft }) => {
   const showMintSuccessMessage = () => {
     toast.success(<MintSuccessMessage />);
   };
@@ -53,13 +64,21 @@ const MintReview = ({ onCompleteLink, nft }) => {
       <p className="sub-header">Art piece description</p>
       <p className="text">{nft.description}</p>
       <ArtItemPriced dataUrl={nft.artDataUrl} bid={nft.startingBid} bidAvailable={false} />
-      <ButtonBottom link={onCompleteLink} text="Mint NFT" onButtonClick={showMintSuccessMessage} />
+      <StickedToBottom isSecondary>
+        <StyledButton isSecondary>
+          <Link to={backLink}>Replace Art</Link>
+        </StyledButton>
+        <StyledButton onClick={showMintSuccessMessage} isPrimary>
+          <Link to={onCompleteLink}>Mint NFT</Link>
+        </StyledButton>
+      </StickedToBottom>
     </Container>
   );
 };
 
 MintReview.propTypes = {
-  onCompleteLink: PropTypes.string,
+  onCompleteLink: PropTypes.string.isRequired,
+  backLink: PropTypes.string.isRequired,
   nft: NftTypeRequired,
 };
 
