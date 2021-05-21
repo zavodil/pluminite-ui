@@ -217,7 +217,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
     ]);
   };
 
-  useEffect(() => setNftField('accountId', user.accountId), []);
+  useEffect(() => setNftField('creator', user.accountId), []);
 
   useEffect(() => {
     setNft((nftOld) => {
