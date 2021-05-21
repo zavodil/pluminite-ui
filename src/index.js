@@ -5,13 +5,15 @@ import ReactDOM from 'react-dom';
 
 import App from './App';
 import { initContract } from './utils';
-import { NearContextProvider } from './contexts';
+import { NearContextProvider, NftContractContextProvider } from './contexts';
 
 window.nearInitPromise = initContract()
-  .then(({ currentUser, nearConfig, walletConnection, near }) => {
+  .then(({ contract, currentUser, nearConfig, walletConnection, near }) => {
     const app = (
       <NearContextProvider currentUser={currentUser} nearConfig={nearConfig} wallet={walletConnection} near={near}>
-        <App />
+        <NftContractContextProvider nftContract={contract}>
+          <App />
+        </NftContractContextProvider>
       </NearContextProvider>
     );
 
