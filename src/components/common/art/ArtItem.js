@@ -38,9 +38,9 @@ const StyledLink = styled(Link)`
 `;
 
 // todo: fix :gemId after integration with nft contract
-const ArtItem = forwardRef(function ArtItemWithRef({ dataUrl, buttonText, isButtonDisabled }, ref) {
+const ArtItem = forwardRef(function ArtItemWithRef({ gemId, dataUrl, buttonText, isButtonDisabled }, ref) {
   return (
-    <StyledLink to="/gem/121212121212">
+    <StyledLink to={`/gem/${gemId}`}>
       <div className="image-container">
         <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" />
       </div>
@@ -52,6 +52,7 @@ const ArtItem = forwardRef(function ArtItemWithRef({ dataUrl, buttonText, isButt
 });
 
 ArtItem.propTypes = {
+  gemId: PropTypes.string,
   dataUrl: PropTypes.string,
   buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isButtonDisabled: PropTypes.bool,
