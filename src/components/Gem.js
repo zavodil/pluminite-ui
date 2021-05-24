@@ -12,7 +12,7 @@ import { withUSDs } from '../hooks';
 
 import { round } from '../utils/numbers';
 
-import { NftContractContext } from '../contexts';
+import { NftContractContext, MarketContractContext } from '../contexts';
 
 const Container = styled('div')`
   display: flex;
@@ -137,23 +137,21 @@ const StyledBid = styled('div')`
 
 export default function Gem() {
   const { gemId } = useParams();
-  const [gem, setGem] = useState();
-  const { getGem } = useContext(NftContractContext);
+  const { gem, getGem } = useContext(NftContractContext);
+  const { getSale, gemOnSale, marketContract } = useContext(MarketContractContext);
 
   useEffect(() => {
     (async () => {
-      setGem(await getGem(gemId));
+      const gemOnNftContract = await getGem(gemId);
+
+      if (Object.keys(gemOnNftContract.approved_account_ids).includes(marketContract.contractId)) {
+        await getSale(gemId);
+      }
     })();
   }, []);
 
   // todo: use real data after nft contract integration
   const bidNears = 15;
-  const historyData = [
-    { type: 'bid', date: 1621337272257, amount: 10, bidder: 'mattlokc.near' },
-    { type: 'startPriceUpdate', date: 1611237272257, updater: 'crasskitty.near' },
-    { type: 'sale', date: 1601137272257, seller: 'bluesygma.near', buyer: 'crasskitty.near' },
-    { type: 'mint', date: 1591037272257, creator: 'bluesygma.near' },
-  ];
   const royalties = [
     { userId: 'bluesygma.near', royalty: '5%' },
     { userId: 'crasskitty.near', royalty: '5%' },
@@ -182,20 +180,15 @@ export default function Gem() {
           },
           {
             title: 'History',
-            content: historyData.map((event, index) => (
-              <div key={`event-${index}`} className="history-event">
-                {event.type === 'bid' &&
-                  `${event.bidder} bid ${event.amount}Ⓝ on ${new Intl.DateTimeFormat().format(new Date(event.date))}`}
-                {event.type === 'startPriceUpdate' &&
-                  `${event.updater} updated the starting price on ${new Intl.DateTimeFormat().format(
-                    new Date(event.date)
-                  )}`}
-                {event.type === 'sale' &&
-                  `${event.seller} sold to ${event.buyer} on ${new Intl.DateTimeFormat().format(new Date(event.date))}`}
-                {event.type === 'mint' &&
-                  `${event.creator} minted “Art Title” on ${new Intl.DateTimeFormat().format(new Date(event.date))}`}
-              </div>
-            )),
+            content: (
+              <>
+                {gem?.metadata?.issued_at &&
+                  // todo: creator_id currently is not implemented on the contracts
+                  `${gem?.creator_id || 'Unknown author'} minted ${
+                    gem?.metadata?.title || 'Gem'
+                  } on ${new Intl.DateTimeFormat().format(new Date(+gem.metadata.issued_at))}`}
+              </>
+            ),
           },
           {
             title: 'Royalties',
