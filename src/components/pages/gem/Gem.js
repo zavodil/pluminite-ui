@@ -175,9 +175,9 @@ function Gem({ location: { prevPathname } }) {
     };
   }, []);
 
-  const hasBids = () => {
-    return !!gemOnSale?.bids?.near?.owner_id;
-  };
+  const hasBids = () => !!gemOnSale?.bids?.near?.owner_id;
+
+  const isListed = () => !!gemOnSale;
 
   useEffect(() => {
     if (hasBids()) {
@@ -212,7 +212,8 @@ function Gem({ location: { prevPathname } }) {
       </Portal>
       <TitleText className="gem-title">{gem?.metadata?.title || 'No title provided'}</TitleText>
       <div className="users">
-        <p>by bluesygma.near</p>
+        {/* todo: gem.creator_id is not implemented on the contract */}
+        <p>by {gem?.creator_id || '?'}</p>
         <p>owned by {gem?.owner_id || '?'}</p>
       </div>
       <Tabs
@@ -257,26 +258,30 @@ function Gem({ location: { prevPathname } }) {
           },
         ]}
       />
-      <StickedToBottom isSecondary>
-        <StyledBid className="bid">
-          <div className="bid-top">
-            <div className="bid-description">
-              <p className="bid-title">{hasBids() ? 'Top offer' : 'Starting Bid'}</p>
-              <p className="bid-user">{previousPriceUser}</p>
+      {isListed() && (
+        <StickedToBottom isSecondary>
+          <StyledBid className="bid">
+            <div className="bid-top">
+              <div className="bid-description">
+                <p className="bid-title">{hasBids() ? 'Top offer' : 'Starting Bid'}</p>
+                <p className="bid-user">{previousPriceUser}</p>
+              </div>
+              <div className="bid-sum">
+                <span className="bid-sum-nears">
+                  <span className="bid-sum-nears--amount">{formatNearAmount(previousPrice)}</span>
+                  <span className="bid-sum-nears--sign">Ⓝ</span>
+                </span>
+                {previousPriceUSDs !== null && (
+                  <span className="bid-sum-usds">~${round(previousPriceUSDs, 0)} USD</span>
+                )}
+              </div>
             </div>
-            <div className="bid-sum">
-              <span className="bid-sum-nears">
-                <span className="bid-sum-nears--amount">{formatNearAmount(previousPrice)}</span>
-                <span className="bid-sum-nears--sign">Ⓝ</span>
-              </span>
-              {previousPriceUSDs !== null && <span className="bid-sum-usds">~${round(previousPriceUSDs, 0)} USD</span>}
-            </div>
-          </div>
-          <Button className="bid-button" isPrimary onClick={processBid}>
-            Bid {+formatNearAmount(previousPrice) + 1}Ⓝ on Gem
-          </Button>
-        </StyledBid>
-      </StickedToBottom>
+            <Button className="bid-button" isPrimary onClick={processBid}>
+              Bid {+formatNearAmount(previousPrice) + 1}Ⓝ on Gem
+            </Button>
+          </StyledBid>
+        </StickedToBottom>
+      )}
     </Container>
   );
 }
