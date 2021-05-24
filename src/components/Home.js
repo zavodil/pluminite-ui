@@ -95,7 +95,7 @@ export default function Home() {
       <div className="items-container">
         <div className="items">
           {salesPopulated.map(({ token_id, metadata: { media } }) => (
-            <ArtItemPriced key={token_id} dataUrl={media} id={token_id} />
+            <ArtItemPriced key={token_id} dataUrl={media} gemId={token_id} />
           ))}
         </div>
       </div>
