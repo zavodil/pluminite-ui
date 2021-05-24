@@ -1,10 +1,14 @@
 import { connect, Contract, keyStores, WalletConnection } from 'near-api-js';
 import getConfig from './config';
 
+import { NftMethods, MarketMethods } from './constants/contractMethods';
+
 const nearConfig = getConfig(process.env.NODE_ENV || 'development');
 
+export const getMarketContractName = (nftContractName) => `market.${nftContractName}`;
+
 // Initialize contract & set global variables
-export async function initContract() {
+export async function initContracts() {
   // Initialize connection to the NEAR testnet
   const near = await connect({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() }, ...nearConfig });
 
@@ -22,17 +26,32 @@ export async function initContract() {
   }
 
   // Initializing our contract APIs by contract name and configuration
-  const contract = await new Contract(walletConnection.account(), nearConfig.contractName, {
+  const nftContract = await new Contract(walletConnection.account(), nearConfig.contractName, {
     // View methods are read only. They don't modify the state, but usually return some value.
-    viewMethods: ['getGreeting'],
+    viewMethods: [...NftMethods.viewMethods],
     // Change methods can modify the state. But you don't receive the returned value when called.
-    changeMethods: ['setGreeting'],
+    changeMethods: [...NftMethods.changeMethods],
     // Sender is the account ID to initialize transactions.
     sender: walletConnection.getAccountId(),
   });
 
+  // Initializing our contract APIs by contract name and configuration
+  const marketContract = await new Contract(
+    walletConnection.account(),
+    getMarketContractName(nearConfig.contractName),
+    {
+      // View methods are read only. They don't modify the state, but usually return some value.
+      viewMethods: [...MarketMethods.viewMethods],
+      // Change methods can modify the state. But you don't receive the returned value when called.
+      changeMethods: [...MarketMethods.changeMethods],
+      // Sender is the account ID to initialize transactions.
+      sender: walletConnection.getAccountId(),
+    }
+  );
+
   return {
-    contract,
+    nftContract,
+    marketContract,
     currentUser,
     nearConfig,
     walletConnection,

@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { HeadingText } from '../common/typography';
-import FileDropzone from '../common/FileDropzone';
-import ButtonBottom from '../common/Button/ButtonBottom';
+import { HeadingText } from '../../../common/typography';
+import FileDropzone from '../../../common/FileDropzone';
+import ButtonBottom from '../../../common/Button/ButtonBottom';
 
-import { NftTypeRequired } from '../../types/NftTypes';
+import { NftTypeRequired } from '../../../../types/NftTypes';
 
 const Container = styled('div')`
   max-width: 600px;

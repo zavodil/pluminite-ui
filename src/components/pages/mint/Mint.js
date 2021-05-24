@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { MintDescribe, MintUpload, MintReview } from './MintSteps';
+import { MintDescribe, MintUpload, MintReview } from './steps';
 
 const Container = styled('div')`
   display: flex;
@@ -30,7 +30,7 @@ export default function Mint() {
           />
         </Route>
         <Route path={`${match.path}/review`}>
-          <MintReview onCompleteLink="/profile" nft={nft} />
+          <MintReview onCompleteLink="/profile" nft={nft} backLink={`${match.path}/upload`} />
         </Route>
         <Route path={match.path}>
           <MintDescribe onCompleteLink={`${match.path}/upload`} nft={nft} setNft={setNft} setNftField={setNftField} />

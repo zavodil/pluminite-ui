@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import defaultProfilePicture from '../../assets/default-profile-picture.png';
+import defaultProfilePicture from '../../../../assets/default-profile-picture.png';
 
-import { StickedToBottom } from '../common/layout';
-import Balance from '../NavigationComponents/Balance';
-import Button from '../common/Button';
-import { Textarea } from '../common/forms';
+import { StickedToBottom } from '../../../common/layout';
+import Balance from '../../../NavigationComponents/Balance';
+import Button from '../../../common/Button';
+import { Textarea } from '../../../common/forms';
 
-import { NearContext } from '../../contexts';
+import { NearContext } from '../../../../contexts';
 
-import { PROFILE } from '../../constants';
+import { PROFILE } from '../../../../constants';
 
 const Container = styled('div')`
   .summary {

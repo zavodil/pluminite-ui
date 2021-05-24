@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { NearContext } from '../contexts';
+import { NearContext, MarketContractContext } from '../../../contexts';
 
-import { DisplayText } from './common/typography';
-import { Contribute, MintPlus } from './common/popups';
-import { ArtItemPriced } from './common/art';
+import { DisplayText } from '../../common/typography';
+import { Contribute, MintPlus } from '../../common/popups';
+import { ArtItemPriced } from '../../common/art';
 
-import DiamondIcon from '../assets/DiamondIcon';
+import DiamondIcon from '../../../assets/DiamondIcon';
 
 const Container = styled('div')`
   padding: 15px;
@@ -76,6 +76,12 @@ const Container = styled('div')`
 
 export default function Home() {
   const { user } = useContext(NearContext);
+  const { salesPopulated, getSalesPopulated } = useContext(MarketContractContext);
+
+  useEffect(() => {
+    // todo: pagination
+    getSalesPopulated('0', '50');
+  }, []);
 
   return (
     <Container>
@@ -88,8 +94,8 @@ export default function Home() {
       </div>
       <div className="items-container">
         <div className="items">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <ArtItemPriced key={`art-item-${i}`} />
+          {salesPopulated.map(({ token_id, metadata: { media } }) => (
+            <ArtItemPriced key={token_id} dataUrl={media} gemId={token_id} />
           ))}
         </div>
       </div>

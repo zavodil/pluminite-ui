@@ -3,22 +3,22 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
-import { NearContext } from '../../contexts';
+import { NearContext } from '../../../../contexts';
 
-import { HeadingText, SmallText } from '../common/typography';
-import { Input, InputNear, InputRoyalty, InputSign, Textarea } from '../common/forms';
-import ButtonBottom from '../common/Button/ButtonBottom';
-import Button from '../common/Button';
+import { HeadingText, SmallText } from '../../../common/typography';
+import { Input, InputNear, InputRoyalty, InputSign, Textarea } from '../../../common/forms';
+import ButtonBottom from '../../../common/Button/ButtonBottom';
+import Button from '../../../common/Button';
 
-import RemoveIcon from '../../assets/RemoveIcon';
+import RemoveIcon from '../../../../assets/RemoveIcon';
 
-import { APP } from '../../constants';
+import { APP } from '../../../../constants';
 
-import { useDebounce } from '../../hooks';
+import { useDebounce } from '../../../../hooks';
 
-import { doesAccountExist } from '../../apis';
+import { doesAccountExist } from '../../../../apis';
 
-import { NftTypeRequired } from '../../types/NftTypes';
+import { NftTypeRequired } from '../../../../types/NftTypes';
 
 const Container = styled('div')`
   max-width: 600px;
@@ -217,7 +217,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
     ]);
   };
 
-  useEffect(() => setNftField('accountId', user.accountId), []);
+  useEffect(() => setNftField('creator', user.accountId), []);
 
   useEffect(() => {
     setNft((nftOld) => {

@@ -84,6 +84,10 @@ const GlobalStyle = createGlobalStyle`
       z-index: 2;
     }
   }
+  
+  .portal-container {
+    position: relative;
+  }
 
   .footer {
     flex-shrink: 0;

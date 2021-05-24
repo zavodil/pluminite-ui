@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { HashRouter as Router, Switch } from 'react-router-dom';
 import { toast, Zoom } from 'react-toastify';
 
-import { NearContext } from './contexts';
+import { NearContext, NftContractContext } from './contexts';
 
 import { GuestPage, Page, UserPage } from './router';
 
@@ -10,13 +10,8 @@ import StyledToastContainer from './StyledToastContainer';
 
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
-import Home from './components/Home';
-import SignUp from './components/SignUp';
-import LogIn from './components/LogIn';
-import Mint from './components/Mint';
-import Profile from './components/Profile';
-import ProfileEdit from './components/ProfileEdit';
-import Gem from './components/Gem';
+
+import { Home, SignUp, LogIn, Mint, Profile, ProfileEdit, Gem } from './components/pages';
 
 import CloseButton from './components/common/Button/CloseButton';
 
@@ -25,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function App() {
   const { user, isLoading } = useContext(NearContext);
+  const { gem } = useContext(NftContractContext);
 
   const isAuthenticated = !!user;
 
@@ -78,7 +74,7 @@ export default function App() {
               <UserPage
                 path="/gem/:gemId"
                 component={Gem}
-                title={user?.accountId ? `${user?.accountId} | Edit` : 'Edit Profile'}
+                title={gem?.metadata?.title || 'Untitled Gem'}
                 isAuthenticated={isAuthenticated}
                 isLoading={isLoading}
               />

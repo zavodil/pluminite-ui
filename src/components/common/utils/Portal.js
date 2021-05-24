@@ -2,18 +2,25 @@ import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
 const Portal = ({ children, mountClassName }) => {
-  const mount = document.getElementsByClassName(mountClassName)[0];
-  const el = document.createElement('div');
+  let mount;
+  if (mountClassName) {
+    [mount] = document.getElementsByClassName(mountClassName);
+  } else {
+    mount = document.body;
+  }
+
+  const element = document.createElement('div');
+  element.classList.add('portal-container');
 
   useEffect(() => {
-    mount.appendChild(el);
+    mount.insertAdjacentElement('afterbegin', element);
 
     return () => {
-      mount.removeChild(el);
+      mount.removeChild(element);
     };
-  }, [el, mount]);
+  }, [element, mount]);
 
-  return createPortal(children, el);
+  return createPortal(children, element);
 };
 
 export default Portal;

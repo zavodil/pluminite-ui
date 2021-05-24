@@ -1,4 +1,5 @@
-const CONTRACT_NAME = process.env.CONTRACT_NAME || 'pluminite.one.testnet';
+// todo: get contract name from environment variable
+const CONTRACT_NAME = 'dev-1621820247784-6862507';
 
 function getConfig(env) {
   switch (env) {
