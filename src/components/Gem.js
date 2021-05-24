@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
+import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
 import { StickedToBottom } from './common/layout';
 import Button from './common/Button';
@@ -181,12 +182,23 @@ export default function Gem() {
           {
             title: 'History',
             content: (
+              // todo: creator_id is currently not implemented on the contracts
+              // todo: gemOnSale.bids.near.date is currently not implemented on the contracts
               <>
-                {gem?.metadata?.issued_at &&
-                  // todo: creator_id currently is not implemented on the contracts
-                  `${gem?.creator_id || 'Unknown author'} minted ${
-                    gem?.metadata?.title || 'Gem'
-                  } on ${new Intl.DateTimeFormat().format(new Date(+gem.metadata.issued_at))}`}
+                {gemOnSale?.bids?.near?.owner_id && (
+                  <div className="history-event">
+                    {gemOnSale.bids.near.owner_id} bid {formatNearAmount(gemOnSale.bids.near.price)}Ⓝ on{' '}
+                    {gemOnSale.bids.near.date
+                      ? new Intl.DateTimeFormat().format(new Date(gemOnSale.bids.near.date))
+                      : 'unknown date'}
+                  </div>
+                )}
+                {gem?.metadata?.issued_at && (
+                  <div className="history-event">
+                    {gem?.creator_id || 'Unknown author'} minted {gem?.metadata?.title || 'untitled gem'} on{' '}
+                    {new Intl.DateTimeFormat().format(new Date(+gem.metadata.issued_at))}
+                  </div>
+                )}
               </>
             ),
           },
