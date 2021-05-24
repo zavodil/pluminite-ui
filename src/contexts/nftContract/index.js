@@ -105,6 +105,7 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
   );
 
   const value = {
+    nftContract,
     gem: nftContractState.gem,
     gems: nftContractState.gems,
     gemsForOwner: nftContractState.gemsForOwner,
