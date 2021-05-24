@@ -1,12 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
 import { StickedToBottom } from '../../common/layout';
 import Button from '../../common/Button';
+import CloseButton from '../../common/Button/CloseButton';
 import { TitleText } from '../../common/typography';
 import { Tabs } from '../../common/tabs';
+import { Portal } from '../../common/utils';
 
 import { withUSDs } from '../../../hooks';
 
@@ -135,12 +138,26 @@ const StyledBid = styled('div')`
   }
 `;
 
-export default function Gem() {
+const StyledCloseButton = styled(CloseButton)`
+  position: absolute;
+  top: 38px;
+  right: 24px;
+  cursor: pointer;
+  z-index: 2;
+
+  > svg {
+    stroke: var(--lavendar);
+    fill: var(--lavendar);
+  }
+`;
+
+function Gem({ location: { prevPathname } }) {
   const [previousPriceUser, setPreviousPriceUser] = useState('');
   const [previousPrice, setPreviousPrice] = useState('0');
   const { gem, getGem } = useContext(NftContractContext);
   const { getSale, gemOnSale, offer, marketContract } = useContext(MarketContractContext);
   const { gemId } = useParams();
+  const history = useHistory();
 
   const previousPriceUSDs = withUSDs(formatNearAmount(previousPrice));
 
@@ -176,8 +193,19 @@ export default function Gem() {
     // history.push(`/profile?gem-id=${gem?.token_id}`);
   };
 
+  const goBack = () => {
+    if (prevPathname) {
+      history.push(prevPathname);
+    } else {
+      history.push('/');
+    }
+  };
+
   return (
     <Container>
+      <Portal>
+        <StyledCloseButton processCLick={goBack} />
+      </Portal>
       <TitleText className="gem-title">{gem?.metadata?.title || 'No title provided'}</TitleText>
       <div className="users">
         <p>by bluesygma.near</p>
@@ -248,3 +276,14 @@ export default function Gem() {
     </Container>
   );
 }
+
+Gem.propTypes = {
+  location: PropTypes.shape({
+    prevPathname: PropTypes.string,
+  }),
+  dataUrl: PropTypes.string,
+  buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  isButtonDisabled: PropTypes.bool,
+};
+
+export default Gem;

@@ -40,7 +40,12 @@ const StyledContainer = styled(Link)`
 const ArtItem = forwardRef(function ArtItemWithRef({ gemId, dataUrl, buttonText, isButtonDisabled }, ref) {
   const isLink = !!gemId;
   const params = {
-    to: isLink ? `/gem/${gemId}` : undefined,
+    to: isLink
+      ? {
+          pathname: `/gem/${gemId}`,
+          prevPathname: window.location.pathname,
+        }
+      : undefined,
     as: isLink ? Link : 'div',
   };
 
