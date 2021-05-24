@@ -155,7 +155,7 @@ function Gem({ location: { prevPathname } }) {
   const [previousPriceUser, setPreviousPriceUser] = useState('');
   const [previousPrice, setPreviousPrice] = useState('0');
   const { gem, getGem } = useContext(NftContractContext);
-  const { getSale, gemOnSale, offer, marketContract } = useContext(MarketContractContext);
+  const { getSale, gemOnSale, offer, clearGemOnSale, marketContract } = useContext(MarketContractContext);
   const { gemId } = useParams();
   const history = useHistory();
 
@@ -169,6 +169,10 @@ function Gem({ location: { prevPathname } }) {
         await getSale(gemId);
       }
     })();
+
+    return () => {
+      clearGemOnSale();
+    };
   }, []);
 
   const hasBids = () => {

@@ -1,4 +1,4 @@
-import { GOT_SALES, GOT_SALES_POPULATED, CLEAR_STATE, GOT_GEM_ON_SALE } from './types';
+import { GOT_SALES, GOT_SALES_POPULATED, CLEAR_STATE, GOT_GEM_ON_SALE, CLEAR_GEM_ON_SALE } from './types';
 
 export const initialMarketContractState = {
   gemOnSale: null,
@@ -12,6 +12,12 @@ export const marketContractReducer = (currentState = initialMarketContractState,
       return {
         ...currentState,
         gemOnSale: action.payload.gemOnSale,
+      };
+
+    case CLEAR_GEM_ON_SALE:
+      return {
+        ...currentState,
+        gemOnSale: null,
       };
 
     case GOT_SALES:
