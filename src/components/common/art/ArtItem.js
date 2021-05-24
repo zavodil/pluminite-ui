@@ -10,7 +10,7 @@ import placeholderDataUrl from '../../../assets/art.png';
 
 import { square } from '../../../styles/mixins';
 
-const StyledLink = styled(Link)`
+const StyledContainer = styled(Link)`
   display: block;
   position: relative;
   width: 400px;
@@ -37,17 +37,22 @@ const StyledLink = styled(Link)`
   }
 `;
 
-// todo: fix :gemId after integration with nft contract
 const ArtItem = forwardRef(function ArtItemWithRef({ gemId, dataUrl, buttonText, isButtonDisabled }, ref) {
+  const isLink = !!gemId;
+  const params = {
+    to: isLink ? `/gem/${gemId}` : undefined,
+    as: isLink ? Link : 'div',
+  };
+
   return (
-    <StyledLink to={`/gem/${gemId}`}>
+    <StyledContainer {...params}>
       <div className="image-container">
         <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" />
       </div>
       <Button isPrimary isSmall isDisabled={isButtonDisabled}>
         {buttonText}
       </Button>
-    </StyledLink>
+    </StyledContainer>
   );
 });
 
