@@ -9,7 +9,7 @@ const withUSDs = (nears) => {
     getUSDsFromNear(nears).then((usdsFromNears) => {
       setUSDs(usdsFromNears);
     });
-  }, []);
+  }, [nears]);
 
   return USDs;
 };

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
@@ -137,9 +137,14 @@ const StyledBid = styled('div')`
 `;
 
 export default function Gem() {
-  const { gemId } = useParams();
+  const [previousPriceUser, setPreviousPriceUser] = useState('');
+  const [previousPrice, setPreviousPrice] = useState('0');
   const { gem, getGem } = useContext(NftContractContext);
   const { getSale, gemOnSale, marketContract } = useContext(MarketContractContext);
+  const { gemId } = useParams();
+  const history = useHistory();
+
+  const previousPriceUSDs = withUSDs(formatNearAmount(previousPrice));
 
   useEffect(() => {
     (async () => {
@@ -151,15 +156,25 @@ export default function Gem() {
     })();
   }, []);
 
+  const hasBids = () => {
+    return !!gemOnSale?.bids?.near?.owner_id;
+  };
+
+  useEffect(() => {
+    if (hasBids()) {
+      setPreviousPriceUser(gemOnSale?.bids?.near?.owner_id || '');
+      setPreviousPrice(gemOnSale?.bids?.near?.price || '0');
+    } else {
+      setPreviousPriceUser(gem?.owner_id || '');
+      setPreviousPrice(gemOnSale?.conditions?.near || '0');
+    }
+  }, [gem, gemOnSale]);
+
   // todo: use real data after nft contract integration
-  const bidNears = 15;
   const royalties = [
     { userId: 'bluesygma.near', royalty: '5%' },
     { userId: 'crasskitty.near', royalty: '5%' },
   ];
-
-  const bidUSDs = withUSDs(bidNears);
-  const history = useHistory();
 
   const processBid = () => {
     toast.success('You own a new gem!', { position: 'top-right' });
@@ -217,19 +232,19 @@ export default function Gem() {
         <StyledBid className="bid">
           <div className="bid-top">
             <div className="bid-description">
-              <p className="bid-title">Starting Bid</p>
-              <p className="bid-user">by bluesygma.near</p>
+              <p className="bid-title">{hasBids() ? 'Top offer' : 'Starting Bid'}</p>
+              <p className="bid-user">{previousPriceUser}</p>
             </div>
             <div className="bid-sum">
               <span className="bid-sum-nears">
-                <span className="bid-sum-nears--amount">{bidNears}</span>
+                <span className="bid-sum-nears--amount">{formatNearAmount(previousPrice)}</span>
                 <span className="bid-sum-nears--sign">Ⓝ</span>
               </span>
-              {bidUSDs && <span className="bid-sum-usds">~${round(bidUSDs, 0)} USD</span>}
+              {previousPriceUSDs !== null && <span className="bid-sum-usds">~${round(previousPriceUSDs, 0)} USD</span>}
             </div>
           </div>
           <Button className="bid-button" isPrimary onClick={processBid}>
-            Bid {bidNears}Ⓝ on Gem
+            Bid {+formatNearAmount(previousPrice) + 1}Ⓝ on Gem
           </Button>
         </StyledBid>
       </StickedToBottom>
