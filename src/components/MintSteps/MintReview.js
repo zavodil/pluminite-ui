@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
+
+import { NftContractContext } from '../../contexts';
 
 import { HeadingText } from '../common/typography';
 import { MintSuccessMessage } from '../common/messages';
@@ -49,8 +51,15 @@ const StyledButton = styled(Button)`
 `;
 
 const MintReview = ({ onCompleteLink, backLink, nft }) => {
-  const showMintSuccessMessage = () => {
+  const { mintGem } = useContext(NftContractContext);
+  const history = useHistory();
+
+  const processMintClick = async () => {
+    await mintGem(nft);
+
     toast.success(<MintSuccessMessage />);
+    // todo: fix redirection to home page after mint
+    history.push(onCompleteLink);
   };
 
   return (
@@ -68,8 +77,8 @@ const MintReview = ({ onCompleteLink, backLink, nft }) => {
         <StyledButton isSecondary>
           <Link to={backLink}>Replace Art</Link>
         </StyledButton>
-        <StyledButton onClick={showMintSuccessMessage} isPrimary>
-          <Link to={onCompleteLink}>Mint NFT</Link>
+        <StyledButton onClick={processMintClick} isPrimary>
+          Mint NFT
         </StyledButton>
       </StickedToBottom>
     </Container>
