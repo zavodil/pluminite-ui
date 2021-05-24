@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { toast } from 'react-toastify';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
 import { StickedToBottom } from '../../common/layout';
@@ -140,9 +139,8 @@ export default function Gem() {
   const [previousPriceUser, setPreviousPriceUser] = useState('');
   const [previousPrice, setPreviousPrice] = useState('0');
   const { gem, getGem } = useContext(NftContractContext);
-  const { getSale, gemOnSale, marketContract } = useContext(MarketContractContext);
+  const { getSale, gemOnSale, offer, marketContract } = useContext(MarketContractContext);
   const { gemId } = useParams();
-  const history = useHistory();
 
   const previousPriceUSDs = withUSDs(formatNearAmount(previousPrice));
 
@@ -171,9 +169,11 @@ export default function Gem() {
   }, [gem, gemOnSale]);
 
   // todo: real processing of bid
-  const processBid = () => {
-    toast.success('You own a new gem!', { position: 'top-right' });
-    history.push(`/profile?gem-id=${gem?.token_id}`);
+  const processBid = async () => {
+    await offer(gemId, +formatNearAmount(previousPrice) + 1);
+    // todo: execute commands below once the bid is accepted
+    // toast.success('You own a new gem!', { position: 'top-right' });
+    // history.push(`/profile?gem-id=${gem?.token_id}`);
   };
 
   return (
