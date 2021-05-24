@@ -1,5 +1,6 @@
 import React, { useReducer, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { parseNearAmount } from 'near-api-js/lib/utils/format';
 
 import { marketContractReducer, initialMarketContractState } from './reducer';
 
@@ -8,6 +9,8 @@ import { GOT_SALES, GOT_SALES_POPULATED, GOT_GEM_ON_SALE } from './types';
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
 
 import { NftContractContext } from '../nftContract';
+
+const GAS = '200000000000000';
 
 export const MarketContractContext = React.createContext(initialMarketContractState);
 
@@ -75,6 +78,20 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
     [marketContract, nftContract]
   );
 
+  const offer = useCallback(
+    async (gemId, offerPrice) => {
+      await marketContract.offer(
+        {
+          nft_contract_id: nftContract.contractId,
+          token_id: gemId,
+        },
+        GAS,
+        parseNearAmount(String(offerPrice))
+      );
+    },
+    [marketContract, nftContract]
+  );
+
   const value = {
     marketContract,
     gemOnSale: marketContractState.gemOnSale,
@@ -83,6 +100,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
     getSale,
     getSales,
     getSalesPopulated,
+    offer,
   };
 
   return <MarketContractContext.Provider value={value}>{children}</MarketContractContext.Provider>;
@@ -92,6 +110,7 @@ MarketContractContextProvider.propTypes = {
   marketContract: PropTypes.shape({
     get_sales_by_nft_contract_id: PropTypes.func.isRequired,
     get_sale: PropTypes.func.isRequired,
+    offer: PropTypes.func.isRequired,
   }).isRequired,
   children: ReactChildrenTypeRequired,
 };
