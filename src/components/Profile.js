@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -9,6 +9,8 @@ import { ArtItemEditable } from './common/art';
 import { Tabs } from './common/tabs';
 
 import { useQuery } from '../hooks';
+
+import { NearContext, NftContractContext } from '../contexts';
 
 const Container = styled('div')`
   display: flex;
@@ -87,6 +89,8 @@ const Container = styled('div')`
 export default function Profile() {
   const ownedGemRef = useRef();
   const query = useQuery();
+  const { user } = useContext(NearContext);
+  const { gemsForOwner, getGemsForOwner } = useContext(NftContractContext);
 
   useEffect(() => {
     if (ownedGemRef?.current) {
@@ -94,6 +98,11 @@ export default function Profile() {
         requestAnimationFrame(() => ownedGemRef.current.scrollIntoView({ behavior: 'smooth' }));
       }, 10);
     }
+  }, []);
+
+  useEffect(() => {
+    // todo: pagination
+    getGemsForOwner(user.accountId, '0', '50');
   }, []);
 
   const ownedGemId = query.get('gem-id');
@@ -120,8 +129,12 @@ export default function Profile() {
           {
             title: 'Gems I own',
             // todo: after integration with NFT contract compare ownedGemId with real gem ids
-            content: Array.from({ length: 14 }).map((_, i) => (
-              <ArtItemEditable forwardedRef={ownedGemId === String(i) ? ownedGemRef : null} key={`art-item-own-${i}`} />
+            content: gemsForOwner.map(({ metadata: { media } }, i) => (
+              <ArtItemEditable
+                dataUrl={media}
+                forwardedRef={ownedGemId === String(i) ? ownedGemRef : null}
+                key={`art-item-own-${i}`}
+              />
             )),
           },
           {
