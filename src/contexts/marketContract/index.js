@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { marketContractReducer, initialMarketContractState } from './reducer';
 
-import { GOT_SALES, GOT_SALES_POPULATED } from './types';
+import { GOT_SALES, GOT_SALES_POPULATED, GOT_GEM_ON_SALE } from './types';
 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
 
@@ -14,6 +14,17 @@ export const MarketContractContext = React.createContext(initialMarketContractSt
 export const MarketContractContextProvider = ({ marketContract, children }) => {
   const [marketContractState, dispatchMarketContract] = useReducer(marketContractReducer, initialMarketContractState);
   const { nftContract, getGemsBatch, getGem } = useContext(NftContractContext);
+
+  const getSale = useCallback(
+    async (gemId) => {
+      const gemOnSale = await marketContract.get_sale({
+        nft_contract_token: `${nftContract.contractId}||${gemId}`,
+      });
+
+      dispatchMarketContract({ type: GOT_GEM_ON_SALE, payload: { gemOnSale } });
+    },
+    [marketContract]
+  );
 
   const getSales = useCallback(
     async (fromIndex, limit) => {
@@ -66,8 +77,10 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
 
   const value = {
     marketContract,
+    gemOnSale: marketContractState.gemOnSale,
     sales: marketContractState.sales,
     salesPopulated: marketContractState.salesPopulated,
+    getSale,
     getSales,
     getSalesPopulated,
   };
@@ -78,6 +91,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
 MarketContractContextProvider.propTypes = {
   marketContract: PropTypes.shape({
     get_sales_by_nft_contract_id: PropTypes.func.isRequired,
+    get_sale: PropTypes.func.isRequired,
   }).isRequired,
   children: ReactChildrenTypeRequired,
 };
