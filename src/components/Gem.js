@@ -1,5 +1,5 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 
@@ -9,7 +9,10 @@ import { TitleText } from './common/typography';
 import { Tabs } from './common/tabs';
 
 import { withUSDs } from '../hooks';
+
 import { round } from '../utils/numbers';
+
+import { NftContractContext } from '../contexts';
 
 const Container = styled('div')`
   display: flex;
@@ -133,7 +136,16 @@ const StyledBid = styled('div')`
 `;
 
 export default function Gem() {
-  // const { gemId } = useParams();
+  const { gemId } = useParams();
+  const [gem, setGem] = useState();
+  const { getGem } = useContext(NftContractContext);
+
+  useEffect(() => {
+    (async () => {
+      setGem(await getGem(gemId));
+    })();
+  }, []);
+
   // todo: use real data after nft contract integration
   const bidNears = 15;
   const historyData = [
@@ -152,22 +164,21 @@ export default function Gem() {
 
   const processBid = () => {
     toast.success('You own a new gem!', { position: 'top-right' });
-    // todo: use real gem id
-    history.push('/profile?gem-id=12');
+    history.push(`/profile?gem-id=${gem?.token_id}`);
   };
 
   return (
     <Container>
-      <TitleText className="gem-title">Art Title</TitleText>
+      <TitleText className="gem-title">{gem?.metadata?.title || 'No title provided'}</TitleText>
       <div className="users">
         <p>by bluesygma.near</p>
-        <p>owned by bluesygma.near</p>
+        <p>owned by {gem?.owner_id || '?'}</p>
       </div>
       <Tabs
         tabsArray={[
           {
             title: 'Description',
-            content: 'Keep it short',
+            content: gem?.metadata?.description || 'No description provided',
           },
           {
             title: 'History',
