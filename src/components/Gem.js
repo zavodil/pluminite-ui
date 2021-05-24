@@ -170,12 +170,7 @@ export default function Gem() {
     }
   }, [gem, gemOnSale]);
 
-  // todo: use real data after nft contract integration
-  const royalties = [
-    { userId: 'bluesygma.near', royalty: '5%' },
-    { userId: 'crasskitty.near', royalty: '5%' },
-  ];
-
+  // todo: real processing of bid
   const processBid = () => {
     toast.success('You own a new gem!', { position: 'top-right' });
     history.push(`/profile?gem-id=${gem?.token_id}`);
@@ -219,12 +214,14 @@ export default function Gem() {
           },
           {
             title: 'Royalties',
-            content: royalties.map(({ userId, royalty }, index) => (
-              <div key={`royalty-${index}`} className="royalty">
-                <span className="royalty-user">{userId}</span>
-                <span className="royalty-royalty">{royalty}</span>
-              </div>
-            )),
+            content:
+              gem?.royalty &&
+              Object.entries(gem.royalty).map(([userId, royalty], index) => (
+                <div key={`royalty-${index}`} className="royalty">
+                  <span className="royalty-user">{userId}</span>
+                  <span className="royalty-royalty">{royalty / 100}%</span>
+                </div>
+              )),
           },
         ]}
       />
