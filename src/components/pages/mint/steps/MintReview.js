@@ -4,15 +4,15 @@ import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 
-import { NftContractContext } from '../../contexts';
+import { NftContractContext } from '../../../../contexts';
 
-import { HeadingText } from '../common/typography';
-import { MintSuccessMessage } from '../common/messages';
-import { ArtItemPriced } from '../common/art';
-import { StickedToBottom } from '../common/layout';
-import Button from '../common/Button';
+import { HeadingText } from '../../../common/typography';
+import { MintSuccessMessage } from '../../../common/messages';
+import { ArtItemPriced } from '../../../common/art';
+import { StickedToBottom } from '../../../common/layout';
+import Button from '../../../common/Button';
 
-import { NftTypeRequired } from '../../types/NftTypes';
+import { NftTypeRequired } from '../../../../types/NftTypes';
 
 const Container = styled('div')`
   max-width: 600px;

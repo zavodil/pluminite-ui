@@ -1,13 +1,13 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { NearContext, MarketContractContext } from '../contexts';
+import { NearContext, MarketContractContext } from '../../../contexts';
 
-import { DisplayText } from './common/typography';
-import { Contribute, MintPlus } from './common/popups';
-import { ArtItemPriced } from './common/art';
+import { DisplayText } from '../../common/typography';
+import { Contribute, MintPlus } from '../../common/popups';
+import { ArtItemPriced } from '../../common/art';
 
-import DiamondIcon from '../assets/DiamondIcon';
+import DiamondIcon from '../../../assets/DiamondIcon';
 
 const Container = styled('div')`
   padding: 15px;

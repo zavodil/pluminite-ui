@@ -3,7 +3,7 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import { ProfileEditBio, ProfileEditPhoto } from './ProfileEditSteps';
+import { ProfileEditBio, ProfileEditPhoto } from './steps';
 
 const Container = styled('div')`
   display: flex;

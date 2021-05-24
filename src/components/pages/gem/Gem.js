@@ -4,16 +4,16 @@ import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
-import { StickedToBottom } from './common/layout';
-import Button from './common/Button';
-import { TitleText } from './common/typography';
-import { Tabs } from './common/tabs';
+import { StickedToBottom } from '../../common/layout';
+import Button from '../../common/Button';
+import { TitleText } from '../../common/typography';
+import { Tabs } from '../../common/tabs';
 
-import { withUSDs } from '../hooks';
+import { withUSDs } from '../../../hooks';
 
-import { round } from '../utils/numbers';
+import { round } from '../../../utils/numbers';
 
-import { NftContractContext, MarketContractContext } from '../contexts';
+import { NftContractContext, MarketContractContext } from '../../../contexts';
 
 const Container = styled('div')`
   display: flex;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { MintDescribe, MintUpload, MintReview } from './MintSteps';
+import { MintDescribe, MintUpload, MintReview } from './steps';
 
 const Container = styled('div')`
   display: flex;

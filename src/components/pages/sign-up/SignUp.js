@@ -2,11 +2,11 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { NearContext } from '../contexts';
+import { NearContext } from '../../../contexts';
 
-import { HeadingText } from './common/typography';
-import Button from './common/Button';
-import SeparatorHorizontal from './common/Separator/SeparatorHorizontal';
+import { HeadingText } from '../../common/typography';
+import Button from '../../common/Button';
+import SeparatorHorizontal from '../../common/Separator/SeparatorHorizontal';
 
 const Container = styled('div')`
   display: flex;

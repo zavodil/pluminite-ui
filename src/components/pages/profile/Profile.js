@@ -2,15 +2,15 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import defaultProfilePicture from '../assets/default-profile-picture.png';
-import Balance from './NavigationComponents/Balance';
-import Button from './common/Button';
-import { ArtItemEditable } from './common/art';
-import { Tabs } from './common/tabs';
+import defaultProfilePicture from '../../../assets/default-profile-picture.png';
+import Balance from '../../NavigationComponents/Balance';
+import Button from '../../common/Button';
+import { ArtItemEditable } from '../../common/art';
+import { Tabs } from '../../common/tabs';
 
-import { useQuery } from '../hooks';
+import { useQuery } from '../../../hooks';
 
-import { NearContext, NftContractContext } from '../contexts';
+import { NearContext, NftContractContext } from '../../../contexts';
 
 const Container = styled('div')`
   display: flex;

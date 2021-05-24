@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { StickedToBottom } from '../common/layout';
-import Button from '../common/Button';
-import FileDropzone from '../common/FileDropzone';
-import { HeadingSmallText } from '../common/typography';
+import { StickedToBottom } from '../../../common/layout';
+import Button from '../../../common/Button';
+import FileDropzone from '../../../common/FileDropzone';
+import { HeadingSmallText } from '../../../common/typography';
 
-import { PROFILE } from '../../constants';
+import { PROFILE } from '../../../../constants';
 
 const Container = styled('div')`
   .heading-small {

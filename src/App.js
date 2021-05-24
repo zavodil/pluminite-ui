@@ -10,13 +10,8 @@ import StyledToastContainer from './StyledToastContainer';
 
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
-import Home from './components/Home';
-import SignUp from './components/SignUp';
-import LogIn from './components/LogIn';
-import Mint from './components/Mint';
-import Profile from './components/Profile';
-import ProfileEdit from './components/ProfileEdit';
-import Gem from './components/Gem';
+
+import { Home, SignUp, LogIn, Mint, Profile, ProfileEdit, Gem } from './components/pages';
 
 import CloseButton from './components/common/Button/CloseButton';
 
