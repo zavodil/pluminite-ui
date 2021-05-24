@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { HashRouter as Router, Switch } from 'react-router-dom';
 import { toast, Zoom } from 'react-toastify';
 
-import { NearContext } from './contexts';
+import { NearContext, NftContractContext } from './contexts';
 
 import { GuestPage, Page, UserPage } from './router';
 
@@ -25,6 +25,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function App() {
   const { user, isLoading } = useContext(NearContext);
+  const { gem } = useContext(NftContractContext);
 
   const isAuthenticated = !!user;
 
@@ -78,7 +79,7 @@ export default function App() {
               <UserPage
                 path="/gem/:gemId"
                 component={Gem}
-                title={user?.accountId ? `${user?.accountId} | Edit` : 'Edit Profile'}
+                title={gem?.metadata?.title || 'Untitled Gem'}
                 isAuthenticated={isAuthenticated}
                 isLoading={isLoading}
               />
