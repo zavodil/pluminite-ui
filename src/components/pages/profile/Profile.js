@@ -128,12 +128,11 @@ export default function Profile() {
         tabsArray={[
           {
             title: 'Gems I own',
-            // todo: after integration with NFT contract compare ownedGemId with real gem ids
-            content: gemsForOwner.map(({ token_id, metadata: { media } = {} }, i) => (
+            content: gemsForOwner.map(({ token_id, metadata: { media } = {} }) => (
               <ArtItemEditable
                 dataUrl={media}
-                forwardedRef={ownedGemId === String(i) ? ownedGemRef : null}
-                key={`art-item-own-${i}`}
+                forwardedRef={ownedGemId === token_id ? ownedGemRef : null}
+                key={token_id}
                 gemId={token_id}
               />
             )),
