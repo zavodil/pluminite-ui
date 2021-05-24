@@ -5,7 +5,7 @@ import { NftMethods, MarketMethods } from './constants/contractMethods';
 
 const nearConfig = getConfig(process.env.NODE_ENV || 'development');
 
-const getMarketContractName = (nftContractName) => `market.${nftContractName}`;
+export const getMarketContractName = (nftContractName) => `market.${nftContractName}`;
 
 // Initialize contract & set global variables
 export async function initContracts() {

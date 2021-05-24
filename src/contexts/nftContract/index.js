@@ -4,16 +4,19 @@ import { parseNearAmount } from 'near-api-js/lib/utils/format';
 
 import { nftContractReducer, initialNftContractState } from './reducer';
 
+import { getMarketContractName } from '../../utils';
+
 import { GOT_GEM, GOT_GEMS, GOT_GEMS_FOR_OWNER, GOT_GEMS_BATCH, CLEAR_STATE } from './types';
 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
 
-export const NftContractContext = React.createContext(initialNftContractState);
-
 const GAS = '200000000000000';
+
+export const NftContractContext = React.createContext(initialNftContractState);
 
 export const NftContractContextProvider = ({ nftContract, children }) => {
   const [nftContractState, dispatchNftContract] = useReducer(nftContractReducer, initialNftContractState);
+  const deposit = parseNearAmount('0.1');
 
   const getGem = useCallback(
     async (id) => {
@@ -86,14 +89,28 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
         }))
         .reduce((acc, cur) => Object.assign(acc, cur), { [nft.creator]: nft.creatorRoyalty * 100 });
 
-      const deposit = parseNearAmount('0.1');
-
       await nftContract.nft_mint(
         {
           // todo: is it alright to set id like this or using default id set by nft contract?
           // token_id: `token-${Date.now()}`,
           metadata,
           perpetual_royalties: perpetualRoyalties,
+        },
+        GAS,
+        deposit
+      );
+
+      dispatchNftContract({ type: CLEAR_STATE });
+    },
+    [nftContract]
+  );
+
+  const listForSale = useCallback(
+    async (gemId) => {
+      await nftContract.nft_approve(
+        {
+          token_id: gemId,
+          account_id: getMarketContractName(nftContract.contractId),
         },
         GAS,
         deposit
@@ -115,6 +132,7 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     getGemsForOwner,
     getGemsBatch,
     mintGem,
+    listForSale,
   };
 
   return <NftContractContext.Provider value={value}>{children}</NftContractContext.Provider>;
@@ -122,11 +140,13 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
 
 NftContractContextProvider.propTypes = {
   nftContract: PropTypes.shape({
+    contractId: PropTypes.string.isRequired,
     nft_token: PropTypes.func.isRequired,
     nft_tokens: PropTypes.func.isRequired,
     nft_tokens_for_owner: PropTypes.func.isRequired,
     nft_tokens_batch: PropTypes.func.isRequired,
     nft_mint: PropTypes.func.isRequired,
+    nft_approve: PropTypes.func.isRequired,
   }).isRequired,
   children: ReactChildrenTypeRequired,
 };
