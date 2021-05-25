@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
 
 import { NearContext, MarketContractContext } from '../../../contexts';
@@ -78,12 +79,11 @@ const Container = styled('div')`
 
 export default function Home() {
   const { user } = useContext(NearContext);
-  const { salesPopulated, getSalesPopulated } = useContext(MarketContractContext);
+  const { getSalesPopulated } = useContext(MarketContractContext);
 
-  useEffect(() => {
-    // todo: pagination
-    getSalesPopulated('0', '50');
-  }, []);
+  const { data: salesPopulated } = useQuery(['salesPopulated'], () => getSalesPopulated('0', '50'), {
+    placeholderData: [],
+  });
 
   return (
     <Container>
