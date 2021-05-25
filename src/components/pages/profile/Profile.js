@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
+import { useQuery as useRQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -90,7 +91,7 @@ export default function Profile() {
   const ownedGemRef = useRef();
   const query = useQuery();
   const { user } = useContext(NearContext);
-  const { gemsForOwner, getGemsForOwner } = useContext(NftContractContext);
+  const { getGemsForOwner } = useContext(NftContractContext);
 
   useEffect(() => {
     if (ownedGemRef?.current) {
@@ -100,10 +101,12 @@ export default function Profile() {
     }
   }, []);
 
-  useEffect(() => {
+  const { data: gemsForOwner } = useRQuery(
+    ['gemsForOwner', user.accountId],
     // todo: pagination
-    getGemsForOwner(user.accountId, '0', '50');
-  }, []);
+    () => getGemsForOwner(user.accountId, '0', '50'),
+    { placeholderData: [] }
+  );
 
   const ownedGemId = query.get('gem-id');
 
