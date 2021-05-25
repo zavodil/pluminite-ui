@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { formatNearAmount } from 'near-api-js/lib/utils/format';
+import { formatNearAmount, parseNearAmount } from 'near-api-js/lib/utils/format';
 
 import { NearContext } from '../../../../contexts';
 
@@ -271,8 +271,8 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
         labelText="Starting Bid"
         isRequired
         isDisabled={isDisabled}
-        nearsInitial={nft.startingBid || ''}
-        onNearsChange={(value) => setNftField('startingBid', value)}
+        nearsInitial={nft?.conditions?.near ? formatNearAmount(nft?.conditions?.near) : ''}
+        onNearsChange={(value) => setNftField('conditions', { near: parseNearAmount(value) })}
       />
       <div className="user-royalty-input">
         <InputRoyalty

@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 export const NftType = PropTypes.shape({
   title: PropTypes.string,
   description: PropTypes.string,
-  startingBid: PropTypes.string,
+  conditions: PropTypes.shape({
+    near: PropTypes.string,
+  }),
   creator: PropTypes.string,
   creatorRoyalty: PropTypes.string,
   collaborators: PropTypes.arrayOf(

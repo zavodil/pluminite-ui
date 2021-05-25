@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { HashRouter as Router, Switch } from 'react-router-dom';
 import { toast, Zoom } from 'react-toastify';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 import { NearContext, NftContractContext } from './contexts';
 
@@ -11,12 +13,22 @@ import StyledToastContainer from './StyledToastContainer';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 
-import { Home, SignUp, LogIn, Mint, Profile, ProfileEdit, Gem } from './components/pages';
+import { Home, SignUp, LogIn, Mint, Profile, ProfileEdit, Gem, NotFound404 } from './components/pages';
 
 import CloseButton from './components/common/Button/CloseButton';
 
 import GlobalStyle from './styles/GlobalStyle';
 import 'react-toastify/dist/ReactToastify.css';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 5,
+      retryDelay: 1000,
+      staleTime: 1000 * 60,
+    },
+  },
+});
 
 export default function App() {
   const { user, isLoading } = useContext(NearContext);
@@ -25,9 +37,10 @@ export default function App() {
   const isAuthenticated = !!user;
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <GlobalStyle />
       <div className="app">
+        {process.env.NODE_ENV !== 'production' && <ReactQueryDevtools initialIsOpen={true} />}
         <Router>
           <Navigation />
           <div className="content">
@@ -78,6 +91,7 @@ export default function App() {
                 isAuthenticated={isAuthenticated}
                 isLoading={isLoading}
               />
+              <Page component={NotFound404} />
             </Switch>
             <div className="sticked-to-bottom" />
           </div>
@@ -91,6 +105,6 @@ export default function App() {
           />
         </Router>
       </div>
-    </>
+    </QueryClientProvider>
   );
 }

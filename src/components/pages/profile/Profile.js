@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
+import { useQuery as useRQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -11,6 +12,8 @@ import { Tabs } from '../../common/tabs';
 import { useQuery } from '../../../hooks';
 
 import { NearContext, NftContractContext } from '../../../contexts';
+
+import { QUERY_KEYS } from '../../../constants';
 
 const Container = styled('div')`
   display: flex;
@@ -87,25 +90,26 @@ const Container = styled('div')`
 `;
 
 export default function Profile() {
-  const ownedGemRef = useRef();
-  const query = useQuery();
   const { user } = useContext(NearContext);
-  const { gemsForOwner, getGemsForOwner } = useContext(NftContractContext);
+  const { getGemsForOwner } = useContext(NftContractContext);
+
+  const ownedGemRef = useRef();
+
+  const query = useQuery();
+  const ownedGemId = query.get('gem-id');
+
+  const { data: gemsForOwner } = useRQuery(
+    [QUERY_KEYS.GEMS_FOR_OWNER, user.accountId],
+    // todo: pagination
+    () => getGemsForOwner(user.accountId, '0', '50'),
+    { placeholderData: [] }
+  );
 
   useEffect(() => {
     if (ownedGemRef?.current) {
-      setTimeout(() => {
-        requestAnimationFrame(() => ownedGemRef.current.scrollIntoView({ behavior: 'smooth' }));
-      }, 10);
+      ownedGemRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, []);
-
-  useEffect(() => {
-    // todo: pagination
-    getGemsForOwner(user.accountId, '0', '50');
-  }, []);
-
-  const ownedGemId = query.get('gem-id');
+  }, [gemsForOwner]);
 
   return (
     <Container>

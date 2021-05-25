@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
@@ -14,15 +15,18 @@ import { Portal } from '../../common/utils';
 import { withUSDs } from '../../../hooks';
 
 import { round } from '../../../utils/numbers';
+import { getNextBidNearsFormatted } from '../../../utils/nears';
 
 import { NftContractContext, MarketContractContext } from '../../../contexts';
+
+import { QUERY_KEYS } from '../../../constants';
 
 const Container = styled('div')`
   display: flex;
   flex-direction: column;
   min-height: calc(100% - 173px);
   max-width: 767px;
-  padding: 100px 28px 60px;
+  padding: 192px 28px 60px;
 
   .gem-title {
     margin-bottom: 5px;
@@ -138,42 +142,55 @@ const StyledBid = styled('div')`
   }
 `;
 
-const StyledCloseButton = styled(CloseButton)`
+const GemHeader = styled('div')`
   position: absolute;
-  top: 38px;
-  right: 24px;
-  cursor: pointer;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
   z-index: 2;
+  min-height: 92px;
 
-  > svg {
-    stroke: var(--lavendar);
-    fill: var(--lavendar);
+  .gem-close {
+    cursor: pointer;
+
+    > svg {
+      stroke: var(--lavendar);
+      fill: var(--lavendar);
+    }
   }
 `;
 
 function Gem({ location: { prevPathname } }) {
+  const { getGem } = useContext(NftContractContext);
+  const { getSale, offer, marketContract } = useContext(MarketContractContext);
+
   const [previousPriceUser, setPreviousPriceUser] = useState('');
   const [previousPrice, setPreviousPrice] = useState('0');
-  const { gem, getGem } = useContext(NftContractContext);
-  const { getSale, gemOnSale, offer, clearGemOnSale, marketContract } = useContext(MarketContractContext);
+
   const { gemId } = useParams();
+
   const history = useHistory();
 
   const previousPriceUSDs = withUSDs(formatNearAmount(previousPrice));
 
-  useEffect(() => {
-    (async () => {
-      const gemOnNftContract = await getGem(gemId);
+  const { data: gem } = useQuery([QUERY_KEYS.GEM, gemId], () => getGem(gemId));
 
-      if (Object.keys(gemOnNftContract.approved_account_ids).includes(marketContract.contractId)) {
-        await getSale(gemId);
+  const { data: gemOnSale } = useQuery(
+    [QUERY_KEYS.GEM_ON_SALE, gemId],
+    async () => {
+      if (Object.keys(gem.approved_account_ids).includes(marketContract.contractId)) {
+        return getSale(gemId);
       }
-    })();
 
-    return () => {
-      clearGemOnSale();
-    };
-  }, []);
+      return null;
+    },
+    {
+      enabled: !!gem,
+    }
+  );
 
   const hasBids = () => !!gemOnSale?.bids?.near?.owner_id;
 
@@ -189,9 +206,8 @@ function Gem({ location: { prevPathname } }) {
     }
   }, [gem, gemOnSale]);
 
-  // todo: real processing of bid
   const processBid = async () => {
-    await offer(gemId, +formatNearAmount(previousPrice) + 1);
+    await offer(gemId, +getNextBidNearsFormatted(gemOnSale));
     // todo: execute commands below once the bid is accepted
     // toast.success('You own a new gem!', { position: 'top-right' });
     // history.push(`/profile?gem-id=${gem?.token_id}`);
@@ -208,7 +224,10 @@ function Gem({ location: { prevPathname } }) {
   return (
     <Container>
       <Portal>
-        <StyledCloseButton processCLick={goBack} />
+        <GemHeader>
+          <div>{gem?.metadata?.media && <img src={gem.metadata.media} alt="Art" width={40} height={40} />}</div>
+          <CloseButton className="gem-close" processCLick={goBack} />
+        </GemHeader>
       </Portal>
       <TitleText className="gem-title">{gem?.metadata?.title || 'No title provided'}</TitleText>
       <div className="users">
@@ -228,7 +247,7 @@ function Gem({ location: { prevPathname } }) {
               // todo: creator_id is currently not implemented on the contracts
               // todo: gemOnSale.bids.near.date is currently not implemented on the contracts
               <>
-                {gemOnSale?.bids?.near?.owner_id && (
+                {hasBids() && (
                   <div className="history-event">
                     {gemOnSale.bids.near.owner_id} bid {formatNearAmount(gemOnSale.bids.near.price)}Ⓝ on{' '}
                     {gemOnSale.bids.near.date
@@ -277,7 +296,7 @@ function Gem({ location: { prevPathname } }) {
               </div>
             </div>
             <Button className="bid-button" isPrimary onClick={processBid}>
-              Bid {+formatNearAmount(previousPrice) + 1}Ⓝ on Gem
+              Bid {getNextBidNearsFormatted(gemOnSale)}Ⓝ on Gem
             </Button>
           </StyledBid>
         </StickedToBottom>

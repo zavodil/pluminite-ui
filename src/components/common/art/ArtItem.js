@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from '../Button';
@@ -38,12 +38,14 @@ const StyledContainer = styled(Link)`
 `;
 
 const ArtItem = forwardRef(function ArtItemWithRef({ gemId, dataUrl, buttonText, isButtonDisabled }, ref) {
+  const location = useLocation();
+
   const isLink = !!gemId;
   const params = {
     to: isLink
       ? {
           pathname: `/gem/${gemId}`,
-          prevPathname: window.location.pathname,
+          prevPathname: location.pathname,
         }
       : undefined,
     as: isLink ? Link : 'div',

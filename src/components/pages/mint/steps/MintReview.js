@@ -1,16 +1,19 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useHistory } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
+import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import { toast } from 'react-toastify';
 
-import { NftContractContext } from '../../../../contexts';
+import { NearContext, NftContractContext } from '../../../../contexts';
+
+import { getNextBidNearsFormatted } from '../../../../utils/nears';
 
 import { HeadingText } from '../../../common/typography';
-import { MintSuccessMessage } from '../../../common/messages';
 import { ArtItemPriced } from '../../../common/art';
 import { StickedToBottom } from '../../../common/layout';
 import Button from '../../../common/Button';
+
+import { QUERY_KEYS } from '../../../../constants';
 
 import { NftTypeRequired } from '../../../../types/NftTypes';
 
@@ -50,17 +53,24 @@ const StyledButton = styled(Button)`
   }
 `;
 
-const MintReview = ({ onCompleteLink, backLink, nft }) => {
+const MintReview = ({ backLink, nft }) => {
+  const { user } = useContext(NearContext);
   const { mintGem } = useContext(NftContractContext);
-  const history = useHistory();
+  const queryClient = useQueryClient();
 
   const processMintClick = async () => {
+    await queryClient.invalidateQueries(QUERY_KEYS.GEMS_FOR_OWNER, user.accountId);
     await mintGem(nft);
 
-    toast.success(<MintSuccessMessage />);
-    // todo: fix redirection to home page after mint
-    history.push(onCompleteLink);
+    // todo: show MintSuccessMessage on mint success (check if success from query params after on redirect from near
+    // wallet when we stop using hash browser) toast.success(<MintSuccessMessage />);
   };
+
+  const wasDescribed = !!nft.creator;
+
+  if (!wasDescribed) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <Container>
@@ -72,7 +82,7 @@ const MintReview = ({ onCompleteLink, backLink, nft }) => {
       <p className="text">{nft.title}</p>
       <p className="sub-header">Art piece description</p>
       <p className="text">{nft.description}</p>
-      <ArtItemPriced dataUrl={nft.artDataUrl} bid={nft.startingBid} bidAvailable={false} />
+      <ArtItemPriced dataUrl={nft.artDataUrl} bid={getNextBidNearsFormatted(nft)} bidAvailable={false} />
       <StickedToBottom isSecondary>
         <StyledButton isSecondary>
           <Link to={backLink}>Replace Art</Link>
@@ -86,7 +96,6 @@ const MintReview = ({ onCompleteLink, backLink, nft }) => {
 };
 
 MintReview.propTypes = {
-  onCompleteLink: PropTypes.string.isRequired,
   backLink: PropTypes.string.isRequired,
   nft: NftTypeRequired,
 };

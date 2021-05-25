@@ -1,13 +1,18 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
 
 import { NearContext, MarketContractContext } from '../../../contexts';
+
+import { getNextBidNearsFormatted } from '../../../utils/nears';
 
 import { DisplayText } from '../../common/typography';
 import { Contribute, MintPlus } from '../../common/popups';
 import { ArtItemPriced } from '../../common/art';
 
 import DiamondIcon from '../../../assets/DiamondIcon';
+
+import QUERY_KEYS from '../../../constants/queryKeys';
 
 const Container = styled('div')`
   padding: 15px;
@@ -76,12 +81,11 @@ const Container = styled('div')`
 
 export default function Home() {
   const { user } = useContext(NearContext);
-  const { salesPopulated, getSalesPopulated } = useContext(MarketContractContext);
+  const { getSalesPopulated } = useContext(MarketContractContext);
 
-  useEffect(() => {
-    // todo: pagination
-    getSalesPopulated('0', '50');
-  }, []);
+  const { data: salesPopulated } = useQuery(QUERY_KEYS.SALES_POPULATED, () => getSalesPopulated('0', '50'), {
+    placeholderData: [],
+  });
 
   return (
     <Container>
@@ -94,9 +98,16 @@ export default function Home() {
       </div>
       <div className="items-container">
         <div className="items">
-          {salesPopulated.map(({ token_id, metadata: { media } }) => (
-            <ArtItemPriced key={token_id} dataUrl={media} gemId={token_id} />
-          ))}
+          {salesPopulated.map((sale) => {
+            const {
+              token_id,
+              metadata: { media },
+            } = sale;
+
+            return (
+              <ArtItemPriced key={token_id} dataUrl={media} gemId={token_id} bid={getNextBidNearsFormatted(sale)} />
+            );
+          })}
         </div>
       </div>
       <div className="pop-up">{user ? <MintPlus /> : <Contribute />}</div>

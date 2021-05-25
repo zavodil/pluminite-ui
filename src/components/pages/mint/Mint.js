@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { Page } from '../../../router';
 import { MintDescribe, MintUpload, MintReview } from './steps';
+
+import NotFound404 from '../not-found-404';
 
 const Container = styled('div')`
   display: flex;
@@ -13,7 +16,7 @@ const Container = styled('div')`
 
 export default function Mint() {
   const match = useRouteMatch();
-  const [nft, setNft] = useState({});
+  const [nft, setNft] = useState({ conditions: {} });
 
   const setNftField = (field, value) => {
     setNft((nftOld) => ({ ...nftOld, [field]: value }));
@@ -30,11 +33,12 @@ export default function Mint() {
           />
         </Route>
         <Route path={`${match.path}/review`}>
-          <MintReview onCompleteLink="/profile" nft={nft} backLink={`${match.path}/upload`} />
+          <MintReview nft={nft} backLink={`${match.path}/upload`} />
         </Route>
-        <Route path={match.path}>
+        <Route exact path={match.path}>
           <MintDescribe onCompleteLink={`${match.path}/upload`} nft={nft} setNft={setNft} setNftField={setNftField} />
         </Route>
+        <Page component={NotFound404} />
       </Switch>
     </Container>
   );
