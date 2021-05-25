@@ -4,7 +4,7 @@ import { parseNearAmount } from 'near-api-js/lib/utils/format';
 
 import { marketContractReducer, initialMarketContractState } from './reducer';
 
-import { GOT_SALES, GOT_SALES_POPULATED, GOT_GEM_ON_SALE, CLEAR_GEM_ON_SALE } from './types';
+import { GOT_SALES, GOT_SALES_POPULATED } from './types';
 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
 
@@ -20,18 +20,12 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
 
   const getSale = useCallback(
     async (gemId) => {
-      const gemOnSale = await marketContract.get_sale({
+      return marketContract.get_sale({
         nft_contract_token: `${nftContract.contractId}||${gemId}`,
       });
-
-      dispatchMarketContract({ type: GOT_GEM_ON_SALE, payload: { gemOnSale } });
     },
     [marketContract]
   );
-
-  const clearGemOnSale = useCallback(() => {
-    dispatchMarketContract({ type: CLEAR_GEM_ON_SALE });
-  }, [marketContract]);
 
   const getSales = useCallback(
     async (fromIndex, limit) => {
@@ -98,11 +92,9 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
 
   const value = {
     marketContract,
-    gemOnSale: marketContractState.gemOnSale,
     sales: marketContractState.sales,
     salesPopulated: marketContractState.salesPopulated,
     getSale,
-    clearGemOnSale,
     getSales,
     getSalesPopulated,
     offer,
