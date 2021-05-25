@@ -146,6 +146,7 @@ const GemHeader = styled('div')`
   align-items: center;
   padding: 24px;
   z-index: 2;
+  min-height: 88px;
 
   .gem-close {
     cursor: pointer;
