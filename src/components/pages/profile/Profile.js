@@ -88,18 +88,13 @@ const Container = styled('div')`
 `;
 
 export default function Profile() {
-  const ownedGemRef = useRef();
-  const query = useQuery();
   const { user } = useContext(NearContext);
   const { getGemsForOwner } = useContext(NftContractContext);
 
-  useEffect(() => {
-    if (ownedGemRef?.current) {
-      setTimeout(() => {
-        requestAnimationFrame(() => ownedGemRef.current.scrollIntoView({ behavior: 'smooth' }));
-      }, 10);
-    }
-  }, []);
+  const ownedGemRef = useRef();
+
+  const query = useQuery();
+  const ownedGemId = query.get('gem-id');
 
   const { data: gemsForOwner } = useRQuery(
     ['gemsForOwner', user.accountId],
@@ -108,7 +103,11 @@ export default function Profile() {
     { placeholderData: [] }
   );
 
-  const ownedGemId = query.get('gem-id');
+  useEffect(() => {
+    if (ownedGemRef?.current) {
+      ownedGemRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [gemsForOwner]);
 
   return (
     <Container>
