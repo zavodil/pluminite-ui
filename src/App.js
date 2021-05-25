@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { HashRouter as Router, Switch } from 'react-router-dom';
 import { toast, Zoom } from 'react-toastify';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { NearContext, NftContractContext } from './contexts';
 
@@ -18,6 +19,16 @@ import CloseButton from './components/common/Button/CloseButton';
 import GlobalStyle from './styles/GlobalStyle';
 import 'react-toastify/dist/ReactToastify.css';
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 5,
+      retryDelay: 1000,
+      staleTime: 1000 * 60,
+    },
+  },
+});
+
 export default function App() {
   const { user, isLoading } = useContext(NearContext);
   const { gem } = useContext(NftContractContext);
@@ -25,7 +36,7 @@ export default function App() {
   const isAuthenticated = !!user;
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <GlobalStyle />
       <div className="app">
         <Router>
@@ -91,6 +102,6 @@ export default function App() {
           />
         </Router>
       </div>
-    </>
+    </QueryClientProvider>
   );
 }
