@@ -1,10 +1,8 @@
-import React, { useReducer, useCallback, useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { parseNearAmount } from 'near-api-js/lib/utils/format';
 
-import { marketContractReducer, initialMarketContractState } from './reducer';
-
-import { GOT_SALES, GOT_SALES_POPULATED } from './types';
+import { initialMarketContractState } from './reducer';
 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
 
@@ -15,7 +13,6 @@ const GAS = '200000000000000';
 export const MarketContractContext = React.createContext(initialMarketContractState);
 
 export const MarketContractContextProvider = ({ marketContract, children }) => {
-  const [marketContractState, dispatchMarketContract] = useReducer(marketContractReducer, initialMarketContractState);
   const { nftContract, getGemsBatch, getGem } = useContext(NftContractContext);
 
   const getSale = useCallback(
@@ -28,17 +25,12 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
   );
 
   const getSales = useCallback(
-    async (fromIndex, limit) => {
-      const sales = await marketContract.get_sales_by_nft_contract_id({
+    async (fromIndex, limit) =>
+      marketContract.get_sales_by_nft_contract_id({
         nft_contract_id: nftContract.contractId,
         from_index: fromIndex,
         limit,
-      });
-
-      dispatchMarketContract({ type: GOT_SALES, payload: { sales } });
-
-      return sales;
-    },
+      }),
     [marketContract]
   );
 
@@ -69,8 +61,6 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
         salesPopulated.push(Object.assign(sale, token));
       }
 
-      dispatchMarketContract({ type: GOT_SALES_POPULATED, payload: { salesPopulated } });
-
       return salesPopulated;
     },
     [marketContract, nftContract]
@@ -92,8 +82,6 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
 
   const value = {
     marketContract,
-    sales: marketContractState.sales,
-    salesPopulated: marketContractState.salesPopulated,
     getSale,
     getSales,
     getSalesPopulated,
