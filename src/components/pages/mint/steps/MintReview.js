@@ -6,6 +6,8 @@ import styled from 'styled-components';
 
 import { NearContext, NftContractContext } from '../../../../contexts';
 
+import { getNextBidNearsFormatted } from '../../../../utils/nears';
+
 import { HeadingText } from '../../../common/typography';
 import { ArtItemPriced } from '../../../common/art';
 import { StickedToBottom } from '../../../common/layout';
@@ -58,8 +60,8 @@ const MintReview = ({ backLink, nft }) => {
     await queryClient.invalidateQueries('gemsForOwner', user.accountId);
     await mintGem(nft);
 
-    // todo: show MintSuccessMessage on mint success (check if success from query params after on redirect from near wallet when we stop using hash browser)
-    // toast.success(<MintSuccessMessage />);
+    // todo: show MintSuccessMessage on mint success (check if success from query params after on redirect from near
+    // wallet when we stop using hash browser) toast.success(<MintSuccessMessage />);
   };
 
   const wasDescribed = !!nft.creator;
@@ -78,7 +80,7 @@ const MintReview = ({ backLink, nft }) => {
       <p className="text">{nft.title}</p>
       <p className="sub-header">Art piece description</p>
       <p className="text">{nft.description}</p>
-      <ArtItemPriced dataUrl={nft.artDataUrl} bid={nft.startingBid} bidAvailable={false} />
+      <ArtItemPriced dataUrl={nft.artDataUrl} bid={getNextBidNearsFormatted(nft)} bidAvailable={false} />
       <StickedToBottom isSecondary>
         <StyledButton isSecondary>
           <Link to={backLink}>Replace Art</Link>

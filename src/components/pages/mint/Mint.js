@@ -13,7 +13,7 @@ const Container = styled('div')`
 
 export default function Mint() {
   const match = useRouteMatch();
-  const [nft, setNft] = useState({});
+  const [nft, setNft] = useState({ conditions: {} });
 
   const setNftField = (field, value) => {
     setNft((nftOld) => ({ ...nftOld, [field]: value }));
