@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
@@ -153,8 +154,8 @@ const StyledCloseButton = styled(CloseButton)`
 `;
 
 function Gem({ location: { prevPathname } }) {
-  const { gem, getGem } = useContext(NftContractContext);
-  const { getSale, gemOnSale, offer, clearGemOnSale, marketContract } = useContext(MarketContractContext);
+  const { getGem } = useContext(NftContractContext);
+  const { getSale, offer, marketContract } = useContext(MarketContractContext);
 
   const [previousPriceUser, setPreviousPriceUser] = useState('');
   const [previousPrice, setPreviousPrice] = useState('0');
@@ -165,19 +166,21 @@ function Gem({ location: { prevPathname } }) {
 
   const previousPriceUSDs = withUSDs(formatNearAmount(previousPrice));
 
-  useEffect(() => {
-    (async () => {
-      const gemOnNftContract = await getGem(gemId);
+  const { data: gem } = useQuery(['gem', gemId], () => getGem(gemId));
 
-      if (Object.keys(gemOnNftContract.approved_account_ids).includes(marketContract.contractId)) {
-        await getSale(gemId);
+  const { data: gemOnSale } = useQuery(
+    ['gemOnSale', gemId],
+    async () => {
+      if (Object.keys(gem.approved_account_ids).includes(marketContract.contractId)) {
+        return getSale(gemId);
       }
-    })();
 
-    return () => {
-      clearGemOnSale();
-    };
-  }, []);
+      return null;
+    },
+    {
+      enabled: !!gem,
+    }
+  );
 
   const hasBids = () => !!gemOnSale?.bids?.near?.owner_id;
 
