@@ -14,6 +14,7 @@ import { Portal } from '../../common/utils';
 import { withUSDs } from '../../../hooks';
 
 import { round } from '../../../utils/numbers';
+import { getNextBidNearsFormatted } from '../../../utils/nears';
 
 import { NftContractContext, MarketContractContext } from '../../../contexts';
 
@@ -152,11 +153,14 @@ const StyledCloseButton = styled(CloseButton)`
 `;
 
 function Gem({ location: { prevPathname } }) {
-  const [previousPriceUser, setPreviousPriceUser] = useState('');
-  const [previousPrice, setPreviousPrice] = useState('0');
   const { gem, getGem } = useContext(NftContractContext);
   const { getSale, gemOnSale, offer, clearGemOnSale, marketContract } = useContext(MarketContractContext);
+
+  const [previousPriceUser, setPreviousPriceUser] = useState('');
+  const [previousPrice, setPreviousPrice] = useState('0');
+
   const { gemId } = useParams();
+
   const history = useHistory();
 
   const previousPriceUSDs = withUSDs(formatNearAmount(previousPrice));
@@ -189,9 +193,8 @@ function Gem({ location: { prevPathname } }) {
     }
   }, [gem, gemOnSale]);
 
-  // todo: real processing of bid
   const processBid = async () => {
-    await offer(gemId, +formatNearAmount(previousPrice) + 1);
+    await offer(gemId, +getNextBidNearsFormatted(gemOnSale));
     // todo: execute commands below once the bid is accepted
     // toast.success('You own a new gem!', { position: 'top-right' });
     // history.push(`/profile?gem-id=${gem?.token_id}`);
@@ -228,7 +231,7 @@ function Gem({ location: { prevPathname } }) {
               // todo: creator_id is currently not implemented on the contracts
               // todo: gemOnSale.bids.near.date is currently not implemented on the contracts
               <>
-                {gemOnSale?.bids?.near?.owner_id && (
+                {hasBids() && (
                   <div className="history-event">
                     {gemOnSale.bids.near.owner_id} bid {formatNearAmount(gemOnSale.bids.near.price)}Ⓝ on{' '}
                     {gemOnSale.bids.near.date
@@ -277,7 +280,7 @@ function Gem({ location: { prevPathname } }) {
               </div>
             </div>
             <Button className="bid-button" isPrimary onClick={processBid}>
-              Bid {+formatNearAmount(previousPrice) + 1}Ⓝ on Gem
+              Bid {getNextBidNearsFormatted(gemOnSale)}Ⓝ on Gem
             </Button>
           </StyledBid>
         </StickedToBottom>
