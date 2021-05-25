@@ -24,7 +24,7 @@ const Container = styled('div')`
   flex-direction: column;
   min-height: calc(100% - 173px);
   max-width: 767px;
-  padding: 100px 28px 60px;
+  padding: 192px 28px 60px;
 
   .gem-title {
     margin-bottom: 5px;
@@ -141,12 +141,15 @@ const StyledBid = styled('div')`
 `;
 
 const GemHeader = styled('div')`
+  position: absolute;
+  top: 0;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 24px;
   z-index: 2;
-  min-height: 88px;
+  min-height: 92px;
 
   .gem-close {
     cursor: pointer;
@@ -220,7 +223,7 @@ function Gem({ location: { prevPathname } }) {
     <Container>
       <Portal>
         <GemHeader>
-          {gem?.metadata?.media && <img src={gem.metadata.media} alt="Art" width={40} height={40} />}
+          <div>{gem?.metadata?.media && <img src={gem.metadata.media} alt="Art" width={40} height={40} />}</div>
           <CloseButton className="gem-close" processCLick={goBack} />
         </GemHeader>
       </Portal>
