@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { HashRouter as Router, Switch } from 'react-router-dom';
 import { toast, Zoom } from 'react-toastify';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 import { NearContext, NftContractContext } from './contexts';
 
@@ -39,6 +40,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <GlobalStyle />
       <div className="app">
+        {process.env.NODE_ENV !== 'production' && <ReactQueryDevtools initialIsOpen={true} />}
         <Router>
           <Navigation />
           <div className="content">
