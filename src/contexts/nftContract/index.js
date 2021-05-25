@@ -6,7 +6,7 @@ import { nftContractReducer, initialNftContractState } from './reducer';
 
 import { getMarketContractName } from '../../utils';
 
-import { GOT_GEM, GOT_GEMS, GOT_GEMS_FOR_OWNER, GOT_GEMS_BATCH, CLEAR_STATE } from './types';
+import { GOT_GEMS, GOT_GEMS_FOR_OWNER, GOT_GEMS_BATCH, CLEAR_STATE } from './types';
 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
 
@@ -18,16 +18,7 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
   const [nftContractState, dispatchNftContract] = useReducer(nftContractReducer, initialNftContractState);
   const deposit = parseNearAmount('0.1');
 
-  const getGem = useCallback(
-    async (id) => {
-      const gem = await nftContract.nft_token({ token_id: id });
-
-      dispatchNftContract({ type: GOT_GEM, payload: { gem } });
-
-      return gem;
-    },
-    [nftContract]
-  );
+  const getGem = useCallback(async (id) => nftContract.nft_token({ token_id: id }), [nftContract]);
 
   const getGems = useCallback(
     async (fromIndex, limit) => {
@@ -123,7 +114,6 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
 
   const value = {
     nftContract,
-    gem: nftContractState.gem,
     gems: nftContractState.gems,
     gemsForOwner: nftContractState.gemsForOwner,
     gemsBatch: nftContractState.gemsBatch,
