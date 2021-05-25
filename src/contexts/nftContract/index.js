@@ -6,7 +6,7 @@ import { nftContractReducer, initialNftContractState } from './reducer';
 
 import { getMarketContractName } from '../../utils';
 
-import { GOT_GEMS, GOT_GEMS_FOR_OWNER, GOT_GEMS_BATCH, CLEAR_STATE } from './types';
+import { GOT_GEMS, GOT_GEMS_BATCH, CLEAR_STATE } from './types';
 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
 
@@ -35,17 +35,12 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
   );
 
   const getGemsForOwner = useCallback(
-    async (accountId, fromIndex, limit) => {
-      const gemsForOwner = await nftContract.nft_tokens_for_owner({
+    async (accountId, fromIndex, limit) =>
+      nftContract.nft_tokens_for_owner({
         account_id: accountId,
         from_index: fromIndex,
         limit,
-      });
-
-      dispatchNftContract({ type: GOT_GEMS_FOR_OWNER, payload: { gemsForOwner } });
-
-      return gemsForOwner;
-    },
+      }),
     [nftContract]
   );
 
@@ -115,7 +110,6 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
   const value = {
     nftContract,
     gems: nftContractState.gems,
-    gemsForOwner: nftContractState.gemsForOwner,
     gemsBatch: nftContractState.gemsBatch,
     getGem,
     getGems,

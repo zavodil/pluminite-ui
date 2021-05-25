@@ -1,8 +1,7 @@
-import { GOT_GEMS, GOT_GEMS_FOR_OWNER, GOT_GEMS_BATCH, CLEAR_STATE } from './types';
+import { GOT_GEMS, GOT_GEMS_BATCH, CLEAR_STATE } from './types';
 
 export const initialNftContractState = {
   gems: [],
-  gemsForOwner: [],
 };
 
 export const nftContractReducer = (currentState = initialNftContractState, action) => {
@@ -11,12 +10,6 @@ export const nftContractReducer = (currentState = initialNftContractState, actio
       return {
         ...currentState,
         gems: action.payload.gems,
-      };
-
-    case GOT_GEMS_FOR_OWNER:
-      return {
-        ...currentState,
-        gemsForOwner: action.payload.gemsForOwner,
       };
 
     case GOT_GEMS_BATCH:
