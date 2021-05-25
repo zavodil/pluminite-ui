@@ -19,6 +19,8 @@ import { getNextBidNearsFormatted } from '../../../utils/nears';
 
 import { NftContractContext, MarketContractContext } from '../../../contexts';
 
+import { QUERY_KEYS } from '../../../constants';
+
 const Container = styled('div')`
   display: flex;
   flex-direction: column;
@@ -174,10 +176,10 @@ function Gem({ location: { prevPathname } }) {
 
   const previousPriceUSDs = withUSDs(formatNearAmount(previousPrice));
 
-  const { data: gem } = useQuery(['gem', gemId], () => getGem(gemId));
+  const { data: gem } = useQuery([QUERY_KEYS.GEM, gemId], () => getGem(gemId));
 
   const { data: gemOnSale } = useQuery(
-    ['gemOnSale', gemId],
+    [QUERY_KEYS.GEM_ON_SALE, gemId],
     async () => {
       if (Object.keys(gem.approved_account_ids).includes(marketContract.contractId)) {
         return getSale(gemId);

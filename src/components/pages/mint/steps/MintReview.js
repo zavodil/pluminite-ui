@@ -13,6 +13,8 @@ import { ArtItemPriced } from '../../../common/art';
 import { StickedToBottom } from '../../../common/layout';
 import Button from '../../../common/Button';
 
+import { QUERY_KEYS } from '../../../../constants';
+
 import { NftTypeRequired } from '../../../../types/NftTypes';
 
 const Container = styled('div')`
@@ -57,7 +59,7 @@ const MintReview = ({ backLink, nft }) => {
   const queryClient = useQueryClient();
 
   const processMintClick = async () => {
-    await queryClient.invalidateQueries('gemsForOwner', user.accountId);
+    await queryClient.invalidateQueries(QUERY_KEYS.GEMS_FOR_OWNER, user.accountId);
     await mintGem(nft);
 
     // todo: show MintSuccessMessage on mint success (check if success from query params after on redirect from near

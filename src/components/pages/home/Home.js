@@ -12,6 +12,8 @@ import { ArtItemPriced } from '../../common/art';
 
 import DiamondIcon from '../../../assets/DiamondIcon';
 
+import QUERY_KEYS from '../../../constants/queryKeys';
+
 const Container = styled('div')`
   padding: 15px;
   max-width: 1200px;
@@ -81,7 +83,7 @@ export default function Home() {
   const { user } = useContext(NearContext);
   const { getSalesPopulated } = useContext(MarketContractContext);
 
-  const { data: salesPopulated } = useQuery(['salesPopulated'], () => getSalesPopulated('0', '50'), {
+  const { data: salesPopulated } = useQuery(QUERY_KEYS.SALES_POPULATED, () => getSalesPopulated('0', '50'), {
     placeholderData: [],
   });
 

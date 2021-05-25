@@ -13,6 +13,8 @@ import { useQuery } from '../../../hooks';
 
 import { NearContext, NftContractContext } from '../../../contexts';
 
+import { QUERY_KEYS } from '../../../constants';
+
 const Container = styled('div')`
   display: flex;
   flex-direction: column;
@@ -97,7 +99,7 @@ export default function Profile() {
   const ownedGemId = query.get('gem-id');
 
   const { data: gemsForOwner } = useRQuery(
-    ['gemsForOwner', user.accountId],
+    [QUERY_KEYS.GEMS_FOR_OWNER, user.accountId],
     // todo: pagination
     () => getGemsForOwner(user.accountId, '0', '50'),
     { placeholderData: [] }
