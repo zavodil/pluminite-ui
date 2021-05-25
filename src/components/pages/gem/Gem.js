@@ -140,16 +140,20 @@ const StyledBid = styled('div')`
   }
 `;
 
-const StyledCloseButton = styled(CloseButton)`
-  position: absolute;
-  top: 38px;
-  right: 24px;
-  cursor: pointer;
+const GemHeader = styled('div')`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
   z-index: 2;
 
-  > svg {
-    stroke: var(--lavendar);
-    fill: var(--lavendar);
+  .gem-close {
+    cursor: pointer;
+
+    > svg {
+      stroke: var(--lavendar);
+      fill: var(--lavendar);
+    }
   }
 `;
 
@@ -214,7 +218,10 @@ function Gem({ location: { prevPathname } }) {
   return (
     <Container>
       <Portal>
-        <StyledCloseButton processCLick={goBack} />
+        <GemHeader>
+          {gem?.metadata?.media && <img src={gem.metadata.media} alt="Art" width={40} height={40} />}
+          <CloseButton className="gem-close" processCLick={goBack} />
+        </GemHeader>
       </Portal>
       <TitleText className="gem-title">{gem?.metadata?.title || 'No title provided'}</TitleText>
       <div className="users">
