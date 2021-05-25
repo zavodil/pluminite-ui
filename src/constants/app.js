@@ -10,6 +10,7 @@ const APP = {
   MAX_COLLABORATORS: 10,
 
   GEM_DESCRIPTION_MAX_LENGTH: 160,
+  GEM_MAX_SIZE_MB: 100,
 };
 
 export default APP;

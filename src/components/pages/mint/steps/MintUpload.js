@@ -6,6 +6,8 @@ import { HeadingText } from '../../../common/typography';
 import FileDropzone from '../../../common/FileDropzone';
 import ButtonBottom from '../../../common/Button/ButtonBottom';
 
+import { APP } from '../../../../constants';
+
 import { NftTypeRequired } from '../../../../types/NftTypes';
 
 const Container = styled('div')`
@@ -21,8 +23,8 @@ const MintUpload = ({ onUpload, onCompleteLink, nft }) => {
       <FileDropzone
         onUpload={onUpload}
         buttonText="Select Art"
-        adviceText="We advise a 1:1 ratio. Max file size 16 Mb."
-        maxSizeMb={16}
+        adviceText={`We advise a 1:1 ratio. Max file size ${APP.GEM_MAX_SIZE_MB} Mb.`}
+        maxSizeMb={APP.GEM_MAX_SIZE_MB}
       />
       <ButtonBottom link={onCompleteLink} text="Last Step: Review" isDisabled={!nft.artDataUrl} />
     </Container>
