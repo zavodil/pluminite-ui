@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 
@@ -61,6 +61,12 @@ const MintReview = ({ onCompleteLink, backLink, nft }) => {
     // todo: fix redirection to home page after mint
     history.push(onCompleteLink);
   };
+
+  const wasDescribed = !!nft.creator;
+
+  if (!wasDescribed) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <Container>

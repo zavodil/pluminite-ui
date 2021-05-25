@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { HeadingText } from '../../../common/typography';
@@ -17,6 +18,12 @@ const Container = styled('div')`
 `;
 
 const MintUpload = ({ onUpload, onCompleteLink, nft }) => {
+  const wasDescribed = !!nft.creator;
+
+  if (!wasDescribed) {
+    return <Redirect to="/" />;
+  }
+
   return (
     <Container>
       <HeadingText>Upload Art</HeadingText>
