@@ -17,7 +17,7 @@ import { withUSDs } from '../../../hooks';
 import { round } from '../../../utils/numbers';
 import { getNextBidNearsFormatted } from '../../../utils/nears';
 
-import { NftContractContext, MarketContractContext } from '../../../contexts';
+import { NftContractContext, MarketContractContext, NearContext } from '../../../contexts';
 
 import { QUERY_KEYS } from '../../../constants';
 
@@ -164,6 +164,7 @@ const GemHeader = styled('div')`
 `;
 
 function Gem({ location: { prevPathname } }) {
+  const { user } = useContext(NearContext);
   const { getGem } = useContext(NftContractContext);
   const { getSale, offer, marketContract } = useContext(MarketContractContext);
 
@@ -195,6 +196,8 @@ function Gem({ location: { prevPathname } }) {
   const hasBids = () => !!gemOnSale?.bids?.near?.owner_id;
 
   const isListed = () => !!gemOnSale;
+
+  const isOwnedByUser = () => gemOnSale?.owner_id && gemOnSale.owner_id === user.accountId;
 
   useEffect(() => {
     if (hasBids()) {
@@ -277,7 +280,7 @@ function Gem({ location: { prevPathname } }) {
           },
         ]}
       />
-      {isListed() && (
+      {isListed() && !isOwnedByUser() && (
         <StickedToBottom isSecondary>
           <StyledBid className="bid">
             <div className="bid-top">
