@@ -43,12 +43,14 @@ const StyledContainer = styled('div')`
   .small-text {
     position: absolute;
     bottom: -25px;
+    margin: 0;
   }
 `;
 
 const Textarea = ({ name, rows, maxLength, labelText, textInitial, onTextChange, isRequired, isDisabled }) => {
   const [textareaValue, setTextareaValue] = useState(textInitial || '');
   const [maxLengthExceeded, setMaxLengthExceeded] = useState(false);
+  const [isRequiredAndSkipped, setIsRequiredAndSkipped] = useState(false);
 
   const processTextChange = (value) => {
     if (isDisabled) {
@@ -56,6 +58,7 @@ const Textarea = ({ name, rows, maxLength, labelText, textInitial, onTextChange,
     }
 
     if (maxLength && value.length > maxLength) {
+      setIsRequiredAndSkipped(false);
       setMaxLengthExceeded(true);
     } else {
       setMaxLengthExceeded(false);
@@ -63,6 +66,14 @@ const Textarea = ({ name, rows, maxLength, labelText, textInitial, onTextChange,
     }
 
     setTextareaValue(value);
+  };
+
+  const onTextareaBlur = (value) => {
+    if (isRequired && !value) {
+      setIsRequiredAndSkipped(true);
+    } else {
+      setIsRequiredAndSkipped(false);
+    }
   };
 
   return (
@@ -75,6 +86,7 @@ const Textarea = ({ name, rows, maxLength, labelText, textInitial, onTextChange,
         rows={rows}
         onChange={(e) => processTextChange(e.target.value)}
         value={textareaValue}
+        onBlur={(e) => onTextareaBlur(e.target.value)}
         disabled={isDisabled}
       />
       {maxLength && (
@@ -84,6 +96,11 @@ const Textarea = ({ name, rows, maxLength, labelText, textInitial, onTextChange,
       )}
       {maxLength && maxLengthExceeded && (
         <SmallText isError>Sorry, it looks like you’ve exceeded the character limit</SmallText>
+      )}
+      {isRequiredAndSkipped && (
+        <SmallText isError className="required-warning">
+          Required
+        </SmallText>
       )}
     </StyledContainer>
   );
