@@ -83,7 +83,11 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
   const payStorage = useCallback(async () => {
     // todo: calculate storage deposit correctly
     await marketContract.storage_deposit({}, GAS, '1000000000000000000000000');
-  }, [marketContract, nftContract]);
+  }, [marketContract]);
+
+  const getStoragePaid = useCallback(async (accountId) => marketContract.storage_paid({ account_id: accountId }), [
+    marketContract,
+  ]);
 
   const value = {
     marketContract,
@@ -92,6 +96,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
     getSalesPopulated,
     offer,
     payStorage,
+    getStoragePaid,
   };
 
   return <MarketContractContext.Provider value={value}>{children}</MarketContractContext.Provider>;
@@ -104,6 +109,7 @@ MarketContractContextProvider.propTypes = {
     get_supply_sales: PropTypes.func.isRequired,
     offer: PropTypes.func.isRequired,
     storage_deposit: PropTypes.func.isRequired,
+    storage_paid: PropTypes.func.isRequired,
   }).isRequired,
   children: ReactChildrenTypeRequired,
 };
