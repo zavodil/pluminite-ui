@@ -265,6 +265,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
         labelText="Description"
         rows={4}
         maxLength={APP.GEM_DESCRIPTION_MAX_LENGTH}
+        isRequired
         isDisabled={isDisabled}
         textInitial={nft.description || ''}
         onTextChange={(value) => setNftField('description', value)}
