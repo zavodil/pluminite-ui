@@ -6,5 +6,6 @@ import Profile from './profile';
 import ProfileEdit from './profile-edit';
 import Gem from './gem';
 import NotFound404 from './not-found-404';
+import MintNotAllowed from './mint-not-allowed';
 
-export { Home, SignUp, LogIn, Mint, Profile, ProfileEdit, Gem, NotFound404 };
+export { Home, SignUp, LogIn, Mint, Profile, ProfileEdit, Gem, NotFound404, MintNotAllowed };
