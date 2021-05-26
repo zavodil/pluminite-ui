@@ -34,7 +34,14 @@ export default function Mint() {
   }, []);
 
   if (isMintAllowed === false) {
-    return <Redirect to="/" />;
+    return (
+      <Redirect
+        to={{
+          pathname: '/mint-not-allowed',
+          state: { isMintAllowed },
+        }}
+      />
+    );
   }
 
   if (isMintAllowed === null) {
