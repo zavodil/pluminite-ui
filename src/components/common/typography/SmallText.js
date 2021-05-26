@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import styled from 'styled-components';
 
 import { ReactChildrenTypeRequired } from '../../../types/ReactChildrenTypes';
@@ -10,8 +11,8 @@ const StyledContainer = styled('div')`
   line-height: 21px;
 `;
 
-const SmallText = ({ children, isError }) => (
-  <StyledContainer isError={isError} className="small-text">
+const SmallText = ({ children, isError, className }) => (
+  <StyledContainer isError={isError} className={classnames('small-text', className)}>
     {children}
   </StyledContainer>
 );
@@ -19,6 +20,7 @@ const SmallText = ({ children, isError }) => (
 SmallText.propTypes = {
   children: ReactChildrenTypeRequired,
   isError: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 export default SmallText;

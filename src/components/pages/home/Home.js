@@ -105,7 +105,13 @@ export default function Home() {
             } = sale;
 
             return (
-              <ArtItemPriced key={token_id} dataUrl={media} gemId={token_id} bid={getNextBidNearsFormatted(sale)} />
+              <ArtItemPriced
+                key={token_id}
+                dataUrl={media}
+                gemId={token_id}
+                bid={getNextBidNearsFormatted(sale)}
+                gemOnSale={sale}
+              />
             );
           })}
         </div>

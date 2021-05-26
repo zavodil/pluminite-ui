@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import styled from 'styled-components';
@@ -6,8 +6,10 @@ import styled from 'styled-components';
 import { hideArrowsForNumberInput } from '../../../styles/mixins';
 
 import { TextInputType } from '../../../types/InputTypes';
+import { SmallText } from '../typography';
 
 const StyledContainer = styled('div')`
+  position: relative;
   display: flex;
   flex-direction: column;
   margin-bottom: 50px;
@@ -49,34 +51,58 @@ const StyledContainer = styled('div')`
       opacity: 50%;
     }
   }
+
+  .small-text.required-warning {
+    position: absolute;
+    bottom: -25px;
+    margin: 0;
+  }
 `;
 
-const Input = ({ type, name, labelText, isRequired, isSmall, isError, isDisabled, className, ...rest }) => (
-  <StyledContainer isDisabled={isDisabled} className="form-group">
-    {labelText && (
-      <label
-        className={classNames({
-          'label--disabled': isDisabled,
+const Input = ({ type, name, labelText, isRequired, isSmall, isError, isDisabled, className, ...rest }) => {
+  const [isRequiredAndSkipped, setIsRequiredAndSkipped] = useState(false);
+
+  const onInputBlur = (value) => {
+    if (isRequired && !value) {
+      setIsRequiredAndSkipped(true);
+    } else {
+      setIsRequiredAndSkipped(false);
+    }
+  };
+
+  return (
+    <StyledContainer isDisabled={isDisabled} className="form-group">
+      {labelText && (
+        <label
+          className={classNames({
+            'label--disabled': isDisabled,
+          })}
+        >
+          {labelText}
+        </label>
+      )}
+      <input
+        type={type}
+        name={name}
+        required={isRequired}
+        autoComplete="off"
+        className={classNames('input', className, {
+          'input--small': isSmall,
+          'input--error': isError,
+          'input--disabled': isDisabled,
         })}
-      >
-        {labelText}
-      </label>
-    )}
-    <input
-      type={type}
-      name={name}
-      required={isRequired}
-      autoComplete="off"
-      className={classNames('input', className, {
-        'input--small': isSmall,
-        'input--error': isError,
-        'input--disabled': isDisabled,
-      })}
-      disabled={isDisabled}
-      {...rest}
-    />
-  </StyledContainer>
-);
+        onBlur={(e) => onInputBlur(e.target.value)}
+        disabled={isDisabled}
+        {...rest}
+      />
+      {isRequiredAndSkipped && (
+        <SmallText isError className="required-warning">
+          Required
+        </SmallText>
+      )}
+    </StyledContainer>
+  );
+};
 
 Input.propTypes = {
   type: TextInputType,

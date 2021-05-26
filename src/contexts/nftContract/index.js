@@ -1,12 +1,16 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { parseNearAmount } from 'near-api-js/lib/utils/format';
+import { transactions, utils } from 'near-api-js';
 
 import { initialNftContractState } from './reducer';
 
 import { getMarketContractName } from '../../utils';
 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
+
+const {
+  format: { parseNearAmount },
+} = utils;
 
 const GAS = '200000000000000';
 
@@ -62,16 +66,42 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
         }))
         .reduce((acc, cur) => Object.assign(acc, cur), { [nft.creator]: nft.creatorRoyalty * 100 });
 
-      await nftContract.nft_mint(
-        {
-          // todo: is it alright to set id like this or using default id set by nft contract?
-          // token_id: `token-${Date.now()}`,
-          metadata,
-          perpetual_royalties: perpetualRoyalties,
-        },
-        GAS,
-        deposit
-      );
+      // todo: is it alright to set id like this or using default id set by nft contract?
+      const tokenId = `token-${Date.now()}`;
+
+      await nftContract.account.signAndSendTransaction(nftContract.contractId, [
+        transactions.functionCall(
+          'nft_mint',
+          Buffer.from(
+            JSON.stringify({
+              token_id: tokenId,
+              metadata,
+              perpetual_royalties: perpetualRoyalties,
+            })
+          ),
+          GAS / 2,
+          deposit
+        ),
+        transactions.functionCall(
+          'nft_approve',
+          Buffer.from(
+            JSON.stringify({
+              token_id: tokenId,
+              account_id: getMarketContractName(nftContract.contractId),
+              msg: JSON.stringify({
+                sale_conditions: [
+                  {
+                    price: nft?.conditions?.near || '0',
+                    ft_token_id: 'near',
+                  },
+                ],
+              }),
+            })
+          ),
+          GAS / 2,
+          deposit
+        ),
+      ]);
     },
     [nftContract]
   );
@@ -105,6 +135,9 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
 
 NftContractContextProvider.propTypes = {
   nftContract: PropTypes.shape({
+    account: PropTypes.shape({
+      signAndSendTransaction: PropTypes.func,
+    }),
     contractId: PropTypes.string.isRequired,
     nft_token: PropTypes.func.isRequired,
     nft_tokens: PropTypes.func.isRequired,

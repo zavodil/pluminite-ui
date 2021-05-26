@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
@@ -24,6 +24,10 @@ const StyledContainer = styled(Link)`
 
   .image-container {
     ${square};
+
+    img {
+      display: none;
+    }
   }
 
   button {
@@ -37,8 +41,12 @@ const StyledContainer = styled(Link)`
   }
 `;
 
-const ArtItem = forwardRef(function ArtItemWithRef({ gemId, dataUrl, buttonText, isButtonDisabled }, ref) {
+const ArtItem = forwardRef(function ArtItemWithRef(
+  { gemId, dataUrl, buttonText, isButtonDisabled, onButtonClick },
+  ref
+) {
   const location = useLocation();
+  const canvasRef = useRef();
 
   const isLink = !!gemId;
   const params = {
@@ -51,12 +59,43 @@ const ArtItem = forwardRef(function ArtItemWithRef({ gemId, dataUrl, buttonText,
     as: isLink ? Link : 'div',
   };
 
+  // todo: fix for gif and video
+  // todo: use only on mint review page
+  function drawImageActualSize(event) {
+    const image = event.target;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+
+    let sx;
+    let sy;
+    let sw;
+    let sh;
+
+    if (image.naturalWidth > image.naturalHeight) {
+      sx = (image.naturalWidth - image.naturalHeight) / 2;
+      sy = 0;
+      sw = image.naturalHeight;
+      sh = image.naturalHeight;
+    } else {
+      sx = 0;
+      sy = (image.naturalHeight - image.naturalWidth) / 2;
+      sh = image.naturalWidth;
+      sw = image.naturalWidth;
+    }
+
+    canvas.width = sw;
+    canvas.height = sh;
+
+    ctx.drawImage(image, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+  }
+
   return (
     <StyledContainer {...params}>
       <div className="image-container">
-        <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" />
+        <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" onLoad={drawImageActualSize} />
+        <canvas ref={canvasRef} />
       </div>
-      <Button isPrimary isSmall isDisabled={isButtonDisabled}>
+      <Button isPrimary isSmall isDisabled={isButtonDisabled} onClick={onButtonClick}>
         {buttonText}
       </Button>
     </StyledContainer>
@@ -68,6 +107,11 @@ ArtItem.propTypes = {
   dataUrl: PropTypes.string,
   buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isButtonDisabled: PropTypes.bool,
+  onButtonClick: PropTypes.func,
+};
+
+ArtItem.defaultProps = {
+  onButtonClick: () => {},
 };
 
 export default ArtItem;

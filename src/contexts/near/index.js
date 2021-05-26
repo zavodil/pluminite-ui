@@ -8,7 +8,7 @@ import { NearConfigTypeShape, NearTypeShape, UserTypeShape, WalletTypeShape } fr
 
 export const NearContext = React.createContext({
   ...initialNearState,
-  nearContract: null,
+  nearContent: null,
   signIn: () => {},
   signOut: () => {},
   startLoading: () => {},
