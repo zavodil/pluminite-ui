@@ -37,7 +37,10 @@ const StyledContainer = styled(Link)`
   }
 `;
 
-const ArtItem = forwardRef(function ArtItemWithRef({ gemId, dataUrl, buttonText, isButtonDisabled }, ref) {
+const ArtItem = forwardRef(function ArtItemWithRef(
+  { gemId, dataUrl, buttonText, isButtonDisabled, onButtonClick },
+  ref
+) {
   const location = useLocation();
 
   const isLink = !!gemId;
@@ -56,7 +59,7 @@ const ArtItem = forwardRef(function ArtItemWithRef({ gemId, dataUrl, buttonText,
       <div className="image-container">
         <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" />
       </div>
-      <Button isPrimary isSmall isDisabled={isButtonDisabled}>
+      <Button isPrimary isSmall isDisabled={isButtonDisabled} onClick={onButtonClick}>
         {buttonText}
       </Button>
     </StyledContainer>
@@ -68,6 +71,11 @@ ArtItem.propTypes = {
   dataUrl: PropTypes.string,
   buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isButtonDisabled: PropTypes.bool,
+  onButtonClick: PropTypes.func,
+};
+
+ArtItem.defaultProps = {
+  onButtonClick: () => {},
 };
 
 export default ArtItem;
