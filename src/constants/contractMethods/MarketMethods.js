@@ -1,6 +1,6 @@
 const MarketMethods = {
-  viewMethods: ['get_sales_by_nft_contract_id', 'get_sale'],
-  changeMethods: ['offer'],
+  viewMethods: ['get_sales_by_nft_contract_id', 'get_sale', 'get_supply_sales'],
+  changeMethods: ['offer', 'storage_deposit'],
 };
 
 export default MarketMethods;

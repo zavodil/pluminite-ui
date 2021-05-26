@@ -58,7 +58,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
           token = await getGem(token_id);
         }
 
-        salesPopulated.push(Object.assign(sale, token));
+        salesPopulated.push({ ...sale, ...token });
       }
 
       return salesPopulated;
@@ -77,8 +77,13 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
         parseNearAmount(String(offerPrice))
       );
     },
-    [marketContract, nftContract]
+    [marketContract]
   );
+
+  const payStorage = useCallback(async () => {
+    // todo: calculate storage deposit correctly
+    await marketContract.storage_deposit({}, GAS, '1000000000000000000000000');
+  }, [marketContract, nftContract]);
 
   const value = {
     marketContract,
@@ -86,6 +91,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
     getSales,
     getSalesPopulated,
     offer,
+    payStorage,
   };
 
   return <MarketContractContext.Provider value={value}>{children}</MarketContractContext.Provider>;
@@ -95,7 +101,9 @@ MarketContractContextProvider.propTypes = {
   marketContract: PropTypes.shape({
     get_sales_by_nft_contract_id: PropTypes.func.isRequired,
     get_sale: PropTypes.func.isRequired,
+    get_supply_sales: PropTypes.func.isRequired,
     offer: PropTypes.func.isRequired,
+    storage_deposit: PropTypes.func.isRequired,
   }).isRequired,
   children: ReactChildrenTypeRequired,
 };
