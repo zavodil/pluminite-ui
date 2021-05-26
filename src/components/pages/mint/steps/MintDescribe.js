@@ -174,7 +174,7 @@ const hasEnoughNears = (user) => {
 // todo: fix once nft contract integrated and there is a way to get the number of prepaid mints
 const hasExceededPrepaidMints = () => false;
 
-const isMintAllowed = (user) => {
+const isMintForbidden = (user) => {
   return !hasEnoughNears(user) && hasExceededPrepaidMints();
 };
 
@@ -195,7 +195,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
     }
   }, [userRoyalty]);
 
-  const isDisabled = isMintAllowed(user);
+  const isDisabled = isMintForbidden(user);
 
   const addCollaborator = () => {
     if (isDisabled) {
@@ -216,6 +216,9 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
       ...prevCollaborators.slice(index + 1),
     ]);
   };
+
+  // todo: add more checks, check length
+  const isProceedAllowed = () => nft.title && nft.description;
 
   useEffect(() => setNftField('creator', user.accountId), []);
 
@@ -323,7 +326,11 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
       <p className="fee-description">
         Pluminite will take a 5% fee for all sales to continue building the Pluminite community.
       </p>
-      <ButtonBottom link={onCompleteLink} text="Next Step: Upload Artwork" isDisabled={isDisabled} />
+      <ButtonBottom
+        link={onCompleteLink}
+        text="Next Step: Upload Artwork"
+        isDisabled={isDisabled || !isProceedAllowed()}
+      />
     </Container>
   );
 };
