@@ -1,8 +1,9 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { parseNearAmount } from 'near-api-js/lib/utils/format';
 
-import { initialMarketContractState } from './reducer';
+import { initialMarketContractState, marketContractReducer } from './reducer';
+import { GOT_MIN_STORAGE } from './types';
 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
 
@@ -13,6 +14,7 @@ const GAS = '200000000000000';
 export const MarketContractContext = React.createContext(initialMarketContractState);
 
 export const MarketContractContextProvider = ({ marketContract, children }) => {
+  const [marketContractState, dispatchMarketContract] = useReducer(marketContractReducer, initialMarketContractState);
   const { nftContract, getGemsBatch, getGem } = useContext(NftContractContext);
 
   const getSale = useCallback(
@@ -81,15 +83,27 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
   );
 
   const payStorage = useCallback(async () => {
-    // todo: calculate storage deposit correctly
-    await marketContract.storage_deposit({}, GAS, '1000000000000000000000000');
-  }, [marketContract]);
+    await marketContract.storage_deposit({}, GAS, marketContractState.minStorage);
+  }, [marketContract, marketContractState]);
+
+  const getMinStorage = useCallback(async () => marketContract.storage_amount(), [marketContract]);
 
   const getStoragePaid = useCallback(async (accountId) => marketContract.storage_paid({ account_id: accountId }), [
     marketContract,
   ]);
 
+  useEffect(() => {
+    (async () => {
+      if (marketContract?.storage_amount) {
+        const minStorage = await getMinStorage();
+
+        dispatchMarketContract({ type: GOT_MIN_STORAGE, payload: { minStorage } });
+      }
+    })();
+  }, [marketContract]);
+
   const value = {
+    minStorage: marketContractState.minStorage,
     marketContract,
     getSale,
     getSales,
@@ -110,6 +124,7 @@ MarketContractContextProvider.propTypes = {
     offer: PropTypes.func.isRequired,
     storage_deposit: PropTypes.func.isRequired,
     storage_paid: PropTypes.func.isRequired,
+    storage_amount: PropTypes.func.isRequired,
   }).isRequired,
   children: ReactChildrenTypeRequired,
 };
