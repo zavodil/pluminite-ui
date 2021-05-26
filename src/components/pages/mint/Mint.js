@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { MarketContractContext } from '../../../contexts';
 
 import { Page } from '../../../router';
 import { MintDescribe, MintUpload, MintReview } from './steps';
@@ -17,10 +19,27 @@ const Container = styled('div')`
 export default function Mint() {
   const match = useRouteMatch();
   const [nft, setNft] = useState({ conditions: {} });
+  const [isMintAllowed, setIsMintAllowed] = useState(null);
+  const { getStoragePaid, marketContract } = useContext(MarketContractContext);
 
   const setNftField = (field, value) => {
     setNft((nftOld) => ({ ...nftOld, [field]: value }));
   };
+
+  useEffect(() => {
+    (async () => {
+      const storagePaid = await getStoragePaid(marketContract.account.accountId);
+      setIsMintAllowed(!!+storagePaid);
+    })();
+  }, []);
+
+  if (isMintAllowed === false) {
+    return <Redirect to="/" />;
+  }
+
+  if (isMintAllowed === null) {
+    return null;
+  }
 
   return (
     <Container>
