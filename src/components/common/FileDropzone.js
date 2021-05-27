@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useState } from 'react';
+import React, { forwardRef, useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-toastify';
@@ -12,8 +12,12 @@ const StyledContainer = styled('div')`
   .image-container {
     ${square};
 
-    img {
+    canvas {
       border-radius: var(--radius-default);
+    }
+
+    img {
+      display: none;
     }
   }
 
@@ -46,6 +50,8 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
   const [isError, setIsError] = useState(false);
   const [filename, setFilename] = useState(false);
 
+  const canvasRef = useRef();
+
   const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
 
@@ -65,6 +71,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
     setFilename(file.name);
 
     const reader = new FileReader();
+
     reader.onabort = () => {
       setIsLoading(false);
     };
@@ -73,24 +80,55 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
       setIsError(true);
     };
     reader.onload = () => {
-      setIsLoading(false);
       setImageDataUrl(reader.result);
-
-      if (onUpload) {
-        onUpload(reader.result);
-      }
     };
+
     reader.readAsDataURL(file);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   const { ref, ...dropzoneProps } = getRootProps();
 
+  const cropImageToSquare = (event) => {
+    const image = event.target;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+
+    let sx;
+    let sy;
+    let sw;
+    let sh;
+
+    if (image.naturalWidth > image.naturalHeight) {
+      sx = (image.naturalWidth - image.naturalHeight) / 2;
+      sy = 0;
+      sw = image.naturalHeight;
+      sh = image.naturalHeight;
+    } else {
+      sx = 0;
+      sy = (image.naturalHeight - image.naturalWidth) / 2;
+      sh = image.naturalWidth;
+      sw = image.naturalWidth;
+    }
+
+    canvas.width = sw;
+    canvas.height = sh;
+
+    ctx.drawImage(image, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+
+    setIsLoading(false);
+
+    if (onUpload) {
+      onUpload(canvas.toDataURL('image/png', 1));
+    }
+  };
+
   return (
     <StyledContainer>
       {imageDataUrl ? (
         <div className="image-container">
-          <img src={imageDataUrl} alt="selected file" />
+          <img src={imageDataUrl} alt="selected file" onLoad={cropImageToSquare} />
+          <canvas ref={canvasRef} />
         </div>
       ) : (
         <div className="input-container" ref={customRef || ref} {...dropzoneProps}>
