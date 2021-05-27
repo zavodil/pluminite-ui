@@ -12,6 +12,8 @@ import { TitleText } from '../../common/typography';
 import { Tabs } from '../../common/tabs';
 import { Portal } from '../../common/utils';
 
+import NotFound404 from '../not-found-404';
+
 import { withUSDs } from '../../../hooks';
 
 import { round } from '../../../utils/numbers';
@@ -223,6 +225,10 @@ function Gem({ location: { prevPathname } }) {
       history.push('/');
     }
   };
+
+  if (gem === null) {
+    return <NotFound404 />;
+  }
 
   return (
     <Container>
