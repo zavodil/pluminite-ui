@@ -12,13 +12,11 @@ import { NftContractContext } from '../nftContract';
 
 import { getMarketContractName } from '../../utils';
 
-const GAS = '200000000000000';
+import { APP } from '../../constants';
 
 export const MarketContractContext = React.createContext(initialMarketContractState);
 
 export const MarketContractContextProvider = ({ marketContract, children }) => {
-  const deposit = parseNearAmount('0.1');
-
   const [marketContractState, dispatchMarketContract] = useReducer(marketContractReducer, initialMarketContractState);
   const { nftContract, getGemsBatch, getGem } = useContext(NftContractContext);
 
@@ -103,8 +101,8 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
               perpetual_royalties: perpetualRoyalties,
             })
           ),
-          GAS / 2,
-          deposit
+          APP.PREPAID_GAS_LIMIT / 2,
+          APP.DEPOSIT_DEFAULT
         ),
         transactions.functionCall(
           'nft_approve',
@@ -122,7 +120,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
               }),
             })
           ),
-          GAS / 2,
+          APP.PREPAID_GAS_LIMIT / 2,
           marketContractState.minStorage
         ),
       ]);
@@ -137,7 +135,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
           nft_contract_id: nftContract.contractId,
           token_id: gemId,
         },
-        GAS,
+        APP.PREPAID_GAS_LIMIT,
         parseNearAmount(String(offerPrice))
       );
     },
@@ -145,7 +143,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
   );
 
   const payStorage = useCallback(async () => {
-    await marketContract.storage_deposit({}, GAS, marketContractState.minStorage);
+    await marketContract.storage_deposit({}, APP.PREPAID_GAS_LIMIT, marketContractState.minStorage);
   }, [marketContract, marketContractState]);
 
   const getMinStorage = useCallback(async () => marketContract.storage_amount(), [marketContract]);

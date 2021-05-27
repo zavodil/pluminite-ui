@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { utils } from 'near-api-js';
 
 import { initialNftContractState } from './reducer';
 
@@ -8,17 +7,11 @@ import { getMarketContractName } from '../../utils';
 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
 
-const {
-  format: { parseNearAmount },
-} = utils;
-
-const GAS = '200000000000000';
+import { APP } from '../../constants';
 
 export const NftContractContext = React.createContext(initialNftContractState);
 
 export const NftContractContextProvider = ({ nftContract, children }) => {
-  const deposit = parseNearAmount('0.1');
-
   const getGem = useCallback(async (id) => nftContract.nft_token({ token_id: id }), [nftContract]);
 
   const getGems = useCallback(
@@ -55,8 +48,8 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
           token_id: gemId,
           account_id: getMarketContractName(nftContract.contractId),
         },
-        GAS,
-        deposit
+        APP.PREPAID_GAS_LIMIT,
+        APP.DEPOSIT_DEFAULT
       );
     },
     [nftContract]
