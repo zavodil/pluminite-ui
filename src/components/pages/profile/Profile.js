@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { useQuery as useRQuery } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -13,7 +13,7 @@ import { useQuery } from '../../../hooks';
 
 import { NearContext, NftContractContext } from '../../../contexts';
 
-import { QUERY_KEYS } from '../../../constants';
+import { APP, QUERY_KEYS } from '../../../constants';
 
 const Container = styled('div')`
   display: flex;
@@ -67,8 +67,19 @@ const Container = styled('div')`
 
   .tabs-tab.tabs-tab--active {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    flex-wrap: wrap;
+
+    .items {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .load-more {
+      margin-top: 25px;
+    }
   }
 
   @media (min-width: 767px) {
@@ -98,18 +109,26 @@ export default function Profile() {
   const query = useQuery();
   const ownedGemId = query.get('gem-id');
 
-  const { data: gemsForOwner } = useRQuery(
+  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery(
     [QUERY_KEYS.GEMS_FOR_OWNER, user.accountId],
-    // todo: pagination
-    () => getGemsForOwner(user.accountId, '0', '50'),
-    { placeholderData: [] }
+    ({ pageParam = 0 }) => getGemsForOwner(user.accountId, String(pageParam), String(APP.MAX_ITEMS_PER_PAGE_PROFILE)),
+    {
+      getNextPageParam(lastPage, pages) {
+        if (lastPage.length === APP.MAX_ITEMS_PER_PAGE_PROFILE) {
+          return pages.length * APP.MAX_ITEMS_PER_PAGE_PROFILE;
+        }
+
+        return undefined;
+      },
+      placeholderData: { pages: [] },
+    }
   );
 
   useEffect(() => {
     if (ownedGemRef?.current) {
       ownedGemRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [gemsForOwner]);
+  }, [data.pages]);
 
   return (
     <Container>
@@ -132,14 +151,30 @@ export default function Profile() {
         tabsArray={[
           {
             title: 'Gems I own',
-            content: gemsForOwner.map(({ token_id, metadata: { media } = {} }) => (
-              <ArtItem
-                dataUrl={media}
-                forwardedRef={ownedGemId === token_id ? ownedGemRef : null}
-                key={token_id}
-                gemId={token_id}
-              />
-            )),
+            content: (
+              <>
+                <div className="items">
+                  {data.pages.flat().map(({ token_id, metadata: { media } = {} }) => (
+                    <ArtItem
+                      dataUrl={media}
+                      forwardedRef={ownedGemId === token_id ? ownedGemRef : null}
+                      key={token_id}
+                      gemId={token_id}
+                    />
+                  ))}
+                </div>
+                {hasNextPage && (
+                  <Button
+                    isPrimary
+                    onClick={() => fetchNextPage()}
+                    isDisabled={isFetching || isFetchingNextPage}
+                    className="load-more"
+                  >
+                    Load more
+                  </Button>
+                )}
+              </>
+            ),
           },
           {
             title: 'Gems I made',

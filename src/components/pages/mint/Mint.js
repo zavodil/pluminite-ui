@@ -30,8 +30,10 @@ export default function Mint() {
   useEffect(() => {
     (async () => {
       if (minStorage) {
-        const storagePaid = await getStoragePaid(marketContract.account.accountId);
-        const salesNumber = await getSalesSupplyForOwner(marketContract.account.accountId);
+        const [storagePaid, salesNumber] = await Promise.all([
+          getStoragePaid(marketContract.account.accountId),
+          getSalesSupplyForOwner(marketContract.account.accountId),
+        ]);
 
         if (new Big(storagePaid).lte(new Big(minStorage).times(salesNumber))) {
           setIsMintAllowed(false);

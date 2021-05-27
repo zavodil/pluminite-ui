@@ -11,6 +11,8 @@ const APP = {
 
   GEM_DESCRIPTION_MAX_LENGTH: 160,
   GEM_MAX_SIZE_MB: 100,
+
+  MAX_ITEMS_PER_PAGE_PROFILE: 20,
 };
 
 export default APP;
