@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { parseNearAmount } from 'near-api-js/lib/utils/format';
+import { transactions } from 'near-api-js';
 
 import { initialMarketContractState, marketContractReducer } from './reducer';
 import { GOT_MIN_STORAGE } from './types';
@@ -9,11 +10,15 @@ import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
 
 import { NftContractContext } from '../nftContract';
 
+import { getMarketContractName } from '../../utils';
+
 const GAS = '200000000000000';
 
 export const MarketContractContext = React.createContext(initialMarketContractState);
 
 export const MarketContractContextProvider = ({ marketContract, children }) => {
+  const deposit = parseNearAmount('0.1');
+
   const [marketContractState, dispatchMarketContract] = useReducer(marketContractReducer, initialMarketContractState);
   const { nftContract, getGemsBatch, getGem } = useContext(NftContractContext);
 
@@ -68,6 +73,64 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
     [marketContract, nftContract]
   );
 
+  const mintAndListGem = useCallback(
+    async (nft) => {
+      // todo: use normal media once ipfs integrated and there is a place to store art images
+      const { url } = await fetch('https://picsum.photos/600');
+
+      const metadata = {
+        media: url,
+        title: nft.title,
+        description: nft.description,
+        issued_at: Date.now().toString(),
+      };
+
+      const perpetualRoyalties = nft.collaborators
+        .map(({ userId, royalty }) => ({
+          [userId]: royalty * 100,
+        }))
+        .reduce((acc, cur) => Object.assign(acc, cur), { [nft.creator]: nft.creatorRoyalty * 100 });
+
+      // todo: is it alright to set id like this or using default id set by nft contract?
+      const tokenId = `token-${Date.now()}`;
+
+      await nftContract.account.signAndSendTransaction(nftContract.contractId, [
+        transactions.functionCall(
+          'nft_mint',
+          Buffer.from(
+            JSON.stringify({
+              token_id: tokenId,
+              metadata,
+              perpetual_royalties: perpetualRoyalties,
+            })
+          ),
+          GAS / 2,
+          deposit
+        ),
+        transactions.functionCall(
+          'nft_approve',
+          Buffer.from(
+            JSON.stringify({
+              token_id: tokenId,
+              account_id: getMarketContractName(nftContract.contractId),
+              msg: JSON.stringify({
+                sale_conditions: [
+                  {
+                    price: nft?.conditions?.near || '0',
+                    ft_token_id: 'near',
+                  },
+                ],
+              }),
+            })
+          ),
+          GAS / 2,
+          deposit
+        ),
+      ]);
+    },
+    [nftContract]
+  );
+
   const offer = useCallback(
     async (gemId, offerPrice) => {
       await marketContract.offer(
@@ -108,6 +171,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
     getSale,
     getSales,
     getSalesPopulated,
+    mintAndListGem,
     offer,
     payStorage,
     getStoragePaid,

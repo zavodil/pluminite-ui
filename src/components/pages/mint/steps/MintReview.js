@@ -4,7 +4,7 @@ import { useQueryClient } from 'react-query';
 import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { NearContext, NftContractContext } from '../../../../contexts';
+import { MarketContractContext, NearContext } from '../../../../contexts';
 
 import { getNextBidNearsFormatted } from '../../../../utils/nears';
 
@@ -55,12 +55,12 @@ const StyledButton = styled(Button)`
 
 const MintReview = ({ backLink, nft }) => {
   const { user } = useContext(NearContext);
-  const { mintGem } = useContext(NftContractContext);
+  const { mintAndListGem } = useContext(MarketContractContext);
   const queryClient = useQueryClient();
 
   const processMintClick = async () => {
     await queryClient.invalidateQueries(QUERY_KEYS.GEMS_FOR_OWNER, user.accountId);
-    await mintGem(nft);
+    await mintAndListGem(nft);
 
     // todo: show MintSuccessMessage on mint success (check if success from query params after on redirect from near
     // wallet when we stop using hash browser) toast.success(<MintSuccessMessage />);

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { transactions, utils } from 'near-api-js';
+import { utils } from 'near-api-js';
 
 import { initialNftContractState } from './reducer';
 
@@ -48,64 +48,6 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     [nftContract]
   );
 
-  const mintGem = useCallback(
-    async (nft) => {
-      // todo: use normal media once ipfs integrated and there is a place to store art images
-      const { url } = await fetch('https://picsum.photos/600');
-
-      const metadata = {
-        media: url,
-        title: nft.title,
-        description: nft.description,
-        issued_at: Date.now().toString(),
-      };
-
-      const perpetualRoyalties = nft.collaborators
-        .map(({ userId, royalty }) => ({
-          [userId]: royalty * 100,
-        }))
-        .reduce((acc, cur) => Object.assign(acc, cur), { [nft.creator]: nft.creatorRoyalty * 100 });
-
-      // todo: is it alright to set id like this or using default id set by nft contract?
-      const tokenId = `token-${Date.now()}`;
-
-      await nftContract.account.signAndSendTransaction(nftContract.contractId, [
-        transactions.functionCall(
-          'nft_mint',
-          Buffer.from(
-            JSON.stringify({
-              token_id: tokenId,
-              metadata,
-              perpetual_royalties: perpetualRoyalties,
-            })
-          ),
-          GAS / 2,
-          deposit
-        ),
-        transactions.functionCall(
-          'nft_approve',
-          Buffer.from(
-            JSON.stringify({
-              token_id: tokenId,
-              account_id: getMarketContractName(nftContract.contractId),
-              msg: JSON.stringify({
-                sale_conditions: [
-                  {
-                    price: nft?.conditions?.near || '0',
-                    ft_token_id: 'near',
-                  },
-                ],
-              }),
-            })
-          ),
-          GAS / 2,
-          deposit
-        ),
-      ]);
-    },
-    [nftContract]
-  );
-
   const listForSale = useCallback(
     async (gemId) => {
       await nftContract.nft_approve(
@@ -126,7 +68,6 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     getGems,
     getGemsForOwner,
     getGemsBatch,
-    mintGem,
     listForSale,
   };
 
