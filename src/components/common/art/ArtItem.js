@@ -60,39 +60,21 @@ const ArtItem = forwardRef(function ArtItemWithRef(
   };
 
   // todo: fix for gif and video
-  // todo: use only on mint review page
-  function drawImageActualSize(event) {
+  function copyImageOnCanvas(event) {
     const image = event.target;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
 
-    let sx;
-    let sy;
-    let sw;
-    let sh;
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
 
-    if (image.naturalWidth > image.naturalHeight) {
-      sx = (image.naturalWidth - image.naturalHeight) / 2;
-      sy = 0;
-      sw = image.naturalHeight;
-      sh = image.naturalHeight;
-    } else {
-      sx = 0;
-      sy = (image.naturalHeight - image.naturalWidth) / 2;
-      sh = image.naturalWidth;
-      sw = image.naturalWidth;
-    }
-
-    canvas.width = sw;
-    canvas.height = sh;
-
-    ctx.drawImage(image, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(image, 0, 0);
   }
 
   return (
     <StyledContainer {...params}>
       <div className="image-container">
-        <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" onLoad={drawImageActualSize} />
+        <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" onLoad={copyImageOnCanvas} />
         <canvas ref={canvasRef} />
       </div>
       {buttonText && (
