@@ -25,7 +25,7 @@ const StyledContainer = styled(Link)`
   .image-container {
     ${square};
 
-    img {
+    .hidden {
       display: none;
     }
   }
@@ -59,10 +59,18 @@ const ArtItem = forwardRef(function ArtItemWithRef(
     as: isLink ? Link : 'div',
   };
 
-  // todo: fix for gif and video
   function copyImageOnCanvas(event) {
     const image = event.target;
     const canvas = canvasRef.current;
+
+    // todo: improve checks once storage is implemented and file extensions of art items are known
+    if (/(.gif\?)|(.gif$)/.test(event.target.src)) {
+      image.classList.remove('hidden');
+      canvas.classList.add('hidden');
+
+      return;
+    }
+
     const ctx = canvas.getContext('2d');
 
     canvas.width = image.naturalWidth;
@@ -74,7 +82,7 @@ const ArtItem = forwardRef(function ArtItemWithRef(
   return (
     <StyledContainer {...params}>
       <div className="image-container">
-        <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" onLoad={copyImageOnCanvas} />
+        <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" onLoad={copyImageOnCanvas} className="hidden" />
         <canvas ref={canvasRef} />
       </div>
       {buttonText && (
