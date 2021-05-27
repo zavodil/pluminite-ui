@@ -128,7 +128,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
         ),
       ]);
     },
-    [nftContract]
+    [nftContract, marketContract, marketContractState]
   );
 
   const offer = useCallback(
