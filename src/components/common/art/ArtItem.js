@@ -5,9 +5,6 @@ import styled from 'styled-components';
 
 import Button from '../Button';
 
-// todo: remove for production
-import placeholderDataUrl from '../../../assets/art.png';
-
 import { square } from '../../../styles/mixins';
 
 const StyledContainer = styled(Link)`
@@ -82,7 +79,7 @@ const ArtItem = forwardRef(function ArtItemWithRef(
   return (
     <StyledContainer {...params}>
       <div className="image-container">
-        <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" onLoad={copyImageOnCanvas} className="hidden" />
+        <img ref={ref} src={dataUrl} alt="art" onLoad={copyImageOnCanvas} className="hidden" />
         <canvas ref={canvasRef} />
       </div>
       {buttonText && (
@@ -96,7 +93,7 @@ const ArtItem = forwardRef(function ArtItemWithRef(
 
 ArtItem.propTypes = {
   gemId: PropTypes.string,
-  dataUrl: PropTypes.string,
+  dataUrl: PropTypes.string.isRequired,
   buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isButtonDisabled: PropTypes.bool,
   onButtonClick: PropTypes.func,

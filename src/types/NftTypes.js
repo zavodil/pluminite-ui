@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-// todo: review after integration with nfr contract
+// todo: review after integration with nft contract
 export const NftType = PropTypes.shape({
   title: PropTypes.string,
   description: PropTypes.string,

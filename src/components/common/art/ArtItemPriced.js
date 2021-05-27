@@ -6,9 +6,6 @@ import { MarketContractContext } from '../../../contexts';
 
 import ArtItem from './ArtItem';
 
-// todo: remove for production
-const placeholderBid = 55;
-
 const ArtItemPriced = ({ gemOnSale, bid, bidAvailable, ...props }) => {
   const { offer } = useContext(MarketContractContext);
 
@@ -22,15 +19,13 @@ const ArtItemPriced = ({ gemOnSale, bid, bidAvailable, ...props }) => {
 };
 
 ArtItemPriced.propTypes = {
-  bid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  bid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   bidAvailable: PropTypes.bool,
   // todo: add type for union of nft and sale
   gemOnSale: PropTypes.object,
 };
 
 ArtItemPriced.defaultProps = {
-  // todo: remove for production
-  bid: placeholderBid,
   bidAvailable: true,
 };
 

@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import defaultProfilePicture from '../../../assets/default-profile-picture.png';
+import placeholderDataUrl from '../../../assets/art.png';
+
 import Balance from '../../NavigationComponents/Balance';
 import Button from '../../common/Button';
 import { ArtItem } from '../../common/art';
@@ -180,8 +182,12 @@ export default function Profile() {
           },
           {
             title: 'Gems I made',
-            // todo: after integration with NFT contract set ArtItem id to gemId
-            content: Array.from({ length: 2 }).map((_, i) => <ArtItem key={`art-item-made-${i}`} />),
+            // todo: after integration with NFT contract set ArtItem id to gemId (can't get nft-s created by a specific
+            // user on the current version of the contract)
+            // todo: remove `placeholderDataUrl` once we get real data from the contract
+            content: Array.from({ length: 2 }).map((_, i) => (
+              <ArtItem key={`art-item-made-${i}`} dataUrl={placeholderDataUrl} />
+            )),
           },
         ]}
       />

@@ -43,7 +43,6 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
 
   const getSalesPopulated = useCallback(
     async (fromIndex, limit) => {
-      // todo: pagination
       const sales = await getSales(fromIndex, limit);
 
       const salesPopulated = [];
