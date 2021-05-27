@@ -13,6 +13,7 @@ const APP = {
   GEM_MAX_SIZE_MB: 100,
 
   MAX_ITEMS_PER_PAGE_PROFILE: 20,
+  MAX_ITEMS_PER_PAGE_HOME: 20,
 };
 
 export default APP;

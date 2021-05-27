@@ -120,7 +120,6 @@ export default function Profile() {
 
         return undefined;
       },
-      placeholderData: { pages: [] },
     }
   );
 
@@ -128,7 +127,7 @@ export default function Profile() {
     if (ownedGemRef?.current) {
       ownedGemRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [data.pages]);
+  }, [data]);
 
   return (
     <Container>
@@ -154,14 +153,17 @@ export default function Profile() {
             content: (
               <>
                 <div className="items">
-                  {data.pages.flat().map(({ token_id, metadata: { media } = {} }) => (
-                    <ArtItem
-                      dataUrl={media}
-                      forwardedRef={ownedGemId === token_id ? ownedGemRef : null}
-                      key={token_id}
-                      gemId={token_id}
-                    />
-                  ))}
+                  {data?.pages &&
+                    data.pages
+                      .flat()
+                      .map(({ token_id, metadata: { media } = {} }) => (
+                        <ArtItem
+                          dataUrl={media}
+                          forwardedRef={ownedGemId === token_id ? ownedGemRef : null}
+                          key={token_id}
+                          gemId={token_id}
+                        />
+                      ))}
                 </div>
                 {hasNextPage && (
                   <Button
