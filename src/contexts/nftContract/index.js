@@ -7,6 +7,7 @@ import { initialNftContractState } from './reducer';
 import { getMarketContractName } from '../../utils';
 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
+import APP from "../../constants/app";
 
 const {
   format: { parseNearAmount },
@@ -50,11 +51,10 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
 
   const mintGem = useCallback(
     async (nft) => {
-      // todo: use normal media once ipfs integrated and there is a place to store art images
-      const { url } = await fetch('https://picsum.photos/600');
 
       const metadata = {
-        media: url,
+        media: nft.artDataUrl,
+        reference: APP.HASH_SOURCE,
         title: nft.title,
         description: nft.description,
         issued_at: Date.now().toString(),
