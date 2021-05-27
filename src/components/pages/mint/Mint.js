@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
+import Big from 'big.js';
 
 import { MarketContractContext } from '../../../contexts';
 
@@ -20,7 +21,7 @@ export default function Mint() {
   const match = useRouteMatch();
   const [nft, setNft] = useState({ conditions: {} });
   const [isMintAllowed, setIsMintAllowed] = useState(null);
-  const { getStoragePaid, marketContract } = useContext(MarketContractContext);
+  const { getStoragePaid, getSalesSupplyForOwner, marketContract, minStorage } = useContext(MarketContractContext);
 
   const setNftField = (field, value) => {
     setNft((nftOld) => ({ ...nftOld, [field]: value }));
@@ -28,10 +29,18 @@ export default function Mint() {
 
   useEffect(() => {
     (async () => {
-      const storagePaid = await getStoragePaid(marketContract.account.accountId);
-      setIsMintAllowed(!!+storagePaid);
+      if (minStorage) {
+        const storagePaid = await getStoragePaid(marketContract.account.accountId);
+        const salesNumber = await getSalesSupplyForOwner(marketContract.account.accountId);
+
+        if (new Big(storagePaid).lte(new Big(minStorage).times(salesNumber))) {
+          setIsMintAllowed(false);
+        } else {
+          setIsMintAllowed(true);
+        }
+      }
     })();
-  }, []);
+  }, [minStorage]);
 
   if (isMintAllowed === false) {
     return (
