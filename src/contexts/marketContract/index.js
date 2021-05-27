@@ -155,6 +155,11 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
     marketContract,
   ]);
 
+  const getSalesSupplyForOwner = useCallback(
+    async (accountId) => marketContract.get_supply_by_owner_id({ account_id: accountId }),
+    [marketContract]
+  );
+
   useEffect(() => {
     (async () => {
       if (marketContract?.storage_amount) {
@@ -175,6 +180,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
     offer,
     payStorage,
     getStoragePaid,
+    getSalesSupplyForOwner,
   };
 
   return <MarketContractContext.Provider value={value}>{children}</MarketContractContext.Provider>;
@@ -189,6 +195,7 @@ MarketContractContextProvider.propTypes = {
     storage_deposit: PropTypes.func.isRequired,
     storage_paid: PropTypes.func.isRequired,
     storage_amount: PropTypes.func.isRequired,
+    get_supply_by_owner_id: PropTypes.func.isRequired,
   }).isRequired,
   children: ReactChildrenTypeRequired,
 };
