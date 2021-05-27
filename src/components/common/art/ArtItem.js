@@ -95,9 +95,11 @@ const ArtItem = forwardRef(function ArtItemWithRef(
         <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" onLoad={drawImageActualSize} />
         <canvas ref={canvasRef} />
       </div>
-      <Button isPrimary isSmall isDisabled={isButtonDisabled} onClick={onButtonClick}>
-        {buttonText}
-      </Button>
+      {buttonText && (
+        <Button isPrimary isSmall isDisabled={isButtonDisabled} onClick={onButtonClick}>
+          {buttonText}
+        </Button>
+      )}
     </StyledContainer>
   );
 });

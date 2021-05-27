@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import defaultProfilePicture from '../../../assets/default-profile-picture.png';
 import Balance from '../../NavigationComponents/Balance';
 import Button from '../../common/Button';
-import { ArtItemEditable } from '../../common/art';
+import { ArtItem } from '../../common/art';
 import { Tabs } from '../../common/tabs';
 
 import { useQuery } from '../../../hooks';
@@ -133,7 +133,7 @@ export default function Profile() {
           {
             title: 'Gems I own',
             content: gemsForOwner.map(({ token_id, metadata: { media } = {} }) => (
-              <ArtItemEditable
+              <ArtItem
                 dataUrl={media}
                 forwardedRef={ownedGemId === token_id ? ownedGemRef : null}
                 key={token_id}
@@ -144,7 +144,7 @@ export default function Profile() {
           {
             title: 'Gems I made',
             // todo: after integration with NFT contract set ArtItem id to gemId
-            content: Array.from({ length: 2 }).map((_, i) => <ArtItemEditable key={`art-item-made-${i}`} />),
+            content: Array.from({ length: 2 }).map((_, i) => <ArtItem key={`art-item-made-${i}`} />),
           },
         ]}
       />
