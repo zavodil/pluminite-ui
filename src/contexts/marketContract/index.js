@@ -124,7 +124,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
             })
           ),
           GAS / 2,
-          deposit
+          marketContractState.minStorage
         ),
       ]);
     },
