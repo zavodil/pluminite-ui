@@ -7,7 +7,7 @@ import { MarketContractContext } from '../../../contexts';
 import ArtItem from './ArtItem';
 
 const ArtItemPriced = ({ gemOnSale, bid, bidAvailable, ...props }) => {
-  const { offer } = useContext(MarketContractContext);
+  const { offer, marketContract } = useContext(MarketContractContext);
 
   const processBid = async (e) => {
     e.preventDefault();
@@ -15,7 +15,16 @@ const ArtItemPriced = ({ gemOnSale, bid, bidAvailable, ...props }) => {
     await offer(gemOnSale.token_id, +getNextBidNearsFormatted(gemOnSale));
   };
 
-  return <ArtItem buttonText={`Bid ${bid}Ⓝ`} isButtonDisabled={!bidAvailable} {...props} onButtonClick={processBid} />;
+  const isItemOwnedByUser = () => gemOnSale.owner_id === marketContract.account.accountId;
+
+  return (
+    <ArtItem
+      buttonText={isItemOwnedByUser() ? null : `Bid ${bid}Ⓝ`}
+      isButtonDisabled={!bidAvailable}
+      {...props}
+      onButtonClick={processBid}
+    />
+  );
 };
 
 ArtItemPriced.propTypes = {
