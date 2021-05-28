@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
@@ -8,8 +8,6 @@ import { Page } from '../../../router';
 import { ProfileEditBio, ProfileEditPhoto } from './steps';
 
 import NotFound404 from '../not-found-404';
-import { NftContractContext, NearContext } from '../../../contexts';
-import QUERY_KEYS from '../../../constants/queryKeys';
 
 const Container = styled('div')`
   display: flex;
@@ -24,20 +22,8 @@ const Container = styled('div')`
   }
 `;
 
-export default function ProfileEdit() {
-  const { user } = useContext(NearContext);
-  const currentAccountId = user?.accountId ? user?.accountId : '';
-
-  const { setProfile, getProfile } = useContext(NftContractContext);
-
-  const { data: profileBio } = useQuery(QUERY_KEYS.GET_PROFILE, () => getProfile(currentAccountId));
-
+const ProfileEdit = ({ location: { profileBio } }) => {
   const match = useRouteMatch();
-
-  const processSaveBio = async () => {
-    await setProfile(profileBio);
-    toast.success('Success! Your profile was saved!');
-  };
 
   const processSavePhoto = () => {
     toast.success('Success! Your profile was saved!');
@@ -50,10 +36,18 @@ export default function ProfileEdit() {
           <ProfileEditPhoto processSave={processSavePhoto} />
         </Route>
         <Route exact path={`${match.path}`}>
-          <ProfileEditBio uploadPhotoLink={`${match.path}/upload-photo`} processSave={processSaveBio} />
+          <ProfileEditBio uploadPhotoLink={`${match.path}/upload-photo`} profileBio={profileBio} />
         </Route>
         <Page component={NotFound404} />
       </Switch>
     </Container>
   );
-}
+};
+
+ProfileEdit.propTypes = {
+  location: PropTypes.shape({
+    profileBio: PropTypes.string,
+  }),
+};
+
+export default ProfileEdit;

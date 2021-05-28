@@ -1,18 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
+import { Link, Redirect } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
 import defaultProfilePicture from '../../../../assets/default-profile-picture.png';
 
 import { StickedToBottom } from '../../../common/layout';
+import { DotsLoading } from '../../../common/utils';
 import Balance from '../../../NavigationComponents/Balance';
 import Button from '../../../common/Button';
 import { Textarea } from '../../../common/forms';
 
-import { NearContext } from '../../../../contexts';
+import { NearContext, NftContractContext } from '../../../../contexts';
 
-import { PROFILE } from '../../../../constants';
+import { PROFILE, QUERY_KEYS } from '../../../../constants';
 
 const Container = styled('div')`
   .summary {
@@ -91,8 +94,30 @@ const StyledButton = styled(Button)`
   }
 `;
 
-function ProfileEditBio({ uploadPhotoLink, processSave }) {
+function ProfileEditBio({ uploadPhotoLink, profileBio }) {
   const { user } = useContext(NearContext);
+  const { setProfile } = useContext(NftContractContext);
+
+  const [bioEdited, setBioEdited] = useState(profileBio);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+
+  const queryClient = useQueryClient();
+
+  const saveBio = async () => {
+    setIsSaving(true);
+
+    await setProfile(bioEdited);
+    await queryClient.invalidateQueries([QUERY_KEYS.GET_PROFILE, user.accountId]);
+    toast.success('Success! Your profile was saved!');
+
+    setIsSaving(false);
+    setIsSaved(true);
+  };
+
+  if (isSaved) {
+    return <Redirect to="/profile" />;
+  }
 
   return (
     <Container>
@@ -105,19 +130,26 @@ function ProfileEditBio({ uploadPhotoLink, processSave }) {
           </Button>
         </div>
       </div>
-      <Textarea name="bio" labelText="Bio" rows={4} maxLength={PROFILE.BIO_MAX_LENGTH} />
+      <Textarea
+        name="bio"
+        labelText="Bio"
+        rows={4}
+        maxLength={PROFILE.BIO_MAX_LENGTH}
+        textInitial={bioEdited}
+        onTextChange={(value) => setBioEdited(value)}
+        isDisabled={isSaving}
+      />
       <div className="balance">
         <p className="balance-label">Your Funds</p>
         <Balance precision={1} />
       </div>
       <StickedToBottom isSecondary>
-        <StyledButton isSecondary>
+        <StyledButton isSecondary isDisabled={isSaving}>
           <Link to="/profile">Cancel</Link>
         </StyledButton>
-        <StyledButton isPrimary>
-          <Link to="/profile" onClick={processSave}>
-            Save
-          </Link>
+        <StyledButton isPrimary onClick={saveBio} isDisabled={isSaving}>
+          {isSaving ? 'Saving' : 'Save'}
+          {isSaving && <DotsLoading />}
         </StyledButton>
       </StickedToBottom>
     </Container>
@@ -126,7 +158,7 @@ function ProfileEditBio({ uploadPhotoLink, processSave }) {
 
 ProfileEditBio.propTypes = {
   uploadPhotoLink: PropTypes.string.isRequired,
-  processSave: PropTypes.func.isRequired,
+  profileBio: PropTypes.string,
 };
 
 export default ProfileEditBio;

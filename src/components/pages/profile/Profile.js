@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery, useQuery as useRQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -104,7 +104,7 @@ const Container = styled('div')`
 
 export default function Profile() {
   const { user } = useContext(NearContext);
-  const { getGemsForOwner } = useContext(NftContractContext);
+  const { getGemsForOwner, getProfile } = useContext(NftContractContext);
 
   const ownedGemRef = useRef();
 
@@ -125,6 +125,10 @@ export default function Profile() {
     }
   );
 
+  const { data: profileBio } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
+    enabled: !!user?.accountId,
+  });
+
   useEffect(() => {
     if (ownedGemRef?.current) {
       ownedGemRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -144,9 +148,16 @@ export default function Profile() {
           <span className="summary-block-bottom">Your Funds</span>
         </div>
       </div>
-      <p className="profile-description">You haven’t added a description yet.</p>
+      <p className="profile-description">{profileBio || 'You haven’t added a description yet.'} </p>
       <Button isSecondary>
-        <Link to="/profile/edit">Edit Profile</Link>
+        <Link
+          to={{
+            pathname: '/profile/edit',
+            profileBio,
+          }}
+        >
+          Edit Profile
+        </Link>
       </Button>
       <Tabs
         tabsArray={[
