@@ -15,6 +15,8 @@ import { Textarea } from '../../../common/forms';
 
 import { NearContext, NftContractContext } from '../../../../contexts';
 
+import { useIsUnmounting } from '../../../../hooks';
+
 import { PROFILE, QUERY_KEYS } from '../../../../constants';
 
 const Container = styled('div')`
@@ -102,6 +104,8 @@ function ProfileEditBio({ uploadPhotoLink, profileBio }) {
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
+  const isUnmounting = useIsUnmounting();
+
   const queryClient = useQueryClient();
 
   const isBioMaxLengthExceeded = () => bioEdited !== undefined && bioEdited.length > PROFILE.BIO_MAX_LENGTH;
@@ -120,8 +124,10 @@ function ProfileEditBio({ uploadPhotoLink, profileBio }) {
     await queryClient.invalidateQueries([QUERY_KEYS.GET_PROFILE, user.accountId]);
     toast.success('Success! Your profile was saved!');
 
-    setIsSaving(false);
-    setIsSaved(true);
+    if (!isUnmounting) {
+      setIsSaving(false);
+      setIsSaved(true);
+    }
   };
 
   if (isSaved) {
