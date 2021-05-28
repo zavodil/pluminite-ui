@@ -104,7 +104,16 @@ function ProfileEditBio({ uploadPhotoLink, profileBio }) {
 
   const queryClient = useQueryClient();
 
+  const isBioMaxLengthExceeded = () => bioEdited !== undefined && bioEdited.length > PROFILE.BIO_MAX_LENGTH;
+  const isBioChanged = () => bioEdited !== profileBio;
+
+  const isSaveAvailable = () => !isSaving && !isBioMaxLengthExceeded() && isBioChanged();
+
   const saveBio = async () => {
+    if (!isSaveAvailable()) {
+      return;
+    }
+
     setIsSaving(true);
 
     await setProfile(bioEdited);
@@ -145,9 +154,9 @@ function ProfileEditBio({ uploadPhotoLink, profileBio }) {
       </div>
       <StickedToBottom isSecondary>
         <StyledButton isSecondary isDisabled={isSaving}>
-          <Link to="/profile">Cancel</Link>
+          <Link to={isSaving ? '#' : '/profile'}>Cancel</Link>
         </StyledButton>
-        <StyledButton isPrimary onClick={saveBio} isDisabled={isSaving}>
+        <StyledButton isPrimary onClick={saveBio} isDisabled={!isSaveAvailable()}>
           {isSaving ? 'Saving' : 'Save'}
           {isSaving && <DotsLoading />}
         </StyledButton>

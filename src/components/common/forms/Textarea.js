@@ -62,9 +62,9 @@ const Textarea = ({ name, rows, maxLength, labelText, textInitial, onTextChange,
       setMaxLengthExceeded(true);
     } else {
       setMaxLengthExceeded(false);
-      onTextChange(value);
     }
 
+    onTextChange(value);
     setTextareaValue(value);
   };
 
