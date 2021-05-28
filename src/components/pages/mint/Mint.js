@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import pinataSDK from '@pinata/sdk';
 import Big from 'big.js';
 
-import { MarketContractContext } from '../../../contexts';
+import { MarketContractContext, NftContractContext } from '../../../contexts';
 
 import { Page } from '../../../router';
 import { MintDescribe, MintUpload, MintReview } from './steps';
@@ -23,7 +23,9 @@ export default function Mint() {
   const match = useRouteMatch();
   const [nft, setNft] = useState({ conditions: {} });
   const [isMintAllowed, setIsMintAllowed] = useState(null);
-  const { getStoragePaid, getSalesSupplyForOwner, marketContract, minStorage } = useContext(MarketContractContext);
+  // const { getStoragePaid, getSalesSupplyForOwner, marketContract, minStorage } = useContext(MarketContractContext);
+  const { getStoragePaid, marketContract, minStorage } = useContext(MarketContractContext);
+  const { getGemsForOwner } = useContext(NftContractContext);
 
   const setNftField = async (field, value) => {
     setNft((nftOld) => ({ ...nftOld, [field]: value }));
@@ -49,12 +51,27 @@ export default function Mint() {
   useEffect(() => {
     (async () => {
       if (minStorage) {
-        const [storagePaid, salesNumber] = await Promise.all([
+        // todo: once `get_supply_by_owner_id` is implemented use code below to check if storage is paid,
+        // `nft_tokens_for_owner` works for now only because nothings is being actually sold
+        // todo: remove these checks once (if) the requirement of initial deposit is removed
+
+        // const [storagePaid, salesNumber] = await Promise.all([
+        //   getStoragePaid(marketContract.account.accountId),
+        //   getSalesSupplyForOwner(marketContract.account.accountId),
+        // ]);
+        //
+        // if (new Big(storagePaid).lte(new Big(minStorage).times(salesNumber))) {
+        //   setIsMintAllowed(false);
+        // } else {
+        //   setIsMintAllowed(true);
+        // }
+
+        const [storagePaid, gemsOwned] = await Promise.all([
           getStoragePaid(marketContract.account.accountId),
-          getSalesSupplyForOwner(marketContract.account.accountId),
+          getGemsForOwner(marketContract.account.accountId, '0', '100'),
         ]);
 
-        if (new Big(storagePaid).lte(new Big(minStorage).times(salesNumber))) {
+        if (new Big(storagePaid).lte(new Big(minStorage).times(gemsOwned.length))) {
           setIsMintAllowed(false);
         } else {
           setIsMintAllowed(true);
