@@ -172,6 +172,7 @@ function Gem({ location: { prevPathname } }) {
 
   const [previousPriceUser, setPreviousPriceUser] = useState('');
   const [previousPrice, setPreviousPrice] = useState('0');
+  const [imageDataUrl, setImageDataUrl] = useState(null);
 
   const { gemId } = useParams();
 
@@ -200,6 +201,14 @@ function Gem({ location: { prevPathname } }) {
   const isListed = () => !!gemOnSale;
 
   const isOwnedByUser = () => gemOnSale?.owner_id && gemOnSale.owner_id === user.accountId;
+
+  useEffect(() => {
+    if (gem?.metadata?.reference === 'pinata' && gem?.metadata?.media) {
+      fetch(`https://gateway.pinata.cloud/ipfs/${gem.metadata.media}`)
+        .then((response) => response.json())
+        .then((json) => setImageDataUrl(json.file));
+    }
+  }, [gem]);
 
   useEffect(() => {
     if (hasBids()) {
@@ -234,7 +243,7 @@ function Gem({ location: { prevPathname } }) {
     <Container>
       <Portal>
         <GemHeader>
-          <div>{gem?.metadata?.media && <img src={gem.metadata.media} alt="Art" width={40} height={40} />}</div>
+          <div>{imageDataUrl && <img src={imageDataUrl} alt="Art" width={40} height={40} />}</div>
           <CloseButton className="gem-close" processCLick={goBack} />
         </GemHeader>
       </Portal>
