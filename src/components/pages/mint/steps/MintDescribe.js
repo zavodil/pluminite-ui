@@ -218,7 +218,14 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
   };
 
   // todo: add more checks, check length
-  const isProceedAllowed = () => nft.title && nft.description;
+  const isProceedAllowed = () =>
+    nft.title &&
+    nft.description &&
+    nft.description.length <= APP.GEM_DESCRIPTION_MAX_LENGTH &&
+    nft.conditions?.near !== undefined &&
+    nft.collaborators.length < APP.MAX_COLLABORATORS &&
+    !isToMuchRoyalties(collaborators, userRoyalty) &&
+    !userRoyaltyIsError;
 
   useEffect(() => setNftField('creator', user.accountId), []);
 
@@ -227,7 +234,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
       return {
         ...nftOld,
         collaborators: collaborators
-          .filter(({ userId, accountExists }) => userId && accountExists)
+          .filter(({ userId, accountExists, royalty }) => userId && accountExists && royalty)
           .map(({ userId, royalty }) => {
             return { userId, royalty };
           }),
