@@ -126,7 +126,7 @@ impl Contract {
         );
 
         assert!(
-            profile.bio.len() < MAX_PROFILE_IMAGE_LENGTH,
+            profile.image.len() < MAX_PROFILE_IMAGE_LENGTH,
             "Profile image length is too long"
         );
 
