@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQueryClient } from 'react-query';
 import { Link, Redirect } from 'react-router-dom';
@@ -13,6 +13,7 @@ import { HeadingText } from '../../../common/typography';
 import { ArtItemPriced } from '../../../common/art';
 import { StickedToBottom } from '../../../common/layout';
 import Button from '../../../common/Button';
+import { DotsLoading } from '../../../common/utils';
 
 import { QUERY_KEYS, APP } from '../../../../constants';
 
@@ -55,6 +56,7 @@ const StyledButton = styled(Button)`
 `;
 
 const MintReview = ({ backLink, nft }) => {
+  const [isMinting, setIsMinting] = useState(false);
   const { user } = useContext(NearContext);
   const { mintAndListGem } = useContext(MarketContractContext);
   const queryClient = useQueryClient();
@@ -80,12 +82,16 @@ const MintReview = ({ backLink, nft }) => {
   };
 
   const processMintClick = async () => {
+    setIsMinting(true);
+
     await queryClient.invalidateQueries(QUERY_KEYS.GEMS_FOR_OWNER, user.accountId);
     const ipfsHash = await uploadToIPFS(nft.artDataUrl);
     await mintAndListGem({ ...nft, media: ipfsHash });
 
     // todo: show MintSuccessMessage on mint success (check if success from query params after on redirect from near
     // wallet when we stop using hash browser) toast.success(<MintSuccessMessage />);
+
+    setIsMinting(false);
   };
 
   const wasDescribed = !!nft.creator;
@@ -106,11 +112,12 @@ const MintReview = ({ backLink, nft }) => {
       <p className="text">{nft.description}</p>
       <ArtItemPriced dataUrl={nft.artDataUrl} bid={getNextBidNearsFormatted(nft)} bidAvailable={false} />
       <StickedToBottom isSecondary>
-        <StyledButton isSecondary>
+        <StyledButton isSecondary isDisabled={isMinting}>
           <Link to={backLink}>Replace Art</Link>
         </StyledButton>
-        <StyledButton onClick={processMintClick} isPrimary>
-          Mint NFT
+        <StyledButton onClick={processMintClick} isPrimary isDisabled={isMinting}>
+          {isMinting ? 'Minting' : 'Mint NFT'}
+          {isMinting && <DotsLoading />}
         </StyledButton>
       </StickedToBottom>
     </Container>
