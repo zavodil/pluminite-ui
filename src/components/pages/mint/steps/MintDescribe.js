@@ -128,7 +128,6 @@ const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaborato
         type="number"
         className="collaborator-royalty"
         name={`royalty-${number}`}
-        isRequired
         isSmall
         isError={royaltyIsError}
         sign="%"
@@ -141,7 +140,6 @@ const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaborato
         sign="@"
         placement="left"
         name={`collaborator-id-${number}`}
-        isRequired
         isSmall
         isError={userIdIsError}
         onChange={(e) => setUserIdValue(e.target.value)}
@@ -289,7 +287,6 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
         <InputRoyalty
           name="royalty"
           labelText="Royalty Fee"
-          isRequired
           asideText={`@${user.accountId}`}
           isSmall
           value={userRoyalty}
