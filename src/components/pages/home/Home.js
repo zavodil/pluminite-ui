@@ -14,6 +14,7 @@ import Button from '../../common/Button';
 import DiamondIcon from '../../../assets/DiamondIcon';
 
 import { QUERY_KEYS, APP } from '../../../constants';
+import { Loading } from '../../common/utils';
 
 const Container = styled('div')`
   padding: 15px;
@@ -118,37 +119,39 @@ export default function Home() {
           <DiamondIcon />
         </div>
       </div>
-      <div className="items-container">
-        <div className="items">
-          {data?.pages &&
-            data.pages.flat().map((sale) => {
-              const {
-                token_id,
-                metadata: { media },
-              } = sale;
+      <Loading waitingFor={data?.pages}>
+        <div className="items-container">
+          <div className="items">
+            {data?.pages &&
+              data.pages.flat().map((sale) => {
+                const {
+                  token_id,
+                  metadata: { media },
+                } = sale;
 
-              return (
-                <ArtItemPriced
-                  key={token_id}
-                  dataUrl={media}
-                  gemId={token_id}
-                  bid={getNextBidNearsFormatted(sale)}
-                  gemOnSale={sale}
-                />
-              );
-            })}
+                return (
+                  <ArtItemPriced
+                    key={token_id}
+                    dataUrl={media}
+                    gemId={token_id}
+                    bid={getNextBidNearsFormatted(sale)}
+                    gemOnSale={sale}
+                  />
+                );
+              })}
+          </div>
+          {hasNextPage && (
+            <Button
+              isPrimary
+              onClick={() => fetchNextPage()}
+              isDisabled={isFetching || isFetchingNextPage}
+              className="load-more"
+            >
+              Load more
+            </Button>
+          )}
         </div>
-        {hasNextPage && (
-          <Button
-            isPrimary
-            onClick={() => fetchNextPage()}
-            isDisabled={isFetching || isFetchingNextPage}
-            className="load-more"
-          >
-            Load more
-          </Button>
-        )}
-      </div>
+      </Loading>
       <div className="pop-up">{user ? <MintPlus /> : <Contribute />}</div>
     </Container>
   );
