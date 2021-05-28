@@ -79,11 +79,9 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
 
   const mintAndListGem = useCallback(
     async (nft) => {
-      // todo: use normal media once ipfs integrated and there is a place to store art images
-      const { url } = await fetch('https://picsum.photos/600');
-
       const metadata = {
-        media: url,
+        media: nft.media,
+        reference: APP.HASH_SOURCE,
         title: nft.title,
         description: nft.description,
         issued_at: Date.now().toString(),
