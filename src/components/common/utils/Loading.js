@@ -57,8 +57,8 @@ const Loading = ({ children, waitingFor }) => {
 };
 
 Loading.propTypes = {
-  children: ReactChildrenType,
-  waitingFor: PropTypes.array,
+  children: ReactChildrenType.isRequired,
+  waitingFor: PropTypes.any,
 };
 
 export default Loading;

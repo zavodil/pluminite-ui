@@ -10,6 +10,7 @@ import Balance from '../../NavigationComponents/Balance';
 import Button from '../../common/Button';
 import { ArtItem } from '../../common/art';
 import { Tabs } from '../../common/tabs';
+import { Loading } from '../../common/utils';
 
 import { useQuery } from '../../../hooks';
 
@@ -164,7 +165,7 @@ export default function Profile() {
           {
             title: 'Gems I own',
             content: (
-              <>
+              <Loading waitingFor={data?.pages}>
                 <div className="items">
                   {data?.pages &&
                     data.pages
@@ -188,7 +189,7 @@ export default function Profile() {
                     Load more
                   </Button>
                 )}
-              </>
+              </Loading>
             ),
           },
           {
