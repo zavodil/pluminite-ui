@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory, useParams } from 'react-router-dom';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
@@ -170,6 +170,7 @@ function Gem({ location: { prevPathname } }) {
 
   const [previousPriceUser, setPreviousPriceUser] = useState('');
   const [previousPrice, setPreviousPrice] = useState('0');
+  const [imageDataUrl, setImageDataUrl] = useState(null);
 
   const { gemId } = useParams();
 
@@ -200,6 +201,14 @@ function Gem({ location: { prevPathname } }) {
   const isOwnedByUser = () => gemOnSale?.owner_id && gemOnSale.owner_id === user.accountId;
 
   useEffect(() => {
+    if (gem?.metadata?.reference === 'pinata' && gem?.metadata?.media) {
+      fetch(`https://gateway.pinata.cloud/ipfs/${gem.metadata.media}`)
+        .then((response) => response.json())
+        .then((json) => setImageDataUrl(json.file));
+    }
+  }, [gem]);
+
+  useEffect(() => {
     if (hasBids()) {
       setPreviousPriceUser(gemOnSale?.bids?.near?.owner_id || '');
       setPreviousPrice(gemOnSale?.bids?.near?.price || '0');
@@ -224,11 +233,15 @@ function Gem({ location: { prevPathname } }) {
     }
   };
 
+  if (gem === null) {
+    return <Redirect to="/404" />;
+  }
+
   return (
     <Container>
       <Portal>
         <GemHeader>
-          <div>{gem?.metadata?.media && <img src={gem.metadata.media} alt="Art" width={40} height={40} />}</div>
+          <div>{imageDataUrl && <img src={imageDataUrl} alt="Art" width={40} height={40} />}</div>
           <CloseButton className="gem-close" processCLick={goBack} />
         </GemHeader>
       </Portal>

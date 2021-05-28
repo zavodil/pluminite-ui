@@ -1,15 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Switch, Route, useRouteMatch, Redirect} from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import pinataSDK from '@pinata/sdk';
+import Big from 'big.js';
 
-import {MarketContractContext} from '../../../contexts';
+import { MarketContractContext, NftContractContext } from '../../../contexts';
 
-import {Page} from '../../../router';
-import {MintDescribe, MintUpload, MintReview} from './steps';
+import { Page } from '../../../router';
+import { MintDescribe, MintUpload, MintReview } from './steps';
 
 import NotFound404 from '../not-found-404';
-import APP from "../../../constants/app";
 
 const Container = styled('div')`
   display: flex;
@@ -18,72 +17,83 @@ const Container = styled('div')`
   padding: 100px 28px 60px;
 `;
 
-
 export default function Mint() {
-    const match = useRouteMatch();
-    const [nft, setNft] = useState({conditions: {}});
-    const [isMintAllowed, setIsMintAllowed] = useState(null);
-    const {getStoragePaid, marketContract} = useContext(MarketContractContext);
+  const match = useRouteMatch();
+  const [nft, setNft] = useState({ conditions: {} });
+  const [isMintAllowed, setIsMintAllowed] = useState(null);
+  // const { getStoragePaid, getSalesSupplyForOwner, marketContract, minStorage } = useContext(MarketContractContext);
+  const { getStoragePaid, marketContract, minStorage } = useContext(MarketContractContext);
+  const { getGemsForOwner } = useContext(NftContractContext);
 
-    const UploadFile = async (reader) => {
-        const pinata = pinataSDK(APP.PINATA_API_KEY, APP.PINATA_API_SECRET);
-        const metadata = {};
-        const data = {
-            file: reader.result
-        };
+  const setNftField = async (field, value) => {
+    setNft((nftOld) => ({ ...nftOld, [field]: value }));
+  };
 
-        pinata.pinJSONToIPFS(data, metadata).then((result) => {
-            setNftField('artDataUrl', result.IpfsHash);
-        }).catch((err) => {
-            console.error(err);
-        });
-    }
+  useEffect(() => {
+    (async () => {
+      if (minStorage) {
+        // todo: once `get_supply_by_owner_id` is implemented use code below to check if storage is paid,
+        // `nft_tokens_for_owner` works for now only because nothings is being actually sold
+        // todo: remove these checks once (if) the requirement of initial deposit is removed
 
-    const setNftField = async (field, value) => {
-        setNft((nftOld) => ({...nftOld, [field]: value}));
-    };
+        // const [storagePaid, salesNumber] = await Promise.all([
+        //   getStoragePaid(marketContract.account.accountId),
+        //   getSalesSupplyForOwner(marketContract.account.accountId),
+        // ]);
+        //
+        // if (new Big(storagePaid).lte(new Big(minStorage).times(salesNumber))) {
+        //   setIsMintAllowed(false);
+        // } else {
+        //   setIsMintAllowed(true);
+        // }
 
-    useEffect(() => {
-        (async () => {
-            const storagePaid = await getStoragePaid(marketContract.account.accountId);
-            setIsMintAllowed(!!+storagePaid);
-        })();
-    }, []);
+        const [storagePaid, gemsOwned] = await Promise.all([
+          getStoragePaid(marketContract.account.accountId),
+          getGemsForOwner(marketContract.account.accountId, '0', '100'),
+        ]);
 
-    if (isMintAllowed === false) {
-        return (
-            <Redirect
-                to={{
-                    pathname: '/mint-not-allowed',
-                    state: {isMintAllowed},
-                }}
-            />
-        );
-    }
+        if (new Big(storagePaid).lte(new Big(minStorage).times(gemsOwned.length))) {
+          setIsMintAllowed(false);
+        } else {
+          setIsMintAllowed(true);
+        }
+      }
+    })();
+  }, [minStorage]);
 
-    if (isMintAllowed === null) {
-        return null;
-    }
-
+  if (isMintAllowed === false) {
     return (
-        <Container>
-            <Switch>
-                <Route path={`${match.path}/upload`}>
-                    <MintUpload
-                        onUpload={(imageDataUrl) => UploadFile(imageDataUrl)}
-                        onCompleteLink={`${match.path}/review`}
-                        nft={nft}
-                    />
-                </Route>
-                <Route path={`${match.path}/review`}>
-                    <MintReview nft={nft} backLink={`${match.path}/upload`}/>
-                </Route>
-                <Route exact path={match.path}>
-                    <MintDescribe onCompleteLink={`${match.path}/upload`} nft={nft} setNft={setNft}
-                                  setNftField={setNftField}/>
-                </Route>
-                <Page component={NotFound404}/>
-            </Switch>
-        </Container>
+      <Redirect
+        to={{
+          pathname: '/mint-not-allowed',
+          state: { isMintAllowed },
+        }}
+      />
     );
+  }
+
+  if (isMintAllowed === null) {
+    return null;
+  }
+
+  return (
+    <Container>
+      <Switch>
+        <Route path={`${match.path}/upload`}>
+          <MintUpload
+            onUpload={(imageDataUrl) => setNftField('artDataUrl', imageDataUrl)}
+            onCompleteLink={`${match.path}/review`}
+            nft={nft}
+          />
+        </Route>
+        <Route path={`${match.path}/review`}>
+          <MintReview nft={nft} backLink={`${match.path}/upload`} />
+        </Route>
+        <Route exact path={match.path}>
+          <MintDescribe onCompleteLink={`${match.path}/upload`} nft={nft} setNft={setNft} setNftField={setNftField} />
+        </Route>
+        <Page component={NotFound404} />
+      </Switch>
+    </Container>
+  );
 }

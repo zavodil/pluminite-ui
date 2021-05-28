@@ -117,7 +117,6 @@ Input.propTypes = {
 
 Input.defaultProps = {
   type: 'text',
-  isRequired: true,
 };
 
 export default Input;

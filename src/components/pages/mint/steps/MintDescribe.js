@@ -128,7 +128,6 @@ const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaborato
         type="number"
         className="collaborator-royalty"
         name={`royalty-${number}`}
-        isRequired
         isSmall
         isError={royaltyIsError}
         sign="%"
@@ -141,7 +140,6 @@ const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaborato
         sign="@"
         placement="left"
         name={`collaborator-id-${number}`}
-        isRequired
         isSmall
         isError={userIdIsError}
         onChange={(e) => setUserIdValue(e.target.value)}
@@ -218,7 +216,14 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
   };
 
   // todo: add more checks, check length
-  const isProceedAllowed = () => nft.title && nft.description;
+  const isProceedAllowed = () =>
+    nft.title &&
+    nft.description &&
+    nft.description.length <= APP.GEM_DESCRIPTION_MAX_LENGTH &&
+    nft.conditions?.near !== undefined &&
+    nft.collaborators.length < APP.MAX_COLLABORATORS &&
+    !isToMuchRoyalties(collaborators, userRoyalty) &&
+    !userRoyaltyIsError;
 
   useEffect(() => setNftField('creator', user.accountId), []);
 
@@ -227,7 +232,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
       return {
         ...nftOld,
         collaborators: collaborators
-          .filter(({ userId, accountExists }) => userId && accountExists)
+          .filter(({ userId, accountExists, royalty }) => userId && accountExists && royalty)
           .map(({ userId, royalty }) => {
             return { userId, royalty };
           }),
@@ -282,7 +287,6 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
         <InputRoyalty
           name="royalty"
           labelText="Royalty Fee"
-          isRequired
           asideText={`@${user.accountId}`}
           isSmall
           value={userRoyalty}

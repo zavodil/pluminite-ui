@@ -1,19 +1,22 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { useQuery as useRQuery } from 'react-query';
+import { useInfiniteQuery, useQuery as useRQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import defaultProfilePicture from '../../../assets/default-profile-picture.png';
+import placeholderDataUrl from '../../../assets/art.png';
+
 import Balance from '../../NavigationComponents/Balance';
 import Button from '../../common/Button';
-import { ArtItemEditable } from '../../common/art';
+import { ArtItem } from '../../common/art';
 import { Tabs } from '../../common/tabs';
+import { Loading } from '../../common/utils';
 
 import { useQuery } from '../../../hooks';
 
 import { NearContext, NftContractContext } from '../../../contexts';
 
-import { QUERY_KEYS } from '../../../constants';
+import { APP, QUERY_KEYS } from '../../../constants';
 
 const Container = styled('div')`
   display: flex;
@@ -67,8 +70,19 @@ const Container = styled('div')`
 
   .tabs-tab.tabs-tab--active {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    flex-wrap: wrap;
+
+    .items {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .load-more {
+      margin-top: 25px;
+    }
   }
 
   @media (min-width: 767px) {
@@ -91,25 +105,36 @@ const Container = styled('div')`
 
 export default function Profile() {
   const { user } = useContext(NearContext);
-  const { getGemsForOwner } = useContext(NftContractContext);
+  const { getGemsForOwner, getProfile } = useContext(NftContractContext);
 
   const ownedGemRef = useRef();
 
   const query = useQuery();
   const ownedGemId = query.get('gem-id');
 
-  const { data: gemsForOwner } = useRQuery(
+  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery(
     [QUERY_KEYS.GEMS_FOR_OWNER, user.accountId],
-    // todo: pagination
-    () => getGemsForOwner(user.accountId, '0', '50'),
-    { placeholderData: [] }
+    ({ pageParam = 0 }) => getGemsForOwner(user.accountId, String(pageParam), String(APP.MAX_ITEMS_PER_PAGE_PROFILE)),
+    {
+      getNextPageParam(lastPage, pages) {
+        if (lastPage.length === APP.MAX_ITEMS_PER_PAGE_PROFILE) {
+          return pages.length * APP.MAX_ITEMS_PER_PAGE_PROFILE;
+        }
+
+        return undefined;
+      },
+    }
   );
+
+  const { data: profileBio } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
+    enabled: !!user?.accountId,
+  });
 
   useEffect(() => {
     if (ownedGemRef?.current) {
       ownedGemRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [gemsForOwner]);
+  }, [data]);
 
   return (
     <Container>
@@ -124,27 +149,57 @@ export default function Profile() {
           <span className="summary-block-bottom">Your Funds</span>
         </div>
       </div>
-      <p className="profile-description">You haven’t added a description yet.</p>
+      <p className="profile-description">{profileBio || 'You haven’t added a description yet.'} </p>
       <Button isSecondary>
-        <Link to="/profile/edit">Edit Profile</Link>
+        <Link
+          to={{
+            pathname: '/profile/edit',
+            profileBio,
+          }}
+        >
+          Edit Profile
+        </Link>
       </Button>
       <Tabs
         tabsArray={[
           {
             title: 'Gems I own',
-            content: gemsForOwner.map(({ token_id, metadata: { media } = {} }) => (
-              <ArtItemEditable
-                dataUrl={media}
-                forwardedRef={ownedGemId === token_id ? ownedGemRef : null}
-                key={token_id}
-                gemId={token_id}
-              />
-            )),
+            content: (
+              <Loading waitingFor={data?.pages}>
+                <div className="items">
+                  {data?.pages &&
+                    data.pages
+                      .flat()
+                      .map(({ token_id, metadata: { media } = {} }) => (
+                        <ArtItem
+                          dataUrl={media}
+                          forwardedRef={ownedGemId === token_id ? ownedGemRef : null}
+                          key={token_id}
+                          gemId={token_id}
+                        />
+                      ))}
+                </div>
+                {hasNextPage && (
+                  <Button
+                    isPrimary
+                    onClick={() => fetchNextPage()}
+                    isDisabled={isFetching || isFetchingNextPage}
+                    className="load-more"
+                  >
+                    Load more
+                  </Button>
+                )}
+              </Loading>
+            ),
           },
           {
             title: 'Gems I made',
-            // todo: after integration with NFT contract set ArtItem id to gemId
-            content: Array.from({ length: 2 }).map((_, i) => <ArtItemEditable key={`art-item-made-${i}`} />),
+            // todo: after integration with NFT contract set ArtItem id to gemId (can't get nft-s created by a specific
+            // user on the current version of the contract)
+            // todo: remove `placeholderDataUrl` once we get real data from the contract
+            content: Array.from({ length: 2 }).map((_, i) => (
+              <ArtItem key={`art-item-made-${i}`} dataUrl={placeholderDataUrl} />
+            )),
           },
         ]}
       />

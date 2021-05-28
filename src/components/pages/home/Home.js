@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useQuery } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
 import styled from 'styled-components';
 
 import { NearContext, MarketContractContext } from '../../../contexts';
@@ -9,10 +9,12 @@ import { getNextBidNearsFormatted } from '../../../utils/nears';
 import { DisplayText } from '../../common/typography';
 import { Contribute, MintPlus } from '../../common/popups';
 import { ArtItemPriced } from '../../common/art';
+import Button from '../../common/Button';
 
 import DiamondIcon from '../../../assets/DiamondIcon';
 
-import QUERY_KEYS from '../../../constants/queryKeys';
+import { QUERY_KEYS, APP } from '../../../constants';
+import { Loading } from '../../common/utils';
 
 const Container = styled('div')`
   padding: 15px;
@@ -23,11 +25,21 @@ const Container = styled('div')`
     margin-left: 30px;
   }
 
-  .items {
+  .items-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+
+    .items {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+    }
+
+    .load-more {
+      margin-top: 25px;
+    }
   }
 
   .item {
@@ -83,9 +95,20 @@ export default function Home() {
   const { user } = useContext(NearContext);
   const { getSalesPopulated } = useContext(MarketContractContext);
 
-  const { data: salesPopulated } = useQuery(QUERY_KEYS.SALES_POPULATED, () => getSalesPopulated('0', '50'), {
-    placeholderData: [],
-  });
+  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery(
+    QUERY_KEYS.SALES_POPULATED,
+    ({ pageParam = 0 }) => getSalesPopulated(String(pageParam), String(APP.MAX_ITEMS_PER_PAGE_HOME)),
+    {
+      getNextPageParam(lastPage, pages) {
+        if (lastPage.length === APP.MAX_ITEMS_PER_PAGE_HOME) {
+          return pages.length * APP.MAX_ITEMS_PER_PAGE_HOME;
+        }
+
+        return undefined;
+      },
+      enabled: !!user?.accountId,
+    }
+  );
 
   return (
     <Container>
@@ -96,26 +119,39 @@ export default function Home() {
           <DiamondIcon />
         </div>
       </div>
-      <div className="items-container">
-        <div className="items">
-          {salesPopulated.map((sale) => {
-            const {
-              token_id,
-              metadata: { media },
-            } = sale;
+      <Loading waitingFor={data?.pages}>
+        <div className="items-container">
+          <div className="items">
+            {data?.pages &&
+              data.pages.flat().map((sale) => {
+                const {
+                  token_id,
+                  metadata: { media },
+                } = sale;
 
-            return (
-              <ArtItemPriced
-                key={token_id}
-                dataUrl={media}
-                gemId={token_id}
-                bid={getNextBidNearsFormatted(sale)}
-                gemOnSale={sale}
-              />
-            );
-          })}
+                return (
+                  <ArtItemPriced
+                    key={token_id}
+                    dataUrl={media}
+                    gemId={token_id}
+                    bid={getNextBidNearsFormatted(sale)}
+                    gemOnSale={sale}
+                  />
+                );
+              })}
+          </div>
+          {hasNextPage && (
+            <Button
+              isPrimary
+              onClick={() => fetchNextPage()}
+              isDisabled={isFetching || isFetchingNextPage}
+              className="load-more"
+            >
+              Load more
+            </Button>
+          )}
         </div>
-      </div>
+      </Loading>
       <div className="pop-up">{user ? <MintPlus /> : <Contribute />}</div>
     </Container>
   );

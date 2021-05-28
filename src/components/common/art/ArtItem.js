@@ -5,9 +5,6 @@ import styled from 'styled-components';
 
 import Button from '../Button';
 
-// todo: remove for production
-import placeholderDataUrl from '../../../assets/art.png';
-
 import { square } from '../../../styles/mixins';
 
 const StyledContainer = styled(Link)`
@@ -25,7 +22,7 @@ const StyledContainer = styled(Link)`
   .image-container {
     ${square};
 
-    img {
+    .hidden {
       display: none;
     }
   }
@@ -59,52 +56,44 @@ const ArtItem = forwardRef(function ArtItemWithRef(
     as: isLink ? Link : 'div',
   };
 
-  // todo: fix for gif and video
-  // todo: use only on mint review page
-  function drawImageActualSize(event) {
+  function copyImageOnCanvas(event) {
     const image = event.target;
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
 
-    let sx;
-    let sy;
-    let sw;
-    let sh;
+    // todo: improve checks once storage is implemented and file extensions of art items are known
+    if (/(.gif\?)|(.gif$)/.test(event.target.src)) {
+      image.classList.remove('hidden');
+      canvas.classList.add('hidden');
 
-    if (image.naturalWidth > image.naturalHeight) {
-      sx = (image.naturalWidth - image.naturalHeight) / 2;
-      sy = 0;
-      sw = image.naturalHeight;
-      sh = image.naturalHeight;
-    } else {
-      sx = 0;
-      sy = (image.naturalHeight - image.naturalWidth) / 2;
-      sh = image.naturalWidth;
-      sw = image.naturalWidth;
+      return;
     }
 
-    canvas.width = sw;
-    canvas.height = sh;
+    const ctx = canvas.getContext('2d');
 
-    ctx.drawImage(image, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+
+    ctx.drawImage(image, 0, 0);
   }
 
   return (
     <StyledContainer {...params}>
       <div className="image-container">
-        <img ref={ref} src={dataUrl || placeholderDataUrl} alt="art" onLoad={drawImageActualSize} />
+        <img ref={ref} src={dataUrl} alt="art" onLoad={copyImageOnCanvas} className="hidden" />
         <canvas ref={canvasRef} />
       </div>
-      <Button isPrimary isSmall isDisabled={isButtonDisabled} onClick={onButtonClick}>
-        {buttonText}
-      </Button>
+      {buttonText && (
+        <Button isPrimary isSmall isDisabled={isButtonDisabled} onClick={onButtonClick}>
+          {buttonText}
+        </Button>
+      )}
     </StyledContainer>
   );
 });
 
 ArtItem.propTypes = {
   gemId: PropTypes.string,
-  dataUrl: PropTypes.string,
+  dataUrl: PropTypes.string.isRequired,
   buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isButtonDisabled: PropTypes.bool,
   onButtonClick: PropTypes.func,
