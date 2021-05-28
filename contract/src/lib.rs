@@ -1,115 +1,213 @@
-/*
- * This is an example of a Rust smart contract with two simple, symmetric functions:
- *
- * 1. set_greeting: accepts a greeting, such as "howdy", and records it for the user (account_id)
- *    who sent the request
- * 2. get_greeting: accepts an account_id and returns the greeting saved for it, defaulting to
- *    "Hello"
- *
- * Learn more about writing NEAR smart contracts with Rust:
- * https://github.com/near/near-sdk-rs
- *
- */
-
-// To conserve gas, efficient serialization is achieved through Borsh (http://borsh.io/)
-use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::wee_alloc;
-use near_sdk::{env, near_bindgen};
 use std::collections::HashMap;
+use std::cmp::min;
 
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
+use near_sdk::collections::{LazyOption, LookupMap, UnorderedMap, UnorderedSet};
+use near_sdk::json_types::{Base64VecU8, ValidAccountId, U64, U128};
+use near_sdk::serde::{Deserialize, Serialize};
+use near_sdk::{
+    env, near_bindgen, AccountId, Balance, CryptoHash, PanicOnDefault, Promise, StorageUsage,
+};
 
-// Structs in Rust are similar to other languages, and may include impl keyword as shown below
-// Note: the names of the structs are not important when calling the smart contract, but the function names are
+use crate::internal::*;
+pub use crate::metadata::*;
+pub use crate::mint::*;
+pub use crate::nft_core::*;
+pub use crate::token::*;
+pub use crate::enumerable::*;
+
+mod internal;
+mod metadata;
+mod mint;
+mod nft_core;
+mod token;
+mod enumerable;
+
+// CUSTOM types
+pub type TokenType = String;
+pub type TypeSupplyCaps = HashMap<TokenType, U64>;
+
+pub const CONTRACT_ROYALTY_CAP: u32 = 1000;
+pub const MINTER_ROYALTY_CAP: u32 = 9000;
+pub const MAX_PROFILE_LENGTH: usize = 128;
+
+near_sdk::setup_alloc!();
+
 #[near_bindgen]
-#[derive(Default, BorshDeserialize, BorshSerialize)]
-pub struct Welcome {
-    records: HashMap<String, String>,
+#[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
+pub struct Contract {
+    pub tokens_per_owner: LookupMap<AccountId, UnorderedSet<TokenId>>,
+
+    pub tokens_by_id: LookupMap<TokenId, Token>,
+
+    pub token_metadata_by_id: UnorderedMap<TokenId, TokenMetadata>,
+
+    pub owner_id: AccountId,
+
+    /// The storage size in bytes for one account.
+    pub extra_storage_in_bytes_per_token: StorageUsage,
+
+    pub metadata: LazyOption<NFTMetadata>,
+
+    /// CUSTOM fields
+    pub supply_cap_by_type: TypeSupplyCaps,
+    pub tokens_per_type: LookupMap<TokenType, UnorderedSet<TokenId>>,
+    pub token_types_locked: UnorderedSet<TokenType>,
+    pub contract_royalty: u32,
+    pub profiles: LookupMap<AccountId, String>,
+}
+
+/// Helper structure to for keys of the persistent collections.
+#[derive(BorshSerialize)]
+pub enum StorageKey {
+    TokensPerOwner,
+    TokenPerOwnerInner { account_id_hash: CryptoHash },
+    TokensById,
+    TokenMetadataById,
+    NftMetadata,
+    TokensPerType,
+    TokensPerTypeInner { token_type_hash: CryptoHash },
+    TokenTypesLocked,
+    Profiles
 }
 
 #[near_bindgen]
-impl Welcome {
-    pub fn set_greeting(&mut self, message: String) {
-        let account_id = env::signer_account_id();
+impl Contract {
+    #[init]
+    pub fn new(owner_id: ValidAccountId, metadata: NFTMetadata, supply_cap_by_type: TypeSupplyCaps, unlocked: Option<bool>) -> Self {
+        let mut this = Self {
+            tokens_per_owner: LookupMap::new(StorageKey::TokensPerOwner.try_to_vec().unwrap()),
+            tokens_by_id: LookupMap::new(StorageKey::TokensById.try_to_vec().unwrap()),
+            token_metadata_by_id: UnorderedMap::new(
+                StorageKey::TokenMetadataById.try_to_vec().unwrap(),
+            ),
+            owner_id: owner_id.into(),
+            extra_storage_in_bytes_per_token: 0,
+            metadata: LazyOption::new(
+                StorageKey::NftMetadata.try_to_vec().unwrap(),
+                Some(&metadata),
+            ),
+            supply_cap_by_type,
+            tokens_per_type: LookupMap::new(StorageKey::TokensPerType.try_to_vec().unwrap()),
+            token_types_locked: UnorderedSet::new(StorageKey::TokenTypesLocked.try_to_vec().unwrap()),
+            contract_royalty: 0,
+            profiles: LookupMap::new(StorageKey::Profiles.try_to_vec().unwrap()),
+        };
 
-        // Use env::log to record logs permanently to the blockchain!
-        env::log(format!("Saving greeting '{}' for account '{}'", message, account_id,).as_bytes());
+        if unlocked.is_none() {
+            // CUSTOM - tokens are locked by default
+            for token_type in this.supply_cap_by_type.keys() {
+                this.token_types_locked.insert(&token_type);
+            }
+        }
 
-        self.records.insert(account_id, message);
+        this.measure_min_token_storage_cost();
+
+        this
     }
 
-    // `match` is similar to `switch` in other languages; here we use it to default to "Hello" if
-    // self.records.get(&account_id) is not yet defined.
-    // Learn more: https://doc.rust-lang.org/book/ch06-02-match.html#matching-with-optiont
-    pub fn get_greeting(&self, account_id: String) -> &str {
-        match self.records.get(&account_id) {
-            Some(greeting) => greeting,
-            None => "Hello",
+    pub fn get_profile(&self, account_id: ValidAccountId) -> Option<String> {
+        let account_id: AccountId = account_id.into();
+        self.profiles.get(&account_id)
+    }
+
+    pub fn set_profile(&mut self, profile: String) {
+        assert!(
+            profile.len() < MAX_PROFILE_LENGTH,
+            "Profile length is too long"
+        );
+
+        let predecessor_account_id = env::predecessor_account_id();
+        self.profiles.insert(&predecessor_account_id, &profile);
+    }
+
+    fn measure_min_token_storage_cost(&mut self) {
+        let initial_storage_usage = env::storage_usage();
+        let tmp_account_id = "a".repeat(64);
+        let u = UnorderedSet::new(
+            StorageKey::TokenPerOwnerInner {
+                account_id_hash: hash_account_id(&tmp_account_id),
+            }
+                .try_to_vec()
+                .unwrap(),
+        );
+        self.tokens_per_owner.insert(&tmp_account_id, &u);
+
+        let tokens_per_owner_entry_in_bytes = env::storage_usage() - initial_storage_usage;
+        let owner_id_extra_cost_in_bytes = (tmp_account_id.len() - self.owner_id.len()) as u64;
+
+        self.extra_storage_in_bytes_per_token =
+            tokens_per_owner_entry_in_bytes + owner_id_extra_cost_in_bytes;
+
+        self.tokens_per_owner.remove(&tmp_account_id);
+    }
+
+    /// CUSTOM - setters for owner
+
+    pub fn set_contract_royalty(&mut self, contract_royalty: u32) {
+        self.assert_owner();
+        assert!(contract_royalty <= CONTRACT_ROYALTY_CAP, "Contract royalties limited to 10% for owner");
+        self.contract_royalty = contract_royalty;
+    }
+
+    pub fn add_token_types(&mut self, supply_cap_by_type: TypeSupplyCaps, unlocked: Option<bool>) {
+        self.assert_owner();
+        for (token_type, hard_cap) in &supply_cap_by_type {
+            if unlocked.is_none() {
+                self.token_types_locked.insert(&token_type);
+            }
+            self.supply_cap_by_type.insert(token_type.to_string(), *hard_cap);
+
+            if token_type == "HipHopHeadsFirstEditionMedley" {
+                let keys = self.token_metadata_by_id.keys_as_vector();
+                for i in 0..keys.len() {
+                    let token_id = keys.get(i).unwrap();
+                    if let Some(token) = self.tokens_by_id.get(&token_id) {
+                        let mut token_2 = token;
+                        token_2.royalty.insert("edyoung.near".to_string(), 200);
+                        self.tokens_by_id.insert(&token_id, &token_2);
+                    }
+                }
+            }
         }
     }
-}
 
-/*
- * The rest of this file holds the inline tests for the code above
- * Learn more about Rust tests: https://doc.rust-lang.org/book/ch11-01-writing-tests.html
- *
- * To run from contract directory:
- * cargo test -- --nocapture
- *
- * From project root, to run in combination with frontend tests:
- * yarn test
- *
- */
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use near_sdk::MockedBlockchain;
-    use near_sdk::{testing_env, VMContext};
-
-    // mock the context for testing, notice "signer_account_id" that was accessed above from env::
-    fn get_context(input: Vec<u8>, is_view: bool) -> VMContext {
-        VMContext {
-            current_account_id: "alice_near".to_string(),
-            signer_account_id: "bob_near".to_string(),
-            signer_account_pk: vec![0, 1, 2],
-            predecessor_account_id: "carol_near".to_string(),
-            input,
-            block_index: 0,
-            block_timestamp: 0,
-            account_balance: 0,
-            account_locked_balance: 0,
-            storage_usage: 0,
-            attached_deposit: 0,
-            prepaid_gas: 10u64.pow(18),
-            random_seed: vec![0, 1, 2],
-            is_view,
-            output_data_receivers: vec![],
-            epoch_height: 19,
+    pub fn test(&mut self) {
+        let keys = self.token_metadata_by_id.keys_as_vector();
+        for i in 0..keys.len() {
+            let token_id = keys.get(i).unwrap();
+            if let Some(token) = self.tokens_by_id.get(&token_id) {
+                let mut token_2 = token;
+                token_2.royalty.insert("edyoung.near".to_string(), 200);
+                self.tokens_by_id.insert(&token_id, &token_2);
+            }
         }
     }
 
-    #[test]
-    fn set_then_get_greeting() {
-        let context = get_context(vec![], false);
-        testing_env!(context);
-        let mut contract = Welcome::default();
-        contract.set_greeting("howdy".to_string());
-        assert_eq!(
-            "howdy".to_string(),
-            contract.get_greeting("bob_near".to_string())
-        );
+    pub fn unlock_token_types(&mut self, token_types: Vec<String>) {
+        for token_type in &token_types {
+            self.token_types_locked.remove(&token_type);
+        }
     }
 
-    #[test]
-    fn get_default_greeting() {
-        let context = get_context(vec![], true);
-        testing_env!(context);
-        let contract = Welcome::default();
-        // this test did not call set_greeting so should return the default "Hello" greeting
-        assert_eq!(
-            "Hello".to_string(),
-            contract.get_greeting("francis.near".to_string())
-        );
+    /// CUSTOM - views
+
+    pub fn get_contract_royalty(&self) -> u32 {
+        self.contract_royalty
+    }
+
+    pub fn get_supply_caps(&self) -> TypeSupplyCaps {
+        self.supply_cap_by_type.clone()
+    }
+
+    pub fn get_token_types_locked(&self) -> Vec<String> {
+        self.token_types_locked.to_vec()
+    }
+
+    pub fn is_token_locked(&self, token_id: TokenId) -> bool {
+        let token = self.tokens_by_id.get(&token_id).expect("No token");
+        assert_eq!(token.token_type.is_some(), true, "Token must have type");
+        let token_type = token.token_type.unwrap();
+        self.token_types_locked.contains(&token_type)
     }
 }

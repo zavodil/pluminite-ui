@@ -13,7 +13,8 @@ const {
   format: { parseNearAmount },
 } = utils;
 
-const GAS = '200000000000000';
+const GAS = '300000000000000';
+const GAS_HALF = '150000000000000';
 
 export const NftContractContext = React.createContext(initialNftContractState);
 
@@ -79,7 +80,7 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
               perpetual_royalties: perpetualRoyalties,
             })
           ),
-          GAS / 2,
+          GAS_HALF,
           deposit
         ),
         transactions.functionCall(
@@ -98,7 +99,7 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
               }),
             })
           ),
-          GAS / 2,
+          GAS_HALF,
           deposit
         ),
       ]);
@@ -120,6 +121,31 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     [nftContract]
   );
 
+    const setProfile = useCallback(
+        async (profile) => {
+            await nftContract.account.signAndSendTransaction(nftContract.contractId, [
+                transactions.functionCall(
+                    'set_profile',
+                    Buffer.from(
+                        JSON.stringify({
+                            profile: profile,
+                        })
+                    ),
+                    GAS_HALF
+                )
+            ]);
+        },
+        [nftContract]
+    );
+
+    const getProfile = useCallback(
+        async (account_id) =>
+            nftContract.get_profile({
+                account_id: account_id,
+            }),
+        [nftContract]
+    );
+
   const value = {
     nftContract,
     getGem,
@@ -128,6 +154,8 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     getGemsBatch,
     mintGem,
     listForSale,
+    setProfile,
+    getProfile
   };
 
   return <NftContractContext.Provider value={value}>{children}</NftContractContext.Provider>;
@@ -145,6 +173,7 @@ NftContractContextProvider.propTypes = {
     nft_tokens_batch: PropTypes.func.isRequired,
     nft_mint: PropTypes.func.isRequired,
     nft_approve: PropTypes.func.isRequired,
+    get_profile: PropTypes.func.isRequired,
   }).isRequired,
   children: ReactChildrenTypeRequired,
 };
