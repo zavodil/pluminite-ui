@@ -7,7 +7,7 @@ import { initialNftContractState } from './reducer';
 import { getMarketContractName } from '../../utils';
 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
-import APP from "../../constants/app";
+import APP from '../../constants/app';
 
 const {
   format: { parseNearAmount },
@@ -52,7 +52,6 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
 
   const mintGem = useCallback(
     async (nft) => {
-
       const metadata = {
         media: nft.artDataUrl,
         reference: APP.HASH_SOURCE,
@@ -121,30 +120,30 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     [nftContract]
   );
 
-    const setProfile = useCallback(
-        async (profile) => {
-            await nftContract.account.signAndSendTransaction(nftContract.contractId, [
-                transactions.functionCall(
-                    'set_profile',
-                    Buffer.from(
-                        JSON.stringify({
-                            profile: profile,
-                        })
-                    ),
-                    GAS_HALF
-                )
-            ]);
-        },
-        [nftContract]
-    );
+  const setProfile = useCallback(
+    async (profile) => {
+      await nftContract.account.signAndSendTransaction(nftContract.contractId, [
+        transactions.functionCall(
+          'set_profile',
+          Buffer.from(
+            JSON.stringify({
+              profile,
+            })
+          ),
+          GAS_HALF
+        ),
+      ]);
+    },
+    [nftContract]
+  );
 
-    const getProfile = useCallback(
-        async (account_id) =>
-            nftContract.get_profile({
-                account_id: account_id,
-            }),
-        [nftContract]
-    );
+  const getProfile = useCallback(
+    async (account_id) =>
+      nftContract.get_profile({
+        account_id,
+      }),
+    [nftContract]
+  );
 
   const value = {
     nftContract,
@@ -155,7 +154,7 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     mintGem,
     listForSale,
     setProfile,
-    getProfile
+    getProfile,
   };
 
   return <NftContractContext.Provider value={value}>{children}</NftContractContext.Provider>;
