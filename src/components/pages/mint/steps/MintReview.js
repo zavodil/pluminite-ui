@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useQueryClient } from 'react-query';
 import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
+import pinataSDK from '@pinata/sdk';
 
 import { MarketContractContext, NearContext } from '../../../../contexts';
 
@@ -13,7 +14,7 @@ import { ArtItemPriced } from '../../../common/art';
 import { StickedToBottom } from '../../../common/layout';
 import Button from '../../../common/Button';
 
-import { QUERY_KEYS } from '../../../../constants';
+import { QUERY_KEYS, APP } from '../../../../constants';
 
 import { NftTypeRequired } from '../../../../types/NftTypes';
 
@@ -58,9 +59,30 @@ const MintReview = ({ backLink, nft }) => {
   const { mintAndListGem } = useContext(MarketContractContext);
   const queryClient = useQueryClient();
 
+  const uploadToIPFS = async (imageDataUrl) => {
+    const pinata = pinataSDK(APP.PINATA_API_KEY, APP.PINATA_API_SECRET);
+    const metadata = {};
+    const data = {
+      file: imageDataUrl,
+    };
+
+    let result;
+
+    try {
+      result = await pinata.pinJSONToIPFS(data, metadata);
+    } catch (err) {
+      console.error(err);
+
+      return undefined;
+    }
+
+    return result.IpfsHash;
+  };
+
   const processMintClick = async () => {
     await queryClient.invalidateQueries(QUERY_KEYS.GEMS_FOR_OWNER, user.accountId);
-    await mintAndListGem(nft);
+    const ipfsHash = await uploadToIPFS(nft.artDataUrl);
+    await mintAndListGem({ ...nft, media: ipfsHash });
 
     // todo: show MintSuccessMessage on mint success (check if success from query params after on redirect from near
     // wallet when we stop using hash browser) toast.success(<MintSuccessMessage />);
