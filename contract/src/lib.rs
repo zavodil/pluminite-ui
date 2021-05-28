@@ -29,7 +29,8 @@ pub type TypeSupplyCaps = HashMap<TokenType, U64>;
 
 pub const CONTRACT_ROYALTY_CAP: u32 = 1000;
 pub const MINTER_ROYALTY_CAP: u32 = 9000;
-pub const MAX_PROFILE_LENGTH: usize = 128;
+pub const MAX_PROFILE_BIO_LENGTH: usize = 256;
+pub const MAX_PROFILE_IMAGE_LENGTH: usize = 256;
 
 near_sdk::setup_alloc!();
 
@@ -54,7 +55,14 @@ pub struct Contract {
     pub tokens_per_type: LookupMap<TokenType, UnorderedSet<TokenId>>,
     pub token_types_locked: UnorderedSet<TokenType>,
     pub contract_royalty: u32,
-    pub profiles: LookupMap<AccountId, String>,
+    pub profiles: LookupMap<AccountId, Profile>,
+}
+
+#[derive(Debug, Clone, BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
+#[serde(crate = "near_sdk::serde")]
+pub struct Profile {
+    pub bio: String,
+    pub image: String,
 }
 
 /// Helper structure to for keys of the persistent collections.
@@ -68,7 +76,7 @@ pub enum StorageKey {
     TokensPerType,
     TokensPerTypeInner { token_type_hash: CryptoHash },
     TokenTypesLocked,
-    Profiles
+    Profiles,
 }
 
 #[near_bindgen]
@@ -106,18 +114,24 @@ impl Contract {
         this
     }
 
-    pub fn get_profile(&self, account_id: ValidAccountId) -> Option<String> {
+    pub fn get_profile(&self, account_id: ValidAccountId) -> Option<Profile> {
         let account_id: AccountId = account_id.into();
         self.profiles.get(&account_id)
     }
 
-    pub fn set_profile(&mut self, profile: String) {
+    pub fn set_profile(&mut self, profile: Profile) {
         assert!(
-            profile.len() < MAX_PROFILE_LENGTH,
-            "Profile length is too long"
+            profile.bio.len() < MAX_PROFILE_BIO_LENGTH,
+            "Profile bio length is too long"
+        );
+
+        assert!(
+            profile.bio.len() < MAX_PROFILE_IMAGE_LENGTH,
+            "Profile image length is too long"
         );
 
         let predecessor_account_id = env::predecessor_account_id();
+
         self.profiles.insert(&predecessor_account_id, &profile);
     }
 
