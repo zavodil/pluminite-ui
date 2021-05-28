@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory, useParams } from 'react-router-dom';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
@@ -11,8 +11,6 @@ import CloseButton from '../../common/Button/CloseButton';
 import { TitleText } from '../../common/typography';
 import { Tabs } from '../../common/tabs';
 import { Portal } from '../../common/utils';
-
-import NotFound404 from '../not-found-404';
 
 import { withUSDs } from '../../../hooks';
 
@@ -236,7 +234,7 @@ function Gem({ location: { prevPathname } }) {
   };
 
   if (gem === null) {
-    return <NotFound404 />;
+    return <Redirect to="/404" />;
   }
 
   return (
