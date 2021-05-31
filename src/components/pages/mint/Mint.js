@@ -26,7 +26,7 @@ export default function Mint() {
   const { getStoragePaid, marketContract, minStorage } = useContext(MarketContractContext);
   const { getGemsForOwner } = useContext(NftContractContext);
 
-  const setNftField = async (field, value) => {
+  const setNftField = (field, value) => {
     setNft((nftOld) => ({ ...nftOld, [field]: value }));
   };
 
@@ -87,7 +87,10 @@ export default function Mint() {
       <Switch>
         <Route path={`${match.path}/upload`}>
           <MintUpload
-            onUpload={(imageDataUrl) => setNftField('artDataUrl', imageDataUrl)}
+            onUpload={({ imageDataUrl, imageThumbnailDataUrl }) => {
+              setNftField('artDataUrl', imageDataUrl);
+              setNftField('artThumbnailDataUrl', imageThumbnailDataUrl);
+            }}
             onCompleteLink={`${match.path}/review`}
             nft={nft}
           />

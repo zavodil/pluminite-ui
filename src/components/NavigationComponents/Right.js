@@ -40,10 +40,11 @@ const Right = () => {
   const isSignUpInPage = !!useRouteMatch('/sign-up') || !!useRouteMatch('/log-in');
   const isProfilePage = useRouteMatch('/profile');
   const isGemPage = useRouteMatch('/gem');
+  const isGemOriginalPage = useRouteMatch('/gem-original');
 
   const { user } = useContext(NearContext);
 
-  if (isSignUpInPage || isGemPage) {
+  if (isSignUpInPage || isGemPage || isGemOriginalPage) {
     return null;
   }
 

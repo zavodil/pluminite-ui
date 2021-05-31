@@ -1,14 +1,22 @@
-import React, { useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import React, { useContext, useRef, useState } from 'react';
+import { useQuery as useRQuery, useQueryClient } from 'react-query';
+import { Link, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
+
+import { NearContext, NftContractContext } from '../../../../contexts';
 
 import { StickedToBottom } from '../../../common/layout';
 import Button from '../../../common/Button';
 import FileDropzone from '../../../common/FileDropzone';
 import { HeadingSmallText } from '../../../common/typography';
+import { DotsLoading } from '../../../common/utils';
 
-import { PROFILE } from '../../../../constants';
+import { useIsUnmounting } from '../../../../hooks';
+
+import { uploadFileData } from '../../../../apis';
+
+import { PROFILE, QUERY_KEYS } from '../../../../constants';
 
 const Container = styled('div')`
   .heading-small {
@@ -42,12 +50,48 @@ const StyledButton = styled(Button)`
   }
 `;
 
-function ProfileEditPhoto({ processSave }) {
-  const [imageDataUrl, setImageDataUrl] = useState(null);
+function ProfileEditPhoto() {
+  const { user } = useContext(NearContext);
+  const { setProfile, getProfile } = useContext(NftContractContext);
+
+  const { data: profile } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
+    enabled: !!user?.accountId,
+  });
+
+  const [avatarDataUrl, setAvatarDataUrl] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+
   const inputRef = useRef();
+
+  const history = useHistory();
+
+  const queryClient = useQueryClient();
+
+  const isUnmounting = useIsUnmounting();
 
   const processUploadButtonClick = () => {
     inputRef.current.click();
+  };
+
+  const isSaveAvailable = () => !isSaving;
+
+  const processSaveButtonClick = async () => {
+    if (!isSaveAvailable()) {
+      return;
+    }
+
+    setIsSaving(true);
+
+    const fileHash = await uploadFileData(avatarDataUrl);
+    await setProfile({ ...profile, image: fileHash });
+    await queryClient.invalidateQueries([QUERY_KEYS.GET_PROFILE, user.accountId]);
+
+    toast.success('Success! Your profile was saved!');
+
+    if (!isUnmounting) {
+      setIsSaving(false);
+      history.push('/profile');
+    }
   };
 
   return (
@@ -57,24 +101,23 @@ function ProfileEditPhoto({ processSave }) {
       <FileDropzone
         buttonText="Select a photo"
         adviceText={
-          imageDataUrl
+          avatarDataUrl
             ? 'This will be your profile picture '
             : 'Photos with a 1:1 ratio work best, that are under 1mb in size.'
         }
-        onUpload={setImageDataUrl}
+        onUpload={({ imageDataUrl }) => setAvatarDataUrl(imageDataUrl)}
         ref={inputRef}
         showFileName={false}
         maxSizeMb={PROFILE.PHOTO_MAX_SIZE_MB}
       />
       <StickedToBottom isSecondary>
-        <StyledButton isSecondary>
-          <Link to="/profile/edit">Cancel</Link>
+        <StyledButton isSecondary isDisabled={isSaving}>
+          <Link to={isSaving ? '#' : '/profile'}>Cancel</Link>
         </StyledButton>
-        {imageDataUrl ? (
-          <StyledButton isPrimary>
-            <Link to="/profile" onClick={processSave}>
-              Save
-            </Link>
+        {avatarDataUrl ? (
+          <StyledButton isPrimary onClick={processSaveButtonClick} isDisabled={!isSaveAvailable()}>
+            {isSaving ? 'Saving' : 'Save'}
+            {isSaving && <DotsLoading />}
           </StyledButton>
         ) : (
           <StyledButton isPrimary onClick={processUploadButtonClick}>
@@ -85,9 +128,5 @@ function ProfileEditPhoto({ processSave }) {
     </Container>
   );
 }
-
-ProfileEditPhoto.propTypes = {
-  processSave: PropTypes.func.isRequired,
-};
 
 export default ProfileEditPhoto;

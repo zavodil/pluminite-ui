@@ -16,6 +16,10 @@ const StyledContainer = styled('div')`
       border-radius: var(--radius-default);
     }
 
+    .canvas-thumbnail {
+      display: none;
+    }
+
     img {
       display: none;
     }
@@ -51,6 +55,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
   const [filename, setFilename] = useState(false);
 
   const canvasRef = useRef();
+  const canvasThumbnailRef = useRef();
 
   const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -91,8 +96,12 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
 
   const cropImageToSquare = (event) => {
     const image = event.target;
+
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
+
+    const canvasThumbnail = canvasThumbnailRef.current;
+    const ctxThumbnail = canvasThumbnail.getContext('2d');
 
     let sx;
     let sy;
@@ -116,10 +125,17 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
 
     ctx.drawImage(image, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
 
+    canvasThumbnail.width = 400;
+    canvasThumbnail.height = 400;
+    ctxThumbnail.drawImage(image, sx, sy, sw, sh, 0, 0, canvasThumbnail.width, canvasThumbnail.height);
+
     setIsLoading(false);
 
     if (onUpload) {
-      onUpload(canvas.toDataURL('image/png', 1));
+      onUpload({
+        imageDataUrl: canvas.toDataURL('image/png', 1),
+        imageThumbnailDataUrl: canvasThumbnail.toDataURL('image/png'),
+      });
     }
   };
 
@@ -129,6 +145,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
         <div className="image-container">
           <img src={imageDataUrl} alt="selected file" onLoad={cropImageToSquare} />
           <canvas ref={canvasRef} />
+          <canvas className="canvas-thumbnail" ref={canvasThumbnailRef} />
         </div>
       ) : (
         <div className="input-container" ref={customRef || ref} {...dropzoneProps}>

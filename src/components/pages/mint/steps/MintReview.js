@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useQueryClient } from 'react-query';
 import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import pinataSDK from '@pinata/sdk';
 
 import { MarketContractContext, NearContext } from '../../../../contexts';
 
@@ -15,7 +14,9 @@ import { StickedToBottom } from '../../../common/layout';
 import Button from '../../../common/Button';
 import { DotsLoading } from '../../../common/utils';
 
-import { QUERY_KEYS, APP } from '../../../../constants';
+import { uploadFileData } from '../../../../apis';
+
+import { QUERY_KEYS } from '../../../../constants';
 
 import { NftTypeRequired } from '../../../../types/NftTypes';
 
@@ -61,32 +62,18 @@ const MintReview = ({ backLink, nft }) => {
   const { mintAndListGem } = useContext(MarketContractContext);
   const queryClient = useQueryClient();
 
-  const uploadToIPFS = async (imageDataUrl) => {
-    const pinata = pinataSDK(APP.PINATA_API_KEY, APP.PINATA_API_SECRET);
-    const metadata = {};
-    const data = {
-      file: imageDataUrl,
-    };
-
-    let result;
-
-    try {
-      result = await pinata.pinJSONToIPFS(data, metadata);
-    } catch (err) {
-      console.error(err);
-
-      return undefined;
-    }
-
-    return result.IpfsHash;
-  };
+  const uploadToIPFS = async ({ imageDataUrl, imageThumbnailDataUrl }) =>
+    Promise.all([uploadFileData(imageDataUrl), uploadFileData(imageThumbnailDataUrl)]);
 
   const processMintClick = async () => {
     setIsMinting(true);
 
     await queryClient.invalidateQueries(QUERY_KEYS.GEMS_FOR_OWNER, user.accountId);
-    const ipfsHash = await uploadToIPFS(nft.artDataUrl);
-    await mintAndListGem({ ...nft, media: ipfsHash });
+    const [ipfsHash, thumbnailIpfsHash] = await uploadToIPFS({
+      imageDataUrl: nft.artDataUrl,
+      imageThumbnailDataUrl: nft.artThumbnailDataUrl,
+    });
+    await mintAndListGem({ ...nft, media: ipfsHash, media_lowres: thumbnailIpfsHash });
 
     // todo: show MintSuccessMessage on mint success (check if success from query params after on redirect from near
     // wallet when we stop using hash browser) toast.success(<MintSuccessMessage />);
@@ -110,7 +97,11 @@ const MintReview = ({ backLink, nft }) => {
       <p className="text">{nft.title}</p>
       <p className="sub-header">Art piece description</p>
       <p className="text">{nft.description}</p>
-      <ArtItemPriced dataUrl={nft.artDataUrl} bid={getNextBidNearsFormatted(nft)} bidAvailable={false} />
+      <ArtItemPriced
+        nft={{ metadata: { media: nft.artDataUrl } }}
+        bid={getNextBidNearsFormatted(nft)}
+        bidAvailable={false}
+      />
       <StickedToBottom isSecondary>
         <StyledButton isSecondary isDisabled={isMinting}>
           <Link to={backLink}>Replace Art</Link>

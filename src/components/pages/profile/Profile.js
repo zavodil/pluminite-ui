@@ -3,18 +3,18 @@ import { useInfiniteQuery, useQuery as useRQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import defaultProfilePicture from '../../../assets/default-profile-picture.png';
 import placeholderDataUrl from '../../../assets/art.png';
 
 import Balance from '../../NavigationComponents/Balance';
 import Button from '../../common/Button';
-import { ArtItem } from '../../common/art';
+import { ArtItem, ArtItemSellable } from '../../common/art';
 import { Tabs } from '../../common/tabs';
 import { Loading } from '../../common/utils';
+import { ImageFromIpfs } from '../../common/images';
 
 import { useQuery } from '../../../hooks';
 
-import { NearContext, NftContractContext } from '../../../contexts';
+import { NearContext, NftContractContext, MarketContractContext } from '../../../contexts';
 
 import { APP, QUERY_KEYS } from '../../../constants';
 
@@ -106,6 +106,7 @@ const Container = styled('div')`
 export default function Profile() {
   const { user } = useContext(NearContext);
   const { getGemsForOwner, getProfile } = useContext(NftContractContext);
+  const { marketContract } = useContext(MarketContractContext);
 
   const ownedGemRef = useRef();
 
@@ -126,7 +127,7 @@ export default function Profile() {
     }
   );
 
-  const { data: profileBio } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
+  const { data: profile } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
     enabled: !!user?.accountId,
   });
 
@@ -139,7 +140,7 @@ export default function Profile() {
   return (
     <Container>
       <div className="summary">
-        <img className="picture" src={defaultProfilePicture} alt="profile picture" width="62" height="62" />
+        <ImageFromIpfs className="picture" media={profile?.image} alt="profile picture" width="62" height="62" />
         <div className="summary-block">
           <span className="summary-block-top">0</span>
           <span className="summary-block-bottom">Pieces Sold</span>
@@ -149,16 +150,9 @@ export default function Profile() {
           <span className="summary-block-bottom">Your Funds</span>
         </div>
       </div>
-      <p className="profile-description">{profileBio || 'You haven’t added a description yet.'} </p>
+      <p className="profile-description">{profile?.bio || 'You haven’t added a description yet.'} </p>
       <Button isSecondary>
-        <Link
-          to={{
-            pathname: '/profile/edit',
-            profileBio,
-          }}
-        >
-          Edit Profile
-        </Link>
+        <Link to="/profile/edit">Edit Profile</Link>
       </Button>
       <Tabs
         tabsArray={[
@@ -168,16 +162,20 @@ export default function Profile() {
               <Loading waitingFor={data?.pages}>
                 <div className="items">
                   {data?.pages &&
-                    data.pages
-                      .flat()
-                      .map(({ token_id, metadata: { media } = {} }) => (
-                        <ArtItem
-                          dataUrl={media}
-                          forwardedRef={ownedGemId === token_id ? ownedGemRef : null}
-                          key={token_id}
-                          gemId={token_id}
+                    data.pages.flat().map((nft) => {
+                      const ArtItemComponent =
+                        marketContract.contractId in nft.approved_account_ids ? ArtItem : ArtItemSellable;
+
+                      return (
+                        <ArtItemComponent
+                          key={nft.token_id}
+                          forwardedRef={ownedGemId === nft.token_id ? ownedGemRef : null}
+                          nft={nft}
+                          isLink
+                          isFromIpfs
                         />
-                      ))}
+                      );
+                    })}
                 </div>
                 {hasNextPage && (
                   <Button
@@ -198,7 +196,7 @@ export default function Profile() {
             // user on the current version of the contract)
             // todo: remove `placeholderDataUrl` once we get real data from the contract
             content: Array.from({ length: 2 }).map((_, i) => (
-              <ArtItem key={`art-item-made-${i}`} dataUrl={placeholderDataUrl} />
+              <ArtItem key={`art-item-made-${i}`} nft={{ metadata: { media: placeholderDataUrl } }} />
             )),
           },
         ]}

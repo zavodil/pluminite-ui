@@ -5,14 +5,10 @@ import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
-import { getFileData } from '../../../apis';
-import { ArtItem } from '../../common/art';
-
+import { ImageFromIpfs } from '../../common/images';
 import { StickedToBottom } from '../../common/layout';
 import Button from '../../common/Button';
 import CloseButton from '../../common/Button/CloseButton';
-import { TitleText } from '../../common/typography';
-import { Tabs } from '../../common/tabs';
 import { Portal } from '../../common/utils';
 
 import { withUSDs } from '../../../hooks';
@@ -28,58 +24,11 @@ const Container = styled('div')`
   display: flex;
   flex-direction: column;
   min-height: calc(100% - 173px);
-  max-width: 767px;
   padding: 192px 28px 60px;
 
-  .gem-title {
-    margin-bottom: 5px;
-  }
-
-  .users {
-    color: rgba(var(--lavendar-base), 0.7);
-    margin-bottom: 40px;
-
-    p {
-      margin: 0 0 5px;
-
-      :last-of-type {
-        margin-bottom: 0;
-      }
-    }
-  }
-
-  .tabs-titles {
-    margin-bottom: 40px;
-  }
-
-  .history-event {
-    padding: 20px 0;
-    font-size: 16px;
-    line-height: 24px;
-
-    :first-of-type {
-      padding-top: 0;
-    }
-
-    :not(:last-of-type) {
-      //border-bottom: 1px solid var(--bubble-gum);
-      border-bottom: 1px solid rgba(var(--bubble-gum-base), 0.2);
-    }
-  }
-
-  .royalty {
-    text-align: right;
-    margin-bottom: 25px;
-
-    &-user {
-      margin-right: 25px;
-    }
-
-    &-royalty {
-      font-size: 34px;
-      font-family: var(--font-secondary);
-      color: rgba(var(--bubble-gum-base), 0.7);
-    }
+  .image {
+    max-width: 100%;
+    border-radius: var(--radius-default);
   }
 
   @media (min-width: 767px) {
@@ -166,7 +115,7 @@ const GemHeader = styled('div')`
   }
 `;
 
-function Gem({ location: { prevPathname } }) {
+function GemOriginal({ location: { prevPathname } }) {
   const { user } = useContext(NearContext);
   const { getGem } = useContext(NftContractContext);
   const { getSale, offer, marketContract } = useContext(MarketContractContext);
@@ -193,15 +142,6 @@ function Gem({ location: { prevPathname } }) {
     },
     {
       enabled: !!gem,
-    }
-  );
-
-  const { data: imageData } = useQuery(
-    [QUERY_KEYS.GET_IMAGE_DATA, gem?.metadata?.media],
-    () => getFileData(gem?.metadata?.media),
-    {
-      retry: 1,
-      enabled: !!gem?.metadata?.media,
     }
   );
 
@@ -236,14 +176,6 @@ function Gem({ location: { prevPathname } }) {
     }
   };
 
-  const getCreator = () => {
-    if (!gem?.metadata?.extra) {
-      return undefined;
-    }
-
-    return JSON.parse(gem?.metadata?.extra).creator_id;
-  };
-
   if (gem === null) {
     return <Redirect to="/404" />;
   }
@@ -252,60 +184,11 @@ function Gem({ location: { prevPathname } }) {
     <Container>
       <Portal>
         <GemHeader>
-          <div>{imageData && <img src={imageData} alt={gem?.metadata?.title} width={40} height={40} />}</div>
+          <div />
           <CloseButton className="gem-close" processCLick={goBack} />
         </GemHeader>
       </Portal>
-      <TitleText className="gem-title">{gem?.metadata?.title || 'No title provided'}</TitleText>
-      <div className="users">
-        <p>by {getCreator() || '?'}</p>
-        <p>owned by {gem?.owner_id || '?'}</p>
-      </div>
-      <Tabs
-        tabsArray={[
-          {
-            title: 'Preview',
-            content: <ArtItem nft={gem} isFullScreenEnabled isFromIpfs />,
-          },
-          {
-            title: 'Description',
-            content: gem?.metadata?.description || 'No description provided',
-          },
-          {
-            title: 'History',
-            content: (
-              // todo: gemOnSale.bids.near.date is currently not implemented on the contracts
-              <>
-                {hasBids() && (
-                  <div className="history-event">
-                    {gemOnSale.bids.near.owner_id} bid {formatNearAmount(gemOnSale.bids.near.price)}Ⓝ on{' '}
-                    {gemOnSale.bids.near.date
-                      ? new Intl.DateTimeFormat().format(new Date(gemOnSale.bids.near.date))
-                      : 'unknown date'}
-                  </div>
-                )}
-                {gem?.metadata?.issued_at && (
-                  <div className="history-event">
-                    {getCreator() || '?'} minted {gem?.metadata?.title || 'untitled gem'} on{' '}
-                    {new Intl.DateTimeFormat().format(new Date(+gem.metadata.issued_at))}
-                  </div>
-                )}
-              </>
-            ),
-          },
-          {
-            title: 'Royalties',
-            content:
-              gem?.royalty &&
-              Object.entries(gem.royalty).map(([userId, royalty], index) => (
-                <div key={`royalty-${index}`} className="royalty">
-                  <span className="royalty-user">{userId}</span>
-                  <span className="royalty-royalty">{royalty / 100}%</span>
-                </div>
-              )),
-          },
-        ]}
-      />
+      <ImageFromIpfs media={gem?.metadata?.media} alt={gem?.metadata?.title} />
       {isListed() && !isOwnedByUser() && (
         <StickedToBottom isSecondary>
           <StyledBid className="bid">
@@ -334,7 +217,7 @@ function Gem({ location: { prevPathname } }) {
   );
 }
 
-Gem.propTypes = {
+GemOriginal.propTypes = {
   location: PropTypes.shape({
     prevPathname: PropTypes.string,
   }),
@@ -343,4 +226,4 @@ Gem.propTypes = {
   isButtonDisabled: PropTypes.bool,
 };
 
-export default Gem;
+export default GemOriginal;
