@@ -65,7 +65,7 @@ const ArtItem = ({
 }) => {
   const location = useLocation();
 
-  const params = {
+  const containerParams = {
     to: isLink
       ? {
           pathname: `/gem/${nft?.token_id}`,
@@ -75,11 +75,21 @@ const ArtItem = ({
     as: isLink ? Link : 'div',
   };
 
+  const getIpfsHashMedia = () => {
+    let mediaLowRes;
+
+    if (nft?.metadata?.extra) {
+      mediaLowRes = JSON.parse(nft.metadata.extra).media_lowres;
+    }
+
+    return mediaLowRes || nft?.metadata?.media;
+  };
+
   return (
-    <StyledContainer className="art-item" {...params}>
+    <StyledContainer className="art-item" {...containerParams}>
       <div className="image-container">
         {isFromIpfs ? (
-          <ImageFromIpfs media={nft?.metadata?.media} forwardedRef={forwardedRef} />
+          <ImageFromIpfs media={getIpfsHashMedia()} forwardedRef={forwardedRef} />
         ) : (
           <Image forwardedRef={forwardedRef} src={nft?.metadata?.media} alt="art" className="hidden" />
         )}
