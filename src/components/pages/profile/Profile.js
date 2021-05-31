@@ -8,13 +8,13 @@ import placeholderDataUrl from '../../../assets/art.png';
 
 import Balance from '../../NavigationComponents/Balance';
 import Button from '../../common/Button';
-import { ArtItem } from '../../common/art';
+import { ArtItem, ArtItemSellable } from '../../common/art';
 import { Tabs } from '../../common/tabs';
 import { Loading } from '../../common/utils';
 
 import { useQuery } from '../../../hooks';
 
-import { NearContext, NftContractContext } from '../../../contexts';
+import { NearContext, NftContractContext, MarketContractContext } from '../../../contexts';
 
 import { APP, QUERY_KEYS } from '../../../constants';
 
@@ -106,6 +106,7 @@ const Container = styled('div')`
 export default function Profile() {
   const { user } = useContext(NearContext);
   const { getGemsForOwner, getProfile } = useContext(NftContractContext);
+  const { marketContract } = useContext(MarketContractContext);
 
   const ownedGemRef = useRef();
 
@@ -168,17 +169,20 @@ export default function Profile() {
               <Loading waitingFor={data?.pages}>
                 <div className="items">
                   {data?.pages &&
-                    data.pages
-                      .flat()
-                      .map((nft) => (
-                        <ArtItem
+                    data.pages.flat().map((nft) => {
+                      const ArtItemComponent =
+                        marketContract.contractId in nft.approved_account_ids ? ArtItem : ArtItemSellable;
+
+                      return (
+                        <ArtItemComponent
                           key={nft.token_id}
                           forwardedRef={ownedGemId === nft.token_id ? ownedGemRef : null}
                           nft={nft}
                           isLink
                           isFromIpfs
                         />
-                      ))}
+                      );
+                    })}
                 </div>
                 {hasNextPage && (
                   <Button
