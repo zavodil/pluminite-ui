@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useQueryClient } from 'react-query';
 import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import pinataSDK from '@pinata/sdk';
 
 import { MarketContractContext, NearContext } from '../../../../contexts';
 
@@ -15,7 +14,9 @@ import { StickedToBottom } from '../../../common/layout';
 import Button from '../../../common/Button';
 import { DotsLoading } from '../../../common/utils';
 
-import { QUERY_KEYS, APP } from '../../../../constants';
+import { uploadFileData } from '../../../../apis';
+
+import { QUERY_KEYS } from '../../../../constants';
 
 import { NftTypeRequired } from '../../../../types/NftTypes';
 
@@ -61,30 +62,8 @@ const MintReview = ({ backLink, nft }) => {
   const { mintAndListGem } = useContext(MarketContractContext);
   const queryClient = useQueryClient();
 
-  const uploadToIPFS = async ({ imageDataUrl, imageThumbnailDataUrl }) => {
-    const pinata = pinataSDK(APP.PINATA_API_KEY, APP.PINATA_API_SECRET);
-    const metadata = {};
-    const data = {
-      file: imageDataUrl,
-    };
-    const dataThumbnail = {
-      file: imageThumbnailDataUrl,
-    };
-
-    let result;
-    let resultThumbnail;
-
-    try {
-      result = await pinata.pinJSONToIPFS(data, metadata);
-      resultThumbnail = await pinata.pinJSONToIPFS(dataThumbnail, metadata);
-    } catch (err) {
-      console.error(err);
-
-      return undefined;
-    }
-
-    return [result.IpfsHash, resultThumbnail.IpfsHash];
-  };
+  const uploadToIPFS = async ({ imageDataUrl, imageThumbnailDataUrl }) =>
+    Promise.all([uploadFileData(imageDataUrl), uploadFileData(imageThumbnailDataUrl)]);
 
   const processMintClick = async () => {
     setIsMinting(true);
