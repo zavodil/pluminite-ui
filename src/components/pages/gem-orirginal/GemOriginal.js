@@ -208,7 +208,7 @@ function GemOriginal({ location: { prevPathname } }) {
               </div>
             </div>
             <Button className="bid-button" isPrimary onClick={processBid}>
-              Bid {getNextBidNearsFormatted(gemOnSale)}Ⓝ on Gem
+              Buy Gem for {getNextBidNearsFormatted(gemOnSale)}Ⓝ
             </Button>
           </StyledBid>
         </StickedToBottom>
