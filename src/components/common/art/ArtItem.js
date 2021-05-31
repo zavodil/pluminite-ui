@@ -91,7 +91,7 @@ const ArtItem = ({
         {isFromIpfs ? (
           <ImageFromIpfs media={getIpfsHashMedia()} forwardedRef={forwardedRef} alt={nft?.metadata?.title} />
         ) : (
-          <Image ref={forwardedRef} src={nft?.metadata?.media} alt={nft?.metadata?.title} className="hidden" />
+          <Image ref={forwardedRef} src={nft?.metadata?.media} alt={nft?.metadata?.title} />
         )}
       </div>
       {buttonText && (
