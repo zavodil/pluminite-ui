@@ -176,6 +176,7 @@ export default function Profile() {
                           forwardedRef={ownedGemId === token_id ? ownedGemRef : null}
                           key={token_id}
                           gemId={token_id}
+                          isLink
                         />
                       ))}
                 </div>

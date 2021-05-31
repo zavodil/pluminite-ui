@@ -136,6 +136,7 @@ export default function Home() {
                     gemId={token_id}
                     bid={getNextBidNearsFormatted(sale)}
                     gemOnSale={sale}
+                    isLink
                   />
                 );
               })}
