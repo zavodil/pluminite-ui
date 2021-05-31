@@ -1,3 +1,4 @@
 import Image from './Image';
+import ImageFromIpfs from './ImageFromIpfs';
 
-export { Image };
+export { Image, ImageFromIpfs };
