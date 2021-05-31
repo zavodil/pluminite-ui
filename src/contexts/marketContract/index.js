@@ -107,7 +107,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
             })
           ),
           APP.PREPAID_GAS_LIMIT / 2,
-          APP.DEPOSIT_DEFAULT
+          APP.USE_STORAGE_FEES ? APP.DEPOSIT_DEFAULT : 0
         ),
         transactions.functionCall(
           'nft_approve',
@@ -126,7 +126,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
             })
           ),
           APP.PREPAID_GAS_LIMIT / 2,
-          marketContractState.minStorage
+          APP.USE_STORAGE_FEES ? marketContractState.minStorage : 1
         ),
       ]);
     },

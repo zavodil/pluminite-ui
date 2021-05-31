@@ -38,6 +38,7 @@ near_sdk::setup_alloc!();
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 pub struct Contract {
     pub tokens_per_owner: LookupMap<AccountId, UnorderedSet<TokenId>>,
+    pub tokens_per_creator: LookupMap<AccountId, UnorderedSet<TokenId>>,
 
     pub tokens_by_id: LookupMap<TokenId, Token>,
 
@@ -56,6 +57,8 @@ pub struct Contract {
     pub token_types_locked: UnorderedSet<TokenType>,
     pub contract_royalty: u32,
     pub profiles: LookupMap<AccountId, Profile>,
+
+    pub use_storage_fees: bool,
 }
 
 #[derive(Debug, Clone, BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
@@ -70,6 +73,8 @@ pub struct Profile {
 pub enum StorageKey {
     TokensPerOwner,
     TokenPerOwnerInner { account_id_hash: CryptoHash },
+    TokensPerCreator,
+    TokenPerCreatorInner { account_id_hash: CryptoHash },
     TokensById,
     TokenMetadataById,
     NftMetadata,
@@ -82,9 +87,15 @@ pub enum StorageKey {
 #[near_bindgen]
 impl Contract {
     #[init]
-    pub fn new(owner_id: ValidAccountId, metadata: NFTMetadata, supply_cap_by_type: TypeSupplyCaps, unlocked: Option<bool>) -> Self {
+    pub fn new(owner_id: ValidAccountId,
+               metadata: NFTMetadata,
+               supply_cap_by_type: TypeSupplyCaps,
+               use_storage_fees: bool,
+               unlocked: Option<bool>,
+    ) -> Self {
         let mut this = Self {
             tokens_per_owner: LookupMap::new(StorageKey::TokensPerOwner.try_to_vec().unwrap()),
+            tokens_per_creator: LookupMap::new(StorageKey::TokensPerCreator.try_to_vec().unwrap()),
             tokens_by_id: LookupMap::new(StorageKey::TokensById.try_to_vec().unwrap()),
             token_metadata_by_id: UnorderedMap::new(
                 StorageKey::TokenMetadataById.try_to_vec().unwrap(),
@@ -100,6 +111,7 @@ impl Contract {
             token_types_locked: UnorderedSet::new(StorageKey::TokenTypesLocked.try_to_vec().unwrap()),
             contract_royalty: 0,
             profiles: LookupMap::new(StorageKey::Profiles.try_to_vec().unwrap()),
+            use_storage_fees
         };
 
         if unlocked.is_none() {
@@ -112,6 +124,10 @@ impl Contract {
         this.measure_min_token_storage_cost();
 
         this
+    }
+
+    pub fn get_use_storage_fees(&self) -> bool {
+        self.use_storage_fees
     }
 
     pub fn get_profile(&self, account_id: ValidAccountId) -> Option<Profile> {
@@ -182,18 +198,6 @@ impl Contract {
                         self.tokens_by_id.insert(&token_id, &token_2);
                     }
                 }
-            }
-        }
-    }
-
-    pub fn test(&mut self) {
-        let keys = self.token_metadata_by_id.keys_as_vector();
-        for i in 0..keys.len() {
-            let token_id = keys.get(i).unwrap();
-            if let Some(token) = self.tokens_by_id.get(&token_id) {
-                let mut token_2 = token;
-                token_2.royalty.insert("edyoung.near".to_string(), 200);
-                self.tokens_by_id.insert(&token_id, &token_2);
             }
         }
     }

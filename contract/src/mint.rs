@@ -17,7 +17,13 @@ impl Contract {
             final_token_id = token_id
         }
 
-        let initial_storage_usage = env::storage_usage();
+        let initial_storage_usage = if self.use_storage_fees {
+            env::storage_usage()
+        }
+        else {
+            0
+        };
+
         let mut owner_id = env::predecessor_account_id();
         if let Some(receiver_id) = receiver_id {
             owner_id = receiver_id.into();
@@ -61,7 +67,7 @@ impl Contract {
         // END CUSTOM
 
         let token = Token {
-            owner_id,
+            owner_id: owner_id.clone(),
             approved_account_ids: Default::default(),
             next_approval_id: 0,
             royalty,
@@ -74,10 +80,30 @@ impl Contract {
         self.token_metadata_by_id.insert(&final_token_id, &metadata);
         self.internal_add_token_to_owner(&token.owner_id, &final_token_id);
 
-        let new_token_size_in_bytes = env::storage_usage() - initial_storage_usage;
-        let required_storage_in_bytes =
-            self.extra_storage_in_bytes_per_token + new_token_size_in_bytes;
+        match self.tokens_per_creator.get(&owner_id.clone()) {
+            Some(mut tokens) => {
+                tokens.insert(&final_token_id);
+                self.tokens_per_creator.insert(&owner_id, &tokens);
+            }
+            None => {
+                let mut tokens = UnorderedSet::new(
+                    StorageKey::TokenPerCreatorInner {
+                        account_id_hash: hash_account_id(&owner_id),
+                    }
+                        .try_to_vec()
+                        .unwrap(),
+                );
+                tokens.insert(&final_token_id);
+                self.tokens_per_creator.insert(&owner_id, &tokens);
+            }
+        }
 
-        refund_deposit(required_storage_in_bytes);
+        if self.use_storage_fees {
+            let new_token_size_in_bytes = env::storage_usage() - initial_storage_usage;
+            let required_storage_in_bytes =
+                self.extra_storage_in_bytes_per_token + new_token_size_in_bytes;
+
+            refund_deposit(required_storage_in_bytes);
+        }
     }
 }

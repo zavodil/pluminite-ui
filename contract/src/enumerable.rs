@@ -96,4 +96,26 @@ impl Contract {
         }
         tmp
     }
+
+    pub fn nft_tokens_for_creator(
+        &self,
+        account_id: AccountId,
+        from_index: U64,
+        limit: U64,
+    ) -> Vec<JsonToken> {
+        let mut tmp = vec![];
+        let tokens_creator = self.tokens_per_creator.get(&account_id);
+        let tokens = if let Some(tokens_creator) = tokens_creator {
+            tokens_creator
+        } else {
+            return vec![];
+        };
+        let keys = tokens.as_vector();
+        let start = u64::from(from_index);
+        let end = min(start + u64::from(limit), keys.len());
+        for i in start..end {
+            tmp.push(self.nft_token(keys.get(i).unwrap()).unwrap());
+        }
+        tmp
+    }
 }
