@@ -25,10 +25,11 @@ const Left = () => {
   const isHomePage = useRouteMatch('/')?.isExact;
   const isProfilePage = useRouteMatch('/profile')?.isExact;
   const isGemPage = useRouteMatch('/gem');
+  const isGemOriginalPage = useRouteMatch('/gem-original');
 
   const { user } = useContext(NearContext);
 
-  if (isGemPage) {
+  if (isGemPage || isGemOriginalPage) {
     return null;
   }
 
