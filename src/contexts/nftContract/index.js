@@ -25,24 +25,11 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
 
   const getGemsForOwner = useCallback(
     async (accountId, fromIndex, limit) => {
-      const gems = await nftContract.nft_tokens_for_owner({
+      return nftContract.nft_tokens_for_owner({
         account_id: accountId,
         from_index: fromIndex,
         limit,
       });
-
-      for (let i = 0; i < gems.length; i += 1) {
-        const token = gems[i];
-
-        if (token.metadata.reference === 'pinata' && token.metadata.media) {
-          // eslint-disable-next-line no-await-in-loop
-          token.metadata.media = await fetch(`https://gateway.pinata.cloud/ipfs/${token.metadata.media}`)
-            .then((response) => response.json())
-            .then((json) => json.file);
-        }
-      }
-
-      return gems;
     },
     [nftContract]
   );

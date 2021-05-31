@@ -62,13 +62,6 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
           token = await getGem(token_id);
         }
 
-        if (token.metadata.reference === 'pinata' && token.metadata.media) {
-          // eslint-disable-next-line no-await-in-loop
-          token.metadata.media = await fetch(`https://gateway.pinata.cloud/ipfs/${token.metadata.media}`)
-            .then((response) => response.json())
-            .then((json) => json.file);
-        }
-
         salesPopulated.push({ ...sale, ...token });
       }
 
