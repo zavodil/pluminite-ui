@@ -13,7 +13,18 @@ import StyledToastContainer from './StyledToastContainer';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 
-import { Home, SignUp, LogIn, Mint, Profile, ProfileEdit, Gem, NotFound404, MintNotAllowed } from './components/pages';
+import {
+  Home,
+  SignUp,
+  LogIn,
+  Mint,
+  Profile,
+  ProfileEdit,
+  Gem,
+  GemOriginal,
+  NotFound404,
+  MintNotAllowed,
+} from './components/pages';
 
 import CloseButton from './components/common/Button/CloseButton';
 
@@ -87,6 +98,13 @@ export default function App() {
               <UserPage
                 path="/gem/:gemId"
                 component={Gem}
+                title={gem?.metadata?.title || 'Untitled Gem'}
+                isAuthenticated={isAuthenticated}
+                isLoading={isLoading}
+              />
+              <UserPage
+                path="/gem-original/:gemId"
+                component={GemOriginal}
                 title={gem?.metadata?.title || 'Untitled Gem'}
                 isAuthenticated={isAuthenticated}
                 isLoading={isLoading}
