@@ -78,7 +78,7 @@ const ArtItem = ({
   };
 
   return (
-    <StyledContainer {...params}>
+    <StyledContainer className="art-item" {...params}>
       <div className="image-container">
         <ImageFromIpfs media={dataUrl} forwardedRef={forwardedRef} />
       </div>
@@ -88,7 +88,12 @@ const ArtItem = ({
         </Button>
       )}
       {isFullScreenEnabled && (
-        <Link to={`/gem-preview/${gemId}`}>
+        <Link
+          to={{
+            pathname: `/gem-original/${gemId}`,
+            prevPathname: location.pathname,
+          }}
+        >
           <FullscreenIcon />
         </Link>
       )}
