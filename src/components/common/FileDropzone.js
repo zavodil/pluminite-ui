@@ -132,7 +132,10 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
     setIsLoading(false);
 
     if (onUpload) {
-      onUpload(canvas.toDataURL('image/png', 1));
+      onUpload({
+        imageDataUrl: canvas.toDataURL('image/png', 1),
+        imageThumbnailDataUrl: canvasThumbnail.toDataURL('image/png'),
+      });
     }
   };
 
