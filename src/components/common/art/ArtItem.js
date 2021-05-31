@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from '../Button';
-import { ImageFromIpfs } from '../images';
+import { Image, ImageFromIpfs } from '../images';
 
 import FullscreenIcon from '../../../assets/FullscreenIcon';
 
@@ -59,6 +59,7 @@ const ArtItem = ({
   buttonText,
   isLink,
   isButtonDisabled,
+  isFromIpfs,
   isFullScreenEnabled,
   onButtonClick,
   forwardedRef,
@@ -78,7 +79,11 @@ const ArtItem = ({
   return (
     <StyledContainer className="art-item" {...params}>
       <div className="image-container">
-        <ImageFromIpfs media={dataUrl} forwardedRef={forwardedRef} />
+        {isFromIpfs ? (
+          <ImageFromIpfs media={dataUrl} forwardedRef={forwardedRef} />
+        ) : (
+          <Image src={dataUrl} alt="art" className="hidden" />
+        )}
       </div>
       {buttonText && (
         <Button isPrimary isSmall isDisabled={isButtonDisabled} onClick={onButtonClick}>
@@ -106,6 +111,7 @@ ArtItem.propTypes = {
   isLink: PropTypes.bool,
   isButtonDisabled: PropTypes.bool,
   isFullScreenEnabled: PropTypes.bool,
+  isFromIpfs: PropTypes.bool,
   onButtonClick: PropTypes.func,
   forwardedRef: PropTypes.object,
 };

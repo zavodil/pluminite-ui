@@ -137,6 +137,7 @@ export default function Home() {
                     bid={getNextBidNearsFormatted(sale)}
                     gemOnSale={sale}
                     isLink
+                    isFromIpfs
                   />
                 );
               })}

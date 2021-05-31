@@ -177,6 +177,7 @@ export default function Profile() {
                           key={token_id}
                           gemId={token_id}
                           isLink
+                          isFromIpfs
                         />
                       ))}
                 </div>
