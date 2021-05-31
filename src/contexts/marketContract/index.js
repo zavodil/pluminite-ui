@@ -78,6 +78,10 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
         title: nft.title,
         description: nft.description,
         issued_at: Date.now().toString(),
+        extra: JSON.stringify({
+          media_lowres: nft.media_lowres,
+          creator_id: nftContract.account.accountId,
+        }),
       };
 
       const perpetualRoyalties = nft.collaborators
