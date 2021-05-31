@@ -277,7 +277,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
       />
       <InputNear
         name="starting_bid"
-        labelText="Starting Bid"
+        labelText="Price"
         isRequired
         isDisabled={isDisabled}
         nearsInitial={nft?.conditions?.near ? formatNearAmount(nft?.conditions?.near) : ''}
