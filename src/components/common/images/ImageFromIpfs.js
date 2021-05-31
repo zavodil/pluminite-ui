@@ -8,18 +8,17 @@ import { getFileData } from '../../../apis';
 
 import { QUERY_KEYS } from '../../../constants';
 
-const ImageFromIpfs = ({ media, alt, forwardedRef }) => {
+const ImageFromIpfs = ({ media, forwardedRef, ...rest }) => {
   const { data: imageData } = useQuery([QUERY_KEYS.GET_IMAGE_DATA, media], () => getFileData(media), {
     retry: 1,
     enabled: !!media,
   });
 
-  return <Image ref={forwardedRef} src={imageData} alt={alt} className="image" />;
+  return <Image ref={forwardedRef} src={imageData} className="image" {...rest} />;
 };
 
 ImageFromIpfs.propTypes = {
   media: PropTypes.string,
-  alt: PropTypes.string,
   forwardedRef: PropTypes.object,
 };
 

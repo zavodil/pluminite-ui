@@ -86,12 +86,12 @@ const ArtItem = ({
   };
 
   return (
-    <StyledContainer className="art-item" {...containerParams}>
+    <StyledContainer className="art-item" {...containerParams} title={nft?.metadata?.title}>
       <div className="image-container">
         {isFromIpfs ? (
-          <ImageFromIpfs media={getIpfsHashMedia()} forwardedRef={forwardedRef} />
+          <ImageFromIpfs media={getIpfsHashMedia()} forwardedRef={forwardedRef} alt={nft?.metadata?.title} />
         ) : (
-          <Image forwardedRef={forwardedRef} src={nft?.metadata?.media} alt="art" className="hidden" />
+          <Image forwardedRef={forwardedRef} src={nft?.metadata?.media} alt={nft?.metadata?.title} className="hidden" />
         )}
       </div>
       {buttonText && (
@@ -117,6 +117,7 @@ ArtItem.propTypes = {
   nft: PropTypes.shape({
     token_id: PropTypes.string,
     metadata: PropTypes.shape({
+      title: PropTypes.string,
       media: PropTypes.string,
       extra: PropTypes.string,
     }),

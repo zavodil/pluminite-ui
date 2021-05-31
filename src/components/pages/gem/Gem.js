@@ -252,7 +252,7 @@ function Gem({ location: { prevPathname } }) {
     <Container>
       <Portal>
         <GemHeader>
-          <div>{imageData && <img src={imageData} alt="Art" width={40} height={40} />}</div>
+          <div>{imageData && <img src={imageData} alt={gem?.metadata?.title} width={40} height={40} />}</div>
           <CloseButton className="gem-close" processCLick={goBack} />
         </GemHeader>
       </Portal>

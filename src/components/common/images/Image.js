@@ -33,7 +33,7 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const Image = forwardRef(function ImageWithRef({ src, alt }, ref) {
+const Image = forwardRef(function ImageWithRef({ src, alt, ...rest }, ref) {
   const [isImgLoaded, setIsImgLoaded] = useState(null);
 
   const processImgLoaded = () => {
@@ -42,7 +42,7 @@ const Image = forwardRef(function ImageWithRef({ src, alt }, ref) {
 
   return (
     <StyledContainer isImgLoaded={isImgLoaded}>
-      <img ref={ref} src={src} alt={alt} onLoad={processImgLoaded} className="image" />
+      <img ref={ref} src={src} alt={alt} onLoad={processImgLoaded} className="image" {...rest} />
       <DiamondIcon />
     </StyledContainer>
   );
