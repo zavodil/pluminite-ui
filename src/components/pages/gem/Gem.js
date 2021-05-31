@@ -236,6 +236,14 @@ function Gem({ location: { prevPathname } }) {
     }
   };
 
+  const getCreator = () => {
+    if (!gem?.metadata?.extra) {
+      return undefined;
+    }
+
+    return JSON.parse(gem?.metadata?.extra).creator_id;
+  };
+
   if (gem === null) {
     return <Redirect to="/404" />;
   }
@@ -250,8 +258,7 @@ function Gem({ location: { prevPathname } }) {
       </Portal>
       <TitleText className="gem-title">{gem?.metadata?.title || 'No title provided'}</TitleText>
       <div className="users">
-        {/* todo: gem.creator_id is not implemented on the contract */}
-        <p>by {gem?.creator_id || '?'}</p>
+        <p>by {getCreator() || '?'}</p>
         <p>owned by {gem?.owner_id || '?'}</p>
       </div>
       <Tabs
@@ -267,7 +274,6 @@ function Gem({ location: { prevPathname } }) {
           {
             title: 'History',
             content: (
-              // todo: creator_id is currently not implemented on the contracts
               // todo: gemOnSale.bids.near.date is currently not implemented on the contracts
               <>
                 {hasBids() && (
@@ -280,7 +286,7 @@ function Gem({ location: { prevPathname } }) {
                 )}
                 {gem?.metadata?.issued_at && (
                   <div className="history-event">
-                    {gem?.creator_id || 'Unknown author'} minted {gem?.metadata?.title || 'untitled gem'} on{' '}
+                    {getCreator() || '?'} minted {gem?.metadata?.title || 'untitled gem'} on{' '}
                     {new Intl.DateTimeFormat().format(new Date(+gem.metadata.issued_at))}
                   </div>
                 )}
