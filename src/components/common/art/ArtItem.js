@@ -29,8 +29,6 @@ const StyledContainer = styled(Link)`
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: var(--radius-default);
-    box-shadow: inset var(--shadow-primary);
 
     .hidden {
       display: none;

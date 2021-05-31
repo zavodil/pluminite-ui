@@ -9,6 +9,14 @@ const StyledContainer = styled('div')`
   justify-content: center;
   align-items: center;
 
+  ${({ isImgLoaded }) =>
+    !isImgLoaded &&
+    `
+    min-width: 400px;
+    min-height: 400px;
+    border-radius: var(--radius-default);
+    box-shadow: inset var(--shadow-primary);
+    `}
   .image {
     display: ${({ isImgLoaded }) => (isImgLoaded ? 'inline' : 'none')};
   }
@@ -18,6 +26,10 @@ const StyledContainer = styled('div')`
     width: 50px;
     filter: drop-shadow(var(--shadow-primary));
     display: ${({ isImgLoaded }) => (isImgLoaded ? 'none' : 'inline')};
+  }
+
+  @media (min-width: 1100px) {
+    ${({ isImgLoaded }) => !isImgLoaded && `min-width: 320px; min-height: 320px;`}
   }
 `;
 
