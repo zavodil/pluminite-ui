@@ -21,8 +21,8 @@ const ArtItemPriced = ({ gemOnSale, bid, bidAvailable, ...props }) => {
     <ArtItem
       buttonText={isItemOwnedByUser() ? null : `Buy for ${bid}Ⓝ`}
       isButtonDisabled={!bidAvailable}
-      {...props}
       onButtonClick={processBid}
+      {...props}
     />
   );
 };

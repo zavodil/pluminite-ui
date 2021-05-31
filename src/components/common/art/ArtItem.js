@@ -54,8 +54,7 @@ const StyledContainer = styled(Link)`
 `;
 
 const ArtItem = ({
-  gemId,
-  dataUrl,
+  nft,
   buttonText,
   isLink,
   isButtonDisabled,
@@ -69,7 +68,7 @@ const ArtItem = ({
   const params = {
     to: isLink
       ? {
-          pathname: `/gem/${gemId}`,
+          pathname: `/gem/${nft?.token_id}`,
           prevPathname: location.pathname,
         }
       : undefined,
@@ -80,9 +79,9 @@ const ArtItem = ({
     <StyledContainer className="art-item" {...params}>
       <div className="image-container">
         {isFromIpfs ? (
-          <ImageFromIpfs media={dataUrl} forwardedRef={forwardedRef} />
+          <ImageFromIpfs media={nft?.metadata?.media} forwardedRef={forwardedRef} />
         ) : (
-          <Image src={dataUrl} alt="art" className="hidden" />
+          <Image forwardedRef={forwardedRef} src={nft?.metadata?.media} alt="art" className="hidden" />
         )}
       </div>
       {buttonText && (
@@ -93,7 +92,7 @@ const ArtItem = ({
       {isFullScreenEnabled && (
         <Link
           to={{
-            pathname: `/gem-original/${gemId}`,
+            pathname: `/gem-original/${nft?.token_id}`,
             prevPathname: location.pathname,
           }}
         >
@@ -105,8 +104,13 @@ const ArtItem = ({
 };
 
 ArtItem.propTypes = {
-  gemId: PropTypes.string,
-  dataUrl: PropTypes.string,
+  nft: PropTypes.shape({
+    token_id: PropTypes.string,
+    metadata: PropTypes.shape({
+      media: PropTypes.string,
+      extra: PropTypes.string,
+    }),
+  }),
   buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isLink: PropTypes.bool,
   isButtonDisabled: PropTypes.bool,

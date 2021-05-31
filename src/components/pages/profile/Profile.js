@@ -170,12 +170,11 @@ export default function Profile() {
                   {data?.pages &&
                     data.pages
                       .flat()
-                      .map(({ token_id, metadata: { media } = {} }) => (
+                      .map((nft) => (
                         <ArtItem
-                          dataUrl={media}
-                          forwardedRef={ownedGemId === token_id ? ownedGemRef : null}
-                          key={token_id}
-                          gemId={token_id}
+                          key={nft.token_id}
+                          forwardedRef={ownedGemId === nft.token_id ? ownedGemRef : null}
+                          nft={nft}
                           isLink
                           isFromIpfs
                         />
@@ -200,7 +199,7 @@ export default function Profile() {
             // user on the current version of the contract)
             // todo: remove `placeholderDataUrl` once we get real data from the contract
             content: Array.from({ length: 2 }).map((_, i) => (
-              <ArtItem key={`art-item-made-${i}`} dataUrl={placeholderDataUrl} />
+              <ArtItem key={`art-item-made-${i}`} nft={{ metadata: { media: placeholderDataUrl } }} />
             )),
           },
         ]}

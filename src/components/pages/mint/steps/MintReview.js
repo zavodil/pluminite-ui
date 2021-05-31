@@ -118,7 +118,11 @@ const MintReview = ({ backLink, nft }) => {
       <p className="text">{nft.title}</p>
       <p className="sub-header">Art piece description</p>
       <p className="text">{nft.description}</p>
-      <ArtItemPriced dataUrl={nft.artDataUrl} bid={getNextBidNearsFormatted(nft)} bidAvailable={false} />
+      <ArtItemPriced
+        nft={{ metadata: { media: nft.artDataUrl } }}
+        bid={getNextBidNearsFormatted(nft)}
+        bidAvailable={false}
+      />
       <StickedToBottom isSecondary>
         <StyledButton isSecondary isDisabled={isMinting}>
           <Link to={backLink}>Replace Art</Link>

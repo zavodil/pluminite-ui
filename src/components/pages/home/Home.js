@@ -123,24 +123,18 @@ export default function Home() {
         <div className="items-container">
           <div className="items">
             {data?.pages &&
-              data.pages.flat().map((sale) => {
-                const {
-                  token_id,
-                  metadata: { media },
-                } = sale;
-
-                return (
+              data.pages
+                .flat()
+                .map((sale) => (
                   <ArtItemPriced
-                    key={token_id}
-                    dataUrl={media}
-                    gemId={token_id}
+                    key={sale.token_id}
+                    nft={sale}
                     bid={getNextBidNearsFormatted(sale)}
                     gemOnSale={sale}
                     isLink
                     isFromIpfs
                   />
-                );
-              })}
+                ))}
           </div>
           {hasNextPage && (
             <Button
