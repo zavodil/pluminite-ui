@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
 import { getFileData } from '../../../apis';
+import { ArtItem } from '../../common/art';
 
 import { StickedToBottom } from '../../common/layout';
 import Button from '../../common/Button';
@@ -255,6 +256,10 @@ function Gem({ location: { prevPathname } }) {
       </div>
       <Tabs
         tabsArray={[
+          {
+            title: 'Preview',
+            content: <ArtItem dataUrl={gem?.metadata?.media} />,
+          },
           {
             title: 'Description',
             content: gem?.metadata?.description || 'No description provided',

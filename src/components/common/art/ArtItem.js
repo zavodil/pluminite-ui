@@ -12,6 +12,7 @@ const StyledContainer = styled(Link)`
   display: block;
   position: relative;
   width: 400px;
+  max-width: 100%;
   margin: 15px 5px;
   border-radius: var(--radius-default);
   transition: 250ms;

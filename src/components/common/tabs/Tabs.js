@@ -20,7 +20,7 @@ const StyledContainer = styled('div')`
       cursor: pointer;
 
       :not(:last-of-type) {
-        margin-right: 40px;
+        margin-right: 20px;
       }
 
       :hover {
