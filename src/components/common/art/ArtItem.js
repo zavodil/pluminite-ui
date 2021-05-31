@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import Button from '../Button';
 import { ImageFromIpfs } from '../images';
 
+import FullscreenIcon from '../../../assets/FullscreenIcon';
+
 import { square } from '../../../styles/mixins';
 
 const StyledContainer = styled(Link)`
@@ -35,6 +37,13 @@ const StyledContainer = styled(Link)`
     }
   }
 
+  .fullscreen-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+  }
+
   button {
     position: absolute;
     right: 20px;
@@ -46,10 +55,18 @@ const StyledContainer = styled(Link)`
   }
 `;
 
-const ArtItem = ({ gemId, dataUrl, buttonText, isButtonDisabled, onButtonClick, forwardedRef }) => {
+const ArtItem = ({
+  gemId,
+  dataUrl,
+  buttonText,
+  isLink,
+  isButtonDisabled,
+  isFullScreenEnabled,
+  onButtonClick,
+  forwardedRef,
+}) => {
   const location = useLocation();
 
-  const isLink = !!gemId;
   const params = {
     to: isLink
       ? {
@@ -70,15 +87,22 @@ const ArtItem = ({ gemId, dataUrl, buttonText, isButtonDisabled, onButtonClick, 
           {buttonText}
         </Button>
       )}
+      {isFullScreenEnabled && (
+        <Link to={`/gem-preview/${gemId}`}>
+          <FullscreenIcon />
+        </Link>
+      )}
     </StyledContainer>
   );
 };
 
 ArtItem.propTypes = {
   gemId: PropTypes.string,
-  dataUrl: PropTypes.string.isRequired,
+  dataUrl: PropTypes.string,
   buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  isLink: PropTypes.bool,
   isButtonDisabled: PropTypes.bool,
+  isFullScreenEnabled: PropTypes.bool,
   onButtonClick: PropTypes.func,
   forwardedRef: PropTypes.object,
 };

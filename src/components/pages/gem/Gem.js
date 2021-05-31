@@ -258,7 +258,7 @@ function Gem({ location: { prevPathname } }) {
         tabsArray={[
           {
             title: 'Preview',
-            content: <ArtItem dataUrl={gem?.metadata?.media} />,
+            content: <ArtItem gemId={gem?.token_id} dataUrl={gem?.metadata?.media} isFullScreenEnabled />,
           },
           {
             title: 'Description',
