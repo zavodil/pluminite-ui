@@ -22,7 +22,7 @@ const Container = styled('div')`
   }
 `;
 
-const ProfileEdit = ({ location: { profileBio } }) => {
+const ProfileEdit = ({ location: { profile } }) => {
   const match = useRouteMatch();
 
   const processSavePhoto = () => {
@@ -36,7 +36,7 @@ const ProfileEdit = ({ location: { profileBio } }) => {
           <ProfileEditPhoto processSave={processSavePhoto} />
         </Route>
         <Route exact path={`${match.path}`}>
-          <ProfileEditBio uploadPhotoLink={`${match.path}/upload-photo`} profileBio={profileBio} />
+          <ProfileEditBio uploadPhotoLink={`${match.path}/upload-photo`} profile={profile} />
         </Route>
         <Page component={NotFound404} />
       </Switch>
@@ -46,7 +46,10 @@ const ProfileEdit = ({ location: { profileBio } }) => {
 
 ProfileEdit.propTypes = {
   location: PropTypes.shape({
-    profileBio: PropTypes.string,
+    profile: PropTypes.shape({
+      bio: PropTypes.string,
+      image: PropTypes.string,
+    }),
   }),
 };
 

@@ -96,11 +96,11 @@ const StyledButton = styled(Button)`
   }
 `;
 
-function ProfileEditBio({ uploadPhotoLink, profileBio }) {
+function ProfileEditBio({ uploadPhotoLink, profile }) {
   const { user } = useContext(NearContext);
   const { setProfile } = useContext(NftContractContext);
 
-  const [bioEdited, setBioEdited] = useState(profileBio);
+  const [bioEdited, setBioEdited] = useState(profile?.bio);
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
@@ -108,8 +108,9 @@ function ProfileEditBio({ uploadPhotoLink, profileBio }) {
 
   const queryClient = useQueryClient();
 
-  const isBioMaxLengthExceeded = () => bioEdited !== undefined && bioEdited.length > PROFILE.BIO_MAX_LENGTH;
-  const isBioChanged = () => bioEdited !== profileBio;
+  const isBioMaxLengthExceeded = () =>
+    bioEdited !== undefined && bioEdited !== null && bioEdited.length > PROFILE.BIO_MAX_LENGTH;
+  const isBioChanged = () => bioEdited !== profile?.bio;
 
   const isSaveAvailable = () => !isSaving && !isBioMaxLengthExceeded() && isBioChanged();
 
@@ -120,7 +121,7 @@ function ProfileEditBio({ uploadPhotoLink, profileBio }) {
 
     setIsSaving(true);
 
-    await setProfile(bioEdited);
+    await setProfile({ ...profile, bio: bioEdited });
     await queryClient.invalidateQueries([QUERY_KEYS.GET_PROFILE, user.accountId]);
     toast.success('Success! Your profile was saved!');
 
@@ -173,7 +174,10 @@ function ProfileEditBio({ uploadPhotoLink, profileBio }) {
 
 ProfileEditBio.propTypes = {
   uploadPhotoLink: PropTypes.string.isRequired,
-  profileBio: PropTypes.string,
+  profile: PropTypes.shape({
+    bio: PropTypes.string,
+    image: PropTypes.string,
+  }),
 };
 
 export default ProfileEditBio;

@@ -127,9 +127,13 @@ export default function Profile() {
     }
   );
 
-  const { data: profileBio } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
-    enabled: !!user?.accountId,
-  });
+  const { data: profile } = useRQuery(
+    [QUERY_KEYS.GET_PROFILE, user.accountId],
+    async () => getProfile(user.accountId),
+    {
+      enabled: !!user?.accountId,
+    }
+  );
 
   useEffect(() => {
     if (ownedGemRef?.current) {
@@ -150,12 +154,12 @@ export default function Profile() {
           <span className="summary-block-bottom">Your Funds</span>
         </div>
       </div>
-      <p className="profile-description">{profileBio || 'You haven’t added a description yet.'} </p>
+      <p className="profile-description">{profile?.bio || 'You haven’t added a description yet.'} </p>
       <Button isSecondary>
         <Link
           to={{
             pathname: '/profile/edit',
-            profileBio,
+            profile,
           }}
         >
           Edit Profile
