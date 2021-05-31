@@ -3,7 +3,6 @@ import { useInfiniteQuery, useQuery as useRQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import defaultProfilePicture from '../../../assets/default-profile-picture.png';
 import placeholderDataUrl from '../../../assets/art.png';
 
 import Balance from '../../NavigationComponents/Balance';
@@ -11,6 +10,7 @@ import Button from '../../common/Button';
 import { ArtItem, ArtItemSellable } from '../../common/art';
 import { Tabs } from '../../common/tabs';
 import { Loading } from '../../common/utils';
+import { ImageFromIpfs } from '../../common/images';
 
 import { useQuery } from '../../../hooks';
 
@@ -127,13 +127,9 @@ export default function Profile() {
     }
   );
 
-  const { data: profile } = useRQuery(
-    [QUERY_KEYS.GET_PROFILE, user.accountId],
-    async () => getProfile(user.accountId),
-    {
-      enabled: !!user?.accountId,
-    }
-  );
+  const { data: profile } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
+    enabled: !!user?.accountId,
+  });
 
   useEffect(() => {
     if (ownedGemRef?.current) {
@@ -144,7 +140,7 @@ export default function Profile() {
   return (
     <Container>
       <div className="summary">
-        <img className="picture" src={defaultProfilePicture} alt="profile picture" width="62" height="62" />
+        <ImageFromIpfs className="picture" media={profile?.image} alt="profile picture" width="62" height="62" />
         <div className="summary-block">
           <span className="summary-block-top">0</span>
           <span className="summary-block-bottom">Pieces Sold</span>
@@ -156,14 +152,7 @@ export default function Profile() {
       </div>
       <p className="profile-description">{profile?.bio || 'You haven’t added a description yet.'} </p>
       <Button isSecondary>
-        <Link
-          to={{
-            pathname: '/profile/edit',
-            profile,
-          }}
-        >
-          Edit Profile
-        </Link>
+        <Link to="/profile/edit">Edit Profile</Link>
       </Button>
       <Tabs
         tabsArray={[
