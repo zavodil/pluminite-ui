@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import DiamondIcon from '../../../assets/DiamondIcon';
 
 const StyledContainer = styled('div')`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   .image {
     display: ${({ isImgLoaded }) => (isImgLoaded ? 'inline' : 'none')};
   }
@@ -17,7 +21,7 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const Image = ({ src, alt }) => {
+const Image = forwardRef(function ImageWithRef({ src, alt }, ref) {
   const [isImgLoaded, setIsImgLoaded] = useState(null);
 
   const processImgLoaded = () => {
@@ -26,14 +30,14 @@ const Image = ({ src, alt }) => {
 
   return (
     <StyledContainer isImgLoaded={isImgLoaded}>
-      <img src={src} alt={alt} onLoad={processImgLoaded} className="image" />
+      <img ref={ref} src={src} alt={alt} onLoad={processImgLoaded} className="image" />
       <DiamondIcon />
     </StyledContainer>
   );
-};
+});
 
 Image.propTypes = {
-  src: PropTypes.string.isRequired,
+  src: PropTypes.string,
   alt: PropTypes.string,
 };
 

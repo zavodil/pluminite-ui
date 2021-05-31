@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from 'react-query';
 
 import Image from './Image';
 
-const ImageFromIpfs = ({ media, alt }) => {
-  const [dataUrl, setDataUrl] = useState(null);
+import { getFileData } from '../../../apis';
 
-  useEffect(() => {
-    fetch(`https://gateway.pinata.cloud/ipfs/${media}`)
-      .then((response) => response.json())
-      .then((json) => setDataUrl(json.file));
-  }, []);
+import { QUERY_KEYS } from '../../../constants';
 
-  return <Image src={dataUrl} alt={alt} className="image" />;
+const ImageFromIpfs = ({ media, alt, forwardedRef }) => {
+  const { data: imageData } = useQuery([QUERY_KEYS.GET_IMAGE_DATA, media], () => getFileData(media), { retry: 1 });
+
+  return <Image ref={forwardedRef} src={imageData} alt={alt} className="image" />;
 };
 
 ImageFromIpfs.propTypes = {
   media: PropTypes.string.isRequired,
   alt: PropTypes.string,
+  forwardedRef: PropTypes.object,
 };
 
 export default ImageFromIpfs;

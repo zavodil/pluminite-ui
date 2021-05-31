@@ -1,9 +1,10 @@
-import React, { forwardRef, useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from '../Button';
+import { ImageFromIpfs } from '../images';
 
 import { square } from '../../../styles/mixins';
 
@@ -22,6 +23,12 @@ const StyledContainer = styled(Link)`
   .image-container {
     ${square};
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--radius-default);
+    box-shadow: inset var(--shadow-primary);
+
     .hidden {
       display: none;
     }
@@ -38,12 +45,8 @@ const StyledContainer = styled(Link)`
   }
 `;
 
-const ArtItem = forwardRef(function ArtItemWithRef(
-  { gemId, dataUrl, buttonText, isButtonDisabled, onButtonClick },
-  ref
-) {
+const ArtItem = ({ gemId, dataUrl, buttonText, isButtonDisabled, onButtonClick, forwardedRef }) => {
   const location = useLocation();
-  const canvasRef = useRef();
 
   const isLink = !!gemId;
   const params = {
@@ -56,31 +59,10 @@ const ArtItem = forwardRef(function ArtItemWithRef(
     as: isLink ? Link : 'div',
   };
 
-  function copyImageOnCanvas(event) {
-    const image = event.target;
-    const canvas = canvasRef.current;
-
-    // todo: improve checks once storage is implemented and file extensions of art items are known
-    if (/(.gif\?)|(.gif$)/.test(event.target.src)) {
-      image.classList.remove('hidden');
-      canvas.classList.add('hidden');
-
-      return;
-    }
-
-    const ctx = canvas.getContext('2d');
-
-    canvas.width = image.naturalWidth;
-    canvas.height = image.naturalHeight;
-
-    ctx.drawImage(image, 0, 0);
-  }
-
   return (
     <StyledContainer {...params}>
       <div className="image-container">
-        <img ref={ref} src={dataUrl} alt="art" onLoad={copyImageOnCanvas} className="hidden" />
-        <canvas ref={canvasRef} />
+        <ImageFromIpfs media={dataUrl} forwardedRef={forwardedRef} />
       </div>
       {buttonText && (
         <Button isPrimary isSmall isDisabled={isButtonDisabled} onClick={onButtonClick}>
@@ -89,7 +71,7 @@ const ArtItem = forwardRef(function ArtItemWithRef(
       )}
     </StyledContainer>
   );
-});
+};
 
 ArtItem.propTypes = {
   gemId: PropTypes.string,
@@ -97,6 +79,7 @@ ArtItem.propTypes = {
   buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isButtonDisabled: PropTypes.bool,
   onButtonClick: PropTypes.func,
+  forwardedRef: PropTypes.object,
 };
 
 ArtItem.defaultProps = {
