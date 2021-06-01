@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import styled from 'styled-components';
@@ -59,7 +59,7 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const Input = ({ type, name, labelText, isRequired, isSmall, isError, isDisabled, className, ...rest }) => {
+const Input = ({ type, name, labelText, isRequired, isSmall, isError, isDisabled, className, autoFocus, ...rest }) => {
   const [isRequiredAndSkipped, setIsRequiredAndSkipped] = useState(false);
 
   const onInputBlur = (value) => {
@@ -69,6 +69,16 @@ const Input = ({ type, name, labelText, isRequired, isSmall, isError, isDisabled
       setIsRequiredAndSkipped(false);
     }
   };
+
+  const inputElement = useRef(null);
+
+  useEffect(() => {
+    if (inputElement.current) {
+      if (autoFocus) {
+        inputElement.current.focus();
+      }
+    }
+  }, [inputElement.current]);
 
   return (
     <StyledContainer isDisabled={isDisabled} className="form-group">
@@ -93,6 +103,9 @@ const Input = ({ type, name, labelText, isRequired, isSmall, isError, isDisabled
         })}
         onBlur={(e) => onInputBlur(e.target.value)}
         disabled={isDisabled}
+        ref={(element) => {
+          inputElement.current = element;
+        }}
         {...rest}
       />
       {isRequiredAndSkipped && (
@@ -112,6 +125,7 @@ Input.propTypes = {
   isSmall: PropTypes.bool,
   isError: PropTypes.bool,
   isDisabled: PropTypes.bool,
+  autoFocus: PropTypes.bool,
   className: PropTypes.string,
 };
 
