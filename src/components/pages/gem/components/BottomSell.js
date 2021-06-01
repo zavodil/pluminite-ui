@@ -1,5 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
+import { parseNearAmount } from 'near-api-js/lib/utils/format';
+import { QUERY_KEYS } from '../../../../constants';
+
+import { NftContractContext } from '../../../../contexts';
+
 import Button from '../../../common/Button';
 import { InputNear } from '../../../common/forms';
 import { StickedToBottom } from '../../../common/layout';
@@ -27,8 +35,17 @@ const Container = styled('div')`
   }
 `;
 
-const BottomSell = () => {
+const BottomSell = ({ gem }) => {
   const [sellPrice, setSellPrice] = useState('');
+  const { listForSale } = useContext(NftContractContext);
+  const queryClient = useQueryClient();
+
+  const processList = async () => {
+    await queryClient.invalidateQueries(QUERY_KEYS.SALES_POPULATED);
+    await listForSale(gem.token_id, parseNearAmount(sellPrice));
+
+    toast.success('Success! Your gem is on the marketplace.');
+  };
 
   return (
     <StickedToBottom isSecondary>
@@ -37,17 +54,22 @@ const BottomSell = () => {
           name="price"
           labelText="Price"
           isRequired
-          // isDisabled={isDisabled}
           nearsInitial={sellPrice}
           onNearsChange={setSellPrice}
           autoFocus
         />
-        <Button className="sell-button" isPrimary>
+        <Button className="sell-button" isPrimary onClick={processList}>
           List Gem for {sellPrice || '0'}Ⓝ
         </Button>
       </Container>
     </StickedToBottom>
   );
+};
+
+BottomSell.propTypes = {
+  gem: PropTypes.shape({
+    token_id: PropTypes.string,
+  }).isRequired,
 };
 
 export default BottomSell;
