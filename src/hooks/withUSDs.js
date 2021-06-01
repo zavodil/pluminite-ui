@@ -5,7 +5,7 @@ import { getUSDsFromNear } from '../apis';
 const withUSDs = (nears) => {
   const [USDs, setUSDs] = useState(null);
 
-  const nearsNormalized = nears.replaceAll(',', '');
+  const nearsNormalized = nears && String(nears).replaceAll(',', '');
 
   useEffect(() => {
     getUSDsFromNear(nearsNormalized).then((usdsFromNears) => {

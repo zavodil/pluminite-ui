@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
@@ -211,7 +212,7 @@ function Gem({ location: { prevPathname } }) {
 
   const isListed = () => !!gemOnSale;
 
-  const isOwnedByUser = () => gemOnSale?.owner_id && gemOnSale.owner_id === user.accountId;
+  const isOwnedByUser = () => gemOnSale?.owner_id && gemOnSale.owner_id === user?.accountId;
 
   useEffect(() => {
     if (hasBids()) {
@@ -224,7 +225,14 @@ function Gem({ location: { prevPathname } }) {
   }, [gem, gemOnSale]);
 
   const processBid = async () => {
-    await offer(gemId, getNextBidNearsFormatted(gemOnSale));
+    if (user) {
+      await offer(gemId, getNextBidNearsFormatted(gemOnSale));
+    } else {
+      toast.success('To buy items you need to be logged in!');
+
+      history.push('/sign-up');
+    }
+
     // todo: execute commands below once the bid is accepted
     // toast.success('You own a new gem!', { position: 'top-right' });
     // history.push(`/profile?gem-id=${gem?.token_id}`);
