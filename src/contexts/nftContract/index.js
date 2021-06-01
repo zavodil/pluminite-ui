@@ -54,15 +54,45 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
   );
 
   const listForSale = useCallback(
-    async (gemId) => {
-      await nftContract.nft_approve(
-        {
-          token_id: gemId,
-          account_id: getMarketContractName(nftContract.contractId),
-        },
-        APP.PREPAID_GAS_LIMIT,
-        APP.DEPOSIT_DEFAULT
-      );
+    async (nftId, price) => {
+      await nftContract.account.signAndSendTransaction(nftContract.contractId, [
+        transactions.functionCall(
+          'nft_approve',
+          Buffer.from(
+            JSON.stringify({
+              token_id: nftId,
+              account_id: getMarketContractName(nftContract.contractId),
+              msg: JSON.stringify({
+                sale_conditions: [
+                  {
+                    price,
+                    ft_token_id: 'near',
+                  },
+                ],
+              }),
+            })
+          ),
+          APP.PREPAID_GAS_LIMIT_HALF,
+          1
+        ),
+      ]);
+      // todo: why doesn't the call before work?
+      // await nftContract.nft_approve(
+      //   {
+      //     token_id: nftId,
+      //     account_id: getMarketContractName(nftContract.contractId),
+      //     msg: JSON.stringify({
+      //       sale_conditions: [
+      //         {
+      //           price,
+      //           ft_token_id: 'near',
+      //         },
+      //       ],
+      //     }),
+      //   },
+      //   APP.PREPAID_GAS_LIMIT,
+      //   1
+      // );
     },
     [nftContract]
   );
