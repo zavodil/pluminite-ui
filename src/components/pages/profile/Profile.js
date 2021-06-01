@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useInfiniteQuery, useQuery as useRQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -119,15 +119,12 @@ export default function Profile() {
   const { getGemsForOwner, getGemsForCreator, getProfile } = useContext(NftContractContext);
   const { marketContract } = useContext(MarketContractContext);
 
-  const [nftsForOwner, setNftsForOwner] = useState([]);
-  const [nftsForCreator, setNftsForCreator] = useState([]);
-
   const ownedGemRef = useRef();
 
   const query = useQuery();
   const ownedGemId = query.get('gem-id');
 
-  const { fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery(
+  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery(
     [QUERY_KEYS.GEMS_FOR_OWNER, user.accountId],
     ({ pageParam = 0 }) => getGemsForOwner(user.accountId, String(pageParam), String(APP.MAX_ITEMS_PER_PAGE_PROFILE)),
     {
@@ -141,15 +138,18 @@ export default function Profile() {
       onError() {
         toast.error('Sorry 😢 There was an error getting gems you own.');
       },
-      onSuccess(data) {
-        if (data?.pages?.length) {
-          setNftsForOwner(data.pages.flat());
+      select(dataRaw) {
+        if (dataRaw?.pages?.length) {
+          return dataRaw.pages.flat();
         }
+
+        return [];
       },
     }
   );
 
   const {
+    data: forCreatorData,
     fetchNextPage: forCreatorFetchNextPage,
     hasNextPage: forCreatorHasNextPage,
     isFetching: forCreatorIsFetching,
@@ -168,10 +168,12 @@ export default function Profile() {
       onError() {
         toast.error('Sorry 😢 There was an error getting gems you made.');
       },
-      onSuccess(data) {
-        if (data?.pages?.length) {
-          setNftsForCreator(data.pages.flat());
+      select(dataRaw) {
+        if (dataRaw?.pages?.length) {
+          return dataRaw.pages.flat();
         }
+
+        return [];
       },
     }
   );
@@ -181,10 +183,10 @@ export default function Profile() {
   });
 
   useEffect(() => {
-    if (ownedGemRef?.current && nftsForOwner.length) {
+    if (ownedGemRef?.current && data.length) {
       ownedGemRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [nftsForOwner]);
+  }, [data]);
 
   const { data: imageData } = useRQuery(
     [QUERY_KEYS.GET_IMAGE_DATA, profile?.image],
@@ -228,8 +230,8 @@ export default function Profile() {
               ) : (
                 <>
                   <div className="items">
-                    {nftsForOwner.length ? (
-                      nftsForOwner.map((nft) => {
+                    {data.length ? (
+                      data.map((nft) => {
                         const ArtItemComponent =
                           // todo: fix bug on contract: approved_account_ids is not populated
                           marketContract.contractId in nft.approved_account_ids ? ArtItem : ArtItemSellable;
@@ -274,8 +276,8 @@ export default function Profile() {
               ) : (
                 <>
                   <div className="items">
-                    {nftsForCreator.length ? (
-                      nftsForCreator.map((nft) => {
+                    {forCreatorData.length ? (
+                      forCreatorData.map((nft) => {
                         const ArtItemComponent =
                           // todo: fix bug on contract: approved_account_ids is not populated
                           !(marketContract.contractId in nft.approved_account_ids) && nft.owner_id === user.accountId
