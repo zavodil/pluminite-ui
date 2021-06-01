@@ -107,7 +107,7 @@ function ProfileEditPhoto() {
         adviceText={
           avatarDataUrl
             ? 'This will be your profile picture '
-            : 'Photos with a 1:1 ratio work best, that are under 1mb in size.'
+            : `Photos with a 1:1 ratio work best, that are under ${PROFILE.PHOTO_MAX_SIZE_MB}mb in size.`
         }
         onUpload={({ imageDataUrl }) => setAvatarDataUrl(imageDataUrl)}
         ref={inputRef}
