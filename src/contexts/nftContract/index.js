@@ -34,6 +34,17 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     [nftContract]
   );
 
+  const getGemsForCreator = useCallback(
+    async (accountId, fromIndex, limit) => {
+      return nftContract.nft_tokens_for_creator({
+        account_id: accountId,
+        from_index: fromIndex,
+        limit,
+      });
+    },
+    [nftContract]
+  );
+
   const getGemsBatch = useCallback(
     async (tokenIds) =>
       nftContract.nft_tokens_batch({
@@ -86,6 +97,7 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     getGem,
     getGems,
     getGemsForOwner,
+    getGemsForCreator,
     getGemsBatch,
     listForSale,
     setProfile,
@@ -104,6 +116,7 @@ NftContractContextProvider.propTypes = {
     nft_token: PropTypes.func.isRequired,
     nft_tokens: PropTypes.func.isRequired,
     nft_tokens_for_owner: PropTypes.func.isRequired,
+    nft_tokens_for_creator: PropTypes.func.isRequired,
     nft_tokens_batch: PropTypes.func.isRequired,
     nft_mint: PropTypes.func.isRequired,
     nft_approve: PropTypes.func.isRequired,

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import defaultProfilePicture from '../../../assets/default-profile-picture.png';
-import placeholderDataUrl from '../../../assets/art.png';
 
 import Balance from '../../NavigationComponents/Balance';
 import Button from '../../common/Button';
@@ -107,7 +106,7 @@ const Container = styled('div')`
 
 export default function Profile() {
   const { user } = useContext(NearContext);
-  const { getGemsForOwner, getProfile } = useContext(NftContractContext);
+  const { getGemsForOwner, getGemsForCreator, getProfile } = useContext(NftContractContext);
   const { marketContract } = useContext(MarketContractContext);
 
   const ownedGemRef = useRef();
@@ -118,6 +117,26 @@ export default function Profile() {
   const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery(
     [QUERY_KEYS.GEMS_FOR_OWNER, user.accountId],
     ({ pageParam = 0 }) => getGemsForOwner(user.accountId, String(pageParam), String(APP.MAX_ITEMS_PER_PAGE_PROFILE)),
+    {
+      getNextPageParam(lastPage, pages) {
+        if (lastPage.length === APP.MAX_ITEMS_PER_PAGE_PROFILE) {
+          return pages.length * APP.MAX_ITEMS_PER_PAGE_PROFILE;
+        }
+
+        return undefined;
+      },
+    }
+  );
+
+  const {
+    data: forCreatorData,
+    fetchNextPage: forCreatorFetchNextPage,
+    hasNextPage: forCreatorHasNextPage,
+    isFetching: forCreatorIsFetching,
+    isFetchingNextPage: forCreatorIsFetchingNextPage,
+  } = useInfiniteQuery(
+    [QUERY_KEYS.GEMS_FOR_CREATOR, user.accountId],
+    ({ pageParam = 0 }) => getGemsForCreator(user.accountId, String(pageParam), String(APP.MAX_ITEMS_PER_PAGE_PROFILE)),
     {
       getNextPageParam(lastPage, pages) {
         if (lastPage.length === APP.MAX_ITEMS_PER_PAGE_PROFILE) {
@@ -209,12 +228,39 @@ export default function Profile() {
           },
           {
             title: 'Gems I made',
-            // todo: after integration with NFT contract set ArtItem id to gemId (can't get nft-s created by a specific
-            // user on the current version of the contract)
-            // todo: remove `placeholderDataUrl` once we get real data from the contract
-            content: Array.from({ length: 2 }).map((_, i) => (
-              <ArtItem key={`art-item-made-${i}`} nft={{ metadata: { media: placeholderDataUrl } }} />
-            )),
+            content: (
+              <Loading waitingFor={forCreatorData?.pages}>
+                <div className="items">
+                  {forCreatorData?.pages &&
+                    forCreatorData.pages.flat().map((nft) => {
+                      const ArtItemComponent =
+                        !(marketContract.contractId in nft.approved_account_ids) && nft.owner_id === user.accountId
+                          ? ArtItemSellable
+                          : ArtItem;
+
+                      return (
+                        <ArtItemComponent
+                          key={nft.token_id}
+                          forwardedRef={ownedGemId === nft.token_id ? ownedGemRef : null}
+                          nft={nft}
+                          isLink
+                          isFromIpfs
+                        />
+                      );
+                    })}
+                </div>
+                {forCreatorHasNextPage && (
+                  <Button
+                    isPrimary
+                    onClick={() => forCreatorFetchNextPage()}
+                    isDisabled={forCreatorIsFetching || forCreatorIsFetchingNextPage}
+                    className="load-more"
+                  >
+                    Load more
+                  </Button>
+                )}
+              </Loading>
+            ),
           },
         ]}
       />
