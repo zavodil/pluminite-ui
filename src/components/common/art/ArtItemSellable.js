@@ -10,7 +10,7 @@ const ArtItemSellable = ({ forwardedRef, nft, ...props }) => {
   const onSellButtonClick = (e) => {
     e.preventDefault();
 
-    history.push(`/sell/${nft.token_id}`);
+    history.push(`/gem/${nft.token_id}`);
   };
 
   return <ArtItem ref={forwardedRef} nft={nft} buttonText="Sell" onButtonClick={onSellButtonClick} {...props} />;
