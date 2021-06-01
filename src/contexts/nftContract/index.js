@@ -122,6 +122,14 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     [nftContract]
   );
 
+  const getSupplyForCreator = useCallback(
+    async (account_id) =>
+      nftContract.nft_supply_for_creator({
+        account_id,
+      }),
+    [nftContract]
+  );
+
   const value = {
     nftContract,
     getGem,
@@ -132,6 +140,7 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     listForSale,
     setProfile,
     getProfile,
+    getSupplyForCreator,
   };
 
   return <NftContractContext.Provider value={value}>{children}</NftContractContext.Provider>;
@@ -151,6 +160,7 @@ NftContractContextProvider.propTypes = {
     nft_mint: PropTypes.func.isRequired,
     nft_approve: PropTypes.func.isRequired,
     get_profile: PropTypes.func.isRequired,
+    nft_supply_for_creator: PropTypes.func.isRequired,
   }).isRequired,
   children: ReactChildrenTypeRequired,
 };

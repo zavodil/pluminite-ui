@@ -7,6 +7,7 @@ const NftMethods = {
     'nft_tokens_batch',
     'nft_approve',
     'get_profile',
+    'nft_supply_for_creator',
   ],
   changeMethods: ['nft_mint', 'set_profile'],
 };
