@@ -83,7 +83,11 @@ function ProfileEditPhoto() {
     setIsSaving(true);
 
     const fileHash = await uploadFileData(avatarDataUrl);
-    await setProfile({ ...profile, image: fileHash });
+    await setProfile({
+      ...profile,
+      image: fileHash,
+      bio: profile?.bio || '',
+    });
     await queryClient.invalidateQueries([QUERY_KEYS.GET_PROFILE, user.accountId]);
 
     toast.success('Success! Your profile was saved!');

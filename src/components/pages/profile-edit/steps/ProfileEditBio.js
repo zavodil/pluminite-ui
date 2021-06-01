@@ -143,7 +143,11 @@ function ProfileEditBio({ uploadPhotoLink }) {
 
     setIsSaving(true);
 
-    await setProfile({ ...profile, bio: bioEdited });
+    await setProfile({
+      ...profile,
+      bio: bioEdited,
+      image: profile?.image || '',
+    });
     await queryClient.invalidateQueries([QUERY_KEYS.GET_PROFILE, user.accountId]);
 
     toast.success('Success! Your profile was saved!');
@@ -171,7 +175,7 @@ function ProfileEditBio({ uploadPhotoLink }) {
           </Button>
         </div>
       </div>
-      {profile && (
+      {profile !== undefined && (
         <Textarea
           name="bio"
           labelText="Bio"
