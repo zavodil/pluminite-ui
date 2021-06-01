@@ -231,6 +231,7 @@ export default function Profile() {
                     {nftsForOwner.length ? (
                       nftsForOwner.map((nft) => {
                         const ArtItemComponent =
+                          // todo: fix bug on contract: approved_account_ids is not populated
                           marketContract.contractId in nft.approved_account_ids ? ArtItem : ArtItemSellable;
 
                         return (
@@ -276,6 +277,7 @@ export default function Profile() {
                     {nftsForCreator.length ? (
                       nftsForCreator.map((nft) => {
                         const ArtItemComponent =
+                          // todo: fix bug on contract: approved_account_ids is not populated
                           !(marketContract.contractId in nft.approved_account_ids) && nft.owner_id === user.accountId
                             ? ArtItemSellable
                             : ArtItem;

@@ -169,7 +169,7 @@ const GemHeader = styled('div')`
 function Gem({ location: { prevPathname } }) {
   const { user } = useContext(NearContext);
   const { getGem } = useContext(NftContractContext);
-  const { getSale, offer, marketContract } = useContext(MarketContractContext);
+  const { getSale, offer } = useContext(MarketContractContext);
 
   const [previousPriceUser, setPreviousPriceUser] = useState('');
   const [previousPrice, setPreviousPrice] = useState('0');
@@ -185,11 +185,13 @@ function Gem({ location: { prevPathname } }) {
   const { data: gemOnSale } = useQuery(
     [QUERY_KEYS.GEM_ON_SALE, gemId],
     async () => {
-      if (Object.keys(gem.approved_account_ids).includes(marketContract.contractId)) {
-        return getSale(gemId);
-      }
-
-      return null;
+      // todo: uncomment once gem.approved_account_ids is fixed
+      // if (Object.keys(gem.approved_account_ids).includes(marketContract.contractId)) {
+      //   return getSale(gemId);
+      // }
+      //
+      // return null;
+      return getSale(gemId);
     },
     {
       enabled: !!gem,
