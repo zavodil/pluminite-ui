@@ -75,6 +75,18 @@ impl Contract {
         }
     }
 
+    pub fn nft_supply_for_creator(
+        &self,
+        account_id: AccountId,
+    ) -> U64 {
+        let tokens_creator = self.tokens_per_creator.get(&account_id);
+        if let Some(tokens_creator) = tokens_creator {
+            U64(tokens_creator.len())
+        } else {
+            U64(0)
+        }
+    }
+
     pub fn nft_tokens_for_owner(
         &self,
         account_id: AccountId,
