@@ -40,7 +40,7 @@ const StyledContainer = styled('div')`
 
 const InputSignAside = ({ labelText, detailsText, asideText, isSmall, isDisabled, ...rest }) => {
   return (
-    <StyledContainer isSmall={isSmall} isDisabled={isDisabled} className="form-group">
+    <StyledContainer isSmall={isSmall} isDisabled={isDisabled} className="form-group input-sign-aside">
       {labelText && <label>{labelText}</label>}
       {detailsText && <SmallText>{detailsText}</SmallText>}
       <div className="aside-wrapper">
