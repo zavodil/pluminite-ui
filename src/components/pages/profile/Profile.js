@@ -3,6 +3,7 @@ import { useInfiniteQuery, useQuery as useRQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import defaultProfilePicture from '../../../assets/default-profile-picture.png';
 import placeholderDataUrl from '../../../assets/art.png';
 
 import Balance from '../../NavigationComponents/Balance';
@@ -10,11 +11,12 @@ import Button from '../../common/Button';
 import { ArtItem, ArtItemSellable } from '../../common/art';
 import { Tabs } from '../../common/tabs';
 import { Loading } from '../../common/utils';
-import { ImageFromIpfs } from '../../common/images';
 
 import { useQuery } from '../../../hooks';
 
 import { NearContext, NftContractContext, MarketContractContext } from '../../../contexts';
+
+import { getFileData } from '../../../apis';
 
 import { APP, QUERY_KEYS } from '../../../constants';
 
@@ -137,10 +139,25 @@ export default function Profile() {
     }
   }, [data]);
 
+  const { data: imageData } = useRQuery(
+    [QUERY_KEYS.GET_IMAGE_DATA, profile?.image],
+    () => getFileData(profile?.image),
+    {
+      retry: 1,
+      enabled: !!profile?.image,
+    }
+  );
+
   return (
     <Container>
       <div className="summary">
-        <ImageFromIpfs className="picture" media={profile?.image} alt="profile picture" width="62" height="62" />
+        <img
+          className="picture"
+          src={imageData || defaultProfilePicture}
+          alt="profile picture"
+          width="62"
+          height="62"
+        />
         <div className="summary-block">
           <span className="summary-block-top">0</span>
           <span className="summary-block-bottom">Pieces Sold</span>
