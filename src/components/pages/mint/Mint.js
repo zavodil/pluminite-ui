@@ -9,7 +9,8 @@ import { Page } from '../../../router';
 import { MintDescribe, MintUpload, MintReview } from './steps';
 
 import NotFound404 from '../not-found-404';
-import APP from "../../../constants/app";
+
+import APP from '../../../constants/app';
 
 const Container = styled('div')`
   display: flex;
@@ -48,7 +49,7 @@ export default function Mint() {
         //   setIsMintAllowed(true);
         // }
 
-        if(APP.USE_STORAGE_FEES) {
+        if (APP.USE_STORAGE_FEES) {
           const [storagePaid, gemsOwned] = await Promise.all([
             getStoragePaid(marketContract.account.accountId),
             getGemsForOwner(marketContract.account.accountId, '0', '100'),
@@ -59,8 +60,7 @@ export default function Mint() {
           } else {
             setIsMintAllowed(true);
           }
-        }
-        else {
+        } else {
           setIsMintAllowed(true);
         }
       }
