@@ -116,7 +116,7 @@ const Container = styled('div')`
 
 export default function Profile() {
   const { user } = useContext(NearContext);
-  const { getGemsForOwner, getGemsForCreator, getProfile } = useContext(NftContractContext);
+  const { getGemsForOwner, getGemsForCreator, getProfile, getSupplyForCreator } = useContext(NftContractContext);
   const { marketContract } = useContext(MarketContractContext);
 
   const ownedGemRef = useRef();
@@ -182,6 +182,15 @@ export default function Profile() {
     enabled: !!user?.accountId,
   });
 
+  const { data: supplyForCreator } = useRQuery(
+    [QUERY_KEYS.GET_SUPPLY_FOR_CREATOR, user.accountId],
+    () => getSupplyForCreator(user.accountId),
+    {
+      enabled: !!user?.accountId,
+      placeholderData: '0',
+    }
+  );
+
   useEffect(() => {
     if (ownedGemRef?.current && data.length) {
       ownedGemRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -208,8 +217,8 @@ export default function Profile() {
           height="62"
         />
         <div className="summary-block">
-          <span className="summary-block-top">0</span>
-          <span className="summary-block-bottom">Pieces Sold</span>
+          <span className="summary-block-top">{supplyForCreator || '0'}</span>
+          <span className="summary-block-bottom">Pieces Created</span>
         </div>
         <div className="summary-block">
           <Balance className="summary-block-top" precision={2} />
@@ -230,7 +239,7 @@ export default function Profile() {
               ) : (
                 <>
                   <div className="items">
-                    {data.length ? (
+                    {data?.length ? (
                       data.map((nft) => {
                         const ArtItemComponent =
                           // todo: fix bug on contract: approved_account_ids is not populated
@@ -276,7 +285,7 @@ export default function Profile() {
               ) : (
                 <>
                   <div className="items">
-                    {forCreatorData.length ? (
+                    {forCreatorData?.length ? (
                       forCreatorData.map((nft) => {
                         const ArtItemComponent =
                           // todo: fix bug on contract: approved_account_ids is not populated
