@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import styled from 'styled-components';
 
-import { NearContext, MarketContractContext } from '../../../contexts';
+import { NearContext, MarketContractContext, NftContractContext } from '../../../contexts';
 
 import { getNextBidNearsFormatted } from '../../../utils/nears';
 
@@ -93,7 +93,8 @@ const Container = styled('div')`
 
 export default function Home() {
   const { user } = useContext(NearContext);
-  const { getSalesPopulated } = useContext(MarketContractContext);
+  const { nftContract } = useContext(NftContractContext);
+  const { getSalesPopulated, marketContract } = useContext(MarketContractContext);
 
   const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery(
     QUERY_KEYS.SALES_POPULATED,
@@ -106,7 +107,7 @@ export default function Home() {
 
         return undefined;
       },
-      enabled: !!user?.accountId,
+      enabled: !!nftContract && !!marketContract,
     }
   );
 

@@ -7,6 +7,8 @@ const APP = {
   MIN_NEARS: 0,
   MIN_NEARS_TO_MINT: 0.05,
 
+  NEARS_TO_NEXT_BID: '1',
+
   MAX_COLLABORATORS: 6,
 
   GEM_DESCRIPTION_MAX_LENGTH: 160,
@@ -23,7 +25,7 @@ const APP = {
   PINATA_API_KEY: 'e6bb9d86edffbfc012f4',
   PINATA_API_SECRET: 'f9962ff3705254bb9b370f3b4bbb0dc8f6ef046d6811904c9e526b8724cacd4f',
 
-  USE_STORAGE_FEES: false
+  USE_STORAGE_FEES: false,
 };
 
 export default APP;

@@ -5,16 +5,19 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
+import defaultProfilePicture from '../../../../assets/default-profile-picture.png';
+
 import { StickedToBottom } from '../../../common/layout';
 import { DotsLoading } from '../../../common/utils';
 import Balance from '../../../NavigationComponents/Balance';
 import Button from '../../../common/Button';
 import { Textarea } from '../../../common/forms';
-import { ImageFromIpfs } from '../../../common/images';
 
 import { NearContext, NftContractContext } from '../../../../contexts';
 
 import { useIsUnmounting } from '../../../../hooks';
+
+import { getFileData } from '../../../../apis';
 
 import { PROFILE, QUERY_KEYS } from '../../../../constants';
 
@@ -103,6 +106,15 @@ function ProfileEditBio({ uploadPhotoLink }) {
     enabled: !!user?.accountId,
   });
 
+  const { data: imageData } = useRQuery(
+    [QUERY_KEYS.GET_IMAGE_DATA, profile?.image],
+    () => getFileData(profile?.image),
+    {
+      retry: 1,
+      enabled: !!profile?.image,
+    }
+  );
+
   const [bioEdited, setBioEdited] = useState(profile?.bio);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -131,7 +143,11 @@ function ProfileEditBio({ uploadPhotoLink }) {
 
     setIsSaving(true);
 
-    await setProfile({ ...profile, bio: bioEdited });
+    await setProfile({
+      ...profile,
+      bio: bioEdited,
+      image: profile?.image || '',
+    });
     await queryClient.invalidateQueries([QUERY_KEYS.GET_PROFILE, user.accountId]);
 
     toast.success('Success! Your profile was saved!');
@@ -145,7 +161,13 @@ function ProfileEditBio({ uploadPhotoLink }) {
   return (
     <Container>
       <div className="summary">
-        <ImageFromIpfs className="picture" media={profile?.image} alt="profile picture" width="82" height="82" />
+        <img
+          className="picture"
+          src={imageData || defaultProfilePicture}
+          alt="profile picture"
+          width="82"
+          height="82"
+        />
         <div className="profile">
           <p className="account-id">{user.accountId}</p>
           <Button isSecondary isSmall className="button-change-profile">
@@ -153,7 +175,7 @@ function ProfileEditBio({ uploadPhotoLink }) {
           </Button>
         </div>
       </div>
-      {profile && (
+      {profile !== undefined && (
         <Textarea
           name="bio"
           labelText="Bio"

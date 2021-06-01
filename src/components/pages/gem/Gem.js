@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
@@ -8,17 +8,11 @@ import { formatNearAmount } from 'near-api-js/lib/utils/format';
 import { getFileData } from '../../../apis';
 import { ArtItem } from '../../common/art';
 
-import { StickedToBottom } from '../../common/layout';
-import Button from '../../common/Button';
+import { BottomSell, BottomBid } from './components';
 import CloseButton from '../../common/Button/CloseButton';
 import { TitleText } from '../../common/typography';
 import { Tabs } from '../../common/tabs';
 import { Portal } from '../../common/utils';
-
-import { withUSDs } from '../../../hooks';
-
-import { round } from '../../../utils/numbers';
-import { getNextBidNearsFormatted } from '../../../utils/nears';
 
 import { NftContractContext, MarketContractContext, NearContext } from '../../../contexts';
 
@@ -27,7 +21,7 @@ import { QUERY_KEYS } from '../../../constants';
 const Container = styled('div')`
   display: flex;
   flex-direction: column;
-  min-height: calc(100% - 173px);
+  min-height: ${({ isBottomSell }) => (isBottomSell ? 'calc(100% - 211px)' : 'calc(100% - 173px)')};
   max-width: 767px;
   padding: 192px 28px 60px;
 
@@ -50,6 +44,10 @@ const Container = styled('div')`
 
   .tabs-titles {
     margin-bottom: 40px;
+  }
+
+  .art-item {
+    margin: 0 auto;
   }
 
   .history-event {
@@ -88,63 +86,6 @@ const Container = styled('div')`
   }
 `;
 
-const StyledBid = styled('div')`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  max-width: 767px;
-
-  .bid-top {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-  }
-
-  .bid-title {
-    font-size: 20px;
-    margin: 0 0 10px;
-  }
-
-  .bid-user {
-    color: rgba(var(--lavendar-base), 0.7);
-    margin: 0;
-  }
-
-  .bid-sum {
-    display: flex;
-    align-items: center;
-    font-family: var(--font-secondary);
-    color: var(--bubble-gum);
-
-    &-nears {
-      display: inline-flex;
-      align-items: center;
-      margin-right: 20px;
-
-      &--amount {
-        font-size: 36px;
-        margin-right: 5px;
-      }
-
-      &--sign {
-        font-size: 18px;
-      }
-    }
-
-    &-usds {
-      font-size: 18px;
-      opacity: 0.7;
-    }
-  }
-
-  .bid-button {
-    width: 100%;
-  }
-`;
-
 const GemHeader = styled('div')`
   position: absolute;
   top: 0;
@@ -169,27 +110,24 @@ const GemHeader = styled('div')`
 function Gem({ location: { prevPathname } }) {
   const { user } = useContext(NearContext);
   const { getGem } = useContext(NftContractContext);
-  const { getSale, offer, marketContract } = useContext(MarketContractContext);
-
-  const [previousPriceUser, setPreviousPriceUser] = useState('');
-  const [previousPrice, setPreviousPrice] = useState('0');
+  const { getSale } = useContext(MarketContractContext);
 
   const { gemId } = useParams();
 
   const history = useHistory();
-
-  const previousPriceUSDs = withUSDs(formatNearAmount(previousPrice));
 
   const { data: gem } = useQuery([QUERY_KEYS.GEM, gemId], () => getGem(gemId));
 
   const { data: gemOnSale } = useQuery(
     [QUERY_KEYS.GEM_ON_SALE, gemId],
     async () => {
-      if (Object.keys(gem.approved_account_ids).includes(marketContract.contractId)) {
-        return getSale(gemId);
-      }
-
-      return null;
+      // todo: uncomment once gem.approved_account_ids is fixed
+      // if (Object.keys(gem.approved_account_ids).includes(marketContract.contractId)) {
+      //   return getSale(gemId);
+      // }
+      //
+      // return null;
+      return getSale(gemId);
     },
     {
       enabled: !!gem,
@@ -209,24 +147,7 @@ function Gem({ location: { prevPathname } }) {
 
   const isListed = () => !!gemOnSale;
 
-  const isOwnedByUser = () => gemOnSale?.owner_id && gemOnSale.owner_id === user.accountId;
-
-  useEffect(() => {
-    if (hasBids()) {
-      setPreviousPriceUser(gemOnSale?.bids?.near?.owner_id || '');
-      setPreviousPrice(gemOnSale?.bids?.near?.price || '0');
-    } else {
-      setPreviousPriceUser(gem?.owner_id || '');
-      setPreviousPrice(gemOnSale?.conditions?.near || '0');
-    }
-  }, [gem, gemOnSale]);
-
-  const processBid = async () => {
-    await offer(gemId, +getNextBidNearsFormatted(gemOnSale));
-    // todo: execute commands below once the bid is accepted
-    // toast.success('You own a new gem!', { position: 'top-right' });
-    // history.push(`/profile?gem-id=${gem?.token_id}`);
-  };
+  const isOwnedByUser = () => gem?.owner_id && gem.owner_id === user?.accountId;
 
   const goBack = () => {
     if (prevPathname) {
@@ -248,8 +169,15 @@ function Gem({ location: { prevPathname } }) {
     return <Redirect to="/404" />;
   }
 
+  let BottomComponent = () => null;
+  if (isListed() && !isOwnedByUser()) {
+    BottomComponent = BottomBid;
+  } else if (!isListed() && isOwnedByUser()) {
+    BottomComponent = BottomSell;
+  }
+
   return (
-    <Container>
+    <Container isBottomSell={BottomComponent === BottomSell}>
       <Portal>
         <GemHeader>
           <div>{imageData && <img src={imageData} alt={gem?.metadata?.title} width={40} height={40} />}</div>
@@ -306,30 +234,7 @@ function Gem({ location: { prevPathname } }) {
           },
         ]}
       />
-      {isListed() && !isOwnedByUser() && (
-        <StickedToBottom isSecondary>
-          <StyledBid className="bid">
-            <div className="bid-top">
-              <div className="bid-description">
-                <p className="bid-title">{hasBids() ? 'Top offer' : 'Starting Bid'}</p>
-                <p className="bid-user">{previousPriceUser}</p>
-              </div>
-              <div className="bid-sum">
-                <span className="bid-sum-nears">
-                  <span className="bid-sum-nears--amount">{formatNearAmount(previousPrice)}</span>
-                  <span className="bid-sum-nears--sign">Ⓝ</span>
-                </span>
-                {previousPriceUSDs !== null && (
-                  <span className="bid-sum-usds">~${round(previousPriceUSDs, 0)} USD</span>
-                )}
-              </div>
-            </div>
-            <Button className="bid-button" isPrimary onClick={processBid}>
-              Buy Gem for {getNextBidNearsFormatted(gemOnSale)}Ⓝ
-            </Button>
-          </StyledBid>
-        </StickedToBottom>
-      )}
+      <BottomComponent gem={gem} gemOnSale={gemOnSale} />
     </Container>
   );
 }

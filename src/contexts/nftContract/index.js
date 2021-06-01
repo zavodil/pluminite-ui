@@ -34,6 +34,17 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     [nftContract]
   );
 
+  const getGemsForCreator = useCallback(
+    async (accountId, fromIndex, limit) => {
+      return nftContract.nft_tokens_for_creator({
+        account_id: accountId,
+        from_index: fromIndex,
+        limit,
+      });
+    },
+    [nftContract]
+  );
+
   const getGemsBatch = useCallback(
     async (tokenIds) =>
       nftContract.nft_tokens_batch({
@@ -43,15 +54,45 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
   );
 
   const listForSale = useCallback(
-    async (gemId) => {
-      await nftContract.nft_approve(
-        {
-          token_id: gemId,
-          account_id: getMarketContractName(nftContract.contractId),
-        },
-        APP.PREPAID_GAS_LIMIT,
-        APP.DEPOSIT_DEFAULT
-      );
+    async (nftId, price) => {
+      await nftContract.account.signAndSendTransaction(nftContract.contractId, [
+        transactions.functionCall(
+          'nft_approve',
+          Buffer.from(
+            JSON.stringify({
+              token_id: nftId,
+              account_id: getMarketContractName(nftContract.contractId),
+              msg: JSON.stringify({
+                sale_conditions: [
+                  {
+                    price,
+                    ft_token_id: 'near',
+                  },
+                ],
+              }),
+            })
+          ),
+          APP.PREPAID_GAS_LIMIT_HALF,
+          1
+        ),
+      ]);
+      // todo: why doesn't the call before work?
+      // await nftContract.nft_approve(
+      //   {
+      //     token_id: nftId,
+      //     account_id: getMarketContractName(nftContract.contractId),
+      //     msg: JSON.stringify({
+      //       sale_conditions: [
+      //         {
+      //           price,
+      //           ft_token_id: 'near',
+      //         },
+      //       ],
+      //     }),
+      //   },
+      //   APP.PREPAID_GAS_LIMIT,
+      //   1
+      // );
     },
     [nftContract]
   );
@@ -81,15 +122,25 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     [nftContract]
   );
 
+  const getSupplyForCreator = useCallback(
+    async (account_id) =>
+      nftContract.nft_supply_for_creator({
+        account_id,
+      }),
+    [nftContract]
+  );
+
   const value = {
     nftContract,
     getGem,
     getGems,
     getGemsForOwner,
+    getGemsForCreator,
     getGemsBatch,
     listForSale,
     setProfile,
     getProfile,
+    getSupplyForCreator,
   };
 
   return <NftContractContext.Provider value={value}>{children}</NftContractContext.Provider>;
@@ -104,10 +155,12 @@ NftContractContextProvider.propTypes = {
     nft_token: PropTypes.func.isRequired,
     nft_tokens: PropTypes.func.isRequired,
     nft_tokens_for_owner: PropTypes.func.isRequired,
+    nft_tokens_for_creator: PropTypes.func.isRequired,
     nft_tokens_batch: PropTypes.func.isRequired,
     nft_mint: PropTypes.func.isRequired,
     nft_approve: PropTypes.func.isRequired,
     get_profile: PropTypes.func.isRequired,
+    nft_supply_for_creator: PropTypes.func.isRequired,
   }).isRequired,
   children: ReactChildrenTypeRequired,
 };

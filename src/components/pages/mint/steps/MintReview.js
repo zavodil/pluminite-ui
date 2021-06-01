@@ -68,7 +68,11 @@ const MintReview = ({ backLink, nft }) => {
   const processMintClick = async () => {
     setIsMinting(true);
 
-    await queryClient.invalidateQueries(QUERY_KEYS.GEMS_FOR_OWNER, user.accountId);
+    await Promise.all([
+      queryClient.invalidateQueries(QUERY_KEYS.GEMS_FOR_OWNER, user.accountId),
+      queryClient.invalidateQueries(QUERY_KEYS.GEMS_FOR_CREATOR, user.accountId),
+      queryClient.invalidateQueries(QUERY_KEYS.SALES_POPULATED),
+    ]);
     const [ipfsHash, thumbnailIpfsHash] = await uploadToIPFS({
       imageDataUrl: nft.artDataUrl,
       imageThumbnailDataUrl: nft.artThumbnailDataUrl,

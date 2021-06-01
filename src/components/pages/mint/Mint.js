@@ -3,13 +3,14 @@ import { Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import Big from 'big.js';
 
-import { MarketContractContext, NftContractContext } from '../../../contexts';
+import { MarketContractContext } from '../../../contexts';
 
 import { Page } from '../../../router';
 import { MintDescribe, MintUpload, MintReview } from './steps';
 
 import NotFound404 from '../not-found-404';
-import APP from "../../../constants/app";
+
+import APP from '../../../constants/app';
 
 const Container = styled('div')`
   display: flex;
@@ -22,45 +23,29 @@ export default function Mint() {
   const match = useRouteMatch();
   const [nft, setNft] = useState({ conditions: {} });
   const [isMintAllowed, setIsMintAllowed] = useState(null);
-  // const { getStoragePaid, getSalesSupplyForOwner, marketContract, minStorage } = useContext(MarketContractContext);
-  const { getStoragePaid, marketContract, minStorage } = useContext(MarketContractContext);
-  const { getGemsForOwner } = useContext(NftContractContext);
+  const { getStoragePaid, getSalesSupplyForOwner, marketContract, minStorage } = useContext(MarketContractContext);
 
   const setNftField = (field, value) => {
     setNft((nftOld) => ({ ...nftOld, [field]: value }));
   };
 
   useEffect(() => {
+    if (!APP.USE_STORAGE_FEES) {
+      setIsMintAllowed(true);
+
+      return;
+    }
+
     (async () => {
       if (minStorage) {
-        // todo: once `get_supply_by_owner_id` is implemented use code below to check if storage is paid,
-        // `nft_tokens_for_owner` works for now only because nothings is being actually sold
-        // todo: remove these checks once (if) the requirement of initial deposit is removed
+        const [storagePaid, salesNumber] = await Promise.all([
+          getStoragePaid(marketContract.account.accountId),
+          getSalesSupplyForOwner(marketContract.account.accountId),
+        ]);
 
-        // const [storagePaid, salesNumber] = await Promise.all([
-        //   getStoragePaid(marketContract.account.accountId),
-        //   getSalesSupplyForOwner(marketContract.account.accountId),
-        // ]);
-        //
-        // if (new Big(storagePaid).lte(new Big(minStorage).times(salesNumber))) {
-        //   setIsMintAllowed(false);
-        // } else {
-        //   setIsMintAllowed(true);
-        // }
-
-        if(APP.USE_STORAGE_FEES) {
-          const [storagePaid, gemsOwned] = await Promise.all([
-            getStoragePaid(marketContract.account.accountId),
-            getGemsForOwner(marketContract.account.accountId, '0', '100'),
-          ]);
-
-          if (new Big(storagePaid).lte(new Big(minStorage).times(gemsOwned.length))) {
-            setIsMintAllowed(false);
-          } else {
-            setIsMintAllowed(true);
-          }
-        }
-        else {
+        if (new Big(storagePaid).lte(new Big(minStorage).times(salesNumber))) {
+          setIsMintAllowed(false);
+        } else {
           setIsMintAllowed(true);
         }
       }
