@@ -12,7 +12,7 @@ const ArtItemPriced = ({ gemOnSale, bid, bidAvailable, ...props }) => {
   const processBid = async (e) => {
     e.preventDefault();
 
-    await offer(gemOnSale.token_id, +getNextBidNearsFormatted(gemOnSale));
+    await offer(gemOnSale.token_id, getNextBidNearsFormatted(gemOnSale));
   };
 
   const isItemOwnedByUser = () => gemOnSale?.owner_id === marketContract.account.accountId;

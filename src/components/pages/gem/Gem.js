@@ -222,7 +222,7 @@ function Gem({ location: { prevPathname } }) {
   }, [gem, gemOnSale]);
 
   const processBid = async () => {
-    await offer(gemId, +getNextBidNearsFormatted(gemOnSale));
+    await offer(gemId, getNextBidNearsFormatted(gemOnSale));
     // todo: execute commands below once the bid is accepted
     // toast.success('You own a new gem!', { position: 'top-right' });
     // history.push(`/profile?gem-id=${gem?.token_id}`);

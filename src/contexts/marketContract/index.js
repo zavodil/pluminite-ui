@@ -138,7 +138,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
           token_id: gemId,
         },
         APP.PREPAID_GAS_LIMIT,
-        parseNearAmount(String(offerPrice))
+        parseNearAmount(offerPrice)
       );
     },
     [marketContract]
