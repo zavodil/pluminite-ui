@@ -260,6 +260,10 @@ impl NonFungibleTokenCore for Contract {
 
             refund_deposit(storage_used);
         }
+        else{
+            token.next_approval_id += 1;
+            self.tokens_by_id.insert(&token_id, &token);
+        }
 
         if let Some(msg) = msg {
 

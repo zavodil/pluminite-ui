@@ -5,7 +5,7 @@ use near_sdk::promise_result_as_success;
 const GAS_FOR_FT_TRANSFER: Gas = 5_000_000_000_000;
 /// max Tgas can attach to resolve_purchase
 const GAS_FOR_ROYALTIES: Gas = 115_000_000_000_000;
-const GAS_FOR_NFT_TRANSFER: Gas = 15_000_000_000_000;
+const GAS_FOR_NFT_TRANSFER: Gas = 50_000_000_000_000;
 
 #[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
