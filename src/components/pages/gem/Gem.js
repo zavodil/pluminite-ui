@@ -46,6 +46,10 @@ const Container = styled('div')`
     margin-bottom: 40px;
   }
 
+  .art-item {
+    margin: 0 auto;
+  }
+
   .history-event {
     padding: 20px 0;
     font-size: 16px;
