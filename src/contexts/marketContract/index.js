@@ -179,7 +179,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
     offer,
     payStorage,
     getStoragePaid,
-    getSalesSupplyForOwner,
+    getSalesSupplyForOwner
   };
 
   return <MarketContractContext.Provider value={value}>{children}</MarketContractContext.Provider>;

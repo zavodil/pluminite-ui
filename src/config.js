@@ -1,5 +1,5 @@
 // todo: get contract name from environment variable
-const CONTRACT_NAME = 'dev-1622461954457-1740773';
+const CONTRACT_NAME = 'dev-1622556560424-4870693';
 
 function getConfig(env) {
   switch (env) {

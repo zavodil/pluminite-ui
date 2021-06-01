@@ -8,6 +8,7 @@ const NftMethods = {
     'nft_approve',
     'get_profile',
     'nft_supply_for_creator',
+    'is_free_mint_available'
   ],
   changeMethods: ['nft_mint', 'set_profile'],
 };

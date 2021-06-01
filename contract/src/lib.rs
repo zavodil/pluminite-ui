@@ -59,6 +59,8 @@ pub struct Contract {
     pub profiles: LookupMap<AccountId, Profile>,
 
     pub use_storage_fees: bool,
+    pub free_mints: u64,
+    pub version: u16,
 }
 
 #[derive(Debug, Clone, BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
@@ -91,6 +93,7 @@ impl Contract {
                metadata: NFTMetadata,
                supply_cap_by_type: TypeSupplyCaps,
                use_storage_fees: bool,
+               free_mints: u64,
                unlocked: Option<bool>,
     ) -> Self {
         let mut this = Self {
@@ -111,7 +114,9 @@ impl Contract {
             token_types_locked: UnorderedSet::new(StorageKey::TokenTypesLocked.try_to_vec().unwrap()),
             contract_royalty: 0,
             profiles: LookupMap::new(StorageKey::Profiles.try_to_vec().unwrap()),
-            use_storage_fees
+            use_storage_fees,
+            free_mints,
+            version: 0,
         };
 
         if unlocked.is_none() {
@@ -124,6 +129,77 @@ impl Contract {
         this.measure_min_token_storage_cost();
 
         this
+    }
+
+    #[init(ignore_state)]
+    pub fn migrate_state_1() -> Self {
+        let migration_version: u16 = 1;
+        assert_eq!(env::predecessor_account_id(), env::current_account_id(), "Private function");
+
+        #[derive(BorshDeserialize)]
+        struct OldContract {
+            tokens_per_owner: LookupMap<AccountId, UnorderedSet<TokenId>>,
+            tokens_per_creator: LookupMap<AccountId, UnorderedSet<TokenId>>,
+            tokens_by_id: LookupMap<TokenId, Token>,
+            token_metadata_by_id: UnorderedMap<TokenId, TokenMetadata>,
+            owner_id: AccountId,
+            extra_storage_in_bytes_per_token: StorageUsage,
+            metadata: LazyOption<NFTMetadata>,
+            supply_cap_by_type: TypeSupplyCaps,
+            tokens_per_type: LookupMap<TokenType, UnorderedSet<TokenId>>,
+            token_types_locked: UnorderedSet<TokenType>,
+            contract_royalty: u32,
+            profiles: LookupMap<AccountId, Profile>,
+            use_storage_fees: bool,
+        }
+
+        let old_contract: OldContract = env::state_read().expect("Old state doesn't exist");
+
+        Self {
+            tokens_per_owner: old_contract.tokens_per_owner,
+            tokens_per_creator: old_contract.tokens_per_creator,
+            tokens_by_id: old_contract.tokens_by_id,
+            token_metadata_by_id: old_contract.token_metadata_by_id,
+            owner_id: old_contract.owner_id,
+            extra_storage_in_bytes_per_token: old_contract.extra_storage_in_bytes_per_token,
+            metadata: old_contract.metadata,
+            supply_cap_by_type: old_contract.supply_cap_by_type,
+            tokens_per_type: old_contract.tokens_per_type,
+            token_types_locked: old_contract.token_types_locked,
+            contract_royalty: old_contract.contract_royalty,
+            profiles: old_contract.profiles,
+            use_storage_fees: old_contract.use_storage_fees,
+            free_mints: 3,
+            version: migration_version,
+        }
+    }
+
+    pub fn set_use_storage_fees(&mut self, use_storage_fees: bool) {
+        assert_eq!(env::predecessor_account_id(), env::current_account_id(), "Private function");
+        self.use_storage_fees = use_storage_fees;
+    }
+
+    pub fn is_free_mint_available(&self, account_id: AccountId) -> bool {
+        if !self.use_storage_fees {
+            self.get_tokens_created(account_id) < self.free_mints
+        } else {
+            false
+        }
+    }
+
+    pub fn get_tokens_created(&self, account_id: AccountId) -> u64 {
+        match self.tokens_per_creator.get(&account_id) {
+            Some(tokens_creator) => {
+                tokens_creator.len()
+            }
+            None => {
+                0
+            }
+        }
+    }
+
+    pub fn get_free_mints(&self) -> u64 {
+        self.free_mints
     }
 
     pub fn get_use_storage_fees(&self) -> bool {

@@ -17,17 +17,19 @@ impl Contract {
             final_token_id = token_id
         }
 
-        let initial_storage_usage = if self.use_storage_fees {
+        let mut owner_id = env::predecessor_account_id();
+        if let Some(receiver_id) = receiver_id {
+            owner_id = receiver_id.into();
+        }
+
+        let pay_for_storage =  self.use_storage_fees || !self.is_free_mint_available(owner_id.clone());
+
+        let initial_storage_usage = if pay_for_storage {
             env::storage_usage()
         }
         else {
             0
         };
-
-        let mut owner_id = env::predecessor_account_id();
-        if let Some(receiver_id) = receiver_id {
-            owner_id = receiver_id.into();
-        }
 
         // CUSTOM - create royalty map
         let mut royalty = HashMap::new();
@@ -98,7 +100,7 @@ impl Contract {
             }
         }
 
-        if self.use_storage_fees {
+        if pay_for_storage {
             let new_token_size_in_bytes = env::storage_usage() - initial_storage_usage;
             let required_storage_in_bytes =
                 self.extra_storage_in_bytes_per_token + new_token_size_in_bytes;
