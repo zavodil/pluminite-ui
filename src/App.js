@@ -99,14 +99,14 @@ export default function App() {
                   isAuthenticated={isAuthenticated}
                   isLoading={isLoading}
                 />
-                <UserPage
+                <Page
                   path="/gem/:gemId"
                   component={Gem}
                   title={gem?.metadata?.title || 'Untitled Gem'}
                   isAuthenticated={isAuthenticated}
                   isLoading={isLoading}
                 />
-                <UserPage
+                <Page
                   path="/gem-original/:gemId"
                   component={GemOriginal}
                   title={gem?.metadata?.title || 'Untitled Gem'}
