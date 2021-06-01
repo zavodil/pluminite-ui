@@ -49,6 +49,8 @@ export const NearContextProvider = ({ currentUser, nearConfig, wallet, near, chi
     wallet.signOut();
 
     clearState();
+
+    window.location.reload();
   };
 
   useEffect(() => {
