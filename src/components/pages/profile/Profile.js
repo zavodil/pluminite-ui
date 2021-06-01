@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { useInfiniteQuery, useQuery as useRQuery } from 'react-query';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
 import defaultProfilePicture from '../../../assets/default-profile-picture.png';
@@ -125,6 +126,9 @@ export default function Profile() {
 
         return undefined;
       },
+      onError() {
+        toast.error('Sorry 😢 There was an error getting gems you own.');
+      },
     }
   );
 
@@ -144,6 +148,9 @@ export default function Profile() {
         }
 
         return undefined;
+      },
+      onError() {
+        toast.error('Sorry 😢 There was an error getting gems you made.');
       },
     }
   );
