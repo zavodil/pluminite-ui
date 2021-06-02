@@ -142,12 +142,22 @@ function Gem({ location: { prevPathname } }) {
     }
   );
 
+  const getIpfsHashMedia = () => {
+    let mediaLowRes;
+
+    if (gem?.metadata?.extra) {
+      mediaLowRes = JSON.parse(gem.metadata.extra).media_lowres;
+    }
+
+    return mediaLowRes || gem?.metadata?.media;
+  };
+
   const { data: imageData } = useQuery(
-    [QUERY_KEYS.GET_IMAGE_DATA, gem?.metadata?.media],
-    () => getFileData(gem?.metadata?.media),
+    [QUERY_KEYS.GET_IMAGE_DATA, getIpfsHashMedia()],
+    () => getFileData(getIpfsHashMedia()),
     {
       retry: 1,
-      enabled: !!gem?.metadata?.media,
+      enabled: !!gem && !!getIpfsHashMedia(),
     }
   );
 
