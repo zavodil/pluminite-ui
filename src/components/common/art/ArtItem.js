@@ -8,6 +8,10 @@ import { Image, ImageFromIpfs } from '../images';
 
 import FullscreenIcon from '../../../assets/FullscreenIcon';
 
+import { convertKBtoMB, isFileTypeAnimatedImage, isFileTypeVideo } from '../../../utils/files';
+
+import { APP } from '../../../constants';
+
 import { square } from '../../../styles/mixins';
 
 const StyledContainer = styled(Link)`
@@ -79,10 +83,25 @@ const ArtItem = ({
   };
 
   const getIpfsHashMedia = () => {
+    let extra;
     let mediaLowRes;
+    let mediaType;
+    let mediaSize;
 
     if (nft?.metadata?.extra) {
-      mediaLowRes = JSON.parse(nft.metadata.extra).media_lowres;
+      extra = JSON.parse(nft.metadata.extra);
+      mediaLowRes = extra.media_lowres;
+      mediaType = extra.media_type;
+      mediaSize = extra.media_size;
+    }
+
+    if (
+      mediaType &&
+      mediaSize &&
+      (isFileTypeAnimatedImage(mediaType) || isFileTypeVideo(mediaType)) &&
+      convertKBtoMB(mediaSize) < APP.AN_MEDIA_MAX_SIZE_BEFORE_THUMNAIL_MB
+    ) {
+      return nft?.metadata?.media || mediaLowRes;
     }
 
     return mediaLowRes || nft?.metadata?.media;
