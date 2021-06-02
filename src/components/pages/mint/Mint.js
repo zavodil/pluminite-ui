@@ -3,7 +3,7 @@ import { Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import Big from 'big.js';
 
-import { MarketContractContext, NftContractContext } from '../../../contexts';
+import { MarketContractContext } from '../../../contexts';
 
 import { Page } from '../../../router';
 import { MintDescribe, MintUpload, MintReview } from './steps';
@@ -24,7 +24,6 @@ export default function Mint() {
   const [nft, setNft] = useState({ conditions: {} });
   const [isMintAllowed, setIsMintAllowed] = useState(null);
   const { getStoragePaid, getSalesSupplyForOwner, marketContract, minStorage } = useContext(MarketContractContext);
-  const { nftContract, getIsFreeMintAvailable } = useContext(NftContractContext);
 
   const setNftField = (field, value) => {
     setNft((nftOld) => ({ ...nftOld, [field]: value }));
@@ -32,10 +31,7 @@ export default function Mint() {
 
   useEffect(() => {
     if (!APP.USE_STORAGE_FEES) {
-      (async () => {
-        const is_free_mint_available = await getIsFreeMintAvailable(nftContract.account.accountId);
-        setIsMintAllowed(is_free_mint_available);
-      })();
+      setIsMintAllowed(true);
 
       return;
     }
