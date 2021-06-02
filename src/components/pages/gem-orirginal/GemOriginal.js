@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
@@ -129,7 +130,12 @@ function GemOriginal({ location: { prevPathname } }) {
 
   const previousPriceUSDs = withUSDs(formatNearAmount(previousPrice));
 
-  const { data: gem } = useQuery([QUERY_KEYS.GEM, gemId], () => getGem(gemId));
+  const { data: gem } = useQuery([QUERY_KEYS.GEM, gemId], () => getGem(gemId), {
+    onError() {
+      toast.error('Sorry 😢 There was an error getting the gem. Please, try again later.');
+      history.push('/');
+    },
+  });
 
   const { data: gemOnSale } = useQuery(
     [QUERY_KEYS.GEM_ON_SALE, gemId],
@@ -142,6 +148,10 @@ function GemOriginal({ location: { prevPathname } }) {
     },
     {
       enabled: !!gem,
+      onError() {
+        toast.error('Sorry 😢 There was an error getting the gem. Please, try again later.');
+        history.push('/');
+      },
     }
   );
 
@@ -162,7 +172,13 @@ function GemOriginal({ location: { prevPathname } }) {
   }, [gem, gemOnSale]);
 
   const processBid = async () => {
-    await offer(gemId, getNextBidNearsFormatted(gemOnSale));
+    try {
+      await offer(gemId, getNextBidNearsFormatted(gemOnSale));
+    } catch (error) {
+      console.error(error);
+      toast.error('Sorry 😢 There was an error in processing your offer. Please, try again later.');
+    }
+
     // todo: execute commands below once the bid is accepted
     // toast.success('You own a new gem!', { position: 'top-right' });
     // history.push(`/profile?gem-id=${gem?.token_id}`);

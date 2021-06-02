@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import Big from 'big.js';
 
@@ -38,10 +39,21 @@ export default function Mint() {
 
     (async () => {
       if (minStorage) {
-        const [storagePaid, salesNumber] = await Promise.all([
-          getStoragePaid(marketContract.account.accountId),
-          getSalesSupplyForOwner(marketContract.account.accountId),
-        ]);
+        let storagePaid;
+        let salesNumber;
+
+        try {
+          [storagePaid, salesNumber] = await Promise.all([
+            getStoragePaid(marketContract.account.accountId),
+            getSalesSupplyForOwner(marketContract.account.accountId),
+          ]);
+        } catch (e) {
+          console.error(e);
+          toast.error('Sorry 😢 There was an error getting your data. Please, try again later.');
+
+          setIsMintAllowed(false);
+          return;
+        }
 
         if (new Big(storagePaid).lte(new Big(minStorage).times(salesNumber))) {
           setIsMintAllowed(false);

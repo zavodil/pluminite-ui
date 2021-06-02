@@ -180,6 +180,9 @@ export default function Profile() {
 
   const { data: profile } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
     enabled: !!user?.accountId,
+    onError() {
+      toast.error('Sorry 😢 There was an error getting your profile data.');
+    },
   });
 
   const { data: supplyForCreator } = useRQuery(
@@ -188,6 +191,9 @@ export default function Profile() {
     {
       enabled: !!user?.accountId,
       placeholderData: '0',
+      onError() {
+        toast.error("Sorry 😢 Can't get the number pf pieces created by you.");
+      },
     }
   );
 
@@ -203,6 +209,9 @@ export default function Profile() {
     {
       retry: 1,
       enabled: !!profile?.image,
+      onError() {
+        toast.error("Sorry 😢 Can't get your profile image.");
+      },
     }
   );
 
