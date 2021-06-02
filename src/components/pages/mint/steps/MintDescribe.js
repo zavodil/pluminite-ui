@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { formatNearAmount, parseNearAmount } from 'near-api-js/lib/utils/format';
 
-import { NearContext } from '../../../../contexts';
+import { NearContext, NftContractContext } from '../../../../contexts';
 
 import { HeadingText, SmallText } from '../../../common/typography';
 import { Input, InputNear, InputRoyalty, InputSign, Textarea } from '../../../common/forms';
@@ -12,7 +13,7 @@ import Button from '../../../common/Button';
 
 import RemoveIcon from '../../../../assets/RemoveIcon';
 
-import { APP } from '../../../../constants';
+import { APP, QUERY_KEYS } from '../../../../constants';
 
 import { useDebounce } from '../../../../hooks';
 
@@ -161,28 +162,22 @@ Collaborator.propTypes = {
   connection: PropTypes.object,
 };
 
-const isToMuchRoyalties = (collaborators, userRoyalty) => {
-  return collaborators.reduce((acc, cv) => acc + +(cv.royalty || 0), 0) + +userRoyalty > APP.MAX_ROYALTY;
-};
-
-const hasEnoughNears = (user) => {
-  return Number(formatNearAmount(user.balance)) > APP.MIN_NEARS_TO_MINT;
-};
-
-// todo: fix once nft contract integrated and there is a way to get the number of prepaid mints
-const hasExceededPrepaidMints = () => false;
-
-const isMintForbidden = (user) => {
-  return !hasEnoughNears(user) && hasExceededPrepaidMints();
-};
-
 const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
   const { user, nearContent } = useContext(NearContext);
+  const { getIsFreeMintAvailable } = useContext(NftContractContext);
 
   const [userRoyalty, setUserRoyalty] = useState(APP.DEFAULT_ROYALTY);
   const [collaborators, setCollaborators] = useState([]);
-
   const [userRoyaltyIsError, setUserRoyaltyIsError] = useState(false);
+
+  const { data: isFreeMintAvailable } = useQuery(
+    [QUERY_KEYS.IS_FREE_MINT_AVAILABLE, user.accountId],
+    () => getIsFreeMintAvailable(user.accountId),
+    {
+      enabled: !!user?.accountId,
+      staleTime: 0,
+    }
+  );
 
   useEffect(() => {
     if (userRoyalty && (userRoyalty < APP.MIN_CREATOR_ROYALTY || userRoyalty > APP.MAX_ROYALTY)) {
@@ -193,7 +188,12 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
     }
   }, [userRoyalty]);
 
-  const isDisabled = isMintForbidden(user);
+  const isTooMuchRoyalties = () =>
+    collaborators.reduce((acc, cv) => acc + +(cv.royalty || 0), 0) + +userRoyalty > APP.MAX_ROYALTY;
+  const hasEnoughNears = () => Number(formatNearAmount(user.balance)) > APP.MIN_NEARS_TO_MINT;
+  const hasExceededPrepaidMints = () => !isFreeMintAvailable;
+  const isMintForbidden = () => !hasEnoughNears() && hasExceededPrepaidMints();
+  const isDisabled = isMintForbidden();
 
   const addCollaborator = () => {
     if (isDisabled) {
@@ -222,7 +222,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
     nft.description.length <= APP.GEM_DESCRIPTION_MAX_LENGTH &&
     nft.conditions?.near !== undefined &&
     nft.collaborators.length < APP.MAX_COLLABORATORS &&
-    !isToMuchRoyalties(collaborators, userRoyalty) &&
+    !isTooMuchRoyalties() &&
     !userRoyaltyIsError;
 
   useEffect(() => setNftField('creator', user.accountId), []);
@@ -244,7 +244,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
     <Container>
       <HeadingText>Mint a Gem</HeadingText>
       <div className="freebies">
-        {!hasEnoughNears(user) && !isDisabled && (
+        {!hasEnoughNears() && !isDisabled && (
           <SmallText>
             We&apos;ll front the cost of your first 3 mints. You&apos;ll need to make a sale to cover your first 3 mints
             or add funds to your NEAR wallet to continue minting more NFTs.
@@ -308,7 +308,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
         );
       })}
       <div className="error-messages">
-        {isToMuchRoyalties(collaborators, userRoyalty) && (
+        {isTooMuchRoyalties() && (
           <div className="error-message">You cannot exceed {APP.MAX_ROYALTY}% in royalties.</div>
         )}
         {collaborators.map(({ userId, accountExists }, index) => {

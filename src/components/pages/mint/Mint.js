@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import Big from 'big.js';
 
-import {MarketContractContext, NftContractContext} from '../../../contexts';
+import { MarketContractContext } from '../../../contexts';
 
 import { Page } from '../../../router';
 import { MintDescribe, MintUpload, MintReview } from './steps';
@@ -23,8 +24,7 @@ export default function Mint() {
   const match = useRouteMatch();
   const [nft, setNft] = useState({ conditions: {} });
   const [isMintAllowed, setIsMintAllowed] = useState(null);
-  const { getStoragePaid, getSalesSupplyForOwner, marketContract, minStorage, } = useContext(MarketContractContext);
-  const { nftContract, getIsFreeMintAvailable } = useContext(NftContractContext);
+  const { getStoragePaid, getSalesSupplyForOwner, marketContract, minStorage } = useContext(MarketContractContext);
 
   const setNftField = (field, value) => {
     setNft((nftOld) => ({ ...nftOld, [field]: value }));
@@ -32,20 +32,28 @@ export default function Mint() {
 
   useEffect(() => {
     if (!APP.USE_STORAGE_FEES) {
-        (async () => {
-            const is_free_mint_available = await getIsFreeMintAvailable(nftContract.account.accountId);
-            setIsMintAllowed(is_free_mint_available);
-        })();
+      setIsMintAllowed(true);
 
       return;
     }
 
     (async () => {
       if (minStorage) {
-        const [storagePaid, salesNumber] = await Promise.all([
-          getStoragePaid(marketContract.account.accountId),
-          getSalesSupplyForOwner(marketContract.account.accountId),
-        ]);
+        let storagePaid;
+        let salesNumber;
+
+        try {
+          [storagePaid, salesNumber] = await Promise.all([
+            getStoragePaid(marketContract.account.accountId),
+            getSalesSupplyForOwner(marketContract.account.accountId),
+          ]);
+        } catch (e) {
+          console.error(e);
+          toast.error('Sorry 😢 There was an error getting your data. Please, try again later.');
+
+          setIsMintAllowed(false);
+          return;
+        }
 
         if (new Big(storagePaid).lte(new Big(minStorage).times(salesNumber))) {
           setIsMintAllowed(false);
@@ -76,9 +84,11 @@ export default function Mint() {
       <Switch>
         <Route path={`${match.path}/upload`}>
           <MintUpload
-            onUpload={({ imageDataUrl, imageThumbnailDataUrl }) => {
-              setNftField('artDataUrl', imageDataUrl);
-              setNftField('artThumbnailDataUrl', imageThumbnailDataUrl);
+            onUpload={({ fileDataUrl, thumbnailDataUrl, fileSize, fileType }) => {
+              setNftField('artDataUrl', fileDataUrl);
+              setNftField('artThumbnailDataUrl', thumbnailDataUrl);
+              setNftField('fileSize', fileSize);
+              setNftField('fileType', fileType);
             }}
             onCompleteLink={`${match.path}/review`}
             nft={nft}

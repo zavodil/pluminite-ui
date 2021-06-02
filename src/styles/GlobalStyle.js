@@ -17,7 +17,8 @@ const GlobalStyle = createGlobalStyle`
     --gray-lighest: #F8F9FB;
     --black: #444444; */
     --purple: #250055;
-    --plum: #1D0535;
+    --plum-base: 29, 5, 53;
+    --plum: rgb(var(--plum-base));
     --plum-light: #2E0458;
     --periwinkle-base: 130, 135, 255;
     --periwinkle: rgb(var(--periwinkle-base));
@@ -84,7 +85,7 @@ const GlobalStyle = createGlobalStyle`
       z-index: 2;
     }
   }
-  
+
   .portal-container {
     position: relative;
   }

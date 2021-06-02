@@ -42,9 +42,14 @@ const BottomSell = ({ gem }) => {
 
   const processList = async () => {
     await queryClient.invalidateQueries(QUERY_KEYS.SALES_POPULATED);
-    await listForSale(gem.token_id, parseNearAmount(sellPrice));
 
-    toast.success('Success! Your gem is on the marketplace.');
+    try {
+      await listForSale(gem.token_id, parseNearAmount(sellPrice));
+      toast.success('Success! Your gem is on the marketplace.');
+    } catch (error) {
+      console.error(error);
+      toast.error('Sorry 😢 There was an error in listing your gem on the market. Please, try again later.');
+    }
   };
 
   return (

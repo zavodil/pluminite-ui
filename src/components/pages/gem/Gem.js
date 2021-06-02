@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
@@ -110,36 +111,53 @@ const GemHeader = styled('div')`
 function Gem({ location: { prevPathname } }) {
   const { user } = useContext(NearContext);
   const { getGem } = useContext(NftContractContext);
-  const { getSale } = useContext(MarketContractContext);
+  const { getSale, marketContract } = useContext(MarketContractContext);
 
   const { gemId } = useParams();
 
   const history = useHistory();
 
-  const { data: gem } = useQuery([QUERY_KEYS.GEM, gemId], () => getGem(gemId));
+  const { data: gem } = useQuery([QUERY_KEYS.GEM, gemId], () => getGem(gemId), {
+    onError() {
+      toast.error('Sorry 😢 There was an error getting the gem. Please, try again later.');
+      history.push('/');
+    },
+  });
 
   const { data: gemOnSale } = useQuery(
     [QUERY_KEYS.GEM_ON_SALE, gemId],
     async () => {
-      // todo: uncomment once gem.approved_account_ids is fixed
-      // if (Object.keys(gem.approved_account_ids).includes(marketContract.contractId)) {
-      //   return getSale(gemId);
-      // }
-      //
-      // return null;
-      return getSale(gemId);
+      if (Object.keys(gem.approved_account_ids).includes(marketContract.contractId)) {
+        return getSale(gemId);
+      }
+
+      return null;
     },
     {
       enabled: !!gem,
+      onError() {
+        toast.error('Sorry 😢 There was an error getting the gem. Please, try again later.');
+        history.push('/');
+      },
     }
   );
 
+  const getIpfsHashMedia = () => {
+    let mediaLowRes;
+
+    if (gem?.metadata?.extra) {
+      mediaLowRes = JSON.parse(gem.metadata.extra).media_lowres;
+    }
+
+    return mediaLowRes || gem?.metadata?.media;
+  };
+
   const { data: imageData } = useQuery(
-    [QUERY_KEYS.GET_IMAGE_DATA, gem?.metadata?.media],
-    () => getFileData(gem?.metadata?.media),
+    [QUERY_KEYS.GET_IMAGE_DATA, getIpfsHashMedia()],
+    () => getFileData(getIpfsHashMedia()),
     {
       retry: 1,
-      enabled: !!gem?.metadata?.media,
+      enabled: !!gem && !!getIpfsHashMedia(),
     }
   );
 

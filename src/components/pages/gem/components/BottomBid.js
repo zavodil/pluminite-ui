@@ -95,12 +95,18 @@ const BottomBid = ({ gem, gemOnSale }) => {
   }, [gem, gemOnSale]);
 
   const processBid = async () => {
-    if (user) {
-      await offer(gemOnSale.token_id, getNextBidNearsFormatted(gemOnSale));
-    } else {
+    if (!user) {
       toast.success('To buy items you need to be logged in!');
-
       history.push('/sign-up');
+
+      return;
+    }
+
+    try {
+      await offer(gemOnSale.token_id, getNextBidNearsFormatted(gemOnSale));
+    } catch (error) {
+      console.error(error);
+      toast.error('Sorry 😢 There was an error in processing your offer. Please, try again later.');
     }
 
     // todo: execute commands below once the bid is accepted

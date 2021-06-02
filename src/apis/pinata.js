@@ -17,15 +17,7 @@ export const uploadFileData = async (fileData) => {
     file: fileData,
   };
 
-  let result;
-
-  try {
-    result = await pinata.pinJSONToIPFS(data, metadata);
-  } catch (err) {
-    console.error(err);
-
-    return undefined;
-  }
+  const result = await pinata.pinJSONToIPFS(data, metadata);
 
   return result.IpfsHash;
 };

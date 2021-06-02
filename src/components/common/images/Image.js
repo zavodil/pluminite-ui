@@ -9,8 +9,8 @@ const StyledContainer = styled('div')`
   justify-content: center;
   align-items: center;
 
-  ${({ isImgLoaded }) =>
-    !isImgLoaded &&
+  ${({ isMediaLoaded }) =>
+    !isMediaLoaded &&
     `
     min-width: 400px;
     min-height: 400px;
@@ -18,31 +18,35 @@ const StyledContainer = styled('div')`
     box-shadow: inset var(--shadow-primary);
     `}
   .image {
-    display: ${({ isImgLoaded }) => (isImgLoaded ? 'inline' : 'none')};
+    display: ${({ isMediaLoaded }) => (isMediaLoaded ? 'inline' : 'none')};
   }
 
   > svg {
     height: 50px;
     width: 50px;
     filter: drop-shadow(var(--shadow-primary));
-    display: ${({ isImgLoaded }) => (isImgLoaded ? 'none' : 'inline')};
+    display: ${({ isMediaLoaded }) => (isMediaLoaded ? 'none' : 'inline')};
   }
 
   @media (min-width: 1100px) {
-    ${({ isImgLoaded }) => !isImgLoaded && `min-width: 320px; min-height: 320px;`}
+    ${({ isMediaLoaded }) => !isMediaLoaded && `min-width: 320px; min-height: 320px;`}
   }
 `;
 
 const Image = forwardRef(function ImageWithRef({ src, alt, ...rest }, ref) {
-  const [isImgLoaded, setIsImgLoaded] = useState(null);
+  const [isMediaLoaded, setIsMediaLoaded] = useState(null);
 
-  const processImgLoaded = () => {
-    setIsImgLoaded(true);
+  const processMediaLoaded = () => {
+    setIsMediaLoaded(true);
   };
 
   return (
-    <StyledContainer isImgLoaded={isImgLoaded}>
-      <img ref={ref} src={src} alt={alt} onLoad={processImgLoaded} className="image" {...rest} />
+    <StyledContainer isMediaLoaded={isMediaLoaded}>
+      {src && src.startsWith('data:video') ? (
+        <video src={src} className="image" autoPlay muted loop ref={ref} onLoadedData={processMediaLoaded} {...rest} />
+      ) : (
+        <img src={src} alt={alt} className="image" ref={ref} onLoad={processMediaLoaded} {...rest} />
+      )}
       <DiamondIcon />
     </StyledContainer>
   );
@@ -54,7 +58,7 @@ Image.propTypes = {
 };
 
 Image.defaultPtops = {
-  alt: 'image',
+  alt: 'media',
 };
 
 export default Image;

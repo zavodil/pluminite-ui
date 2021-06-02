@@ -104,6 +104,9 @@ function ProfileEditBio({ uploadPhotoLink }) {
 
   const { data: profile } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
     enabled: !!user?.accountId,
+    onError() {
+      toast.error('Sorry 😢 There was an error getting your profile data.');
+    },
   });
 
   const { data: imageData } = useRQuery(
@@ -112,6 +115,9 @@ function ProfileEditBio({ uploadPhotoLink }) {
     {
       retry: 1,
       enabled: !!profile?.image,
+      onError() {
+        toast.error("Sorry 😢 Can't get your profile image.");
+      },
     }
   );
 
@@ -143,11 +149,23 @@ function ProfileEditBio({ uploadPhotoLink }) {
 
     setIsSaving(true);
 
-    await setProfile({
-      ...profile,
-      bio: bioEdited,
-      image: profile?.image || '',
-    });
+    try {
+      await setProfile({
+        ...profile,
+        bio: bioEdited,
+        image: profile?.image || '',
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error('Sorry 😢 There was an error with saving your profile. Please, try again later.');
+
+      if (!isUnmounting) {
+        setIsSaving(false);
+      }
+
+      return;
+    }
+
     await queryClient.invalidateQueries([QUERY_KEYS.GET_PROFILE, user.accountId]);
 
     toast.success('Success! Your profile was saved!');

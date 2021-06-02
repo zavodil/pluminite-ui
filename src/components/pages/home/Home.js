@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
 import { useInfiniteQuery } from 'react-query';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
 import { NearContext, MarketContractContext, NftContractContext } from '../../../contexts';
@@ -82,6 +84,15 @@ const Container = styled('div')`
     margin-left: auto;
   }
 
+  .no-nfts {
+    margin-top: 50px;
+    text-align: center;
+
+    .button {
+      margin-top: 25px;
+    }
+  }
+
   @media (min-width: 767px) {
     .description-container {
       margin-left: 0;
@@ -107,6 +118,16 @@ export default function Home() {
 
         return undefined;
       },
+      onError() {
+        toast.error('Sorry 😢 There was an error getting gems you own.');
+      },
+      select(dataRaw) {
+        if (dataRaw?.pages?.length) {
+          return dataRaw.pages.flat();
+        }
+
+        return [];
+      },
       enabled: !!nftContract && !!marketContract,
     }
   );
@@ -120,22 +141,30 @@ export default function Home() {
           <DiamondIcon />
         </div>
       </div>
-      <Loading waitingFor={data?.pages}>
+      {isFetching || isFetchingNextPage ? (
+        <Loading />
+      ) : (
         <div className="items-container">
           <div className="items">
-            {data?.pages &&
-              data.pages
-                .flat()
-                .map((sale) => (
-                  <ArtItemPriced
-                    key={sale.token_id}
-                    nft={sale}
-                    bid={getNextBidNearsFormatted(sale)}
-                    gemOnSale={sale}
-                    isLink
-                    isFromIpfs
-                  />
-                ))}
+            {data?.length ? (
+              data.map((sale) => (
+                <ArtItemPriced
+                  key={sale.token_id}
+                  nft={sale}
+                  bid={getNextBidNearsFormatted(sale)}
+                  gemOnSale={sale}
+                  isLink
+                  isFromIpfs
+                />
+              ))
+            ) : (
+              <div className="no-nfts">
+                There is nothing here 😢 <br />
+                <Button isPrimary isSmall>
+                  <Link to="/mint">Mint a Gem</Link>
+                </Button>
+              </div>
+            )}
           </div>
           {hasNextPage && (
             <Button
@@ -148,7 +177,7 @@ export default function Home() {
             </Button>
           )}
         </div>
-      </Loading>
+      )}
       <div className="pop-up">{user ? <MintPlus /> : <Contribute />}</div>
     </Container>
   );

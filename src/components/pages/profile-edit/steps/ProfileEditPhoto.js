@@ -56,6 +56,9 @@ function ProfileEditPhoto() {
 
   const { data: profile } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
     enabled: !!user?.accountId,
+    onError() {
+      toast.error('Sorry 😢 There was an error getting your profile data.');
+    },
   });
 
   const [avatarDataUrl, setAvatarDataUrl] = useState(null);
@@ -82,12 +85,42 @@ function ProfileEditPhoto() {
 
     setIsSaving(true);
 
-    const fileHash = await uploadFileData(avatarDataUrl);
-    await setProfile({
-      ...profile,
-      image: fileHash,
-      bio: profile?.bio || '',
-    });
+    let fileHash;
+    let uploadError;
+
+    try {
+      fileHash = await uploadFileData(avatarDataUrl);
+    } catch (e) {
+      console.error(e);
+      uploadError = e;
+    }
+
+    if (!fileHash || uploadError) {
+      toast.error('Sorry 😢 There was an error saving profile image. Please, try again later.');
+      if (!isUnmounting) {
+        setIsSaving(false);
+      }
+
+      return;
+    }
+
+    try {
+      await setProfile({
+        ...profile,
+        image: fileHash,
+        bio: profile?.bio || '',
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error('Sorry 😢 There was an error with saving your profile. Please, try again later.');
+
+      if (!isUnmounting) {
+        setIsSaving(false);
+      }
+
+      return;
+    }
+
     await queryClient.invalidateQueries([QUERY_KEYS.GET_PROFILE, user.accountId]);
 
     toast.success('Success! Your profile was saved!');
@@ -109,7 +142,7 @@ function ProfileEditPhoto() {
             ? 'This will be your profile picture '
             : `Photos with a 1:1 ratio work best, that are under ${PROFILE.PHOTO_MAX_SIZE_MB}mb in size.`
         }
-        onUpload={({ imageDataUrl }) => setAvatarDataUrl(imageDataUrl)}
+        onUpload={({ fileDataUrl }) => setAvatarDataUrl(fileDataUrl)}
         ref={inputRef}
         showFileName={false}
         maxSizeMb={PROFILE.PHOTO_MAX_SIZE_MB}
