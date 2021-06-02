@@ -63,8 +63,8 @@ const MintReview = ({ backLink, nft }) => {
   const { mintAndListGem } = useContext(MarketContractContext);
   const queryClient = useQueryClient();
 
-  const uploadToIPFS = async ({ imageDataUrl, imageThumbnailDataUrl }) =>
-    Promise.all([uploadFileData(imageDataUrl), uploadFileData(imageThumbnailDataUrl)]);
+  const uploadToIPFS = async ({ fileDataUrl, thumbnailDataUrl }) =>
+    Promise.all([uploadFileData(fileDataUrl), uploadFileData(thumbnailDataUrl)]);
 
   const processMintClick = async () => {
     setIsMinting(true);
@@ -81,8 +81,8 @@ const MintReview = ({ backLink, nft }) => {
 
     try {
       [ipfsHash, thumbnailIpfsHash] = await uploadToIPFS({
-        imageDataUrl: nft.artDataUrl,
-        imageThumbnailDataUrl: nft.artThumbnailDataUrl,
+        fileDataUrl: nft.artDataUrl,
+        thumbnailDataUrl: nft.artThumbnailDataUrl,
       });
     } catch (e) {
       console.error(e);

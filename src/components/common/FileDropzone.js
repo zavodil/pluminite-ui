@@ -162,8 +162,8 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
 
     if (onUpload) {
       onUpload({
-        imageDataUrl: isFileTypeAnimatedImage(fileType) ? fileDataUrl : getCroppedToSquareImage(image),
-        imageThumbnailDataUrl: getCroppedToSquareThumbnail(image),
+        fileDataUrl: isFileTypeAnimatedImage(fileType) ? fileDataUrl : getCroppedToSquareImage(image),
+        thumbnailDataUrl: getCroppedToSquareThumbnail(image),
       });
     }
 
@@ -175,8 +175,8 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
 
     if (onUpload) {
       onUpload({
-        imageDataUrl: fileDataUrl,
-        imageThumbnailDataUrl: getCroppedToSquareThumbnail(video),
+        fileDataUrl,
+        thumbnailDataUrl: getCroppedToSquareThumbnail(video),
       });
     }
 
