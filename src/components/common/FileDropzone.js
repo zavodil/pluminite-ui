@@ -169,6 +169,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
         fileDataUrl: isFileTypeAnimatedImage(fileType) ? fileDataUrl : getCroppedToSquareImage(image),
         thumbnailDataUrl: getCroppedToSquareThumbnail(image),
         fileSize,
+        fileType,
       });
     }
 
@@ -183,6 +184,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
         fileDataUrl,
         thumbnailDataUrl: getCroppedToSquareThumbnail(video),
         fileSize,
+        fileType,
       });
     }
 
