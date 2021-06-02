@@ -159,7 +159,7 @@ function GemOriginal({ location: { prevPathname } }) {
 
   const isListed = () => !!gemOnSale;
 
-  const isOwnedByUser = () => gemOnSale?.owner_id && gemOnSale.owner_id === user.accountId;
+  const isOwnedByUser = () => gemOnSale?.owner_id && gemOnSale.owner_id === user?.accountId;
 
   useEffect(() => {
     if (hasBids()) {
