@@ -40,6 +40,9 @@ const StyledContainer = styled(Link)`
     bottom: 0;
     right: 0;
     cursor: pointer;
+    background-color: rgba(var(--plum-base), 0.2);
+    border: 1px solid #ffffff;
+    border-radius: 0 0 var(--radius-default) 0;
   }
 
   button {

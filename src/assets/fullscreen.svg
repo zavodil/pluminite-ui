@@ -2,7 +2,7 @@
      xmlns:xlink="http://www.w3.org/1999/xlink">
     <g filter="url(#filter0_b)">
         <rect width="40" height="40" fill="url(#pattern0)"/>
-        <rect x="0.5" y="0.5" width="39" height="39" stroke="white"/>
+<!--        <rect x="0.5" y="0.5" width="39" height="39" stroke="white"/>-->
     </g>
     <defs>
         <filter id="filter0_b" x="-10" y="-10" width="60" height="60" filterUnits="userSpaceOnUse"

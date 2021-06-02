@@ -12,7 +12,7 @@ export default function FullscreenIcon() {
     >
       <g filter="url(#filter0_b)">
         <rect width="40" height="40" fill="url(#pattern0)" />
-        <rect x="0.5" y="0.5" width="39" height="39" stroke="white" />
+        {/* <rect x="0.5" y="0.5" width="39" height="39" stroke="white" /> */}
       </g>
       <defs>
         <filter
