@@ -57,11 +57,13 @@ export const square = css`
     padding-bottom: 100%;
   }
 
-  img {
+  img,
+  video {
     object-fit: cover;
   }
 
   img,
+  video,
   canvas {
     position: absolute;
     width: 100%;

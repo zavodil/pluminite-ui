@@ -130,7 +130,7 @@ const MintReview = ({ backLink, nft }) => {
       <p className="sub-header">Art piece description</p>
       <p className="text">{nft.description}</p>
       <ArtItemPriced
-        nft={{ metadata: { media: nft.artDataUrl } }}
+        nft={{ metadata: { media: nft.artThumbnailDataUrl || nft.artDataUrl } }}
         bid={getNextBidNearsFormatted(nft)}
         bidAvailable={false}
       />
