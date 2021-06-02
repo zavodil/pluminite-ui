@@ -45,14 +45,14 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     [nftContract]
   );
 
-    const getIsFreeMintAvailable = useCallback(
-        async (accountId) => {
-            return nftContract.is_free_mint_available({
-                account_id: accountId
-            });
-        },
-        [nftContract]
-    );
+  const getIsFreeMintAvailable = useCallback(
+    async (accountId) => {
+      return nftContract.is_free_mint_available({
+        account_id: accountId,
+      });
+    },
+    [nftContract]
+  );
 
   const getGemsBatch = useCallback(
     async (tokenIds) =>
@@ -150,7 +150,7 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     setProfile,
     getProfile,
     getSupplyForCreator,
-    getIsFreeMintAvailable
+    getIsFreeMintAvailable,
   };
 
   return <NftContractContext.Provider value={value}>{children}</NftContractContext.Provider>;
@@ -171,7 +171,7 @@ NftContractContextProvider.propTypes = {
     nft_approve: PropTypes.func.isRequired,
     get_profile: PropTypes.func.isRequired,
     nft_supply_for_creator: PropTypes.func.isRequired,
-    is_free_mint_available:PropTypes.func.isRequired
+    is_free_mint_available: PropTypes.func.isRequired,
   }).isRequired,
   children: ReactChildrenTypeRequired,
 };
