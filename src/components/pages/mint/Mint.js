@@ -87,6 +87,7 @@ export default function Mint() {
             onUpload={({ fileDataUrl, thumbnailDataUrl, fileSize }) => {
               setNftField('artDataUrl', fileDataUrl);
               setNftField('artThumbnailDataUrl', thumbnailDataUrl);
+              setNftField('fileSize', fileSize);
             }}
             onCompleteLink={`${match.path}/review`}
             nft={nft}

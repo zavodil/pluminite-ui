@@ -81,6 +81,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
         extra: JSON.stringify({
           media_lowres: nft.media_lowres,
           creator_id: nftContract.account.accountId,
+          media_size: nft.fileSize,
         }),
       };
 

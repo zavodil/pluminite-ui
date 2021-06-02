@@ -57,6 +57,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
   const [fileType, setFileType] = useState(null);
   const [isError, setIsError] = useState(false);
   const [filename, setFilename] = useState(false);
+  const [fileSize, setFileSize] = useState(false);
 
   const canvasRef = useRef();
   const canvasThumbnailRef = useRef();
@@ -97,6 +98,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
     reader.onload = () => {
       setFileDataUrl(reader.result);
       setFileType(file.type);
+      setFileSize(file.size);
     };
 
     reader.readAsDataURL(file);
@@ -164,6 +166,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
       onUpload({
         fileDataUrl: isFileTypeAnimatedImage(fileType) ? fileDataUrl : getCroppedToSquareImage(image),
         thumbnailDataUrl: getCroppedToSquareThumbnail(image),
+        fileSize,
       });
     }
 
@@ -177,6 +180,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
       onUpload({
         fileDataUrl,
         thumbnailDataUrl: getCroppedToSquareThumbnail(video),
+        fileSize,
       });
     }
 
