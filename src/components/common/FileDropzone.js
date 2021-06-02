@@ -6,7 +6,13 @@ import styled from 'styled-components';
 
 import Button from './Button';
 
-import { isFileTypeAnimatedImage, isFileTypeImage, isFileTypeVideo, isSupportedFileType } from '../../utils/files';
+import {
+  convertKBtoMB,
+  isFileTypeAnimatedImage,
+  isFileTypeImage,
+  isFileTypeVideo,
+  isSupportedFileType,
+} from '../../utils/files';
 
 import { square } from '../../styles/mixins';
 
@@ -68,7 +74,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
     }
 
     if (maxSizeMb) {
-      const fileSizeMb = (file.size / (1024 * 1024)).toFixed(2);
+      const fileSizeMb = convertKBtoMB(file.size);
 
       if (fileSizeMb > maxSizeMb) {
         toast.error('Max file size exceeded.');
