@@ -1,4 +1,4 @@
-name: NEAR NFT Checker
+name: Pluminite
 
 on:
   # We want to trigger the build & test pipelines in every branch.

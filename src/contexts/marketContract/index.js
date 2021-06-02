@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { parseNearAmount } from 'near-api-js/lib/utils/format';
+import { formatNearAmount, parseNearAmount } from 'near-api-js/lib/utils/format';
 import { transactions } from 'near-api-js';
 
 import { initialMarketContractState, marketContractReducer } from './reducer';
@@ -8,6 +8,7 @@ import { GOT_MIN_STORAGE } from './types';
 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
 
+import { NearContext } from '../near';
 import { NftContractContext } from '../nftContract';
 
 import { getMarketContractName } from '../../utils';
@@ -18,6 +19,7 @@ export const MarketContractContext = React.createContext(initialMarketContractSt
 
 export const MarketContractContextProvider = ({ marketContract, children }) => {
   const [marketContractState, dispatchMarketContract] = useReducer(marketContractReducer, initialMarketContractState);
+  const { user } = useContext(NearContext);
   const { nftContract, getGemsBatch, getGem } = useContext(NftContractContext);
 
   const getSale = useCallback(
@@ -106,7 +108,9 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
             })
           ),
           APP.PREPAID_GAS_LIMIT / 2,
-          APP.USE_STORAGE_FEES ? APP.DEPOSIT_DEFAULT : 0
+          APP.USE_STORAGE_FEES || Number(formatNearAmount(user.balance)) > APP.MIN_NEARS_TO_MINT
+            ? APP.DEPOSIT_DEFAULT
+            : 0
         ),
         transactions.functionCall(
           'nft_approve',
