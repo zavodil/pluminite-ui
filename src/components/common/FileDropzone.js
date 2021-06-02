@@ -111,16 +111,19 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
     let sw;
     let sh;
 
-    if (target.naturalWidth > target.naturalHeight) {
-      sx = (target.naturalWidth - target.naturalHeight) / 2;
+    const width = target.naturalWidth || target.videoWidth;
+    const height = target.naturalHeight || target.videoHeight;
+
+    if (width > height) {
+      sx = (width - height) / 2;
       sy = 0;
-      sw = target.naturalHeight;
-      sh = target.naturalHeight;
+      sw = height;
+      sh = height;
     } else {
       sx = 0;
-      sy = (target.naturalHeight - target.naturalWidth) / 2;
-      sh = target.naturalWidth;
-      sw = target.naturalWidth;
+      sy = (height - width) / 2;
+      sh = width;
+      sw = width;
     }
 
     return { sx, sy, sw, sh };
