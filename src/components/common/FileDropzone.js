@@ -200,7 +200,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
           <input
             {...getInputProps({
               multiple: false,
-              accept: 'image/*',
+              accept: 'image/*,video/*',
             })}
           />
         </div>
