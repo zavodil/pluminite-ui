@@ -251,7 +251,6 @@ export default function Profile() {
                     {data?.length ? (
                       data.map((nft) => {
                         const ArtItemComponent =
-                          // todo: fix bug on contract: approved_account_ids is not populated
                           marketContract.contractId in nft.approved_account_ids ? ArtItem : ArtItemSellable;
 
                         return (
