@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
@@ -49,6 +49,16 @@ const StyledContainer = styled(Link)`
     border-radius: 0 0 var(--radius-default) 0;
   }
 
+  .video-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    background-color: rgba(var(--plum-base), 0.2);
+    border: 1px solid #ffffff;
+    border-radius: var(--radius-default) 0 0 0;
+  }
+
   button {
     position: absolute;
     right: 20px;
@@ -71,6 +81,15 @@ const ArtItem = ({
   forwardedRef,
 }) => {
   const location = useLocation();
+  const [, setFileType] = useState('');
+
+  useEffect(() => {
+    if (nft?.metadata?.extra) {
+      const extra = JSON.parse(nft.metadata.extra);
+
+      setFileType(extra.media_type);
+    }
+  }, [nft]);
 
   const containerParams = {
     to: isLink
@@ -131,6 +150,17 @@ const ArtItem = ({
           <FullscreenIcon />
         </Link>
       )}
+      {/* todo: add video icon once its' designs are ready */}
+      {/* {fileType && (isFileTypeAnimatedImage(fileType) || isFileTypeVideo(fileType)) && ( */}
+      {/*  <Link */}
+      {/*    to={{ */}
+      {/*      pathname: `/gem-original/${nft?.token_id}`, */}
+      {/*      prevPathname: location.pathname, */}
+      {/*    }} */}
+      {/*  > */}
+      {/*    <VideoIcon /> */}
+      {/*  </Link> */}
+      {/* )} */}
     </StyledContainer>
   );
 };
