@@ -6,6 +6,8 @@ import styled from 'styled-components';
 
 import Button from './Button';
 
+import { isFileTypeAnimatedImage, isFileTypeImage, isFileTypeVideo, isSupportedFileType } from '../../utils/files';
+
 import { square } from '../../styles/mixins';
 
 const StyledContainer = styled('div')`
@@ -44,12 +46,6 @@ const StyledContainer = styled('div')`
     color: var(--periwinkle);
   }
 `;
-
-const isFileTypeImage = (fileType) => fileType.startsWith('image');
-const isFileTypeVideo = (fileType) => fileType.startsWith('video');
-const isFileTypeAnimatedImage = (fileType) =>
-  ['image/apng', 'image/avif', 'image/gif', 'image/webp'].includes(fileType);
-const isSupportedFileType = (fileType) => fileType.startsWith('image') || fileType.startsWith('video');
 
 const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileName, maxSizeMb }, customRef) => {
   const [isLoading, setIsLoading] = useState(false);
