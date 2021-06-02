@@ -189,7 +189,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
         <div className="image-container">
           {fileType && isFileTypeImage(fileType) && <img src={fileDataUrl} alt="selected file" onLoad={onImageLoad} />}
           {fileType && isFileTypeVideo(fileType) && (
-            <video onLoadedData={onVideoLoad} autoPlay muted loop src={fileDataUrl} />
+            <video src={fileDataUrl} autoPlay muted loop onLoadedData={onVideoLoad} />
           )}
           <canvas ref={canvasRef} />
           <canvas className="canvas-thumbnail" ref={canvasThumbnailRef} />
