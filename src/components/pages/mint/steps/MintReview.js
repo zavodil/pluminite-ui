@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQueryClient } from 'react-query';
 import { Link, Redirect } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
 import { MarketContractContext, NearContext } from '../../../../contexts';
@@ -73,11 +74,38 @@ const MintReview = ({ backLink, nft }) => {
       queryClient.invalidateQueries(QUERY_KEYS.GEMS_FOR_CREATOR, user.accountId),
       queryClient.invalidateQueries(QUERY_KEYS.SALES_POPULATED),
     ]);
-    const [ipfsHash, thumbnailIpfsHash] = await uploadToIPFS({
-      imageDataUrl: nft.artDataUrl,
-      imageThumbnailDataUrl: nft.artThumbnailDataUrl,
-    });
-    await mintAndListGem({ ...nft, media: ipfsHash, media_lowres: thumbnailIpfsHash });
+
+    let ipfsHash;
+    let thumbnailIpfsHash;
+    let uploadError;
+
+    try {
+      [ipfsHash, thumbnailIpfsHash] = await uploadToIPFS({
+        imageDataUrl: nft.artDataUrl,
+        imageThumbnailDataUrl: nft.artThumbnailDataUrl,
+      });
+    } catch (e) {
+      console.error(e);
+      uploadError = e;
+    }
+
+    if (!ipfsHash || !thumbnailIpfsHash || uploadError) {
+      setIsMinting(false);
+      toast.error('Sorry 😢 There was a problem with uploading your art file to IPFS. Try again later.');
+
+      return;
+    }
+
+    try {
+      await mintAndListGem({ ...nft, media: ipfsHash, media_lowres: thumbnailIpfsHash });
+    } catch (e) {
+      console.error(e);
+
+      setIsMinting(false);
+      toast.error('Sorry 😢 There was a problem with minting and listing your gem on the market. Try again later.');
+
+      return;
+    }
 
     // todo: show MintSuccessMessage on mint success (check if success from query params after on redirect from near
     // wallet when we stop using hash browser) toast.success(<MintSuccessMessage />);
