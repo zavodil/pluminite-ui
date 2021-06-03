@@ -3,7 +3,7 @@ import pinataSDK from '@pinata/sdk';
 import { APP } from '../constants';
 
 export const getFileData = async (hash) => {
-  const response = await fetch(`https://gateway.pinata.cloud/ipfs/${hash}`);
+  const response = await fetch(`http://storage.pluminite.com/ipfs/${hash}`);
 
   const { file } = await response.json();
 
