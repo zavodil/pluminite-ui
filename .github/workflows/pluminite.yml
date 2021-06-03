@@ -48,6 +48,8 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/download-artifact@v2
+        env:
+          PAGES_CNAME: pluminite.com
 
       - run: yarn install --frozen-lockfile
       - run: yarn build:web
