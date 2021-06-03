@@ -41,6 +41,7 @@ jobs:
     env:
       PINATA_API_KEY: ${{ secrets.PINATA_API_KEY }}
       PINATA_API_SECRET: ${{ secrets.PINATA_API_SECRET }}
+      PAGES_CNAME: pluminite.com
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
