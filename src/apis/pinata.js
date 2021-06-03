@@ -3,11 +3,19 @@ import pinataSDK from '@pinata/sdk';
 import { APP } from '../constants';
 
 export const getFileData = async (hash) => {
-  const response = await fetch(`https://storage.pluminite.com/ipfs/${hash}`);
+  return fetch(`https://storage.pluminite.com/ipfs/${hash}`)
+      .then(res => {
+        if (!res.ok)
+          return null;
 
-  const { file } = await response.json();
-
-  return file;
+        return res.text()})
+      .then(res => {
+        const json = res ? JSON.parse(res) : null;
+        return json ? json.file : null;
+      })
+      .catch(err => {
+        console.log(err);
+      });
 };
 
 export const uploadFileData = async (fileData) => {
