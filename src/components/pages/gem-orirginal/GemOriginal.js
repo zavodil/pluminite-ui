@@ -210,7 +210,9 @@ function GemOriginal({ location: { prevPathname } }) {
           <StyledBid className="bid">
             <div className="bid-top">
               <div className="bid-description">
-                <p className="bid-title">{hasBids() ? 'Top offer' : 'Starting Bid'}</p>
+                {/* todo: 'Top offer' and 'Starting Bid' are for when we have offers */}
+                {/* <p className="bid-title">{hasBids() ? 'Top offer' : 'Starting Bid'}</p> */}
+                <p className="bid-title">Price</p>
                 <p className="bid-user">{previousPriceUser}</p>
               </div>
               <div className="bid-sum">
