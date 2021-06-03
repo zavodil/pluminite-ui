@@ -11,7 +11,7 @@ export const getFileData = async (hash) => {
 };
 
 export const uploadFileData = async (fileData) => {
-  const pinata = pinataSDK(APP.PINATA_API_KEY, APP.PINATA_API_SECRET);
+  const pinata = pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_API_SECRET);
   const metadata = {};
   const data = {
     file: fileData,
