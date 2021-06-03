@@ -188,7 +188,7 @@ function Gem({ location: { prevPathname } }) {
   }
 
   let BottomComponent = () => null;
-  if (isListed() && !isOwnedByUser()) {
+  if (isListed()) {
     BottomComponent = BottomBid;
   } else if (!isListed() && isOwnedByUser()) {
     BottomComponent = BottomSell;

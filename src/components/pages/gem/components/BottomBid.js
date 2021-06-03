@@ -94,7 +94,13 @@ const BottomBid = ({ gem, gemOnSale }) => {
     }
   }, [gem, gemOnSale]);
 
+  const isOwnedByUser = () => gem?.owner_id && gem.owner_id === user?.accountId;
+
   const processBid = async () => {
+    if (isOwnedByUser()) {
+      return;
+    }
+
     if (!user) {
       toast.success('To buy items you need to be logged in!');
       history.push('/sign-up');
@@ -130,7 +136,7 @@ const BottomBid = ({ gem, gemOnSale }) => {
             {previousPriceUSDs !== null && <span className="bid-sum-usds">~${round(previousPriceUSDs, 0)} USD</span>}
           </div>
         </div>
-        <Button className="bid-button" isPrimary onClick={processBid}>
+        <Button className="bid-button" isPrimary onClick={processBid} isDisabled={isOwnedByUser()}>
           Buy Gem for {getNextBidNearsFormatted(gemOnSale)}Ⓝ
         </Button>
       </Container>
