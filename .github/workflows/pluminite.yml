@@ -38,6 +38,9 @@ jobs:
     needs: build-contract
     if: ${{ github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
+    env:
+      PINATA_API_KEY: ${{ secrets.PINATA_API_KEY }}
+      PINATA_API_SECRET: ${{ secrets.PINATA_API_SECRET }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -47,7 +50,7 @@ jobs:
       - uses: actions/download-artifact@v2
 
       - run: yarn install --frozen-lockfile
-      - run: PINATA_API_KEY=${{ secrets.PINATA_API_KEY }} PINATA_API_SECRET=${{ secrets.PINATA_API_SECRET }} yarn build:web
+      - run: yarn build:web
       - run: git remote set-url origin https://git:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git
       - run: yarn gh-pages-clean
       - run: yarn deploy:pages --user "Near <hello@near.org>"
