@@ -1,9 +1,11 @@
 // todo: get contract name from environment variable
-const CONTRACT_NAME = 'dev-1622556560424-4870693';
+//const CONTRACT_NAME = 'dev-1622556560424-4870693';
+const CONTRACT_NAME = 'pluminite.near';
 
 function getConfig(env) {
   switch (env) {
     // todo: use mainnet on production as well
+    case 'production':
     case 'mainnet':
       return {
         networkId: 'mainnet',
@@ -13,7 +15,6 @@ function getConfig(env) {
         helperUrl: 'https://helper.mainnet.near.org',
         explorerUrl: 'https://explorer.mainnet.near.org',
       };
-    case 'production':
     case 'development':
     case 'testnet':
       return {

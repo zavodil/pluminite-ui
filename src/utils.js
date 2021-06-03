@@ -3,7 +3,7 @@ import getConfig from './config';
 
 import { NftMethods, MarketMethods } from './constants/contractMethods';
 
-const nearConfig = getConfig(process.env.NODE_ENV || 'development');
+const nearConfig = getConfig(process.env.NODE_ENV || 'production');
 
 export const getMarketContractName = (nftContractName) => `market.${nftContractName}`;
 
@@ -70,5 +70,5 @@ export function login() {
   // user's behalf.
   // This works by creating a new access key for the user's account and storing
   // the private key in localStorage.
-  window.walletConnection.requestSignIn(nearConfig.contractName);
+  window.walletConnection.requestSignIn(nearConfig.contractName, "Pluminite");
 }
