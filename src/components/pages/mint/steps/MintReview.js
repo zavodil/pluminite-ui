@@ -139,7 +139,7 @@ const MintReview = ({ backLink, nft }) => {
           <Link to={backLink}>Replace Art</Link>
         </StyledButton>
         <StyledButton onClick={processMintClick} isPrimary isDisabled={isMinting}>
-          {isMinting ? 'Minting' : 'Mint NFT'}
+          {isMinting ? 'Uploading file to IPFS' : 'Mint NFT'}
           {isMinting && <DotsLoading />}
         </StyledButton>
       </StickedToBottom>
