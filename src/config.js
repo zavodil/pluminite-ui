@@ -1,6 +1,6 @@
 // todo: get contract name from environment variable
-//const CONTRACT_NAME = 'dev-1622556560424-4870693';
-const CONTRACT_NAME = 'pluminite.near';
+// const CONTRACT_NAME = 'dev-1622556560424-4870693';
+let CONTRACT_NAME;
 
 function getConfig(env) {
   switch (env) {
@@ -10,7 +10,8 @@ function getConfig(env) {
       return {
         networkId: 'mainnet',
         nodeUrl: 'https://rpc.mainnet.near.org',
-        contractName: CONTRACT_NAME,
+        // contractName: CONTRACT_NAME,
+        contractName: 'pluminite.near',
         walletUrl: 'https://wallet.near.org',
         helperUrl: 'https://helper.mainnet.near.org',
         explorerUrl: 'https://explorer.mainnet.near.org',
@@ -20,7 +21,8 @@ function getConfig(env) {
       return {
         networkId: 'testnet',
         nodeUrl: 'https://rpc.testnet.near.org',
-        contractName: CONTRACT_NAME,
+        // contractName: CONTRACT_NAME,
+        contractName: 'dev-1622556560424-4870693',
         walletUrl: 'https://wallet.testnet.near.org',
         helperUrl: 'https://helper.testnet.near.org',
         explorerUrl: 'https://explorer.testnet.near.org',
