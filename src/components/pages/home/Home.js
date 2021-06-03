@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
-import { useInfiniteQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
 import { NearContext, MarketContractContext, NftContractContext } from '../../../contexts';
+
+import { useInfiniteQueryGemsWithBlackList } from '../../../hooks';
 
 import { getNextBidNearsFormatted } from '../../../utils/nears';
 
@@ -107,7 +108,7 @@ export default function Home() {
   const { nftContract } = useContext(NftContractContext);
   const { getSalesPopulated, marketContract } = useContext(MarketContractContext);
 
-  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery(
+  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQueryGemsWithBlackList(
     QUERY_KEYS.SALES_POPULATED,
     ({ pageParam = 0 }) => getSalesPopulated(String(pageParam), String(APP.MAX_ITEMS_PER_PAGE_HOME)),
     {
@@ -120,13 +121,6 @@ export default function Home() {
       },
       onError() {
         toast.error('Sorry 😢 There was an error getting gems you own.');
-      },
-      select(dataRaw) {
-        if (dataRaw?.pages?.length) {
-          return dataRaw.pages.flat();
-        }
-
-        return [];
       },
       enabled: !!nftContract && !!marketContract,
     }

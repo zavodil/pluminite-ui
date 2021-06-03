@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { useInfiniteQuery, useQuery as useRQuery } from 'react-query';
+import { useQuery as useRQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
@@ -12,7 +12,7 @@ import { ArtItem, ArtItemSellable } from '../../common/art';
 import { Tabs } from '../../common/tabs';
 import { Loading } from '../../common/utils';
 
-import { useQuery } from '../../../hooks';
+import { useInfiniteQueryGemsWithBlackList, useQuery } from '../../../hooks';
 
 import { NearContext, NftContractContext, MarketContractContext } from '../../../contexts';
 
@@ -124,7 +124,7 @@ export default function Profile() {
   const query = useQuery();
   const ownedGemId = query.get('gem-id');
 
-  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery(
+  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQueryGemsWithBlackList(
     [QUERY_KEYS.GEMS_FOR_OWNER, user.accountId],
     ({ pageParam = 0 }) => getGemsForOwner(user.accountId, String(pageParam), String(APP.MAX_ITEMS_PER_PAGE_PROFILE)),
     {
@@ -138,13 +138,6 @@ export default function Profile() {
       onError() {
         toast.error('Sorry 😢 There was an error getting gems you own.');
       },
-      select(dataRaw) {
-        if (dataRaw?.pages?.length) {
-          return dataRaw.pages.flat();
-        }
-
-        return [];
-      },
     }
   );
 
@@ -154,7 +147,7 @@ export default function Profile() {
     hasNextPage: forCreatorHasNextPage,
     isFetching: forCreatorIsFetching,
     isFetchingNextPage: forCreatorIsFetchingNextPage,
-  } = useInfiniteQuery(
+  } = useInfiniteQueryGemsWithBlackList(
     [QUERY_KEYS.GEMS_FOR_CREATOR, user.accountId],
     ({ pageParam = 0 }) => getGemsForCreator(user.accountId, String(pageParam), String(APP.MAX_ITEMS_PER_PAGE_PROFILE)),
     {
@@ -167,13 +160,6 @@ export default function Profile() {
       },
       onError() {
         toast.error('Sorry 😢 There was an error getting gems you made.');
-      },
-      select(dataRaw) {
-        if (dataRaw?.pages?.length) {
-          return dataRaw.pages.flat();
-        }
-
-        return [];
       },
     }
   );
