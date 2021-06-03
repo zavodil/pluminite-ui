@@ -144,7 +144,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
 
     ctx.drawImage(image, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
 
-    return canvas.toDataURL('image/png', 1);
+    return canvas.toDataURL(fileType, 1);
   };
 
   const getCroppedToSquareThumbnail = (target) => {
