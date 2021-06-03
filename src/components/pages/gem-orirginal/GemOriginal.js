@@ -5,6 +5,7 @@ import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
+import { getBlacklistedTokens } from '../../../apis';
 
 import { ImageFromIpfs } from '../../common/images';
 import { StickedToBottom } from '../../common/layout';
@@ -171,6 +172,10 @@ function GemOriginal({ location: { prevPathname } }) {
     }
   }, [gem, gemOnSale]);
 
+  const { data: blacklistedTokens } = useQuery([QUERY_KEYS.BLACKLIST], () => getBlacklistedTokens(), {
+    staleTime: 1000 * 60 * 10,
+  });
+
   const processBid = async () => {
     try {
       await offer(gemId, getNextBidNearsFormatted(gemOnSale));
@@ -194,6 +199,12 @@ function GemOriginal({ location: { prevPathname } }) {
 
   if (gem === null) {
     return <Redirect to="/404" />;
+  }
+  if (!blacklistedTokens) {
+    return null;
+  }
+  if (gem?.token_id && blacklistedTokens.includes(gem.token_id)) {
+    return <Redirect to="/" />;
   }
 
   return (

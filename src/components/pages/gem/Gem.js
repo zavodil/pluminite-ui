@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
-import { getFileData } from '../../../apis';
+import { getBlacklistedTokens, getFileData } from '../../../apis';
 import { ArtItem } from '../../common/art';
 
 import { BottomSell, BottomBid } from './components';
@@ -161,6 +161,10 @@ function Gem({ location: { prevPathname } }) {
     }
   );
 
+  const { data: blacklistedTokens } = useQuery([QUERY_KEYS.BLACKLIST], () => getBlacklistedTokens(), {
+    staleTime: 1000 * 60 * 10,
+  });
+
   const hasBids = () => !!gemOnSale?.bids?.near?.owner_id;
 
   const isListed = () => !!gemOnSale;
@@ -185,6 +189,12 @@ function Gem({ location: { prevPathname } }) {
 
   if (gem === null) {
     return <Redirect to="/404" />;
+  }
+  if (!blacklistedTokens) {
+    return null;
+  }
+  if (gem?.token_id && blacklistedTokens.includes(gem.token_id)) {
+    return <Redirect to="/" />;
   }
 
   let BottomComponent = () => null;
