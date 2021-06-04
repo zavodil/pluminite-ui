@@ -17,20 +17,52 @@ if (process.env.NODE_ENV !== 'production') {
   pinataHref = 'https://storage.pluminite.com/ipfs';
 }
 
-export const getFileData = async (hash) => {
-  return fetch(`${pinataHref}/${hash}`)
-    .then((res) => {
-      if (!res.ok) return null;
+const readBlobAsDataUrl = (blob) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
 
-      return res.text();
-    })
-    .then((res) => {
-      const json = res ? JSON.parse(res) : null;
-      return json ? json.file : null;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+const readBlobAsText = (blob) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = reject;
+    reader.readAsText(blob);
+  });
+
+export const getFileData = async (hash) => {
+  let response;
+
+  try {
+    response = await fetch(`${pinataHref}/${hash}`);
+  } catch (e) {
+    console.error(e);
+
+    return null;
+  }
+
+  try {
+    const blob = await response.blob();
+
+    if (blob.type === 'application/json') {
+      const text = await readBlobAsText(blob);
+
+      return JSON.parse(text)?.file || null;
+    }
+
+    return await readBlobAsDataUrl(blob);
+  } catch (e) {
+    console.error(e);
+  }
+
+  return null;
 };
 
 export const uploadFileData = async (fileData) => {
