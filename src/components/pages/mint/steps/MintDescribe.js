@@ -144,7 +144,7 @@ const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaborato
         name={`collaborator-id-${number}`}
         isSmall
         isError={userIdIsError}
-        onChange={(e) => setUserIdValue(e.target.value)}
+        onChange={(e) => setUserIdValue(e.target.value.toLowerCase())}
         value={userIdValue || ''}
       />
       <RemoveIcon onClick={onRemoveButtonClick} />
