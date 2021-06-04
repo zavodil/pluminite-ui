@@ -138,6 +138,7 @@ const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaborato
       <InputSign
         className="collaborator-id"
         type="text"
+        autoCapitalize="off"
         sign="@"
         placement="left"
         name={`collaborator-id-${number}`}
