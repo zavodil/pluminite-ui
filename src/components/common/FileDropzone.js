@@ -106,7 +106,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
     reader.readAsDataURL(file);
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, maxFiles: 1 });
   const { ref, ...dropzoneProps } = getRootProps();
 
   const getSquareDimensions = (target) => {
@@ -144,7 +144,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
 
     ctx.drawImage(image, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
 
-    return canvas.toDataURL(fileType, 1);
+    return canvas.toDataURL(fileType);
   };
 
   const getCroppedToSquareThumbnail = (target) => {
