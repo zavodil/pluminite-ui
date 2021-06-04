@@ -1,3 +1,4 @@
+import { formatNearAmount } from 'near-api-js/lib/utils/format';
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQueryClient } from 'react-query';
@@ -15,9 +16,9 @@ import { StickedToBottom } from '../../../common/layout';
 import Button from '../../../common/Button';
 import { DotsLoading } from '../../../common/utils';
 
-import { uploadFileData } from '../../../../apis';
+import { uploadFile } from '../../../../apis';
 
-import { QUERY_KEYS } from '../../../../constants';
+import { APP, QUERY_KEYS } from '../../../../constants';
 
 import { NftTypeRequired } from '../../../../types/NftTypes';
 
@@ -44,6 +45,12 @@ const Container = styled('div')`
     color: var(--periwinkle);
   }
 
+  .fee-description {
+    margin-top: 50px;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
   a {
     width: 100%;
   }
@@ -63,8 +70,7 @@ const MintReview = ({ backLink, nft }) => {
   const { mintAndListGem } = useContext(MarketContractContext);
   const queryClient = useQueryClient();
 
-  const uploadToIPFS = async ({ fileDataUrl, thumbnailDataUrl }) =>
-    Promise.all([uploadFileData(fileDataUrl), uploadFileData(thumbnailDataUrl)]);
+  const uploadToIPFS = async ({ file, thumbnailFile }) => Promise.all([uploadFile(file), uploadFile(thumbnailFile)]);
 
   const processMintClick = async () => {
     setIsMinting(true);
@@ -75,21 +81,21 @@ const MintReview = ({ backLink, nft }) => {
       queryClient.invalidateQueries(QUERY_KEYS.SALES_POPULATED),
     ]);
 
-    let ipfsHash;
+    let fileIpfsHash;
     let thumbnailIpfsHash;
     let uploadError;
 
     try {
-      [ipfsHash, thumbnailIpfsHash] = await uploadToIPFS({
-        fileDataUrl: nft.artDataUrl,
-        thumbnailDataUrl: nft.artThumbnailDataUrl,
+      [fileIpfsHash, thumbnailIpfsHash] = await uploadToIPFS({
+        file: nft.file,
+        thumbnailFile: nft.thumbnailFile,
       });
     } catch (e) {
       console.error(e);
       uploadError = e;
     }
 
-    if (!ipfsHash || !thumbnailIpfsHash || uploadError) {
+    if (!fileIpfsHash || !thumbnailIpfsHash || uploadError) {
       setIsMinting(false);
       toast.error('Sorry 😢 There was a problem with uploading your art file to IPFS. Try again later.');
 
@@ -97,7 +103,7 @@ const MintReview = ({ backLink, nft }) => {
     }
 
     try {
-      await mintAndListGem({ ...nft, media: ipfsHash, media_lowres: thumbnailIpfsHash });
+      await mintAndListGem({ ...nft, media: fileIpfsHash, media_lowres: thumbnailIpfsHash });
     } catch (e) {
       console.error(e);
 
@@ -106,9 +112,6 @@ const MintReview = ({ backLink, nft }) => {
 
       return;
     }
-
-    // todo: show MintSuccessMessage on mint success (check if success from query params after on redirect from near
-    // wallet when we stop using hash browser) toast.success(<MintSuccessMessage />);
 
     setIsMinting(false);
   };
@@ -130,10 +133,20 @@ const MintReview = ({ backLink, nft }) => {
       <p className="sub-header">Art piece description</p>
       <p className="text">{nft.description}</p>
       <ArtItemPriced
-        nft={{ metadata: { media: nft.artThumbnailDataUrl || nft.artDataUrl } }}
+        nft={{
+          metadata: {
+            media:
+              (nft.thumbnailFile && URL.createObjectURL(nft.thumbnailFile)) ||
+              (nft.file && URL.createObjectURL(nft.file)),
+          },
+        }}
         bid={getNextBidNearsFormatted(nft)}
         bidAvailable={false}
       />
+      <p className="fee-description">
+        We will ask to attach {formatNearAmount(APP.DEPOSIT_DEFAULT)} NEAR to mint transaction to cover storage fees.
+        All unused funds will be returned to your account in the same transaction.
+      </p>
       <StickedToBottom isSecondary>
         <StyledButton isSecondary isDisabled={isMinting}>
           <Link to={backLink}>Replace Art</Link>

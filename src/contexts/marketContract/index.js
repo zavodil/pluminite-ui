@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { formatNearAmount, parseNearAmount } from 'near-api-js/lib/utils/format';
+import { parseNearAmount } from 'near-api-js/lib/utils/format';
 import { transactions } from 'near-api-js';
 
 import { initialMarketContractState, marketContractReducer } from './reducer';
@@ -12,8 +12,9 @@ import { NearContext } from '../near';
 import { NftContractContext } from '../nftContract';
 
 import { getMarketContractName } from '../../utils';
+import { convertYoctoNearsToNears } from '../../utils/nears';
 
-import { APP } from '../../constants';
+import { PAYABLE_METHODS, APP, STORAGE } from '../../constants';
 
 export const MarketContractContext = React.createContext(initialMarketContractState);
 
@@ -97,6 +98,8 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
       // todo: is it alright to set id like this or using default id set by nft contract?
       const tokenId = `token-${Date.now()}`;
 
+      localStorage.setItem(STORAGE.PAYABLE_METHOD_ITEM_NAME, PAYABLE_METHODS.MINT_AND_LIST_NFT);
+
       await nftContract.account.signAndSendTransaction(nftContract.contractId, [
         transactions.functionCall(
           'nft_mint',
@@ -108,7 +111,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
             })
           ),
           APP.PREPAID_GAS_LIMIT / 2,
-          APP.USE_STORAGE_FEES || Number(formatNearAmount(user.balance)) > APP.MIN_NEARS_TO_MINT
+          APP.USE_STORAGE_FEES || Number(convertYoctoNearsToNears(user.balance)) > APP.MIN_NEARS_TO_MINT
             ? APP.DEPOSIT_DEFAULT
             : 0
         ),
@@ -138,6 +141,8 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
 
   const offer = useCallback(
     async (gemId, offerPrice) => {
+      localStorage.setItem(STORAGE.PAYABLE_METHOD_ITEM_NAME, PAYABLE_METHODS.OFFER);
+
       await marketContract.offer(
         {
           nft_contract_id: nftContract.contractId,
@@ -151,6 +156,8 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
   );
 
   const payStorage = useCallback(async () => {
+    localStorage.setItem(STORAGE.PAYABLE_METHOD_ITEM_NAME, PAYABLE_METHODS.PAY_STORAGE);
+
     await marketContract.storage_deposit({}, APP.PREPAID_GAS_LIMIT, marketContractState.minStorage);
   }, [marketContract, marketContractState]);
 

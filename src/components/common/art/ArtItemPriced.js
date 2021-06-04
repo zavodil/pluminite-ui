@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { getNextBidNearsFormatted } from '../../../utils/nears';
+import { getNextBidNears } from '../../../utils/nears';
 
 import { MarketContractContext, NearContext } from '../../../contexts';
 
@@ -25,7 +25,7 @@ const ArtItemPriced = ({ gemOnSale, bid, bidAvailable, ...props }) => {
     }
 
     try {
-      await offer(gemOnSale.token_id, getNextBidNearsFormatted(gemOnSale));
+      await offer(gemOnSale.token_id, getNextBidNears(gemOnSale));
     } catch (error) {
       console.error(error);
       toast.error('Sorry 😢 There was an error in processing your offer. Please, try again later.');
