@@ -1,4 +1,6 @@
 const APP = {
+  NAME: 'Pluminite',
+
   DEFAULT_ROYALTY: 5,
   MIN_CREATOR_ROYALTY: 0,
   MIN_COLLABORATOR_ROYALTY: 0.01,
