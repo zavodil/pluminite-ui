@@ -18,18 +18,18 @@ if (process.env.NODE_ENV !== 'production') {
 
 export const getFileData = async (hash) => {
   return fetch(`${pinataHref}/${hash}`)
-      .then(res => {
-        if (!res.ok)
-          return null;
+    .then((res) => {
+      if (!res.ok) return null;
 
-        return res.text()})
-      .then(res => {
-        const json = res ? JSON.parse(res) : null;
-        return json ? json.file : null;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+      return res.text();
+    })
+    .then((res) => {
+      const json = res ? JSON.parse(res) : null;
+      return json ? json.file : null;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 };
 
 export const uploadFileData = async (fileData) => {
