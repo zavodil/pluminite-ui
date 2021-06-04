@@ -16,7 +16,7 @@ import { Portal } from '../../common/utils';
 import { useDocumentTitle, withUSDs } from '../../../hooks';
 
 import { round } from '../../../utils/numbers';
-import { getNextBidNearsFormatted } from '../../../utils/nears';
+import { convertYoctoNearsToNears, getNextBidNears, getNextBidNearsFormatted } from '../../../utils/nears';
 
 import { NftContractContext, MarketContractContext, NearContext } from '../../../contexts';
 
@@ -129,7 +129,7 @@ function GemOriginal({ location: { prevPathname } }) {
 
   const history = useHistory();
 
-  const previousPriceUSDs = withUSDs(formatNearAmount(previousPrice));
+  const previousPriceUSDs = withUSDs(convertYoctoNearsToNears(previousPrice));
 
   const { data: gem } = useQuery([QUERY_KEYS.GEM, gemId], () => getGem(gemId), {
     onError() {
@@ -180,7 +180,7 @@ function GemOriginal({ location: { prevPathname } }) {
 
   const processBid = async () => {
     try {
-      await offer(gemId, getNextBidNearsFormatted(gemOnSale));
+      await offer(gemId, getNextBidNears(gemOnSale));
     } catch (error) {
       console.error(error);
       toast.error('Sorry 😢 There was an error in processing your offer. Please, try again later.');
