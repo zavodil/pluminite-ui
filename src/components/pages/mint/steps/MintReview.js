@@ -1,3 +1,4 @@
+import { formatNearAmount } from 'near-api-js/lib/utils/format';
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQueryClient } from 'react-query';
@@ -17,7 +18,7 @@ import { DotsLoading } from '../../../common/utils';
 
 import { uploadFile } from '../../../../apis';
 
-import { QUERY_KEYS } from '../../../../constants';
+import { APP, QUERY_KEYS } from '../../../../constants';
 
 import { NftTypeRequired } from '../../../../types/NftTypes';
 
@@ -42,6 +43,12 @@ const Container = styled('div')`
 
   .sub-header {
     color: var(--periwinkle);
+  }
+
+  .fee-description {
+    margin-top: 50px;
+    font-size: 13px;
+    line-height: 18px;
   }
 
   a {
@@ -136,6 +143,10 @@ const MintReview = ({ backLink, nft }) => {
         bid={getNextBidNearsFormatted(nft)}
         bidAvailable={false}
       />
+      <p className="fee-description">
+        We will ask to attach {formatNearAmount(APP.DEPOSIT_DEFAULT)} NEAR to mint transaction to cover storage fees.
+        All unused funds will be returned to your account in the same transaction.
+      </p>
       <StickedToBottom isSecondary>
         <StyledButton isSecondary isDisabled={isMinting}>
           <Link to={backLink}>Replace Art</Link>
