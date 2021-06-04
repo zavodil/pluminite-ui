@@ -13,7 +13,7 @@ import Button from '../../common/Button';
 import CloseButton from '../../common/Button/CloseButton';
 import { Portal } from '../../common/utils';
 
-import { withUSDs } from '../../../hooks';
+import { useDocumentTitle, withUSDs } from '../../../hooks';
 
 import { round } from '../../../utils/numbers';
 import { getNextBidNearsFormatted } from '../../../utils/nears';
@@ -137,6 +137,8 @@ function GemOriginal({ location: { prevPathname } }) {
       history.push('/');
     },
   });
+
+  useDocumentTitle(gem?.metadata?.title || 'Untitled Gem');
 
   const { data: gemOnSale } = useQuery(
     [QUERY_KEYS.GEM_ON_SALE, gemId],

@@ -5,13 +5,13 @@ import { toast } from 'react-toastify';
 
 import { useDocumentTitle, useQuery } from '../hooks';
 
-import { APP, PAYABLE_METHODS_DESCRIPTIONS, PAYABLE_METHODS_SUCCESS_MESSAGES, STORAGE } from '../constants';
+import { PAYABLE_METHODS_DESCRIPTIONS, PAYABLE_METHODS_SUCCESS_MESSAGES, STORAGE } from '../constants';
 
 const Page = ({ component: Component, title, ...rest }) => {
   const query = useQuery();
   const history = useHistory();
 
-  useDocumentTitle(title ? `${APP.NAME} | ${title}` : APP.NAME);
+  useDocumentTitle(title);
 
   const payableMethod = localStorage.getItem(STORAGE.PAYABLE_METHOD_ITEM_NAME);
 
