@@ -1,4 +1,5 @@
 import pinataSDK from '@pinata/sdk';
+import axios from 'axios';
 
 import { APP } from '../constants';
 
@@ -42,4 +43,23 @@ export const uploadFileData = async (fileData) => {
   const result = await pinata.pinJSONToIPFS(data, metadata);
 
   return result.IpfsHash;
+};
+
+export const uploadFile = async (file) => {
+  const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await axios.post(url, formData, {
+    maxBodyLength: 'Infinity', // this is needed to prevent axios from erroring out with large files
+    headers: {
+      // eslint-disable-next-line no-underscore-dangle
+      'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
+      pinata_api_key: pinataApiKey,
+      pinata_secret_api_key: pinataApiSecret,
+    },
+  });
+
+  return response.data.IpfsHash;
 };
