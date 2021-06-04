@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { HashRouter as Router, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { toast, Zoom } from 'react-toastify';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
