@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import { HashRouter as Router, Switch } from 'react-router-dom';
 import { toast, Zoom } from 'react-toastify';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { NearContext } from './contexts';
+import { NearContext, NftContractContext } from './contexts';
 
 import { GuestPage, Page, UserPage } from './router';
 
@@ -46,6 +46,7 @@ const queryClient = new QueryClient({
 
 export default function App() {
   const { user, isLoading } = useContext(NearContext);
+  const { gem } = useContext(NftContractContext);
 
   const isAuthenticated = !!user;
 
@@ -98,17 +99,24 @@ export default function App() {
                   isAuthenticated={isAuthenticated}
                   isLoading={isLoading}
                 />
-                <Page path="/gem/:gemId" component={Gem} isAuthenticated={isAuthenticated} isLoading={isLoading} />
+                <Page
+                  path="/gem/:gemId"
+                  component={Gem}
+                  title={gem?.metadata?.title || 'Untitled Gem'}
+                  isAuthenticated={isAuthenticated}
+                  isLoading={isLoading}
+                />
                 <Page
                   path="/gem-original/:gemId"
                   component={GemOriginal}
+                  title={gem?.metadata?.title || 'Untitled Gem'}
                   isAuthenticated={isAuthenticated}
                   isLoading={isLoading}
                 />
                 <UserPage
                   path="/mint-not-allowed"
                   component={MintNotAllowed}
-                  title={'Mint not Allowed'}
+                  title={gem?.metadata?.title || 'Mint not Allowed'}
                   isAuthenticated={isAuthenticated}
                   isLoading={isLoading}
                 />
