@@ -1,4 +1,13 @@
-pluminite-ui
+[Pluminite is online](https://pluminite.com/)
+==================
+
+Project description
+==================
+
+Coming soon
+
+
+How to install pluminite-ui
 ==================
 
 This [React] app was initialized with [create-near-app]
