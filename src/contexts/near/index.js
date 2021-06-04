@@ -40,12 +40,7 @@ export const NearContextProvider = ({ currentUser, nearConfig, wallet, near, chi
   };
 
   const signIn = () => {
-    wallet.requestSignIn(
-      nearConfig.contractName,
-      `NEAR ${APP.NAME}`
-      // todo: fix redirect link for gh-pages
-      // `${window.location.origin}/${window.location.hash ? '#' : ''}/mint`.replaceAll(/([^:]\/)\/+/g, '$1')
-    );
+    wallet.requestSignIn(nearConfig.contractName, `NEAR ${APP.NAME}`, `${window.location.origin}/mint`);
   };
   const signOut = () => {
     wallet.signOut();
