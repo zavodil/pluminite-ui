@@ -107,9 +107,6 @@ const MintReview = ({ backLink, nft }) => {
       return;
     }
 
-    // todo: show MintSuccessMessage on mint success (check if success from query params after on redirect from near
-    // wallet when we stop using hash browser) toast.success(<MintSuccessMessage />);
-
     setIsMinting(false);
   };
 

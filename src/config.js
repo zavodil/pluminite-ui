@@ -4,7 +4,6 @@ let CONTRACT_NAME;
 
 function getConfig(env) {
   switch (env) {
-    // todo: use mainnet on production as well
     case 'production':
     case 'mainnet':
       return {
