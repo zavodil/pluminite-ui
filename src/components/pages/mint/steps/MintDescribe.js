@@ -330,7 +330,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
         </Button>
       )}
       <p className="fee-description">
-        Pluminite will take a 5% fee for all sales to continue building the Pluminite community.
+        {APP.NAME} will take a 5% fee for all sales to continue building the {APP.NAME} community.
       </p>
       <ButtonBottom
         link={onCompleteLink}

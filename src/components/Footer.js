@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { APP } from '../constants';
+
 const Container = styled('footer')`
   z-index: 1;
   padding: 24px;
@@ -41,7 +43,7 @@ export default function Footer() {
         <a href="/">FAQs</a>
         <a href="https://2biqpwq7khk.typeform.com/to/FgnGmWij">Report Content</a>
       </div>
-      <div className="bottom">Pluminite is in Open Beta :)</div>
+      <div className="bottom">{APP.NAME} is in Open Beta :)</div>
     </Container>
   );
 }
