@@ -2,7 +2,6 @@ import { connect, Contract, keyStores, WalletConnection } from 'near-api-js';
 import getConfig from './config';
 
 import { NftMethods, MarketMethods } from './constants/contractMethods';
-import { APP } from './constants';
 
 const nearConfig = getConfig(process.env.NODE_ENV || 'production');
 
@@ -71,5 +70,5 @@ export function login() {
   // user's behalf.
   // This works by creating a new access key for the user's account and storing
   // the private key in localStorage.
-  window.walletConnection.requestSignIn(nearConfig.contractName, APP.NAME);
+  window.walletConnection.requestSignIn(nearConfig.contractName, "Pluminite");
 }

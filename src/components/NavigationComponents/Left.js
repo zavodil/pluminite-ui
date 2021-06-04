@@ -4,8 +4,6 @@ import { Link, useRouteMatch } from 'react-router-dom';
 
 import { NearContext } from '../../contexts';
 
-import { APP } from '../../constants';
-
 const StyledContainer = styled('div')`
   height: 52px;
   line-height: 52px;
@@ -38,11 +36,11 @@ const Left = () => {
   let toRender;
 
   if (isHomePage) {
-    toRender = APP.NAME;
+    toRender = 'Pluminite';
   } else if (isProfilePage && user?.accountId) {
     toRender = user.accountId;
   } else {
-    toRender = <Link to="/">{APP.NAME}</Link>;
+    toRender = <Link to="/">Pluminite</Link>;
   }
 
   return <StyledContainer>{toRender}</StyledContainer>;

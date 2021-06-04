@@ -2,11 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { parseNearAmount } from 'near-api-js/lib/utils/format';
+import { formatNearAmount, parseNearAmount } from 'near-api-js/lib/utils/format';
 
 import { NearContext, NftContractContext } from '../../../../contexts';
-
-import { convertYoctoNearsToNears } from '../../../../utils/nears';
 
 import { HeadingText, SmallText } from '../../../common/typography';
 import { Input, InputNear, InputRoyalty, InputSign, Textarea } from '../../../common/forms';
@@ -146,7 +144,7 @@ const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaborato
         name={`collaborator-id-${number}`}
         isSmall
         isError={userIdIsError}
-        onChange={(e) => setUserIdValue(e.target.value.toLowerCase())}
+        onChange={(e) => setUserIdValue(e.target.value)}
         value={userIdValue || ''}
       />
       <RemoveIcon onClick={onRemoveButtonClick} />
@@ -193,7 +191,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
 
   const isTooMuchRoyalties = () =>
     collaborators.reduce((acc, cv) => acc + +(cv.royalty || 0), 0) + +userRoyalty > APP.MAX_ROYALTY;
-  const hasEnoughNears = () => Number(convertYoctoNearsToNears(user.balance)) > APP.MIN_NEARS_TO_MINT;
+  const hasEnoughNears = () => Number(formatNearAmount(user.balance)) > APP.MIN_NEARS_TO_MINT;
   const hasExceededPrepaidMints = () => !isFreeMintAvailable;
   const isMintForbidden = () => !hasEnoughNears() && hasExceededPrepaidMints();
   const isDisabled = isMintForbidden();
@@ -283,7 +281,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
         labelText="Price"
         isRequired
         isDisabled={isDisabled}
-        nearsInitial={nft?.conditions?.near ? convertYoctoNearsToNears(nft?.conditions?.near) : ''}
+        nearsInitial={nft?.conditions?.near ? formatNearAmount(nft?.conditions?.near) : ''}
         onNearsChange={(value) => setNftField('conditions', { near: parseNearAmount(value) })}
       />
       <div className="user-royalty-input">
@@ -332,7 +330,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
         </Button>
       )}
       <p className="fee-description">
-        {APP.NAME} will take a 5% fee for all sales to continue building the {APP.NAME} community.
+        Pluminite will take a 5% fee for all sales to continue building the Pluminite community.
       </p>
       <ButtonBottom
         link={onCompleteLink}

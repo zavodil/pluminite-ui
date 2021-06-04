@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
-import { convertYoctoNearsToNears } from '../../utils/nears';
 import { round } from '../../utils/numbers';
 
 import { NearContext } from '../../contexts';
@@ -30,13 +30,14 @@ const StyledSpan = styled('span')`
 const Balance = ({ precision, ...props }) => {
   const { user } = useContext(NearContext);
 
-  const nears = convertYoctoNearsToNears(user.balance, precision);
+  const nearFormatted = formatNearAmount(user.balance);
+  const nearRounded = round(nearFormatted, precision);
 
-  const USDs = withUSDs(nears);
+  const USDs = withUSDs(nearRounded);
 
   return (
     <StyledSpan className="balance-text" {...props}>
-      <span className="nears">{Number(nears).toLocaleString()}</span> <span className="nears-sign">Ⓝ</span>{' '}
+      <span className="nears">{nearRounded}</span> <span className="nears-sign">Ⓝ</span>{' '}
       <span className="usds">{USDs && `~$${round(USDs, precision)} USD`}</span>
     </StyledSpan>
   );
