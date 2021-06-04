@@ -84,11 +84,9 @@ export default function Mint() {
       <Switch>
         <Route path={`${match.path}/upload`}>
           <MintUpload
-            onUpload={({ fileDataUrl, thumbnailDataUrl, fileSize, fileType }) => {
-              setNftField('artDataUrl', fileDataUrl);
-              setNftField('artThumbnailDataUrl', thumbnailDataUrl);
-              setNftField('fileSize', fileSize);
-              setNftField('fileType', fileType);
+            onUpload={({ file, thumbnailFile }) => {
+              setNftField('file', file);
+              setNftField('thumbnailFile', thumbnailFile);
             }}
             onCompleteLink={`${match.path}/review`}
             nft={nft}

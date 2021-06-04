@@ -15,7 +15,7 @@ import { StickedToBottom } from '../../../common/layout';
 import Button from '../../../common/Button';
 import { DotsLoading } from '../../../common/utils';
 
-import { uploadFileData } from '../../../../apis';
+import { uploadFile } from '../../../../apis';
 
 import { QUERY_KEYS } from '../../../../constants';
 
@@ -63,8 +63,7 @@ const MintReview = ({ backLink, nft }) => {
   const { mintAndListGem } = useContext(MarketContractContext);
   const queryClient = useQueryClient();
 
-  const uploadToIPFS = async ({ fileDataUrl, thumbnailDataUrl }) =>
-    Promise.all([uploadFileData(fileDataUrl), uploadFileData(thumbnailDataUrl)]);
+  const uploadToIPFS = async ({ file, thumbnailFile }) => Promise.all([uploadFile(file), uploadFile(thumbnailFile)]);
 
   const processMintClick = async () => {
     setIsMinting(true);
@@ -75,21 +74,21 @@ const MintReview = ({ backLink, nft }) => {
       queryClient.invalidateQueries(QUERY_KEYS.SALES_POPULATED),
     ]);
 
-    let ipfsHash;
+    let fileIpfsHash;
     let thumbnailIpfsHash;
     let uploadError;
 
     try {
-      [ipfsHash, thumbnailIpfsHash] = await uploadToIPFS({
-        fileDataUrl: nft.artDataUrl,
-        thumbnailDataUrl: nft.artThumbnailDataUrl,
+      [fileIpfsHash, thumbnailIpfsHash] = await uploadToIPFS({
+        file: nft.file,
+        thumbnailFile: nft.thumbnailFile,
       });
     } catch (e) {
       console.error(e);
       uploadError = e;
     }
 
-    if (!ipfsHash || !thumbnailIpfsHash || uploadError) {
+    if (!fileIpfsHash || !thumbnailIpfsHash || uploadError) {
       setIsMinting(false);
       toast.error('Sorry 😢 There was a problem with uploading your art file to IPFS. Try again later.');
 
@@ -97,7 +96,7 @@ const MintReview = ({ backLink, nft }) => {
     }
 
     try {
-      await mintAndListGem({ ...nft, media: ipfsHash, media_lowres: thumbnailIpfsHash });
+      await mintAndListGem({ ...nft, media: fileIpfsHash, media_lowres: thumbnailIpfsHash });
     } catch (e) {
       console.error(e);
 
@@ -127,7 +126,13 @@ const MintReview = ({ backLink, nft }) => {
       <p className="sub-header">Art piece description</p>
       <p className="text">{nft.description}</p>
       <ArtItemPriced
-        nft={{ metadata: { media: nft.artThumbnailDataUrl || nft.artDataUrl } }}
+        nft={{
+          metadata: {
+            media:
+              (nft.thumbnailFile && URL.createObjectURL(nft.thumbnailFile)) ||
+              (nft.file && URL.createObjectURL(nft.file)),
+          },
+        }}
         bid={getNextBidNearsFormatted(nft)}
         bidAvailable={false}
       />
