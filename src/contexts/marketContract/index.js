@@ -13,7 +13,7 @@ import { NftContractContext } from '../nftContract';
 
 import { getMarketContractName } from '../../utils';
 
-import { APP } from '../../constants';
+import { PAYABLE_METHODS, APP, STORAGE } from '../../constants';
 
 export const MarketContractContext = React.createContext(initialMarketContractState);
 
@@ -97,6 +97,8 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
       // todo: is it alright to set id like this or using default id set by nft contract?
       const tokenId = `token-${Date.now()}`;
 
+      localStorage.setItem(STORAGE.PAYABLE_METHOD_ITEM_NAME, PAYABLE_METHODS.MINT_AND_LIST_NFT);
+
       await nftContract.account.signAndSendTransaction(nftContract.contractId, [
         transactions.functionCall(
           'nft_mint',
@@ -138,6 +140,8 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
 
   const offer = useCallback(
     async (gemId, offerPrice) => {
+      localStorage.setItem(STORAGE.PAYABLE_METHOD_ITEM_NAME, PAYABLE_METHODS.OFFER);
+
       await marketContract.offer(
         {
           nft_contract_id: nftContract.contractId,
@@ -151,6 +155,8 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
   );
 
   const payStorage = useCallback(async () => {
+    localStorage.setItem(STORAGE.PAYABLE_METHOD_ITEM_NAME, PAYABLE_METHODS.PAY_STORAGE);
+
     await marketContract.storage_deposit({}, APP.PREPAID_GAS_LIMIT, marketContractState.minStorage);
   }, [marketContract, marketContractState]);
 
