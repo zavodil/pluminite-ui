@@ -9,7 +9,7 @@ export const useQueryGemsWithBlackList = (queryKeys, queryFn, options) => {
 
   return useQuery(queryKeys, queryFn, {
     ...options,
-    enabled: !!(options.enabled && blacklistedTokens),
+    enabled: options.enabled !== undefined ? !!(options.enabled && blacklistedTokens) : !!blacklistedTokens,
     select: (dataRaw) => {
       if (dataRaw?.pages?.length) {
         return dataRaw.pages.flat().filter(({ token_id }) => !blacklistedTokens.includes(token_id));
@@ -27,7 +27,7 @@ export const useInfiniteQueryGemsWithBlackList = (queryKeys, queryFn, options) =
 
   return useInfiniteQuery(queryKeys, queryFn, {
     ...options,
-    enabled: !!(options.enabled && blacklistedTokens),
+    enabled: options.enabled !== undefined ? !!(options.enabled && blacklistedTokens) : !!blacklistedTokens,
     select: (dataRaw) => {
       if (dataRaw?.pages?.length) {
         return dataRaw.pages.flat().filter(({ token_id }) => !blacklistedTokens.includes(token_id));
