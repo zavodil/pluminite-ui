@@ -4,6 +4,8 @@ import styled from 'styled-components';
 
 import DiamondIcon from '../../../assets/DiamondIcon';
 
+import { beatAnimate } from '../../../styles/mixins';
+
 const StyledContainer = styled('div')`
   display: flex;
   justify-content: center;

@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { square } from '../../../styles/mixins';
-
 import DiamondIcon from '../../../assets/DiamondIcon';
+
+import { beatAnimate, square } from '../../../styles/mixins';
 
 import { ReactChildrenType } from '../../../types/ReactChildrenTypes';
 
@@ -20,9 +20,10 @@ const Container = styled('div')`
   padding: 20px 13px;
 
   .diamond-icon {
+    ${beatAnimate(1.5)}
+
     height: 100px;
     width: 100px;
-    animation: beat 1.5s cubic-bezier(0.5, 0, 0.5, 1) 0s infinite normal none;
     filter: drop-shadow(var(--shadow-primary));
   }
 
