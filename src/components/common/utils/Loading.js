@@ -19,7 +19,7 @@ const Container = styled('div')`
   margin: 0 auto;
   padding: 20px 13px;
 
-  > svg {
+  .diamond-icon {
     height: 100px;
     width: 100px;
     animation: beat 1.5s cubic-bezier(0.5, 0, 0.5, 1) 0s infinite normal none;

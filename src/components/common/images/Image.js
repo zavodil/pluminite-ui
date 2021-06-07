@@ -21,7 +21,7 @@ const StyledContainer = styled('div')`
     display: ${({ isMediaLoaded }) => (isMediaLoaded ? 'inline' : 'none')};
   }
 
-  > svg {
+  .diamond-icon {
     height: 50px;
     width: 50px;
     filter: drop-shadow(var(--shadow-primary));
