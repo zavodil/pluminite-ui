@@ -1,5 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { APP } from '../constants';
 
 const Container = styled('footer')`
   z-index: 1;
@@ -37,11 +40,11 @@ export default function Footer() {
   return (
     <Container>
       <div className="top">
-        <a href="/">Terms of Service</a>
-        <a href="/">FAQs</a>
+        <Link to="/terms">Terms of Service</Link>
+        <Link to="/faq">FAQs</Link>
         <a href="https://2biqpwq7khk.typeform.com/to/FgnGmWij">Report Content</a>
       </div>
-      <div className="bottom">Pluminite is in Open Beta :)</div>
+      <div className="bottom">{APP.NAME} is in Open Beta :)</div>
     </Container>
   );
 }
