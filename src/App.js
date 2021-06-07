@@ -27,6 +27,7 @@ import {
   NotFound404,
   MintNotAllowed,
   Faq,
+  Terms,
 } from './components/pages';
 
 import CloseButton from './components/common/Button/CloseButton';
@@ -85,6 +86,7 @@ export default function App() {
                   isLoading={isLoading}
                 />
                 <Page path="/faq" component={Faq} title="Faqs" />
+                <Page path="/terms" component={Terms} title="Terms and Conditions" />
                 <UserPage
                   exact
                   path="/profile"

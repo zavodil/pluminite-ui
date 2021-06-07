@@ -9,5 +9,6 @@ import GemOriginal from './gem-orirginal';
 import NotFound404 from './not-found-404';
 import MintNotAllowed from './mint-not-allowed';
 import Faq from './Faq';
+import Terms from './Terms';
 
-export { Home, SignUp, LogIn, Mint, Profile, ProfileEdit, Gem, GemOriginal, NotFound404, MintNotAllowed, Faq };
+export { Home, SignUp, LogIn, Mint, Profile, ProfileEdit, Gem, GemOriginal, NotFound404, MintNotAllowed, Faq, Terms };

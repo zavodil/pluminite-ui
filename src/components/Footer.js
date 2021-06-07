@@ -40,7 +40,7 @@ export default function Footer() {
   return (
     <Container>
       <div className="top">
-        <a href="/">Terms of Service</a>
+        <Link to="/terms">Terms of Service</Link>
         <Link to="/faq">FAQs</Link>
         <a href="https://2biqpwq7khk.typeform.com/to/FgnGmWij">Report Content</a>
       </div>
