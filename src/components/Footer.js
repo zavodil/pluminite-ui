@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { APP } from '../constants';
@@ -40,7 +41,7 @@ export default function Footer() {
     <Container>
       <div className="top">
         <a href="/">Terms of Service</a>
-        <a href="/">FAQs</a>
+        <Link to="/faq">FAQs</Link>
         <a href="https://2biqpwq7khk.typeform.com/to/FgnGmWij">Report Content</a>
       </div>
       <div className="bottom">{APP.NAME} is in Open Beta :)</div>

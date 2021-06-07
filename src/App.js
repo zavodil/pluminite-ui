@@ -26,6 +26,7 @@ import {
   GemOriginal,
   NotFound404,
   MintNotAllowed,
+  Faq,
 } from './components/pages';
 
 import CloseButton from './components/common/Button/CloseButton';
@@ -83,6 +84,7 @@ export default function App() {
                   isAuthenticated={isAuthenticated}
                   isLoading={isLoading}
                 />
+                <Page path="/faq" component={Faq} title="Faqs" />
                 <UserPage
                   exact
                   path="/profile"
