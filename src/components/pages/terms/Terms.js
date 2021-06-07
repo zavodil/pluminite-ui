@@ -15,10 +15,6 @@ const Container = styled('div')`
     margin: 0;
   }
 
-  .intro {
-    text-align: center;
-  }
-
   .point {
     margin: 60px 0;
 
