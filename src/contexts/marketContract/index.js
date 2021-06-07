@@ -12,7 +12,6 @@ import { NearContext } from '../near';
 import { NftContractContext } from '../nftContract';
 
 import { getMarketContractName } from '../../utils';
-import { convertYoctoNearsToNears } from '../../utils/nears';
 
 import { PAYABLE_METHODS, APP, STORAGE } from '../../constants';
 
@@ -21,7 +20,7 @@ export const MarketContractContext = React.createContext(initialMarketContractSt
 export const MarketContractContextProvider = ({ marketContract, children }) => {
   const [marketContractState, dispatchMarketContract] = useReducer(marketContractReducer, initialMarketContractState);
   const { user } = useContext(NearContext);
-  const { nftContract, getGemsBatch, getGem } = useContext(NftContractContext);
+  const { nftContract, getGemsBatch, getGem, getIsFreeMintAvailable } = useContext(NftContractContext);
 
   const getSale = useCallback(
     async (gemId) => {
@@ -75,6 +74,8 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
 
   const mintAndListGem = useCallback(
     async (nft) => {
+      const isFreeMintAvailable = await getIsFreeMintAvailable(user.accountId);
+
       const metadata = {
         media: nft.media,
         reference: APP.HASH_SOURCE,
@@ -111,9 +112,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
             })
           ),
           APP.PREPAID_GAS_LIMIT / 2,
-          APP.USE_STORAGE_FEES || Number(convertYoctoNearsToNears(user.balance)) > APP.MIN_NEARS_TO_MINT
-            ? APP.DEPOSIT_DEFAULT
-            : 0
+          APP.USE_STORAGE_FEES || !isFreeMintAvailable ? APP.DEPOSIT_DEFAULT : 0
         ),
         transactions.functionCall(
           'nft_approve',
