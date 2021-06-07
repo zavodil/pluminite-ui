@@ -194,8 +194,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
   const isTooMuchRoyalties = () =>
     collaborators.reduce((acc, cv) => acc + +(cv.royalty || 0), 0) + +userRoyalty > APP.MAX_ROYALTY;
   const hasEnoughNears = () => Number(convertYoctoNearsToNears(user.balance)) > APP.MIN_NEARS_TO_MINT;
-  const hasExceededPrepaidMints = () => !isFreeMintAvailable;
-  const isMintForbidden = () => !hasEnoughNears() && hasExceededPrepaidMints();
+  const isMintForbidden = () => !hasEnoughNears() && !isFreeMintAvailable;
   const isDisabled = isMintForbidden();
 
   const addCollaborator = () => {
@@ -247,10 +246,10 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
     <Container>
       <HeadingText>Mint a Gem</HeadingText>
       <div className="freebies">
-        {!hasEnoughNears() && !isDisabled && (
+        {isFreeMintAvailable && !isDisabled && (
           <SmallText>
             We&apos;ll front the cost of your first 3 mints. You&apos;ll need to make a sale to cover your first 3 mints
-            or add funds to your NEAR wallet to continue minting more NFTs.
+            or have enough funds in your NEAR wallet to continue minting more NFTs.
           </SmallText>
         )}
         {isDisabled && (

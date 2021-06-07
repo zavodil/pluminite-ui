@@ -1,12 +1,12 @@
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { Link, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import { MarketContractContext, NearContext } from '../../../../contexts';
+import { MarketContractContext, NearContext, NftContractContext } from '../../../../contexts';
 
 import { getNextBidNearsFormatted } from '../../../../utils/nears';
 
@@ -68,7 +68,17 @@ const MintReview = ({ backLink, nft }) => {
   const [isMinting, setIsMinting] = useState(false);
   const { user } = useContext(NearContext);
   const { mintAndListGem } = useContext(MarketContractContext);
+  const { getIsFreeMintAvailable } = useContext(NftContractContext);
   const queryClient = useQueryClient();
+
+  const { data: isFreeMintAvailable } = useQuery(
+    [QUERY_KEYS.IS_FREE_MINT_AVAILABLE, user.accountId],
+    () => getIsFreeMintAvailable(user.accountId),
+    {
+      enabled: !!user?.accountId,
+      staleTime: 0,
+    }
+  );
 
   const uploadToIPFS = async ({ file, thumbnailFile }) => Promise.all([uploadFile(file), uploadFile(thumbnailFile)]);
 
@@ -143,10 +153,12 @@ const MintReview = ({ backLink, nft }) => {
         bid={getNextBidNearsFormatted(nft)}
         bidAvailable={false}
       />
-      <p className="fee-description">
-        We will ask to attach {formatNearAmount(APP.DEPOSIT_DEFAULT)} NEAR to mint transaction to cover storage fees.
-        All unused funds will be returned to your account in the same transaction.
-      </p>
+      {!isFreeMintAvailable && (
+        <p className="fee-description">
+          We will ask to attach {formatNearAmount(APP.DEPOSIT_DEFAULT)} NEAR to mint transaction to cover storage fees.
+          All unused funds will be returned to your account in the same transaction.
+        </p>
+      )}
       <StickedToBottom isSecondary>
         <StyledButton isSecondary isDisabled={isMinting}>
           <Link to={backLink}>Replace Art</Link>
