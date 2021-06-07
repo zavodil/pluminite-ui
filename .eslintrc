@@ -53,6 +53,14 @@
         "svg": "always"
       }
     ],
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1,
+        "offsetTernaryExpressions": true
+      }
+    ],
     "prettier/prettier": "error",
     "camelcase": "off",
     "no-console": ["error", { "allow": ["warn", "error"] }]
