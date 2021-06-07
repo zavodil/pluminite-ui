@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Route, useHistory } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { useDocumentTitle, useQuery } from '../hooks';
+import { useDocumentTitle, useNativeQuery } from '../hooks';
 
 import { APP, PAYABLE_METHODS_DESCRIPTIONS, PAYABLE_METHODS_SUCCESS_MESSAGES, STORAGE } from '../constants';
 
 const Page = ({ component: Component, title, ...rest }) => {
-  const query = useQuery();
-  const history = useHistory();
+  const query = useNativeQuery();
 
   useDocumentTitle(title ? `${APP.NAME} | ${title}` : APP.NAME);
 
@@ -33,7 +32,8 @@ const Page = ({ component: Component, title, ...rest }) => {
       }
 
       localStorage.removeItem(STORAGE.PAYABLE_METHOD_ITEM_NAME);
-      history.replace(history.location.pathname);
+
+      window.history.pushState(null, null, window.location.origin + window.location.hash);
     }
   }, []);
 
