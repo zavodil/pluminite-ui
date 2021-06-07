@@ -156,15 +156,24 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
 
     const { sx, sy, sw, sh } = getSquareDimensions(target);
 
-    canvasThumbnail.width = 400;
-    canvasThumbnail.height = 400;
+    const width = target.naturalWidth || target.videoWidth;
+    const height = target.naturalHeight || target.videoHeight;
+
+    const thumbnailSideSize = Math.min(400, width, height);
+
+    canvasThumbnail.width = thumbnailSideSize;
+    canvasThumbnail.height = thumbnailSideSize;
 
     ctxThumbnail.drawImage(target, sx, sy, sw, sh, 0, 0, canvasThumbnail.width, canvasThumbnail.height);
 
     return new Promise((resolve) => {
-      canvasThumbnail.toBlob((blob) => {
-        resolve(blob);
-      }, 'image/png');
+      canvasThumbnail.toBlob(
+        (blob) => {
+          resolve(blob);
+        },
+        'image/jpeg',
+        0.7
+      );
     });
   };
 
