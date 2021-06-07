@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -24,9 +24,12 @@ const StyledContainer = styled('div')`
   }
 
   .diamond-icon {
+    ${({ isMediaLoading }) => (isMediaLoading ? beatAnimate(0.4) : '')}
+
     height: 50px;
     width: 50px;
-    filter: drop-shadow(var(--shadow-primary));
+    filter: ${({ isMediaLoading }) => (isMediaLoading ? 'drop-shadow(var(--shadow-primary))' : '')};
+    opacity: ${({ isMediaLoading }) => (isMediaLoading ? '1' : '0.25')};
     display: ${({ isMediaLoaded }) => (isMediaLoaded ? 'none' : 'inline')};
   }
 
@@ -35,19 +38,53 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const Image = forwardRef(function ImageWithRef({ src, alt, ...rest }, ref) {
+const Image = forwardRef(function ImageWithRef({ src, alt, media, ...rest }, ref) {
   const [isMediaLoaded, setIsMediaLoaded] = useState(null);
+  const [isMediaLoading, setIsMediaLoading] = useState(false);
 
   const processMediaLoaded = () => {
     setIsMediaLoaded(true);
+    setIsMediaLoading(false);
   };
 
+  const processMediaError = () => {
+    setIsMediaLoading(false);
+  };
+
+  useEffect(() => {
+    if (media || src) {
+      setIsMediaLoading(true);
+    }
+
+    if (src === null) {
+      setIsMediaLoading(false);
+    }
+  }, [src, media]);
+
   return (
-    <StyledContainer isMediaLoaded={isMediaLoaded}>
+    <StyledContainer isMediaLoaded={isMediaLoaded} isMediaLoading={isMediaLoading}>
       {src && src.startsWith('data:video') ? (
-        <video src={src} className="image" autoPlay muted loop ref={ref} onLoadedData={processMediaLoaded} {...rest} />
+        <video
+          src={src}
+          className="image"
+          autoPlay
+          muted
+          loop
+          ref={ref}
+          onLoadedData={processMediaLoaded}
+          onError={processMediaError}
+          {...rest}
+        />
       ) : (
-        <img src={src} alt={alt} className="image" ref={ref} onLoad={processMediaLoaded} {...rest} />
+        <img
+          src={src}
+          alt={alt}
+          className="image"
+          ref={ref}
+          onLoad={processMediaLoaded}
+          onError={processMediaError}
+          {...rest}
+        />
       )}
       <DiamondIcon />
     </StyledContainer>
@@ -56,6 +93,7 @@ const Image = forwardRef(function ImageWithRef({ src, alt, ...rest }, ref) {
 
 Image.propTypes = {
   src: PropTypes.string,
+  media: PropTypes.string,
   alt: PropTypes.string,
 };
 
