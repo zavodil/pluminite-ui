@@ -14,7 +14,7 @@ import { DotsLoading } from '../../../common/utils';
 
 import { useIsUnmounting } from '../../../../hooks';
 
-import { uploadFile } from '../../../../apis';
+import { uploadFileData } from '../../../../apis';
 
 import { PROFILE, QUERY_KEYS } from '../../../../constants';
 
@@ -89,7 +89,7 @@ function ProfileEditPhoto() {
     let uploadError;
 
     try {
-      fileHash = await uploadFile(avatarDataUrl);
+      fileHash = await uploadFileData(avatarDataUrl);
     } catch (e) {
       console.error(e);
       uploadError = e;
@@ -142,7 +142,7 @@ function ProfileEditPhoto() {
             ? 'This will be your profile picture '
             : `Photos with a 1:1 ratio work best, that are under ${PROFILE.PHOTO_MAX_SIZE_MB}mb in size.`
         }
-        onUpload={({ file }) => setAvatarDataUrl(file)}
+        onUpload={({ fileDataUrl }) => setAvatarDataUrl(fileDataUrl)}
         ref={inputRef}
         showFileName={false}
         maxSizeMb={PROFILE.PHOTO_MAX_SIZE_MB}

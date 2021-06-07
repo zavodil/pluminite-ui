@@ -1,10 +1,8 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import DiamondIcon from '../../../assets/DiamondIcon';
-
-import { beatAnimate } from '../../../styles/mixins';
 
 const StyledContainer = styled('div')`
   display: flex;
@@ -23,13 +21,10 @@ const StyledContainer = styled('div')`
     display: ${({ isMediaLoaded }) => (isMediaLoaded ? 'inline' : 'none')};
   }
 
-  .diamond-icon {
-    ${({ isMediaLoading }) => (isMediaLoading ? beatAnimate(0.4) : '')}
-
+  > svg {
     height: 50px;
     width: 50px;
-    filter: ${({ isMediaLoading }) => (isMediaLoading ? 'drop-shadow(var(--shadow-primary))' : '')};
-    opacity: ${({ isMediaLoading }) => (isMediaLoading ? '1' : '0.25')};
+    filter: drop-shadow(var(--shadow-primary));
     display: ${({ isMediaLoaded }) => (isMediaLoaded ? 'none' : 'inline')};
   }
 
@@ -38,53 +33,19 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const Image = forwardRef(function ImageWithRef({ src, alt, media, ...rest }, ref) {
+const Image = forwardRef(function ImageWithRef({ src, alt, ...rest }, ref) {
   const [isMediaLoaded, setIsMediaLoaded] = useState(null);
-  const [isMediaLoading, setIsMediaLoading] = useState(false);
 
   const processMediaLoaded = () => {
     setIsMediaLoaded(true);
-    setIsMediaLoading(false);
   };
-
-  const processMediaError = () => {
-    setIsMediaLoading(false);
-  };
-
-  useEffect(() => {
-    if (media || src) {
-      setIsMediaLoading(true);
-    }
-
-    if (src === null) {
-      setIsMediaLoading(false);
-    }
-  }, [src, media]);
 
   return (
-    <StyledContainer isMediaLoaded={isMediaLoaded} isMediaLoading={isMediaLoading}>
+    <StyledContainer isMediaLoaded={isMediaLoaded}>
       {src && src.startsWith('data:video') ? (
-        <video
-          src={src}
-          className="image"
-          autoPlay
-          muted
-          loop
-          ref={ref}
-          onLoadedData={processMediaLoaded}
-          onError={processMediaError}
-          {...rest}
-        />
+        <video src={src} className="image" autoPlay muted loop ref={ref} onLoadedData={processMediaLoaded} {...rest} />
       ) : (
-        <img
-          src={src}
-          alt={alt}
-          className="image"
-          ref={ref}
-          onLoad={processMediaLoaded}
-          onError={processMediaError}
-          {...rest}
-        />
+        <img src={src} alt={alt} className="image" ref={ref} onLoad={processMediaLoaded} {...rest} />
       )}
       <DiamondIcon />
     </StyledContainer>
@@ -93,7 +54,6 @@ const Image = forwardRef(function ImageWithRef({ src, alt, media, ...rest }, ref
 
 Image.propTypes = {
   src: PropTypes.string,
-  media: PropTypes.string,
   alt: PropTypes.string,
 };
 

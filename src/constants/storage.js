@@ -1,5 +1,0 @@
-const STORAGE = {
-  PAYABLE_METHOD_ITEM_NAME: 'PAYABLE_METHOD_ITEM_NAME',
-};
-
-export default STORAGE;

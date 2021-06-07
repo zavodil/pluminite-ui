@@ -56,17 +56,16 @@ const StyledContainer = styled('div')`
 const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileName, maxSizeMb }, customRef) => {
   const [isLoading, setIsLoading] = useState(false);
   const [fileDataUrl, setFileDataUrl] = useState(null);
+  const [fileType, setFileType] = useState(null);
   const [isError, setIsError] = useState(false);
-  const [filename, setFilename] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [filename, setFilename] = useState(false);
+  const [fileSize, setFileSize] = useState(false);
 
   const canvasRef = useRef();
   const canvasThumbnailRef = useRef();
 
   const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
-
-    setSelectedFile(file);
 
     if (!isSupportedFileType(file.type)) {
       toast.error(`File type ${file.type} unsupported.`);
@@ -100,12 +99,14 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
     };
     reader.onload = () => {
       setFileDataUrl(reader.result);
+      setFileType(file.type);
+      setFileSize(file.size);
     };
 
     reader.readAsDataURL(file);
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, maxFiles: 1 });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   const { ref, ...dropzoneProps } = getRootProps();
 
   const getSquareDimensions = (target) => {
@@ -143,11 +144,7 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
 
     ctx.drawImage(image, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
 
-    return new Promise((resolve) => {
-      canvas.toBlob((blob) => {
-        resolve(blob);
-      }, selectedFile.type);
-    });
+    return canvas.toDataURL(fileType, 1);
   };
 
   const getCroppedToSquareThumbnail = (target) => {
@@ -156,47 +153,38 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
 
     const { sx, sy, sw, sh } = getSquareDimensions(target);
 
-    const width = target.naturalWidth || target.videoWidth;
-    const height = target.naturalHeight || target.videoHeight;
-
-    const thumbnailSideSize = Math.min(400, width, height);
-
-    canvasThumbnail.width = thumbnailSideSize;
-    canvasThumbnail.height = thumbnailSideSize;
+    canvasThumbnail.width = 400;
+    canvasThumbnail.height = 400;
 
     ctxThumbnail.drawImage(target, sx, sy, sw, sh, 0, 0, canvasThumbnail.width, canvasThumbnail.height);
 
-    return new Promise((resolve) => {
-      canvasThumbnail.toBlob(
-        (blob) => {
-          resolve(blob);
-        },
-        'image/jpeg',
-        0.7
-      );
-    });
+    return canvasThumbnail.toDataURL('image/png');
   };
 
-  const onImageLoad = async (event) => {
+  const onImageLoad = (event) => {
     const image = event.target;
 
     if (onUpload) {
       onUpload({
-        file: isFileTypeAnimatedImage(selectedFile.type) ? selectedFile : await getCroppedToSquareImage(image),
-        thumbnailFile: await getCroppedToSquareThumbnail(image),
+        fileDataUrl: isFileTypeAnimatedImage(fileType) ? fileDataUrl : getCroppedToSquareImage(image),
+        thumbnailDataUrl: getCroppedToSquareThumbnail(image),
+        fileSize,
+        fileType,
       });
     }
 
     setIsLoading(false);
   };
 
-  const onVideoLoad = async (event) => {
+  const onVideoLoad = (event) => {
     const video = event.target;
 
     if (onUpload) {
       onUpload({
-        file: selectedFile,
-        thumbnailFile: await getCroppedToSquareThumbnail(video),
+        fileDataUrl,
+        thumbnailDataUrl: getCroppedToSquareThumbnail(video),
+        fileSize,
+        fileType,
       });
     }
 
@@ -207,10 +195,8 @@ const FileDropzone = forwardRef(({ onUpload, buttonText, adviceText, showFileNam
     <StyledContainer>
       {fileDataUrl ? (
         <div className="image-container">
-          {selectedFile?.type && isFileTypeImage(selectedFile.type) && (
-            <img src={fileDataUrl} alt="selected file" onLoad={onImageLoad} />
-          )}
-          {selectedFile?.type && isFileTypeVideo(selectedFile.type) && (
+          {fileType && isFileTypeImage(fileType) && <img src={fileDataUrl} alt="selected file" onLoad={onImageLoad} />}
+          {fileType && isFileTypeVideo(fileType) && (
             <video src={fileDataUrl} autoPlay muted loop onLoadedData={onVideoLoad} />
           )}
           <canvas ref={canvasRef} />

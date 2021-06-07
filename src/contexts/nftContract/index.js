@@ -7,7 +7,7 @@ import { initialNftContractState } from './reducer';
 import { getMarketContractName } from '../../utils';
 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
-import { APP, PAYABLE_METHODS, STORAGE } from '../../constants';
+import APP from '../../constants/app';
 
 export const NftContractContext = React.createContext(initialNftContractState);
 
@@ -64,8 +64,6 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
 
   const listForSale = useCallback(
     async (nftId, price) => {
-      localStorage.setItem(STORAGE.PAYABLE_METHOD_ITEM_NAME, PAYABLE_METHODS.LIST);
-
       await nftContract.account.signAndSendTransaction(nftContract.contractId, [
         transactions.functionCall(
           'nft_approve',

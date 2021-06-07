@@ -108,7 +108,7 @@ export default function Home() {
   const { nftContract } = useContext(NftContractContext);
   const { getSalesPopulated, marketContract } = useContext(MarketContractContext);
 
-  const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQueryGemsWithBlackList(
+  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQueryGemsWithBlackList(
     QUERY_KEYS.SALES_POPULATED,
     ({ pageParam = 0 }) => getSalesPopulated(String(pageParam), String(APP.MAX_ITEMS_PER_PAGE_HOME)),
     {
@@ -135,35 +135,43 @@ export default function Home() {
           <DiamondIcon />
         </div>
       </div>
-      <div className="items-container">
-        <div className="items">
-          {data?.length &&
-            data.map((sale) => (
-              <ArtItemPriced
-                key={sale.token_id}
-                nft={sale}
-                bid={getNextBidNearsFormatted(sale)}
-                gemOnSale={sale}
-                isLink
-                isFromIpfs
-              />
-            ))}
-          {!data?.length && !isFetching && (
-            <div className="no-nfts">
-              There is nothing here 😢 <br />
-              <Button isPrimary isSmall>
-                <Link to="/mint">Mint a Gem</Link>
-              </Button>
-            </div>
+      {isFetching || isFetchingNextPage ? (
+        <Loading />
+      ) : (
+        <div className="items-container">
+          <div className="items">
+            {data?.length ? (
+              data.map((sale) => (
+                <ArtItemPriced
+                  key={sale.token_id}
+                  nft={sale}
+                  bid={getNextBidNearsFormatted(sale)}
+                  gemOnSale={sale}
+                  isLink
+                  isFromIpfs
+                />
+              ))
+            ) : (
+              <div className="no-nfts">
+                There is nothing here 😢 <br />
+                <Button isPrimary isSmall>
+                  <Link to="/mint">Mint a Gem</Link>
+                </Button>
+              </div>
+            )}
+          </div>
+          {hasNextPage && (
+            <Button
+              isPrimary
+              onClick={() => fetchNextPage()}
+              isDisabled={isFetching || isFetchingNextPage}
+              className="load-more"
+            >
+              Load more
+            </Button>
           )}
         </div>
-        {hasNextPage && !isFetching && (
-          <Button isPrimary onClick={() => fetchNextPage()} isDisabled={isFetching} className="load-more">
-            Load more
-          </Button>
-        )}
-        {isFetching && <Loading />}
-      </div>
+      )}
       <div className="pop-up">{user ? <MintPlus /> : <Contribute />}</div>
     </Container>
   );
