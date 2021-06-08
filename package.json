@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@pinata/sdk": "^1.1.20",
+    "axios": "^0.21.1",
     "big.js": "^6.1.1",
     "classnames": "^2.3.1",
     "near-api-js": "~0.36.3",

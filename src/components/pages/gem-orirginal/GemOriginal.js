@@ -13,10 +13,10 @@ import Button from '../../common/Button';
 import CloseButton from '../../common/Button/CloseButton';
 import { Portal } from '../../common/utils';
 
-import { withUSDs } from '../../../hooks';
+import { useDocumentTitle, withUSDs } from '../../../hooks';
 
 import { round } from '../../../utils/numbers';
-import { getNextBidNearsFormatted } from '../../../utils/nears';
+import { convertYoctoNearsToNears, getNextBidNears, getNextBidNearsFormatted } from '../../../utils/nears';
 
 import { NftContractContext, MarketContractContext, NearContext } from '../../../contexts';
 
@@ -129,7 +129,7 @@ function GemOriginal({ location: { prevPathname } }) {
 
   const history = useHistory();
 
-  const previousPriceUSDs = withUSDs(formatNearAmount(previousPrice));
+  const previousPriceUSDs = withUSDs(convertYoctoNearsToNears(previousPrice));
 
   const { data: gem } = useQuery([QUERY_KEYS.GEM, gemId], () => getGem(gemId), {
     onError() {
@@ -137,6 +137,8 @@ function GemOriginal({ location: { prevPathname } }) {
       history.push('/');
     },
   });
+
+  useDocumentTitle(gem?.metadata?.title || 'Untitled Gem');
 
   const { data: gemOnSale } = useQuery(
     [QUERY_KEYS.GEM_ON_SALE, gemId],
@@ -178,13 +180,14 @@ function GemOriginal({ location: { prevPathname } }) {
 
   const processBid = async () => {
     try {
-      await offer(gemId, getNextBidNearsFormatted(gemOnSale));
+      await offer(gemId, getNextBidNears(gemOnSale));
     } catch (error) {
       console.error(error);
       toast.error('Sorry 😢 There was an error in processing your offer. Please, try again later.');
     }
 
-    // todo: execute commands below once the bid is accepted
+    // todo: do we show a toast with the link to the profile page (there are designs for that)
+    //  or do we redirect to profile page on success
     // toast.success('You own a new gem!', { position: 'top-right' });
     // history.push(`/profile?gem-id=${gem?.token_id}`);
   };

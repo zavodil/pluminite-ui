@@ -71,3 +71,8 @@ export const square = css`
     border-radius: var(--radius-default);
   }
 `;
+
+export const beatAnimate = (durationS) =>
+  css`
+    animation: beat ${durationS}s cubic-bezier(0.5, 0, 0.5, 1) 0s infinite normal none;
+  `;
