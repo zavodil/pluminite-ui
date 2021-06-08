@@ -7,8 +7,6 @@ import { NearContext, MarketContractContext, NftContractContext } from '../../..
 
 import { useInfiniteQueryGemsWithBlackList } from '../../../hooks';
 
-import { getNextBidNearsFormatted } from '../../../utils/nears';
-
 import { DisplayText } from '../../common/typography';
 import { Contribute, MintPlus } from '../../common/popups';
 import { ArtItemPriced } from '../../common/art';
@@ -137,17 +135,7 @@ export default function Home() {
       </div>
       <div className="items-container">
         <div className="items">
-          {data?.length &&
-            data.map((sale) => (
-              <ArtItemPriced
-                key={sale.token_id}
-                nft={sale}
-                bid={getNextBidNearsFormatted(sale)}
-                gemOnSale={sale}
-                isLink
-                isFromIpfs
-              />
-            ))}
+          {data?.length && data.map((sale) => <ArtItemPriced key={sale.token_id} nft={sale} isLink isFromIpfs />)}
           {!data?.length && !isFetching && (
             <div className="no-nfts">
               There is nothing here 😢 <br />
