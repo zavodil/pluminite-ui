@@ -12,7 +12,7 @@ import { getNextBidNearsFormatted } from '../../../utils/nears';
 import { DisplayText } from '../../common/typography';
 import { Contribute, MintPlus } from '../../common/popups';
 import { ArtItemPriced } from '../../common/art';
-import Button from '../../common/Button';
+import { Button } from '../../common/buttons';
 
 import DiamondIcon from '../../../assets/DiamondIcon';
 

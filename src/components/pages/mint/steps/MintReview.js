@@ -13,7 +13,7 @@ import { getNextBidNearsFormatted } from '../../../../utils/nears';
 import { HeadingText } from '../../../common/typography';
 import { ArtItemPriced } from '../../../common/art';
 import { StickedToBottom } from '../../../common/layout';
-import Button from '../../../common/Button';
+import { Button } from '../../../common/buttons';
 import { DotsLoading } from '../../../common/utils';
 
 import { uploadFile } from '../../../../apis';

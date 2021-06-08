@@ -10,8 +10,7 @@ import { convertYoctoNearsToNears } from '../../../../utils/nears';
 
 import { HeadingText, SmallText } from '../../../common/typography';
 import { Input, InputNear, InputRoyalty, InputSign, Textarea } from '../../../common/forms';
-import ButtonBottom from '../../../common/Button/ButtonBottom';
-import Button from '../../../common/Button';
+import { ButtonBottom, Button } from '../../../common/buttons';
 
 import RemoveIcon from '../../../../assets/RemoveIcon';
 

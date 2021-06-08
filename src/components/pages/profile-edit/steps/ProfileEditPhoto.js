@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react';
-import { useQuery as useRQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { NearContext, NftContractContext } from '../../../../contexts';
 
 import { StickedToBottom } from '../../../common/layout';
-import Button from '../../../common/Button';
+import { Button } from '../../../common/buttons';
 import FileDropzone from '../../../common/FileDropzone';
 import { HeadingSmallText } from '../../../common/typography';
 import { DotsLoading } from '../../../common/utils';
@@ -54,7 +54,7 @@ function ProfileEditPhoto() {
   const { user } = useContext(NearContext);
   const { setProfile, getProfile } = useContext(NftContractContext);
 
-  const { data: profile } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
+  const { data: profile } = useQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
     enabled: !!user?.accountId,
     onError() {
       toast.error('Sorry 😢 There was an error getting your profile data.');

@@ -5,7 +5,7 @@ import { Link, useRouteMatch } from 'react-router-dom';
 import { NearContext } from '../../contexts';
 
 import UserMenu from './UserMenu';
-import Button from '../common/Button';
+import { Button } from '../common/buttons';
 import ProfileUserMenu from './ProfileUserMenu';
 
 const StyledContainer = styled('div')`

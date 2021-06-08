@@ -9,8 +9,8 @@ import { getBlacklistedTokens } from '../../../apis';
 
 import { ImageFromIpfs } from '../../common/images';
 import { StickedToBottom } from '../../common/layout';
-import Button from '../../common/Button';
-import CloseButton from '../../common/Button/CloseButton';
+import { Button, CloseButton } from '../../common/buttons';
+
 import { Portal } from '../../common/utils';
 
 import { useDocumentTitle, withUSDs } from '../../../hooks';

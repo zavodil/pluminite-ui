@@ -40,7 +40,7 @@ export const NearContextProvider = ({ currentUser, nearConfig, wallet, near, chi
   };
 
   const signIn = () => {
-    wallet.requestSignIn(nearConfig.contractName, `NEAR ${APP.NAME}`, `${window.location.origin}/mint`);
+    wallet.requestSignIn(nearConfig.contractName, `NEAR ${APP.NAME}`);
   };
   const signOut = () => {
     wallet.signOut();

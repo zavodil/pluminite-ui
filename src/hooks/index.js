@@ -2,7 +2,7 @@ import useDetectClickOutside from './useDetectClickOutside';
 import useDocumentTitle from './useDocumentTitle';
 import useDebounce from './useDebounce';
 import withUSDs from './withUSDs';
-import { useQuery, useNativeQuery } from './useQuery';
+import { useSearchParams, useNativeSearchParams } from './useSearchParams';
 import useIsUnmounting from './useIsUnmounting';
 import { useInfiniteQueryGemsWithBlackList, useQueryGemsWithBlackList } from './useBlacklist';
 
@@ -11,8 +11,8 @@ export {
   useDocumentTitle,
   useDebounce,
   withUSDs,
-  useQuery,
-  useNativeQuery,
+  useSearchParams,
+  useNativeSearchParams,
   useIsUnmounting,
   useInfiniteQueryGemsWithBlackList,
   useQueryGemsWithBlackList,

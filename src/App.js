@@ -30,7 +30,7 @@ import {
   Terms,
 } from './components/pages';
 
-import CloseButton from './components/common/Button/CloseButton';
+import { CloseButton } from './components/common/buttons';
 
 import GlobalStyle from './styles/GlobalStyle';
 import 'react-toastify/dist/ReactToastify.css';

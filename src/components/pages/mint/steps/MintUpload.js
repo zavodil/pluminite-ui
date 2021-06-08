@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { HeadingText } from '../../../common/typography';
 import FileDropzone from '../../../common/FileDropzone';
-import ButtonBottom from '../../../common/Button/ButtonBottom';
+import { ButtonBottom } from '../../../common/buttons';
 
 import { APP } from '../../../../constants';
 
