@@ -12,7 +12,7 @@ import { withUSDs } from '../../../../hooks';
 import { convertYoctoNearsToNears, getNextBidNears, getNextBidNearsFormatted } from '../../../../utils/nears';
 import { round } from '../../../../utils/numbers';
 
-import Button from '../../../common/Button';
+import { Button } from '../../../common/buttons';
 import { StickedToBottom } from '../../../common/layout';
 
 const Container = styled('div')`

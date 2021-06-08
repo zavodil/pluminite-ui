@@ -10,7 +10,7 @@ import { getBlacklistedTokens, getFileData } from '../../../apis';
 
 import { BottomSell, BottomBid } from './components';
 import { ArtItem } from '../../common/art';
-import CloseButton from '../../common/Button/CloseButton';
+import { CloseButton } from '../../common/buttons';
 import { TitleText } from '../../common/typography';
 import { Tabs } from '../../common/tabs';
 import { Portal } from '../../common/utils';

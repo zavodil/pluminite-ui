@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Button from '../Button';
+import { Button } from '../buttons';
 import { Image, ImageFromIpfs } from '../images';
 
 import FullscreenIcon from '../../../assets/FullscreenIcon';

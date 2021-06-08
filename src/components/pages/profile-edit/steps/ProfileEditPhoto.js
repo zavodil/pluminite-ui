@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { NearContext, NftContractContext } from '../../../../contexts';
 
 import { StickedToBottom } from '../../../common/layout';
-import Button from '../../../common/Button';
+import { Button } from '../../../common/buttons';
 import FileDropzone from '../../../common/FileDropzone';
 import { HeadingSmallText } from '../../../common/typography';
 import { DotsLoading } from '../../../common/utils';

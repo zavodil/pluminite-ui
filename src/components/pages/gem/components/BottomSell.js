@@ -8,7 +8,7 @@ import { QUERY_KEYS } from '../../../../constants';
 
 import { NftContractContext } from '../../../../contexts';
 
-import Button from '../../../common/Button';
+import { Button } from '../../../common/buttons';
 import { InputNear } from '../../../common/forms';
 import { StickedToBottom } from '../../../common/layout';
 

@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import Button from './Button';
+import { Button } from './buttons';
 
 import {
   convertKBtoMB,

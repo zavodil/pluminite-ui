@@ -10,7 +10,7 @@ import defaultProfilePicture from '../../../../assets/default-profile-picture.pn
 import { StickedToBottom } from '../../../common/layout';
 import { DotsLoading } from '../../../common/utils';
 import Balance from '../../../NavigationComponents/Balance';
-import Button from '../../../common/Button';
+import { Button } from '../../../common/buttons';
 import { Textarea } from '../../../common/forms';
 
 import { NearContext, NftContractContext } from '../../../../contexts';
