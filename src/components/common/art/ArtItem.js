@@ -140,10 +140,10 @@ const ArtItem = ({
           {buttonText}
         </Button>
       )}
-      {isFullScreenEnabled && (
+      {isFullScreenEnabled && nft?.token_id && (
         <Link
           to={{
-            pathname: `/gem-original/${nft?.token_id}`,
+            pathname: `/gem-original/${nft.token_id}`,
             prevPathname: location.pathname,
           }}
         >
