@@ -7,13 +7,15 @@ import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
 import { getBlacklistedTokens, getFileData } from '../../../apis';
-import { ArtItem } from '../../common/art';
 
 import { BottomSell, BottomBid } from './components';
-import CloseButton from '../../common/Button/CloseButton';
+import { ArtItem } from '../../common/art';
+import { CloseButton } from '../../common/buttons';
 import { TitleText } from '../../common/typography';
 import { Tabs } from '../../common/tabs';
 import { Portal } from '../../common/utils';
+
+import { useDocumentTitle } from '../../../hooks';
 
 import { NftContractContext, MarketContractContext, NearContext } from '../../../contexts';
 
@@ -123,6 +125,8 @@ function Gem({ location: { prevPathname } }) {
       history.push('/');
     },
   });
+
+  useDocumentTitle(gem?.metadata?.title || 'Untitled Gem');
 
   const { data: gemOnSale } = useQuery(
     [QUERY_KEYS.GEM_ON_SALE, gemId],

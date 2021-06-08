@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { NearContext } from '../../../contexts';
 
 import { HeadingText } from '../../common/typography';
-import Button from '../../common/Button';
+import { Button } from '../../common/buttons';
 
 const Container = styled('div')`
   display: flex;

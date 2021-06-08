@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { MarketContractContext } from '../../../contexts';
-import Button from '../../common/Button';
+import { Button } from '../../common/buttons';
 
 import { TitleText } from '../../common/typography';
 

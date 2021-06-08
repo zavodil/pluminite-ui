@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { HeadingText } from '../../../common/typography';
 import FileDropzone from '../../../common/FileDropzone';
-import ButtonBottom from '../../../common/Button/ButtonBottom';
+import { ButtonBottom } from '../../../common/buttons';
 
 import { APP } from '../../../../constants';
 
@@ -33,7 +33,7 @@ const MintUpload = ({ onUpload, onCompleteLink, nft }) => {
         adviceText={`We advise a 1:1 ratio. Max file size ${APP.GEM_MAX_SIZE_MB} Mb.`}
         maxSizeMb={APP.GEM_MAX_SIZE_MB}
       />
-      <ButtonBottom link={onCompleteLink} text="Last Step: Review" isDisabled={!nft.artDataUrl} />
+      <ButtonBottom link={onCompleteLink} text="Last Step: Review" isDisabled={!nft.file} />
     </Container>
   );
 };

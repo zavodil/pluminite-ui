@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { useQuery as useRQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
@@ -7,12 +7,12 @@ import styled from 'styled-components';
 import defaultProfilePicture from '../../../assets/default-profile-picture.png';
 
 import Balance from '../../NavigationComponents/Balance';
-import Button from '../../common/Button';
+import { Button } from '../../common/buttons';
 import { ArtItem, ArtItemSellable } from '../../common/art';
 import { Tabs } from '../../common/tabs';
 import { Loading } from '../../common/utils';
 
-import { useInfiniteQueryGemsWithBlackList, useQuery } from '../../../hooks';
+import { useInfiniteQueryGemsWithBlackList, useSearchParams } from '../../../hooks';
 
 import { NearContext, NftContractContext, MarketContractContext } from '../../../contexts';
 
@@ -121,10 +121,10 @@ export default function Profile() {
 
   const ownedGemRef = useRef();
 
-  const query = useQuery();
+  const query = useSearchParams();
   const ownedGemId = query.get('gem-id');
 
-  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQueryGemsWithBlackList(
+  const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQueryGemsWithBlackList(
     [QUERY_KEYS.GEMS_FOR_OWNER, user.accountId],
     ({ pageParam = 0 }) => getGemsForOwner(user.accountId, String(pageParam), String(APP.MAX_ITEMS_PER_PAGE_PROFILE)),
     {
@@ -146,7 +146,6 @@ export default function Profile() {
     fetchNextPage: forCreatorFetchNextPage,
     hasNextPage: forCreatorHasNextPage,
     isFetching: forCreatorIsFetching,
-    isFetchingNextPage: forCreatorIsFetchingNextPage,
   } = useInfiniteQueryGemsWithBlackList(
     [QUERY_KEYS.GEMS_FOR_CREATOR, user.accountId],
     ({ pageParam = 0 }) => getGemsForCreator(user.accountId, String(pageParam), String(APP.MAX_ITEMS_PER_PAGE_PROFILE)),
@@ -164,14 +163,14 @@ export default function Profile() {
     }
   );
 
-  const { data: profile } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
+  const { data: profile } = useQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
     enabled: !!user?.accountId,
     onError() {
       toast.error('Sorry 😢 There was an error getting your profile data.');
     },
   });
 
-  const { data: supplyForCreator } = useRQuery(
+  const { data: supplyForCreator } = useQuery(
     [QUERY_KEYS.GET_SUPPLY_FOR_CREATOR, user.accountId],
     () => getSupplyForCreator(user.accountId),
     {
@@ -189,17 +188,13 @@ export default function Profile() {
     }
   }, [data]);
 
-  const { data: imageData } = useRQuery(
-    [QUERY_KEYS.GET_IMAGE_DATA, profile?.image],
-    () => getFileData(profile?.image),
-    {
-      retry: 1,
-      enabled: !!profile?.image,
-      onError() {
-        toast.error("Sorry 😢 Can't get your profile image.");
-      },
-    }
-  );
+  const { data: imageData } = useQuery([QUERY_KEYS.GET_IMAGE_DATA, profile?.image], () => getFileData(profile?.image), {
+    retry: 1,
+    enabled: !!profile?.image,
+    onError() {
+      toast.error("Sorry 😢 Can't get your profile image.");
+    },
+  });
 
   return (
     <Container>
@@ -228,96 +223,86 @@ export default function Profile() {
         tabsArray={[
           {
             title: 'Gems I own',
-            content:
-              isFetching && !isFetchingNextPage ? (
-                <Loading />
-              ) : (
-                <>
-                  <div className="items">
-                    {data?.length ? (
-                      data.map((nft) => {
-                        const ArtItemComponent =
-                          marketContract.contractId in nft.approved_account_ids ? ArtItem : ArtItemSellable;
+            content: (
+              <>
+                <div className="items">
+                  {data?.length ? (
+                    data.map((nft) => {
+                      const ArtItemComponent =
+                        marketContract.contractId in nft.approved_account_ids ? ArtItem : ArtItemSellable;
 
-                        return (
-                          <ArtItemComponent
-                            key={nft.token_id}
-                            forwardedRef={ownedGemId === nft.token_id ? ownedGemRef : null}
-                            nft={nft}
-                            isLink
-                            isFromIpfs
-                          />
-                        );
-                      })
-                    ) : (
-                      <div className="no-nfts">
-                        You don&apos;t own any gems yet. <br />
-                        <Button isPrimary isSmall>
-                          <Link to="/mint">Mint a Gem</Link>
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                  {hasNextPage && (
-                    <Button
-                      isPrimary
-                      onClick={() => fetchNextPage()}
-                      isDisabled={isFetching || isFetchingNextPage}
-                      className="load-more"
-                    >
-                      Load more
-                    </Button>
+                      return (
+                        <ArtItemComponent
+                          key={nft.token_id}
+                          forwardedRef={ownedGemId === nft.token_id ? ownedGemRef : null}
+                          nft={nft}
+                          isLink
+                          isFromIpfs
+                        />
+                      );
+                    })
+                  ) : (
+                    <div className="no-nfts">
+                      You don&apos;t own any gems yet. <br />
+                      <Button isPrimary isSmall>
+                        <Link to="/mint">Mint a Gem</Link>
+                      </Button>
+                    </div>
                   )}
-                </>
-              ),
+                </div>
+                {hasNextPage && !isFetching && (
+                  <Button isPrimary onClick={() => fetchNextPage()} isDisabled={isFetching} className="load-more">
+                    Load more
+                  </Button>
+                )}
+                {isFetching && <Loading />}
+              </>
+            ),
           },
           {
             title: 'Gems I made',
-            content:
-              forCreatorIsFetching && !forCreatorIsFetchingNextPage ? (
-                <Loading />
-              ) : (
-                <>
-                  <div className="items">
-                    {forCreatorData?.length ? (
-                      forCreatorData.map((nft) => {
-                        const ArtItemComponent =
-                          // todo: fix bug on contract: approved_account_ids is not populated
-                          !(marketContract.contractId in nft.approved_account_ids) && nft.owner_id === user.accountId
-                            ? ArtItemSellable
-                            : ArtItem;
+            content: (
+              <>
+                <div className="items">
+                  {forCreatorData?.length ? (
+                    forCreatorData.map((nft) => {
+                      const ArtItemComponent =
+                        !(marketContract.contractId in nft.approved_account_ids) && nft.owner_id === user.accountId
+                          ? ArtItemSellable
+                          : ArtItem;
 
-                        return (
-                          <ArtItemComponent
-                            key={nft.token_id}
-                            forwardedRef={ownedGemId === nft.token_id ? ownedGemRef : null}
-                            nft={nft}
-                            isLink
-                            isFromIpfs
-                          />
-                        );
-                      })
-                    ) : (
-                      <div className="no-nfts">
-                        You haven&apos;t created any gems yet. <br />
-                        <Button isPrimary isSmall>
-                          <Link to="/mint">Mint a Gem</Link>
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                  {forCreatorHasNextPage && (
-                    <Button
-                      isPrimary
-                      onClick={() => forCreatorFetchNextPage()}
-                      isDisabled={forCreatorIsFetching || forCreatorIsFetchingNextPage}
-                      className="load-more"
-                    >
-                      Load more
-                    </Button>
+                      return (
+                        <ArtItemComponent
+                          key={nft.token_id}
+                          forwardedRef={ownedGemId === nft.token_id ? ownedGemRef : null}
+                          nft={nft}
+                          isLink
+                          isFromIpfs
+                        />
+                      );
+                    })
+                  ) : (
+                    <div className="no-nfts">
+                      You haven&apos;t created any gems yet. <br />
+                      <Button isPrimary isSmall>
+                        <Link to="/mint">Mint a Gem</Link>
+                      </Button>
+                    </div>
                   )}
-                </>
-              ),
+                </div>
+                {forCreatorHasNextPage && !forCreatorIsFetching && (
+                  <Button
+                    isPrimary
+                    onClick={() => forCreatorFetchNextPage()}
+                    isDisabled={forCreatorIsFetching}
+                    className="load-more"
+                  >
+                    Load more
+                  </Button>
+                )}
+                {forCreatorIsFetching && <Loading />}
+              </>
+            ),
           },
         ]}
       />

@@ -6,6 +6,8 @@ import { CLEAR_STATE, LOADING_ERROR, LOADING_START, LOADING_SUCCESS, SET_USER } 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
 import { NearConfigTypeShape, NearTypeShape, UserTypeShape, WalletTypeShape } from '../../types/NearTypes';
 
+import { APP } from '../../constants';
+
 export const NearContext = React.createContext({
   ...initialNearState,
   nearContent: null,
@@ -38,12 +40,7 @@ export const NearContextProvider = ({ currentUser, nearConfig, wallet, near, chi
   };
 
   const signIn = () => {
-    wallet.requestSignIn(
-      nearConfig.contractName,
-      'NEAR Pluminite'
-      // todo: fix redirect link for gh-pages
-      // `${window.location.origin}/${window.location.hash ? '#' : ''}/mint`.replaceAll(/([^:]\/)\/+/g, '$1')
-    );
+    wallet.requestSignIn(nearConfig.contractName, `NEAR ${APP.NAME}`);
   };
   const signOut = () => {
     wallet.signOut();
