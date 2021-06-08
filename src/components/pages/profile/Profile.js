@@ -12,7 +12,7 @@ import { ArtItem, ArtItemSellable } from '../../common/art';
 import { Tabs } from '../../common/tabs';
 import { Loading } from '../../common/utils';
 
-import { useInfiniteQueryGemsWithBlackList, useQuery } from '../../../hooks';
+import { useInfiniteQueryGemsWithBlackList, useSearchParams } from '../../../hooks';
 
 import { NearContext, NftContractContext, MarketContractContext } from '../../../contexts';
 
@@ -121,7 +121,7 @@ export default function Profile() {
 
   const ownedGemRef = useRef();
 
-  const query = useQuery();
+  const query = useSearchParams();
   const ownedGemId = query.get('gem-id');
 
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQueryGemsWithBlackList(
