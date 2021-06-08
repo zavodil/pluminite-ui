@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { useQuery as useRQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
@@ -163,14 +163,14 @@ export default function Profile() {
     }
   );
 
-  const { data: profile } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
+  const { data: profile } = useQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
     enabled: !!user?.accountId,
     onError() {
       toast.error('Sorry 😢 There was an error getting your profile data.');
     },
   });
 
-  const { data: supplyForCreator } = useRQuery(
+  const { data: supplyForCreator } = useQuery(
     [QUERY_KEYS.GET_SUPPLY_FOR_CREATOR, user.accountId],
     () => getSupplyForCreator(user.accountId),
     {
@@ -188,17 +188,13 @@ export default function Profile() {
     }
   }, [data]);
 
-  const { data: imageData } = useRQuery(
-    [QUERY_KEYS.GET_IMAGE_DATA, profile?.image],
-    () => getFileData(profile?.image),
-    {
-      retry: 1,
-      enabled: !!profile?.image,
-      onError() {
-        toast.error("Sorry 😢 Can't get your profile image.");
-      },
-    }
-  );
+  const { data: imageData } = useQuery([QUERY_KEYS.GET_IMAGE_DATA, profile?.image], () => getFileData(profile?.image), {
+    retry: 1,
+    enabled: !!profile?.image,
+    onError() {
+      toast.error("Sorry 😢 Can't get your profile image.");
+    },
+  });
 
   return (
     <Container>
