@@ -26,15 +26,6 @@ const Container = styled('div')`
     width: 100px;
     filter: drop-shadow(var(--shadow-primary));
   }
-
-  @keyframes beat {
-    30% {
-      transform: scale(1.5);
-    }
-    60% {
-      transform: scale(1);
-    }
-  }
 `;
 
 const Loading = ({ children, waitingFor }) => {
