@@ -8,8 +8,6 @@ import styled from 'styled-components';
 
 import { MarketContractContext, NearContext, NftContractContext } from '../../../../contexts';
 
-import { getNextBidNearsFormatted } from '../../../../utils/nears';
-
 import { HeadingText } from '../../../common/typography';
 import { ArtItemPriced } from '../../../common/art';
 import { StickedToBottom } from '../../../common/layout';
@@ -144,13 +142,13 @@ const MintReview = ({ backLink, nft }) => {
       <p className="text">{nft.description}</p>
       <ArtItemPriced
         nft={{
+          ...nft,
           metadata: {
             media:
               (nft.thumbnailFile && URL.createObjectURL(nft.thumbnailFile)) ||
               (nft.file && URL.createObjectURL(nft.file)),
           },
         }}
-        bid={getNextBidNearsFormatted(nft)}
         bidAvailable={false}
       />
       {!isFreeMintAvailable && (

@@ -222,6 +222,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
     nft.description &&
     nft.description.length <= APP.GEM_DESCRIPTION_MAX_LENGTH &&
     nft.conditions?.near !== undefined &&
+    Number(nft.conditions.near) > 0 &&
     nft.collaborators.length < APP.MAX_COLLABORATORS &&
     !isTooMuchRoyalties() &&
     !userRoyaltyIsError;
@@ -281,8 +282,9 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
         labelText="Price"
         isRequired
         isDisabled={isDisabled}
-        nearsInitial={nft?.conditions?.near ? convertYoctoNearsToNears(nft?.conditions?.near) : ''}
+        nearsInitial={nft?.conditions?.near ? convertYoctoNearsToNears(nft?.conditions?.near) : '1'}
         onNearsChange={(value) => setNftField('conditions', { near: parseNearAmount(value) })}
+        min="0.000000000001"
       />
       <div className="user-royalty-input">
         <InputRoyalty
