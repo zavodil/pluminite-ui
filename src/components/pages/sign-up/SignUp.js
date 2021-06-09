@@ -6,7 +6,7 @@ import { NearContext } from '../../../contexts';
 
 import { HeadingText } from '../../common/typography';
 import { Button } from '../../common/buttons';
-import SeparatorHorizontal from '../../common/Separator/SeparatorHorizontal';
+import { SeparatorHorizontal } from '../../common/separators';
 
 const Container = styled('div')`
   display: flex;
