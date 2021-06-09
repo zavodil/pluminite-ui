@@ -2,10 +2,10 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link, useRouteMatch } from 'react-router-dom';
 
-import { NearContext } from '../../contexts';
+import { NearContext } from '~/contexts';
 
 import UserMenu from './UserMenu';
-import { Button } from '../common/buttons';
+import { Button } from '~/components/common/buttons';
 import ProfileUserMenu from './ProfileUserMenu';
 
 const StyledContainer = styled('div')`

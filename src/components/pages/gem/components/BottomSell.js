@@ -4,13 +4,14 @@ import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { parseNearAmount } from 'near-api-js/lib/utils/format';
-import { QUERY_KEYS } from '../../../../constants';
 
-import { NftContractContext } from '../../../../contexts';
+import { QUERY_KEYS } from '~/constants';
 
-import { Button } from '../../../common/buttons';
-import { InputNear } from '../../../common/forms';
-import { StickedToBottom } from '../../../common/layout';
+import { NftContractContext } from '~/contexts';
+
+import { Button } from '~/components/common/buttons';
+import { InputNear } from '~/components/common/forms';
+import { StickedToBottom } from '~/components/common/layout';
 
 const Container = styled('div')`
   width: 100%;

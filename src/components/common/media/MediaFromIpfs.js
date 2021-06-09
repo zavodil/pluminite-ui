@@ -4,9 +4,9 @@ import { useQuery } from 'react-query';
 
 import Media from './Media';
 
-import { getFileData } from '../../../apis';
+import { getFileData } from '~/apis';
 
-import { QUERY_KEYS } from '../../../constants';
+import { QUERY_KEYS } from '~/constants';
 
 const MediaFromIpfs = ({ media, forwardedRef, ...rest }) => {
   const { data: imageData } = useQuery([QUERY_KEYS.GET_IMAGE_DATA, media], () => getFileData(media), {

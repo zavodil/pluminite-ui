@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { APP } from '../constants';
+import { APP } from '~/constants';
 
 let pinataApiKey;
 let pinataApiSecret;

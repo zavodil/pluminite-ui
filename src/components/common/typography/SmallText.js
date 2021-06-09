@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import styled from 'styled-components';
 
-import { ReactChildrenTypeRequired } from '../../../types/ReactChildrenTypes';
+import { ReactChildrenTypeRequired } from '~/types/ReactChildrenTypes';
 
 const StyledContainer = styled('div')`
   color: ${({ isError }) => (isError ? 'var(--error)' : 'var(--periwinkle)')};

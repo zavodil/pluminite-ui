@@ -7,18 +7,18 @@ import styled from 'styled-components';
 
 import defaultProfilePicture from '../../../../assets/default-profile-picture.png';
 
-import { StickedToBottom } from '../../../common/layout';
-import { DotsLoading, Balance } from '../../../common/utils';
-import { Button } from '../../../common/buttons';
-import { Textarea } from '../../../common/forms';
+import { StickedToBottom } from '~/components/common/layout';
+import { DotsLoading, Balance } from '~/components/common/utils';
+import { Button } from '~/components/common/buttons';
+import { Textarea } from '~/components/common/forms';
 
-import { NearContext, NftContractContext } from '../../../../contexts';
+import { NearContext, NftContractContext } from '~/contexts';
 
-import { useIsUnmounting } from '../../../../hooks';
+import { useIsUnmounting } from '~/hooks';
 
-import { getFileData } from '../../../../apis';
+import { getFileData } from '~/apis';
 
-import { PROFILE, QUERY_KEYS } from '../../../../constants';
+import { PROFILE, QUERY_KEYS } from '~/constants';
 
 const Container = styled('div')`
   .summary {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { getUSDsFromNear } from '../apis';
+import { getUSDsFromNear } from '~/apis';
 
 import useIsUnmounting from './useIsUnmounting';
 

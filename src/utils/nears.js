@@ -1,7 +1,7 @@
 import Big from 'big.js';
 import { formatNearAmount, parseNearAmount } from 'near-api-js/lib/utils/format';
 
-import { APP } from '../constants';
+import { APP } from '~/constants';
 
 Big.PE = 100;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { HeadingText } from '../../common/typography';
+import { HeadingText } from '~/components/common/typography';
 
 const Container = styled('div')`
   display: flex;

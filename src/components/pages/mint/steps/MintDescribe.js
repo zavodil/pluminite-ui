@@ -4,23 +4,23 @@ import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { parseNearAmount } from 'near-api-js/lib/utils/format';
 
-import { NearContext, NftContractContext } from '../../../../contexts';
+import { NearContext, NftContractContext } from '~/contexts';
 
-import { convertYoctoNearsToNears } from '../../../../utils/nears';
+import { convertYoctoNearsToNears } from '~/utils/nears';
 
-import { HeadingText, SmallText } from '../../../common/typography';
-import { Input, InputNear, InputRoyalty, InputSign, Textarea } from '../../../common/forms';
-import { ButtonBottom, Button } from '../../../common/buttons';
+import { HeadingText, SmallText } from '~/components/common/typography';
+import { Input, InputNear, InputRoyalty, InputSign, Textarea } from '~/components/common/forms';
+import { ButtonBottom, Button } from '~/components/common/buttons';
 
-import RemoveIcon from '../../../../assets/RemoveIcon';
+import RemoveIcon from '~/assets/RemoveIcon';
 
-import { APP, QUERY_KEYS } from '../../../../constants';
+import { APP, QUERY_KEYS } from '~/constants';
 
-import { useDebounce } from '../../../../hooks';
+import { useDebounce } from '~/hooks';
 
-import { doesAccountExist } from '../../../../apis';
+import { doesAccountExist } from '~/apis';
 
-import { NftTypeRequired } from '../../../../types/NftTypes';
+import { NftTypeRequired } from '~/types/NftTypes';
 
 const Container = styled('div')`
   max-width: 600px;

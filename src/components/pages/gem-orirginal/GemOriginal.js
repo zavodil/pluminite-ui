@@ -5,18 +5,18 @@ import { useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import { getBlacklistedTokens } from '../../../apis';
+import { getBlacklistedTokens } from '~/apis';
 
-import { MediaFromIpfs } from '../../common/media';
-import { CloseButton } from '../../common/buttons';
-import { Portal } from '../../common/utils';
+import { MediaFromIpfs } from '~/components/common/media';
+import { CloseButton } from '~/components/common/buttons';
+import { Portal } from '~/components/common/utils';
 import { BottomBid, BottomSell } from '../gem/components';
 
-import { useDocumentTitle } from '../../../hooks';
+import { useDocumentTitle } from '~/hooks';
 
-import { NftContractContext, MarketContractContext, NearContext } from '../../../contexts';
+import { NftContractContext, MarketContractContext, NearContext } from '~/contexts';
 
-import { QUERY_KEYS } from '../../../constants';
+import { QUERY_KEYS } from '~/constants';
 
 const Container = styled('div')`
   display: flex;

@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { NearContext } from '../../contexts';
+import { NearContext } from '~/contexts';
 
-import Dropdown from '../common/Dropdown';
-import { Balance } from '../common/utils';
+import Dropdown from '~/components/common/Dropdown';
+import { Balance } from '~/components/common/utils';
 
 const StyledSpan = styled('span')`
   color: var(--bubble-gum);

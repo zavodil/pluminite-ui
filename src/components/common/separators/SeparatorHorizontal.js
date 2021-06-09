@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { ReactChildrenType } from '../../../types/ReactChildrenTypes';
+import { ReactChildrenType } from '~/types/ReactChildrenTypes';
 
 const Container = styled('div')`
   width: 100%;

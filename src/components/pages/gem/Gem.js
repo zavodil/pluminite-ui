@@ -6,20 +6,20 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
-import { getBlacklistedTokens, getFileData } from '../../../apis';
+import { getBlacklistedTokens, getFileData } from '~/apis';
 
 import { BottomSell, BottomBid } from './components';
-import { ArtItem } from '../../common/art';
-import { CloseButton } from '../../common/buttons';
-import { TitleText } from '../../common/typography';
-import { Tabs } from '../../common/tabs';
-import { Portal } from '../../common/utils';
+import { ArtItem } from '~/components/common/art';
+import { CloseButton } from '~/components/common/buttons';
+import { TitleText } from '~/components/common/typography';
+import { Tabs } from '~/components/common/tabs';
+import { Portal } from '~/components/common/utils';
 
-import { useDocumentTitle } from '../../../hooks';
+import { useDocumentTitle } from '~/hooks';
 
-import { NftContractContext, MarketContractContext, NearContext } from '../../../contexts';
+import { NftContractContext, MarketContractContext, NearContext } from '~/contexts';
 
-import { QUERY_KEYS } from '../../../constants';
+import { QUERY_KEYS } from '~/constants';
 
 const Container = styled('div')`
   display: flex;

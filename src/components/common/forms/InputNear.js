@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 import InputSignAside from './InputSignAside';
 
-import { useDebounce, useIsUnmounting } from '../../../hooks';
-import { getUSDsFromNear } from '../../../apis';
+import { useDebounce, useIsUnmounting } from '~/hooks';
+import { getUSDsFromNear } from '~/apis';
 
-import { APP } from '../../../constants';
+import { APP } from '~/constants';
 
-import { round } from '../../../utils/numbers';
+import { round } from '~/utils/numbers';
 
 const InputNear = ({ nearsInitial, onNearsChange, ...rest }) => {
   const [nears, setNears] = useState(nearsInitial || '');

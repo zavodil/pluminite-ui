@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import InputSignAside from './InputSignAside';
 
-import { APP } from '../../../constants';
+import { APP } from '~/constants';
 
 const StyledContainer = styled('div')`
   .input {

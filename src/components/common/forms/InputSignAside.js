@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { SmallText } from '../typography';
+import { SmallText } from '~/components/common/typography';
 import InputSign from './InputSign';
 
 const StyledContainer = styled('div')`

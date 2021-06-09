@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { SmallText } from '../typography';
+import { SmallText } from '~/components/common/typography';
 
 const StyledContainer = styled('div')`
   position: relative;

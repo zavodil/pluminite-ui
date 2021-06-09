@@ -4,19 +4,19 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import { NearContext, NftContractContext } from '../../../../contexts';
+import { NearContext, NftContractContext } from '~/contexts';
 
-import { StickedToBottom } from '../../../common/layout';
-import { Button } from '../../../common/buttons';
-import FileDropzone from '../../../common/FileDropzone';
-import { HeadingSmallText } from '../../../common/typography';
-import { DotsLoading } from '../../../common/utils';
+import { StickedToBottom } from '~/components/common/layout';
+import { Button } from '~/components/common/buttons';
+import FileDropzone from '~/components/common/FileDropzone';
+import { HeadingSmallText } from '~/components/common/typography';
+import { DotsLoading } from '~/components/common/utils';
 
-import { useIsUnmounting } from '../../../../hooks';
+import { useIsUnmounting } from '~/hooks';
 
-import { uploadFile } from '../../../../apis';
+import { uploadFile } from '~/apis';
 
-import { PROFILE, QUERY_KEYS } from '../../../../constants';
+import { PROFILE, QUERY_KEYS } from '~/constants';
 
 const Container = styled('div')`
   .heading-small {

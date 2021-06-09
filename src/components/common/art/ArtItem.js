@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Button } from '../buttons';
-import { Media, MediaFromIpfs } from '../media';
+import { Button } from '~/components/common/buttons';
+import { Media, MediaFromIpfs } from '~/components/common/media';
 
-import FullscreenIcon from '../../../assets/FullscreenIcon';
+import FullscreenIcon from '~/assets/FullscreenIcon';
 
-import { convertKBtoMB, isFileTypeAnimatedImage, isFileTypeVideo } from '../../../utils/files';
+import { convertKBtoMB, isFileTypeAnimatedImage, isFileTypeVideo } from '~/utils/files';
 
-import { APP } from '../../../constants';
+import { APP } from '~/constants';
 
-import { square } from '../../../styles/mixins';
+import { square } from '~/styles/mixins';
 
 const StyledContainer = styled(Link)`
   display: block;

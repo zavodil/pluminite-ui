@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import DiamondIcon from '../../../assets/DiamondIcon';
+import DiamondIcon from '~/assets/DiamondIcon';
 
-import { beatAnimate, square } from '../../../styles/mixins';
+import { beatAnimate, square } from '~/styles/mixins';
 
-import { ReactChildrenType } from '../../../types/ReactChildrenTypes';
+import { ReactChildrenType } from '~/types/ReactChildrenTypes';
 
 const Container = styled('div')`
   ${square};

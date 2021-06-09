@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { ReactChildrenTypeRequired } from '../../../types/ReactChildrenTypes';
+import { ReactChildrenTypeRequired } from '~/types/ReactChildrenTypes';
 
 const StyledH3 = styled('h3')`
   margin: 0;
