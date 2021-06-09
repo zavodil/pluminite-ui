@@ -40,7 +40,13 @@ const BottomSell = ({ gem }) => {
   const { listForSale } = useContext(NftContractContext);
   const queryClient = useQueryClient();
 
+  const isListAllowed = () => !!sellPrice && Number(sellPrice) > 0;
+
   const processList = async () => {
+    if (!isListAllowed()) {
+      return;
+    }
+
     await queryClient.invalidateQueries(QUERY_KEYS.SALES_POPULATED);
 
     try {
@@ -63,8 +69,8 @@ const BottomSell = ({ gem }) => {
           onNearsChange={setSellPrice}
           autoFocus
         />
-        <Button className="sell-button" isPrimary onClick={processList}>
-          List Gem for {sellPrice || '0'}Ⓝ
+        <Button className="sell-button" isPrimary onClick={processList} isDisabled={!isListAllowed()}>
+          List Gem for {sellPrice ? +sellPrice : '0'}Ⓝ
         </Button>
       </Container>
     </StickedToBottom>
