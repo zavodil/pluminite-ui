@@ -8,8 +8,7 @@ import styled from 'styled-components';
 import defaultProfilePicture from '../../../../assets/default-profile-picture.png';
 
 import { StickedToBottom } from '../../../common/layout';
-import { DotsLoading } from '../../../common/utils';
-import Balance from '../../../NavigationComponents/Balance';
+import { DotsLoading, Balance } from '../../../common/utils';
 import { Button } from '../../../common/buttons';
 import { Textarea } from '../../../common/forms';
 

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import Dropdown from '../common/Dropdown';
 import Hamburger from '../common/Hamburger';
-import Balance from './Balance';
+import { Balance } from '../common/utils';
 
 const DropdownBase = ({ handleOnClick, className }) => <Hamburger className={className} onClick={handleOnClick} />;
 

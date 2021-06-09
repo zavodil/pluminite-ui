@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { convertYoctoNearsToNears } from '../../utils/nears';
-import { round } from '../../utils/numbers';
+import { convertYoctoNearsToNears } from '../../../utils/nears';
+import { round } from '../../../utils/numbers';
 
-import { NearContext } from '../../contexts';
+import { NearContext } from '../../../contexts';
 
-import { withUSDs } from '../../hooks';
+import { withUSDs } from '../../../hooks';
 
 const StyledSpan = styled('span')`
   display: inline-flex;

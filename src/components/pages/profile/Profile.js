@@ -6,11 +6,10 @@ import styled from 'styled-components';
 
 import defaultProfilePicture from '../../../assets/default-profile-picture.png';
 
-import Balance from '../../NavigationComponents/Balance';
+import { Balance, Loading } from '../../common/utils';
 import { Button } from '../../common/buttons';
 import { ArtItem, ArtItemSellable } from '../../common/art';
 import { Tabs } from '../../common/tabs';
-import { Loading } from '../../common/utils';
 
 import { useInfiniteQueryGemsWithBlackList, useSearchParams } from '../../../hooks';
 

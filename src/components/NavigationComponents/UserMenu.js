@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { NearContext } from '../../contexts';
 
 import Dropdown from '../common/Dropdown';
-import Balance from './Balance';
+import { Balance } from '../common/utils';
 
 const StyledSpan = styled('span')`
   color: var(--bubble-gum);
