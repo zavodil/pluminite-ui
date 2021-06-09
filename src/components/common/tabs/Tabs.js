@@ -51,6 +51,7 @@ const StyledContainer = styled('div')`
 
     .tabs-tab {
       display: none;
+      word-break: break-word;
 
       &--active {
         display: block;

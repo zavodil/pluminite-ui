@@ -37,6 +37,7 @@ const Container = styled('div')`
   .text {
     margin-bottom: 25px;
     line-height: 24px;
+    word-break: break-word;
   }
 
   .sub-header {

@@ -10,6 +10,7 @@ const StyledH3 = styled('h3')`
   line-height: 45px;
   font-weight: normal;
   color: var(--lavendar);
+  word-break: break-word;
 `;
 
 const TitleText = ({ children, ...props }) => <StyledH3 {...props}>{children}</StyledH3>;
