@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 import { getBlacklistedTokens } from '../../../apis';
 
-import { ImageFromIpfs } from '../../common/images';
+import { MediaFromIpfs } from '../../common/media';
 import { CloseButton } from '../../common/buttons';
 import { Portal } from '../../common/utils';
 import { BottomBid, BottomSell } from '../gem/components';
@@ -133,7 +133,7 @@ function GemOriginal({ location: { prevPathname } }) {
           <CloseButton className="gem-close" processCLick={goBack} />
         </GemHeader>
       </Portal>
-      <ImageFromIpfs media={gem?.metadata?.media} alt={gem?.metadata?.title} />
+      <MediaFromIpfs media={gem?.metadata?.media} alt={gem?.metadata?.title} />
       <BottomComponent gem={gem} gemOnSale={gemOnSale} />
     </Container>
   );

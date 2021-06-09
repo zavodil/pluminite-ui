@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Button } from '../buttons';
-import { Image, ImageFromIpfs } from '../images';
+import { Media, MediaFromIpfs } from '../media';
 
 import FullscreenIcon from '../../../assets/FullscreenIcon';
 
@@ -130,9 +130,9 @@ const ArtItem = ({
     <StyledContainer className="art-item" {...containerParams} title={nft?.metadata?.title}>
       <div className="image-container">
         {isFromIpfs ? (
-          <ImageFromIpfs media={getIpfsHashMedia()} forwardedRef={forwardedRef} alt={nft?.metadata?.title} />
+          <MediaFromIpfs media={getIpfsHashMedia()} forwardedRef={forwardedRef} alt={nft?.metadata?.title} />
         ) : (
-          <Image ref={forwardedRef} src={nft?.metadata?.media} alt={nft?.metadata?.title} />
+          <Media ref={forwardedRef} src={nft?.metadata?.media} alt={nft?.metadata?.title} />
         )}
       </div>
       {buttonText && (
