@@ -12,6 +12,8 @@ import { NearContextProvider, NftContractContextProvider, MarketContractContextP
 
 import GlobalStyle from './styles/GlobalStyle';
 
+const rootElement = document.getElementById('root');
+
 window.nearInitPromise = initContracts()
   .then(({ nftContract, marketContract, currentUser, nearConfig, walletConnection, near }) => {
     const app = (
@@ -24,7 +26,7 @@ window.nearInitPromise = initContracts()
       </NearContextProvider>
     );
 
-    ReactDOM.render(app, document.getElementById('root'));
+    ReactDOM.render(app, rootElement);
   })
   .catch((error) => {
     console.error(error);
@@ -34,16 +36,26 @@ window.nearInitPromise = initContracts()
         <GlobalStyle />
         <ErrorFallback />
       </>,
-      document.getElementById('root')
+      rootElement
     );
   })
   .catch((error) => {
     console.error(error);
 
     ReactDOM.render(
-      <div>
+      <div
+        style={{
+          fontSize: '66px',
+          textTransform: 'uppercase',
+          fontFamily: "'Staatliches', sans-serif",
+          color: 'rgb(255, 121, 237)',
+        }}
+      >
         Sorry :( <br /> There was an unexpected error
       </div>,
-      document.getElementById('root')
+      rootElement
     );
+  })
+  .finally(() => {
+    rootElement.classList.remove('loading');
   });
