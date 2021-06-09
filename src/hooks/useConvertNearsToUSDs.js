@@ -4,7 +4,7 @@ import { getUSDsFromNear } from '../apis';
 
 import useIsUnmounting from './useIsUnmounting';
 
-const withUSDs = (nears) => {
+const useConvertNearsToUSDs = (nears) => {
   const [USDs, setUSDs] = useState(null);
   const isUnmounting = useIsUnmounting();
 
@@ -21,4 +21,4 @@ const withUSDs = (nears) => {
   return USDs;
 };
 
-export default withUSDs;
+export default useConvertNearsToUSDs;

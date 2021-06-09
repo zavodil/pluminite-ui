@@ -7,7 +7,7 @@ import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
 import { MarketContractContext, NearContext } from '../../../../contexts';
 
-import { withUSDs } from '../../../../hooks';
+import { useConvertNearsToUSDs } from '../../../../hooks';
 
 import { convertYoctoNearsToNears, getNextBidNears, getNextBidNearsFormatted } from '../../../../utils/nears';
 import { round } from '../../../../utils/numbers';
@@ -80,7 +80,7 @@ const BottomBid = ({ gem, gemOnSale }) => {
   const [previousPriceUser, setPreviousPriceUser] = useState('');
   const [previousPrice, setPreviousPrice] = useState('0');
 
-  const previousPriceUSDs = withUSDs(convertYoctoNearsToNears(previousPrice));
+  const previousPriceUSDs = useConvertNearsToUSDs(convertYoctoNearsToNears(previousPrice));
 
   const hasBids = () => !!gemOnSale?.bids?.near?.owner_id;
 

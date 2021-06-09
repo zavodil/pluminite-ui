@@ -7,7 +7,7 @@ import { round } from '../../../utils/numbers';
 
 import { NearContext } from '../../../contexts';
 
-import { withUSDs } from '../../../hooks';
+import { useConvertNearsToUSDs } from '../../../hooks';
 
 const StyledSpan = styled('span')`
   display: inline-flex;
@@ -32,7 +32,7 @@ const Balance = ({ precision, ...props }) => {
 
   const nears = convertYoctoNearsToNears(user.balance, precision);
 
-  const USDs = withUSDs(nears);
+  const USDs = useConvertNearsToUSDs(nears);
 
   return (
     <StyledSpan className="balance-text" {...props}>
