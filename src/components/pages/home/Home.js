@@ -3,19 +3,19 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import { NearContext, MarketContractContext, NftContractContext } from '../../../contexts';
+import { NearContext, MarketContractContext, NftContractContext } from '~/contexts';
 
-import { useInfiniteQueryGemsWithBlackList } from '../../../hooks';
+import { useInfiniteQueryGemsWithBlackList } from '~/hooks';
 
-import { DisplayText } from '../../common/typography';
-import { Contribute, MintPlus } from '../../common/popups';
-import { ArtItemPriced } from '../../common/art';
-import { Button } from '../../common/buttons';
+import { DisplayText } from '~/components/common/typography';
+import { Contribute, MintPlus } from '~/components/common/popups';
+import { ArtItemPriced } from '~/components/common/art';
+import { Button } from '~/components/common/buttons';
 
-import DiamondIcon from '../../../assets/DiamondIcon';
+import DiamondIcon from '~/assets/DiamondIcon';
 
-import { QUERY_KEYS, APP } from '../../../constants';
-import { Loading } from '../../common/utils';
+import { QUERY_KEYS, APP } from '~/constants';
+import { Loading } from '~/components/common/utils';
 
 const Container = styled('div')`
   padding: 15px;

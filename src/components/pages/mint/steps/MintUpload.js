@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { HeadingText } from '../../../common/typography';
-import FileDropzone from '../../../common/FileDropzone';
-import { ButtonBottom } from '../../../common/buttons';
+import { HeadingText } from '~/components/common/typography';
+import FileDropzone from '~/components/common/FileDropzone';
+import { ButtonBottom } from '~/components/common/buttons';
 
-import { APP } from '../../../../constants';
+import { APP } from '~/constants';
 
-import { NftTypeRequired } from '../../../../types/NftTypes';
+import { NftTypeRequired } from '~/types/NftTypes';
 
 const Container = styled('div')`
   max-width: 600px;

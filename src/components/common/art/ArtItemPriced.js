@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { getNextBidNears, getNextBidNearsFormatted } from '../../../utils/nears';
+import { getNextBidNears, getNextBidNearsFormatted } from '~/utils/nears';
 
-import { MarketContractContext, NearContext } from '../../../contexts';
+import { MarketContractContext, NearContext } from '~/contexts';
 
 import ArtItem from './ArtItem';
 

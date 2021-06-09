@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { useDocumentTitle, useNativeSearchParams } from '../hooks';
+import { useDocumentTitle, useNativeSearchParams } from '~/hooks';
 
-import { PAYABLE_METHODS_DESCRIPTIONS, PAYABLE_METHODS_SUCCESS_MESSAGES, STORAGE } from '../constants';
+import { PAYABLE_METHODS_DESCRIPTIONS, PAYABLE_METHODS_SUCCESS_MESSAGES, STORAGE } from '~/constants';
 
 const Page = ({ component: Component, title, ...rest }) => {
   const query = useNativeSearchParams();

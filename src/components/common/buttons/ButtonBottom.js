@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { StickedToBottom } from '../layout';
+import { StickedToBottom } from '~/components/common/layout';
 import Button from './Button';
 
 const StyledButton = styled(Button)`

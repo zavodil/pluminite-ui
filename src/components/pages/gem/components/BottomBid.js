@@ -5,15 +5,15 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
-import { MarketContractContext, NearContext } from '../../../../contexts';
+import { MarketContractContext, NearContext } from '~/contexts';
 
-import { withUSDs } from '../../../../hooks';
+import { useConvertNearsToUSDs } from '~/hooks';
 
-import { convertYoctoNearsToNears, getNextBidNears, getNextBidNearsFormatted } from '../../../../utils/nears';
-import { round } from '../../../../utils/numbers';
+import { convertYoctoNearsToNears, getNextBidNears, getNextBidNearsFormatted } from '~/utils/nears';
+import { round } from '~/utils/numbers';
 
-import { Button } from '../../../common/buttons';
-import { StickedToBottom } from '../../../common/layout';
+import { Button } from '~/components/common/buttons';
+import { StickedToBottom } from '~/components/common/layout';
 
 const Container = styled('div')`
   width: 100%;
@@ -80,7 +80,7 @@ const BottomBid = ({ gem, gemOnSale }) => {
   const [previousPriceUser, setPreviousPriceUser] = useState('');
   const [previousPrice, setPreviousPrice] = useState('0');
 
-  const previousPriceUSDs = withUSDs(convertYoctoNearsToNears(previousPrice));
+  const previousPriceUSDs = useConvertNearsToUSDs(convertYoctoNearsToNears(previousPrice));
 
   const hasBids = () => !!gemOnSale?.bids?.near?.owner_id;
 

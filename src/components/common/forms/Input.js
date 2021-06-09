@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
-import { hideArrowsForNumberInput } from '../../../styles/mixins';
+import { hideArrowsForNumberInput } from '~/styles/mixins';
 
-import { TextInputType } from '../../../types/InputTypes';
-import { SmallText } from '../typography';
+import { TextInputType } from '~/types/InputTypes';
+import { SmallText } from '~/components/common/typography';
 
 const StyledContainer = styled('div')`
   position: relative;

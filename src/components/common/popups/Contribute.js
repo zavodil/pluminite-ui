@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Button } from '../buttons';
+import { Button } from '~/components/common/buttons';
 
-import { APP } from '../../../constants';
+import { APP } from '~/constants';
 
 const Contribute = () => (
   <Button isSecondary>

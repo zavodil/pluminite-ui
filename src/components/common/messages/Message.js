@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ReactChildrenTypeRequired } from '../../../types/ReactChildrenTypes';
+import { ReactChildrenTypeRequired } from '~/types/ReactChildrenTypes';
 
 const Message = ({ children }) => <div>{children}</div>;
 

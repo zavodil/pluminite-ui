@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { HeadingText } from '../../common/typography';
+import { HeadingText } from '~/components/common/typography';
 
 const Container = styled('div')`
   display: flex;
@@ -71,7 +71,7 @@ export default function Terms() {
               like your furniture, a picture image file, or your laptop. These things are not interchangeable for other
               items because they have unique properties. NFTs are tokens that we can use to represent ownership of
               unique items. They let us tokenize things like art, collectibles, even real estate. They can only have one
-              official owner at a time and they're secured by the NEAR blockchain – no one can modify the record of
+              official owner at a time and they&apos;re secured by the NEAR blockchain – no one can modify the record of
               ownership or copy/paste a new NFT into existence.
             </p>
             <p>
@@ -102,10 +102,10 @@ export default function Terms() {
               </ol>
             </p>
             <p>
-              <strong>"we/us/our"</strong> means Company;
+              <strong>&quot;we/us/our&quot;</strong> means Company;
             </p>
             <p>
-              <strong>"you/your"</strong> means the user of the NFT Trading market;
+              <strong>&quot;you/your&quot;</strong> means the user of the NFT Trading market;
             </p>
           </div>
         </li>
@@ -219,10 +219,10 @@ export default function Terms() {
                 users;
               </li>
               <li>
-                Take any action that imposes an unreasonable or disproportionately large burden or load on the
-                Companyinfrastructure (including, but without limitation to our servers, networks, data centres and
-                related or like equipment) and detrimentally interfere with, intercept or expropriate any system, data
-                or information belonging to other users of the NFT Trading market;
+                Take any action that imposes an unreasonable or disproportionately large burden or load on the Company
+                infrastructure (including, but without limitation to our servers, networks, data centres and related or
+                like equipment) and detrimentally interfere with, intercept or expropriate any system, data or
+                information belonging to other users of the NFT Trading market;
               </li>
               <li>
                 Engage in any other activities deemed inappropriate by us or which is in contravention of these Terms or
@@ -639,9 +639,9 @@ export default function Terms() {
               regard to any choice or conflict of laws rules. Any dispute, controversy, or claim, whether contractual or
               non-contractual, arising out of or in connection with these Terms, or the breach, termination or
               invalidity thereof, or any other issue which shall arise in virtue of these Terms, shall be referred to
-              and finally settled by the Swiss Rules of International Arbitration of the Swiss Chambers' Arbitration
-              Institution in force on the date on which the Notice of Arbitration is submitted in accordance with these
-              Rules.
+              and finally settled by the Swiss Rules of International Arbitration of the Swiss Chambers&apos;
+              Arbitration Institution in force on the date on which the Notice of Arbitration is submitted in accordance
+              with these Rules.
             </p>
             <p>
               The law of this arbitration clause shall be Swiss law. The seat of arbitration shall be in Zug The number

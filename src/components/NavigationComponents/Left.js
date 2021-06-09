@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link, useRouteMatch } from 'react-router-dom';
 
-import { NearContext } from '../../contexts';
+import { NearContext } from '~/contexts';
 
-import { APP } from '../../constants';
+import { APP } from '~/constants';
 
 const StyledContainer = styled('div')`
   height: 52px;

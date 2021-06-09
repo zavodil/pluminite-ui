@@ -2,9 +2,9 @@ import React, { forwardRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import DiamondIcon from '../../../assets/DiamondIcon';
+import DiamondIcon from '~/assets/DiamondIcon';
 
-import { beatAnimate } from '../../../styles/mixins';
+import { beatAnimate } from '~/styles/mixins';
 
 const StyledContainer = styled('div')`
   display: flex;
@@ -38,7 +38,7 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const Image = forwardRef(function ImageWithRef({ src, alt, media, ...rest }, ref) {
+const Media = forwardRef(function MediaWithRef({ src, alt, media, ...rest }, ref) {
   const [isMediaLoaded, setIsMediaLoaded] = useState(null);
   const [isMediaLoading, setIsMediaLoading] = useState(false);
 
@@ -91,14 +91,14 @@ const Image = forwardRef(function ImageWithRef({ src, alt, media, ...rest }, ref
   );
 });
 
-Image.propTypes = {
+Media.propTypes = {
   src: PropTypes.string,
   media: PropTypes.string,
   alt: PropTypes.string,
 };
 
-Image.defaultPtops = {
+Media.defaultPtops = {
   alt: 'media',
 };
 
-export default Image;
+export default Media;

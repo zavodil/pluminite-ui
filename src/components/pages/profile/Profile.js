@@ -4,21 +4,20 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import defaultProfilePicture from '../../../assets/default-profile-picture.png';
+import defaultProfilePicture from '~/assets/default-profile-picture.png';
 
-import Balance from '../../NavigationComponents/Balance';
-import { Button } from '../../common/buttons';
-import { ArtItem, ArtItemSellable } from '../../common/art';
-import { Tabs } from '../../common/tabs';
-import { Loading } from '../../common/utils';
+import { Balance, Loading } from '~/components/common/utils';
+import { Button } from '~/components/common/buttons';
+import { ArtItem, ArtItemSellable } from '~/components/common/art';
+import { Tabs } from '~/components/common/tabs';
 
-import { useInfiniteQueryGemsWithBlackList, useSearchParams } from '../../../hooks';
+import { useInfiniteQueryGemsWithBlackList, useSearchParams } from '~/hooks';
 
-import { NearContext, NftContractContext, MarketContractContext } from '../../../contexts';
+import { NearContext, NftContractContext, MarketContractContext } from '~/contexts';
 
-import { getFileData } from '../../../apis';
+import { getFileData } from '~/apis';
 
-import { APP, QUERY_KEYS } from '../../../constants';
+import { APP, QUERY_KEYS } from '~/constants';
 
 const Container = styled('div')`
   display: flex;

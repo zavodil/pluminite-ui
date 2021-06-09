@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Page } from '../../../router';
+import { Page } from '~/router';
 import { ProfileEditBio, ProfileEditPhoto } from './steps';
 
 import NotFound404 from '../not-found-404';

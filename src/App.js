@@ -9,7 +9,7 @@ import { NearContext } from './contexts';
 
 import { GuestPage, Page, UserPage } from './router';
 
-import StyledToastContainer from './StyledToastContainer';
+import StyledToastContainer from './styles/StyledToastContainer';
 
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';

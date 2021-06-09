@@ -3,18 +3,19 @@ import PropTypes from 'prop-types';
 
 import InputSignAside from './InputSignAside';
 
-import { useDebounce } from '../../../hooks';
-import { getUSDsFromNear } from '../../../apis';
+import { useDebounce, useIsUnmounting } from '~/hooks';
+import { getUSDsFromNear } from '~/apis';
 
-import { APP } from '../../../constants';
+import { APP } from '~/constants';
 
-import { round } from '../../../utils/numbers';
+import { round } from '~/utils/numbers';
 
 const InputNear = ({ nearsInitial, onNearsChange, ...rest }) => {
   const [nears, setNears] = useState(nearsInitial || '');
   const [USDs, setUSDs] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const debouncedNears = useDebounce(nears, 500);
+  const isUnmounting = useIsUnmounting();
 
   const processNearsChange = (value) => {
     setNears(value);
@@ -32,8 +33,10 @@ const InputNear = ({ nearsInitial, onNearsChange, ...rest }) => {
       }
 
       getUSDsFromNear(nearsForExchange).then((results) => {
-        setIsSearching(false);
-        setUSDs(results);
+        if (!isUnmounting) {
+          setIsSearching(false);
+          setUSDs(results);
+        }
       });
     } else {
       setUSDs(null);

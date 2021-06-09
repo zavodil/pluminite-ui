@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Button } from '../buttons';
-import { Image, ImageFromIpfs } from '../images';
+import { Button } from '~/components/common/buttons';
+import { Media, MediaFromIpfs } from '~/components/common/media';
 
-import FullscreenIcon from '../../../assets/FullscreenIcon';
+import FullscreenIcon from '~/assets/FullscreenIcon';
 
-import { convertKBtoMB, isFileTypeAnimatedImage, isFileTypeVideo } from '../../../utils/files';
+import { convertKBtoMB, isFileTypeAnimatedImage, isFileTypeVideo } from '~/utils/files';
 
-import { APP } from '../../../constants';
+import { APP } from '~/constants';
 
-import { square } from '../../../styles/mixins';
+import { square } from '~/styles/mixins';
 
 const StyledContainer = styled(Link)`
   display: block;
@@ -118,7 +118,7 @@ const ArtItem = ({
       mediaType &&
       mediaSize &&
       (isFileTypeAnimatedImage(mediaType) || isFileTypeVideo(mediaType)) &&
-      convertKBtoMB(mediaSize) < APP.AN_MEDIA_MAX_SIZE_BEFORE_THUMNAIL_MB
+      convertKBtoMB(mediaSize) < APP.AN_MEDIA_MAX_SIZE_BEFORE_THUMBNAIL_MB
     ) {
       return nft?.metadata?.media || mediaLowRes;
     }
@@ -130,9 +130,9 @@ const ArtItem = ({
     <StyledContainer className="art-item" {...containerParams} title={nft?.metadata?.title}>
       <div className="image-container">
         {isFromIpfs ? (
-          <ImageFromIpfs media={getIpfsHashMedia()} forwardedRef={forwardedRef} alt={nft?.metadata?.title} />
+          <MediaFromIpfs media={getIpfsHashMedia()} forwardedRef={forwardedRef} alt={nft?.metadata?.title} />
         ) : (
-          <Image ref={forwardedRef} src={nft?.metadata?.media} alt={nft?.metadata?.title} />
+          <Media ref={forwardedRef} src={nft?.metadata?.media} alt={nft?.metadata?.title} />
         )}
       </div>
       {buttonText && (
