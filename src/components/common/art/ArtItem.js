@@ -118,7 +118,7 @@ const ArtItem = ({
       mediaType &&
       mediaSize &&
       (isFileTypeAnimatedImage(mediaType) || isFileTypeVideo(mediaType)) &&
-      convertKBtoMB(mediaSize) < APP.AN_MEDIA_MAX_SIZE_BEFORE_THUMNAIL_MB
+      convertKBtoMB(mediaSize) < APP.AN_MEDIA_MAX_SIZE_BEFORE_THUMBNAIL_MB
     ) {
       return nft?.metadata?.media || mediaLowRes;
     }
