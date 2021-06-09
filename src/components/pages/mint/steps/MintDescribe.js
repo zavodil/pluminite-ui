@@ -284,7 +284,6 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
         isDisabled={isDisabled}
         nearsInitial={nft?.conditions?.near ? convertYoctoNearsToNears(nft?.conditions?.near) : '1'}
         onNearsChange={(value) => setNftField('conditions', { near: parseNearAmount(value) })}
-        min="0.000000000001"
       />
       <div className="user-royalty-input">
         <InputRoyalty
