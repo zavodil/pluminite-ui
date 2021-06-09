@@ -1,4 +1,3 @@
-import pinataSDK from '@pinata/sdk';
 import axios from 'axios';
 
 import { APP } from '../constants';
@@ -16,6 +15,8 @@ if (process.env.NODE_ENV !== 'production') {
   pinataApiSecret = process.env.PINATA_API_SECRET;
   pinataHref = 'https://storage.pluminite.com/ipfs';
 }
+
+const pinataApiUrl = 'https://api.pinata.cloud';
 
 const readBlobAsDataUrl = (blob) =>
   new Promise((resolve, reject) => {
@@ -66,19 +67,24 @@ export const getFileData = async (hash) => {
 };
 
 export const uploadFileData = async (fileData) => {
-  const pinata = pinataSDK(pinataApiKey, pinataApiSecret);
-  const metadata = {};
   const data = {
     file: fileData,
   };
 
-  const result = await pinata.pinJSONToIPFS(data, metadata);
+  const url = `${pinataApiUrl}/pinning/pinJSONToIPFS`;
 
-  return result.IpfsHash;
+  const response = await axios.post(url, data, {
+    headers: {
+      pinata_api_key: pinataApiKey,
+      pinata_secret_api_key: pinataApiSecret,
+    },
+  });
+
+  return response.data.IpfsHash;
 };
 
 export const uploadFile = async (file) => {
-  const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
+  const url = `${pinataApiUrl}/pinning/pinFileToIPFS`;
 
   const formData = new FormData();
   formData.append('file', file);
