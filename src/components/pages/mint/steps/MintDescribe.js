@@ -282,7 +282,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
         labelText="Price"
         isRequired
         isDisabled={isDisabled}
-        nearsInitial={nft?.conditions?.near ? convertYoctoNearsToNears(nft?.conditions?.near) : '1'}
+        nearsInitial={nft?.conditions?.near ? convertYoctoNearsToNears(nft?.conditions?.near) : ''}
         onNearsChange={(value) => setNftField('conditions', { near: parseNearAmount(value) })}
       />
       <div className="user-royalty-input">

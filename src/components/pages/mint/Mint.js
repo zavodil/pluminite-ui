@@ -22,7 +22,7 @@ const Container = styled('div')`
 
 export default function Mint() {
   const match = useRouteMatch();
-  const [nft, setNft] = useState({ conditions: {} });
+  const [nft, setNft] = useState({ conditions: { near: '1000000000000000000000000' } }); // it's in yoctoNears,  === 1Ⓝ
   const [isMintAllowed, setIsMintAllowed] = useState(null);
   const { getStoragePaid, getSalesSupplyForOwner, marketContract, minStorage } = useContext(MarketContractContext);
 
