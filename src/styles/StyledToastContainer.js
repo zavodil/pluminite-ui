@@ -30,27 +30,28 @@ const StyledToastContainer = styled(ToastContainer)`
     line-height: 20px;
     cursor: default;
 
-    @media only screen and (max-width: 480px) {
-      border-radius: var(--radius-default);
+    &-body {
+      width: 100%;
+      word-break: break-word;
     }
-  }
 
-  .Toastify__toast--success {
-    border-color: var(--success);
-    background-color: var(--success-bg);
+    &--success {
+      border-color: var(--success);
+      background-color: var(--success-bg);
 
-    .Toastify__close-button > svg {
-      fill: var(--success);
-      stroke: var(--success);
+      .Toastify__close-button > svg {
+        fill: var(--success);
+        stroke: var(--success);
+      }
     }
-  }
 
-  .Toastify__toast--error {
-    border-color: var(--error);
+    &--error {
+      border-color: var(--error);
 
-    .Toastify__close-button > svg {
-      fill: var(--error);
-      stroke: var(--error);
+      .Toastify__close-button > svg {
+        fill: var(--error);
+        stroke: var(--error);
+      }
     }
   }
 

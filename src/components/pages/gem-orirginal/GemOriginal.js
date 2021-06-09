@@ -1,22 +1,22 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import { getBlacklistedTokens } from '../../../apis';
+import { getBlacklistedTokens } from '~/apis';
 
-import { ImageFromIpfs } from '../../common/images';
-import { CloseButton } from '../../common/buttons';
-import { Portal } from '../../common/utils';
+import { MediaFromIpfs } from '~/components/common/media';
+import { CloseButton } from '~/components/common/buttons';
+import { Portal } from '~/components/common/utils';
 import { BottomBid, BottomSell } from '../gem/components';
 
-import { useDocumentTitle } from '../../../hooks';
+import { useDocumentTitle } from '~/hooks';
 
-import { NftContractContext, MarketContractContext, NearContext } from '../../../contexts';
+import { NftContractContext, MarketContractContext, NearContext } from '~/contexts';
 
-import { QUERY_KEYS } from '../../../constants';
+import { QUERY_KEYS } from '~/constants';
 
 const Container = styled('div')`
   display: flex;
@@ -60,19 +60,39 @@ function GemOriginal({ location: { prevPathname } }) {
   const { user } = useContext(NearContext);
   const { getGem } = useContext(NftContractContext);
   const { getSale, marketContract } = useContext(MarketContractContext);
-
   const { gemId } = useParams();
-
   const history = useHistory();
+
+  const queryClient = useQueryClient();
+
+  const getCachedNft = (queryKeys) => {
+    let cachedNft;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const queryKey of queryKeys) {
+      const cachedNfts = queryClient.getQueryData(queryKey);
+      cachedNft = cachedNfts?.pages?.length
+        ? cachedNfts.pages.flat().find(({ token_id }) => token_id === gemId)
+        : undefined;
+
+      if (cachedNft) {
+        break;
+      }
+    }
+
+    return cachedNft;
+  };
+
+  const cachedNft = getCachedNft([QUERY_KEYS.SALES_POPULATED, QUERY_KEYS.GEMS_FOR_OWNER, QUERY_KEYS.GEMS_FOR_CREATOR]);
 
   const { data: gem } = useQuery([QUERY_KEYS.GEM, gemId], () => getGem(gemId), {
     onError() {
       toast.error('Sorry 😢 There was an error getting the gem. Please, try again later.');
       history.push('/');
     },
+    initialData: cachedNft,
   });
 
-  useDocumentTitle(gem?.metadata?.title || 'Untitled Gem');
+  const cachedSaleNft = getCachedNft([QUERY_KEYS.SALES_POPULATED]);
 
   const { data: gemOnSale } = useQuery(
     [QUERY_KEYS.GEM_ON_SALE, gemId],
@@ -89,8 +109,11 @@ function GemOriginal({ location: { prevPathname } }) {
         toast.error('Sorry 😢 There was an error getting the gem. Please, try again later.');
         history.push('/');
       },
+      initialData: cachedSaleNft,
     }
   );
+
+  useDocumentTitle(gem?.metadata?.title || 'Untitled Gem');
 
   const isListed = () => !!gemOnSale;
 
@@ -133,7 +156,7 @@ function GemOriginal({ location: { prevPathname } }) {
           <CloseButton className="gem-close" processCLick={goBack} />
         </GemHeader>
       </Portal>
-      <ImageFromIpfs media={gem?.metadata?.media} alt={gem?.metadata?.title} />
+      <MediaFromIpfs media={gem?.metadata?.media} alt={gem?.metadata?.title} />
       <BottomComponent gem={gem} gemOnSale={gemOnSale} />
     </Container>
   );

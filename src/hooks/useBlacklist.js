@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from 'react-query';
-import { getBlacklistedTokens } from '../apis';
-import { QUERY_KEYS } from '../constants';
+import { getBlacklistedTokens } from '~/apis';
+import { QUERY_KEYS } from '~/constants';
 
 export const useQueryGemsWithBlackList = (queryKeys, queryFn, options) => {
   const { data: blacklistedTokens } = useQuery([QUERY_KEYS.BLACKLIST], () => getBlacklistedTokens(), {

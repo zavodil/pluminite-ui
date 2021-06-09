@@ -6,19 +6,19 @@ import { Link, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import { MarketContractContext, NearContext, NftContractContext } from '../../../../contexts';
+import { MarketContractContext, NearContext, NftContractContext } from '~/contexts';
 
-import { HeadingText } from '../../../common/typography';
-import { ArtItemPriced } from '../../../common/art';
-import { StickedToBottom } from '../../../common/layout';
-import { Button } from '../../../common/buttons';
-import { DotsLoading } from '../../../common/utils';
+import { HeadingText } from '~/components/common/typography';
+import { ArtItemPriced } from '~/components/common/art';
+import { StickedToBottom } from '~/components/common/layout';
+import { Button } from '~/components/common/buttons';
+import { DotsLoading } from '~/components/common/utils';
 
-import { uploadFile } from '../../../../apis';
+import { uploadFile } from '~/apis';
 
-import { APP, QUERY_KEYS } from '../../../../constants';
+import { APP, QUERY_KEYS } from '~/constants';
 
-import { NftTypeRequired } from '../../../../types/NftTypes';
+import { NftTypeRequired } from '~/types/NftTypes';
 
 const Container = styled('div')`
   max-width: 600px;
@@ -37,6 +37,7 @@ const Container = styled('div')`
   .text {
     margin-bottom: 25px;
     line-height: 24px;
+    word-break: break-word;
   }
 
   .sub-header {

@@ -12,9 +12,9 @@ import {
   isFileTypeImage,
   isFileTypeVideo,
   isSupportedFileType,
-} from '../../utils/files';
+} from '~/utils/files';
 
-import { square } from '../../styles/mixins';
+import { square } from '~/styles/mixins';
 
 const StyledContainer = styled('div')`
   .image-container {

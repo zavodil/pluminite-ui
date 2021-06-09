@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { MintSuccessMessage, BuySuccessMessage } from '../components/common/messages';
+import { MintSuccessMessage, BuySuccessMessage } from '~/components/common/messages';
 
 export const PAYABLE_METHODS = {
   MINT_AND_LIST_NFT: 'MINT_AND_LIST_NFT',

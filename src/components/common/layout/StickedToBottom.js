@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import styled from 'styled-components';
 
 import { Portal } from '../utils';
-import { ReactChildrenType } from '../../../types/ReactChildrenTypes';
+import { ReactChildrenType } from '~/types/ReactChildrenTypes';
 
 const StyledContainer = styled('div')`
   display: flex;

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
-import { ReactChildrenType } from '../../../types/ReactChildrenTypes';
+import { ReactChildrenType } from '~/types/ReactChildrenTypes';
 
 const StyledButton = styled('button')`
   max-width: 350px;
