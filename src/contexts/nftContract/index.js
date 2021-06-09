@@ -66,44 +66,22 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     async (nftId, price) => {
       localStorage.setItem(STORAGE.PAYABLE_METHOD_ITEM_NAME, PAYABLE_METHODS.LIST);
 
-      await nftContract.account.signAndSendTransaction(nftContract.contractId, [
-        transactions.functionCall(
-          'nft_approve',
-          Buffer.from(
-            JSON.stringify({
-              token_id: nftId,
-              account_id: getMarketContractName(nftContract.contractId),
-              msg: JSON.stringify({
-                sale_conditions: [
-                  {
-                    price,
-                    ft_token_id: 'near',
-                  },
-                ],
-              }),
-            })
-          ),
-          APP.PREPAID_GAS_LIMIT_HALF,
-          1
-        ),
-      ]);
-      // todo: why doesn't the call before work?
-      // await nftContract.nft_approve(
-      //   {
-      //     token_id: nftId,
-      //     account_id: getMarketContractName(nftContract.contractId),
-      //     msg: JSON.stringify({
-      //       sale_conditions: [
-      //         {
-      //           price,
-      //           ft_token_id: 'near',
-      //         },
-      //       ],
-      //     }),
-      //   },
-      //   APP.PREPAID_GAS_LIMIT,
-      //   1
-      // );
+      await nftContract.nft_approve(
+        {
+          token_id: nftId,
+          account_id: getMarketContractName(nftContract.contractId),
+          msg: JSON.stringify({
+            sale_conditions: [
+              {
+                price,
+                ft_token_id: 'near',
+              },
+            ],
+          }),
+        },
+        APP.PREPAID_GAS_LIMIT,
+        1
+      );
     },
     [nftContract]
   );
