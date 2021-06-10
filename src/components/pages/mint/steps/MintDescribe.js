@@ -221,7 +221,6 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
     ]);
   };
 
-  // todo: add more checks, check length
   const isProceedAllowed = () =>
     nft.title &&
     nft.title.length <= APP.GEM_TITLE_MAX_LENGTH &&
@@ -298,7 +297,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
           labelText="Royalty Fee"
           asideText={`@${user.accountId}`}
           isSmall
-          value={userRoyalty}
+          value={String(userRoyalty)}
           onChange={(e) => setUserRoyalty(e.target.value)}
           isDisabled={isDisabled}
           isError={userRoyaltyIsError}
