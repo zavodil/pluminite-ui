@@ -6,8 +6,7 @@ import styled from 'styled-components';
 import { Button } from '~/components/common/buttons';
 import { Media, MediaFromIpfs } from '~/components/common/media';
 
-import FullscreenIcon from '~/assets/FullscreenIcon';
-import PlayIcon from '~/assets/PlayIcon';
+import { FullscreenIcon , PlayIcon } from '~/components/common/icons';
 
 import { convertKBtoMB, isFileTypeAnimatedImage, isFileTypeVideo } from '~/utils/files';
 

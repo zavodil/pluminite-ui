@@ -12,7 +12,7 @@ import { HeadingText, SmallText } from '~/components/common/typography';
 import { Input, InputNear, InputRoyalty, InputSign, Textarea } from '~/components/common/forms';
 import { ButtonBottom, Button } from '~/components/common/buttons';
 
-import RemoveIcon from '~/assets/RemoveIcon';
+import { RemoveIcon } from '~/components/common/icons';
 
 import { APP, QUERY_KEYS } from '~/constants';
 

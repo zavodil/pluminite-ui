@@ -12,7 +12,7 @@ import { Contribute, MintPlus } from '~/components/common/popups';
 import { ArtItemPriced } from '~/components/common/art';
 import { Button } from '~/components/common/buttons';
 
-import DiamondIcon from '~/assets/DiamondIcon';
+import { DiamondIcon } from '~/components/common/icons';
 
 import { QUERY_KEYS, APP } from '~/constants';
 import { Loading } from '~/components/common/utils';
