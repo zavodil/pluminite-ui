@@ -40,6 +40,11 @@ const Container = styled('div')`
     }
   }
 
+  textarea {
+    max-width: 100%;
+    min-width: 100%;
+  }
+
   .collaborator-add {
     margin-bottom: 30px;
   }
