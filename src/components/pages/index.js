@@ -10,5 +10,20 @@ import NotFound404 from './not-found-404';
 import MintNotAllowed from './mint-not-allowed';
 import Faq from './faq';
 import Terms from './terms';
+import NotEnoughBalance from './not-enough-balance';
 
-export { Home, SignUp, LogIn, Mint, Profile, ProfileEdit, Gem, GemOriginal, NotFound404, MintNotAllowed, Faq, Terms };
+export {
+  Home,
+  SignUp,
+  LogIn,
+  Mint,
+  Profile,
+  ProfileEdit,
+  Gem,
+  GemOriginal,
+  NotFound404,
+  MintNotAllowed,
+  Faq,
+  Terms,
+  NotEnoughBalance,
+};
