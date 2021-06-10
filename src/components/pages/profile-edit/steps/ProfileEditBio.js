@@ -5,7 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import defaultProfilePicture from '../../../../assets/default-profile-picture.png';
+import defaultProfilePicture from '~/assets/images/default-profile-picture.png';
 
 import { StickedToBottom } from '~/components/common/layout';
 import { DotsLoading, Balance } from '~/components/common/utils';

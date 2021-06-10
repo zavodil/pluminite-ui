@@ -28,6 +28,7 @@ import {
   MintNotAllowed,
   Faq,
   Terms,
+  NotEnoughBalance,
 } from './components/pages';
 
 import { CloseButton } from './components/common/buttons';
@@ -87,6 +88,7 @@ export default function App() {
                 />
                 <Page path="/faq" component={Faq} title="Faqs" />
                 <Page path="/terms" component={Terms} title="Terms and Conditions" />
+                <Page path="/not-enough-balance" component={NotEnoughBalance} title="Not Enough Balance" />
                 <UserPage
                   exact
                   path="/profile"

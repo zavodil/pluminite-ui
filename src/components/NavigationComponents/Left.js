@@ -28,10 +28,11 @@ const Left = () => {
   const isProfilePage = useRouteMatch('/profile')?.isExact;
   const isGemPage = useRouteMatch('/gem');
   const isGemOriginalPage = useRouteMatch('/gem-original');
+  const isNotEnoughBalancePage = useRouteMatch('/not-enough-balance');
 
   const { user } = useContext(NearContext);
 
-  if (isGemPage || isGemOriginalPage) {
+  if (isGemPage || isGemOriginalPage || isNotEnoughBalancePage) {
     return null;
   }
 
