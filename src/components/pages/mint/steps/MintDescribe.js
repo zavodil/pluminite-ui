@@ -219,6 +219,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
   // todo: add more checks, check length
   const isProceedAllowed = () =>
     nft.title &&
+    nft.title.length <= APP.GEM_TITLE_MAX_LENGTH &&
     nft.description &&
     nft.description.length <= APP.GEM_DESCRIPTION_MAX_LENGTH &&
     nft.conditions?.near !== undefined &&
@@ -262,6 +263,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
       <Input
         name="gem_title"
         labelText="Gem Title"
+        maxLength={APP.GEM_TITLE_MAX_LENGTH}
         isRequired
         isDisabled={isDisabled}
         value={nft.title || ''}
