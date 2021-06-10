@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import DiamondIcon from '~/assets/DiamondIcon';
+import { DiamondIcon } from '~/components/common/icons';
 
 import { beatAnimate, square } from '~/styles/mixins';
 

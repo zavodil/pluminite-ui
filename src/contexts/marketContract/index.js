@@ -6,14 +6,14 @@ import { transactions } from 'near-api-js';
 import { initialMarketContractState, marketContractReducer } from './reducer';
 import { GOT_MIN_STORAGE } from './types';
 
-import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
+import { ReactChildrenTypeRequired } from '~types/ReactChildrenTypes';
 
 import { NearContext } from '../near';
-import { NftContractContext } from '../nftContract';
+import { NftContractContext } from '~/contexts';
 
-import { getMarketContractName } from '../../utils';
+import { getMarketContractName } from '~/utils';
 
-import { PAYABLE_METHODS, APP, STORAGE } from '../../constants';
+import { PAYABLE_METHODS, APP, STORAGE } from '~/constants';
 
 export const MarketContractContext = React.createContext(initialMarketContractState);
 
@@ -85,8 +85,8 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
         extra: JSON.stringify({
           media_lowres: nft.media_lowres,
           creator_id: nftContract.account.accountId,
-          media_size: nft.fileSize,
-          media_type: nft.fileType,
+          media_size: nft.file.size,
+          media_type: nft.file.type,
         }),
       };
 

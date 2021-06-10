@@ -12,7 +12,7 @@ import { HeadingText, SmallText } from '~/components/common/typography';
 import { Input, InputNear, InputRoyalty, InputSign, Textarea } from '~/components/common/forms';
 import { ButtonBottom, Button } from '~/components/common/buttons';
 
-import RemoveIcon from '~/assets/RemoveIcon';
+import { RemoveIcon } from '~/components/common/icons';
 
 import { APP, QUERY_KEYS } from '~/constants';
 
@@ -38,6 +38,11 @@ const Container = styled('div')`
     .form-group {
       margin-bottom: 0;
     }
+  }
+
+  textarea {
+    max-width: 100%;
+    min-width: 100%;
   }
 
   .collaborator-add {
@@ -216,9 +221,9 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
     ]);
   };
 
-  // todo: add more checks, check length
   const isProceedAllowed = () =>
     nft.title &&
+    nft.title.length <= APP.GEM_TITLE_MAX_LENGTH &&
     nft.description &&
     nft.description.length <= APP.GEM_DESCRIPTION_MAX_LENGTH &&
     nft.conditions?.near !== undefined &&
@@ -262,6 +267,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
       <Input
         name="gem_title"
         labelText="Gem Title"
+        maxLength={APP.GEM_TITLE_MAX_LENGTH}
         isRequired
         isDisabled={isDisabled}
         value={nft.title || ''}
@@ -291,7 +297,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
           labelText="Royalty Fee"
           asideText={`@${user.accountId}`}
           isSmall
-          value={userRoyalty}
+          value={String(userRoyalty)}
           onChange={(e) => setUserRoyalty(e.target.value)}
           isDisabled={isDisabled}
           isError={userRoyaltyIsError}

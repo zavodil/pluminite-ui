@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import DiamondIcon from '~/assets/DiamondIcon';
+
+import { DiamondIcon } from '~/components/common/icons';
 
 import { HeadingText } from '~/components/common/typography';
 
