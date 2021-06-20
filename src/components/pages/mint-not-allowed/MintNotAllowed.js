@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { MarketContractContext } from '../../../contexts';
-import Button from '../../common/Button';
+import { MarketContractContext } from '~/contexts';
+import { Button } from '~/components/common/buttons';
 
-import { TitleText } from '../../common/typography';
+import { TitleText } from '~/components/common/typography';
 
 const Container = styled('div')`
   display: flex;

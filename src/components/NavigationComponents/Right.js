@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 
-import { NearContext } from '../../contexts';
+import { NearContext } from '~/contexts';
 
 import UserMenu from './UserMenu';
-import Button from '../common/Button';
+import { Button, CloseButton } from '~/components/common/buttons';
 import ProfileUserMenu from './ProfileUserMenu';
 
 const StyledContainer = styled('div')`
@@ -31,6 +31,19 @@ const StyledContainer = styled('div')`
     color: var(--lavendar);
   }
 
+  .gem-close {
+    cursor: pointer;
+
+    > svg {
+      stroke: var(--lavendar);
+      fill: var(--lavendar);
+    }
+  }
+
+  :last-child {
+    margin-left: auto;
+  }
+
   @media (min-width: 767px) {
     margin: 0;
   }
@@ -41,8 +54,11 @@ const Right = () => {
   const isProfilePage = useRouteMatch('/profile');
   const isGemPage = useRouteMatch('/gem');
   const isGemOriginalPage = useRouteMatch('/gem-original');
+  const isNotEnoughBalancePage = useRouteMatch('/not-enough-balance');
 
   const { user } = useContext(NearContext);
+
+  const history = useHistory();
 
   if (isSignUpInPage || isGemPage || isGemOriginalPage) {
     return null;
@@ -50,7 +66,9 @@ const Right = () => {
 
   let toRender;
 
-  if (isProfilePage && user) {
+  if (isNotEnoughBalancePage) {
+    toRender = <CloseButton className="gem-close" processCLick={() => history.push('/')} />;
+  } else if (isProfilePage && user) {
     toRender = <ProfileUserMenu />;
   } else if (user) {
     toRender = <UserMenu />;

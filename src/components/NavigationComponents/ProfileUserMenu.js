@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Dropdown from '../common/Dropdown';
-import Hamburger from '../common/Hamburger';
-import Balance from './Balance';
+import Dropdown from '~/components/common/Dropdown';
+import Hamburger from '~/components/common/Hamburger';
+import { Balance } from '~/components/common/utils';
 
 const DropdownBase = ({ handleOnClick, className }) => <Hamburger className={className} onClick={handleOnClick} />;
 

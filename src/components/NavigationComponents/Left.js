@@ -2,7 +2,9 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link, useRouteMatch } from 'react-router-dom';
 
-import { NearContext } from '../../contexts';
+import { NearContext } from '~/contexts';
+
+import { APP } from '~/constants';
 
 const StyledContainer = styled('div')`
   height: 52px;
@@ -26,21 +28,22 @@ const Left = () => {
   const isProfilePage = useRouteMatch('/profile')?.isExact;
   const isGemPage = useRouteMatch('/gem');
   const isGemOriginalPage = useRouteMatch('/gem-original');
+  const isNotEnoughBalancePage = useRouteMatch('/not-enough-balance');
 
   const { user } = useContext(NearContext);
 
-  if (isGemPage || isGemOriginalPage) {
+  if (isGemPage || isGemOriginalPage || isNotEnoughBalancePage) {
     return null;
   }
 
   let toRender;
 
   if (isHomePage) {
-    toRender = 'Pluminite';
+    toRender = APP.NAME;
   } else if (isProfilePage && user?.accountId) {
     toRender = user.accountId;
   } else {
-    toRender = <Link to="/">Pluminite</Link>;
+    toRender = <Link to="/">{APP.NAME}</Link>;
   }
 
   return <StyledContainer>{toRender}</StyledContainer>;

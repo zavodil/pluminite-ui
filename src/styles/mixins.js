@@ -71,3 +71,17 @@ export const square = css`
     border-radius: var(--radius-default);
   }
 `;
+
+export const beatAnimate = (durationS) =>
+  css`
+    @keyframes beat {
+      30% {
+        transform: scale(1.5);
+      }
+      60% {
+        transform: scale(1);
+      }
+    }
+
+    animation: beat ${durationS}s cubic-bezier(0.5, 0, 0.5, 1) 0s infinite normal none;
+  `;

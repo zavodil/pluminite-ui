@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import DiamondIcon from '../../../assets/DiamondIcon';
 
-import { HeadingText } from '../../common/typography';
+import { DiamondIcon } from '~/components/common/icons';
+
+import { HeadingText } from '~/components/common/typography';
 
 const Container = styled('div')`
   display: flex;

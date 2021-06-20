@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
-import { useDetectClickOutside } from '../../../hooks';
+import { useDetectClickOutside } from '~/hooks';
 
 import DropdownItem from './DropdownItem';
 
-import { disFlexColumn, absoluteTopRight } from '../../../styles/mixins';
+import { disFlexColumn, absoluteTopRight } from '~/styles/mixins';
 
-import { ReactChildrenType } from '../../../types/ReactChildrenTypes';
-import StylesType from '../../../types/StylesType';
+import { ReactChildrenType } from '~/types/ReactChildrenTypes';
+import StylesType from '~/types/StylesType';
 
 const Container = styled('div')`
   position: relative;

@@ -1,22 +1,22 @@
 import React, { useContext, useRef, useState } from 'react';
-import { useQuery as useRQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import { NearContext, NftContractContext } from '../../../../contexts';
+import { NearContext, NftContractContext } from '~/contexts';
 
-import { StickedToBottom } from '../../../common/layout';
-import Button from '../../../common/Button';
-import FileDropzone from '../../../common/FileDropzone';
-import { HeadingSmallText } from '../../../common/typography';
-import { DotsLoading } from '../../../common/utils';
+import { StickedToBottom } from '~/components/common/layout';
+import { Button } from '~/components/common/buttons';
+import FileDropzone from '~/components/common/FileDropzone';
+import { HeadingSmallText } from '~/components/common/typography';
+import { DotsLoading } from '~/components/common/utils';
 
-import { useIsUnmounting } from '../../../../hooks';
+import { useIsUnmounting } from '~/hooks';
 
-import { uploadFileData } from '../../../../apis';
+import { uploadFile } from '~/apis';
 
-import { PROFILE, QUERY_KEYS } from '../../../../constants';
+import { PROFILE, QUERY_KEYS } from '~/constants';
 
 const Container = styled('div')`
   .heading-small {
@@ -54,7 +54,7 @@ function ProfileEditPhoto() {
   const { user } = useContext(NearContext);
   const { setProfile, getProfile } = useContext(NftContractContext);
 
-  const { data: profile } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
+  const { data: profile } = useQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
     enabled: !!user?.accountId,
     onError() {
       toast.error('Sorry 😢 There was an error getting your profile data.');
@@ -89,7 +89,7 @@ function ProfileEditPhoto() {
     let uploadError;
 
     try {
-      fileHash = await uploadFileData(avatarDataUrl);
+      fileHash = await uploadFile(avatarDataUrl);
     } catch (e) {
       console.error(e);
       uploadError = e;
@@ -142,7 +142,7 @@ function ProfileEditPhoto() {
             ? 'This will be your profile picture '
             : `Photos with a 1:1 ratio work best, that are under ${PROFILE.PHOTO_MAX_SIZE_MB}mb in size.`
         }
-        onUpload={({ fileDataUrl }) => setAvatarDataUrl(fileDataUrl)}
+        onUpload={({ file }) => setAvatarDataUrl(file)}
         ref={inputRef}
         showFileName={false}
         maxSizeMb={PROFILE.PHOTO_MAX_SIZE_MB}

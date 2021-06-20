@@ -7,7 +7,7 @@ import { initialNftContractState } from './reducer';
 import { getMarketContractName } from '../../utils';
 
 import { ReactChildrenTypeRequired } from '../../types/ReactChildrenTypes';
-import APP from '../../constants/app';
+import { APP, PAYABLE_METHODS, STORAGE } from '../../constants';
 
 export const NftContractContext = React.createContext(initialNftContractState);
 
@@ -64,44 +64,24 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
 
   const listForSale = useCallback(
     async (nftId, price) => {
-      await nftContract.account.signAndSendTransaction(nftContract.contractId, [
-        transactions.functionCall(
-          'nft_approve',
-          Buffer.from(
-            JSON.stringify({
-              token_id: nftId,
-              account_id: getMarketContractName(nftContract.contractId),
-              msg: JSON.stringify({
-                sale_conditions: [
-                  {
-                    price,
-                    ft_token_id: 'near',
-                  },
-                ],
-              }),
-            })
-          ),
-          APP.PREPAID_GAS_LIMIT_HALF,
-          1
-        ),
-      ]);
-      // todo: why doesn't the call before work?
-      // await nftContract.nft_approve(
-      //   {
-      //     token_id: nftId,
-      //     account_id: getMarketContractName(nftContract.contractId),
-      //     msg: JSON.stringify({
-      //       sale_conditions: [
-      //         {
-      //           price,
-      //           ft_token_id: 'near',
-      //         },
-      //       ],
-      //     }),
-      //   },
-      //   APP.PREPAID_GAS_LIMIT,
-      //   1
-      // );
+      localStorage.setItem(STORAGE.PAYABLE_METHOD_ITEM_NAME, PAYABLE_METHODS.LIST);
+
+      await nftContract.nft_approve(
+        {
+          token_id: nftId,
+          account_id: getMarketContractName(nftContract.contractId),
+          msg: JSON.stringify({
+            sale_conditions: [
+              {
+                price,
+                ft_token_id: 'near',
+              },
+            ],
+          }),
+        },
+        APP.PREPAID_GAS_LIMIT,
+        1
+      );
     },
     [nftContract]
   );

@@ -5,11 +5,11 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { NearContext, NftContractContext } from './contexts';
+import { NearContext } from './contexts';
 
 import { GuestPage, Page, UserPage } from './router';
 
-import StyledToastContainer from './StyledToastContainer';
+import StyledToastContainer from './styles/StyledToastContainer';
 
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
@@ -26,9 +26,12 @@ import {
   GemOriginal,
   NotFound404,
   MintNotAllowed,
+  Faq,
+  Terms,
+  NotEnoughBalance,
 } from './components/pages';
 
-import CloseButton from './components/common/Button/CloseButton';
+import { CloseButton } from './components/common/buttons';
 
 import GlobalStyle from './styles/GlobalStyle';
 import 'react-toastify/dist/ReactToastify.css';
@@ -46,7 +49,6 @@ const queryClient = new QueryClient({
 
 export default function App() {
   const { user, isLoading } = useContext(NearContext);
-  const { gem } = useContext(NftContractContext);
 
   const isAuthenticated = !!user;
 
@@ -84,6 +86,9 @@ export default function App() {
                   isAuthenticated={isAuthenticated}
                   isLoading={isLoading}
                 />
+                <Page path="/faq" component={Faq} title="Faqs" />
+                <Page path="/terms" component={Terms} title="Terms and Conditions" />
+                <Page path="/not-enough-balance" component={NotEnoughBalance} title="Not Enough Balance" />
                 <UserPage
                   exact
                   path="/profile"
@@ -99,24 +104,17 @@ export default function App() {
                   isAuthenticated={isAuthenticated}
                   isLoading={isLoading}
                 />
-                <Page
-                  path="/gem/:gemId"
-                  component={Gem}
-                  title={gem?.metadata?.title || 'Untitled Gem'}
-                  isAuthenticated={isAuthenticated}
-                  isLoading={isLoading}
-                />
+                <Page path="/gem/:gemId" component={Gem} isAuthenticated={isAuthenticated} isLoading={isLoading} />
                 <Page
                   path="/gem-original/:gemId"
                   component={GemOriginal}
-                  title={gem?.metadata?.title || 'Untitled Gem'}
                   isAuthenticated={isAuthenticated}
                   isLoading={isLoading}
                 />
                 <UserPage
                   path="/mint-not-allowed"
                   component={MintNotAllowed}
-                  title={gem?.metadata?.title || 'Mint not Allowed'}
+                  title={'Mint not Allowed'}
                   isAuthenticated={isAuthenticated}
                   isLoading={isLoading}
                 />

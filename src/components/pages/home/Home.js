@@ -3,21 +3,19 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import { NearContext, MarketContractContext, NftContractContext } from '../../../contexts';
+import { NearContext, MarketContractContext, NftContractContext } from '~/contexts';
 
-import { useInfiniteQueryGemsWithBlackList } from '../../../hooks';
+import { useInfiniteQueryGemsWithBlackList } from '~/hooks';
 
-import { getNextBidNearsFormatted } from '../../../utils/nears';
+import { DisplayText } from '~/components/common/typography';
+import { Contribute, MintPlus } from '~/components/common/popups';
+import { ArtItemPriced } from '~/components/common/art';
+import { Button } from '~/components/common/buttons';
 
-import { DisplayText } from '../../common/typography';
-import { Contribute, MintPlus } from '../../common/popups';
-import { ArtItemPriced } from '../../common/art';
-import Button from '../../common/Button';
+import { DiamondIcon } from '~/components/common/icons';
 
-import DiamondIcon from '../../../assets/DiamondIcon';
-
-import { QUERY_KEYS, APP } from '../../../constants';
-import { Loading } from '../../common/utils';
+import { QUERY_KEYS, APP } from '~/constants';
+import { Loading } from '~/components/common/utils';
 
 const Container = styled('div')`
   padding: 15px;
@@ -108,7 +106,7 @@ export default function Home() {
   const { nftContract } = useContext(NftContractContext);
   const { getSalesPopulated, marketContract } = useContext(MarketContractContext);
 
-  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQueryGemsWithBlackList(
+  const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQueryGemsWithBlackList(
     QUERY_KEYS.SALES_POPULATED,
     ({ pageParam = 0 }) => getSalesPopulated(String(pageParam), String(APP.MAX_ITEMS_PER_PAGE_HOME)),
     {
@@ -135,43 +133,25 @@ export default function Home() {
           <DiamondIcon />
         </div>
       </div>
-      {isFetching || isFetchingNextPage ? (
-        <Loading />
-      ) : (
-        <div className="items-container">
-          <div className="items">
-            {data?.length ? (
-              data.map((sale) => (
-                <ArtItemPriced
-                  key={sale.token_id}
-                  nft={sale}
-                  bid={getNextBidNearsFormatted(sale)}
-                  gemOnSale={sale}
-                  isLink
-                  isFromIpfs
-                />
-              ))
-            ) : (
-              <div className="no-nfts">
-                There is nothing here 😢 <br />
-                <Button isPrimary isSmall>
-                  <Link to="/mint">Mint a Gem</Link>
-                </Button>
-              </div>
-            )}
-          </div>
-          {hasNextPage && (
-            <Button
-              isPrimary
-              onClick={() => fetchNextPage()}
-              isDisabled={isFetching || isFetchingNextPage}
-              className="load-more"
-            >
-              Load more
-            </Button>
+      <div className="items-container">
+        <div className="items">
+          {data?.length && data.map((sale) => <ArtItemPriced key={sale.token_id} nft={sale} isLink isFromIpfs />)}
+          {!data?.length && !isFetching && (
+            <div className="no-nfts">
+              There is nothing here 😢 <br />
+              <Button isPrimary isSmall>
+                <Link to="/mint">Mint a Gem</Link>
+              </Button>
+            </div>
           )}
         </div>
-      )}
+        {hasNextPage && !isFetching && (
+          <Button isPrimary onClick={() => fetchNextPage()} isDisabled={isFetching} className="load-more">
+            Load more
+          </Button>
+        )}
+        {isFetching && <Loading />}
+      </div>
       <div className="pop-up">{user ? <MintPlus /> : <Contribute />}</div>
     </Container>
   );

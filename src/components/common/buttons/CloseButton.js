@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import CloseIcon from '../../../assets/CloseIcon';
+import { CloseIcon } from '~/components/common/icons';
 
 const CloseButton = ({ closeToast, processCLick = () => {}, ...props }) => (
   <div onClick={closeToast || processCLick} {...props}>

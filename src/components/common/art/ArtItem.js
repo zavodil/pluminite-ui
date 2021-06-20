@@ -3,19 +3,18 @@ import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Button from '../Button';
-import { Image, ImageFromIpfs } from '../images';
+import { Button } from '~/components/common/buttons';
+import { Media, MediaFromIpfs } from '~/components/common/media';
 
-import FullscreenIcon from '../../../assets/FullscreenIcon';
+import { FullscreenIcon , PlayIcon } from '~/components/common/icons';
 
-import { convertKBtoMB, isFileTypeAnimatedImage, isFileTypeVideo } from '../../../utils/files';
+import { convertKBtoMB, isFileTypeAnimatedImage, isFileTypeVideo } from '~/utils/files';
 
-import { APP } from '../../../constants';
+import { APP } from '~/constants';
 
-import { square } from '../../../styles/mixins';
+import { square } from '~/styles/mixins';
 
-const StyledContainer = styled(Link)`
-  display: block;
+const Container = styled('div')`
   position: relative;
   width: 400px;
   max-width: 100%;
@@ -25,18 +24,6 @@ const StyledContainer = styled(Link)`
 
   :hover {
     transform: scale(1.01);
-  }
-
-  .image-container {
-    ${square};
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .hidden {
-      display: none;
-    }
   }
 
   .fullscreen-icon {
@@ -49,14 +36,17 @@ const StyledContainer = styled(Link)`
     border-radius: 0 0 var(--radius-default) 0;
   }
 
-  .video-icon {
+  .play-icon {
     position: absolute;
     top: 0;
     left: 0;
-    cursor: pointer;
-    background-color: rgba(var(--plum-base), 0.2);
+    width: 40px;
+    height: 40px;
+    padding: 7px 5px 7px 7px;
     border: 1px solid #ffffff;
     border-radius: var(--radius-default) 0 0 0;
+    background-color: rgba(var(--plum-base), 0.2);
+    cursor: pointer;
   }
 
   button {
@@ -64,6 +54,26 @@ const StyledContainer = styled(Link)`
     right: 20px;
     bottom: 20px;
   }
+
+  @media (min-width: 1100px) {
+    width: 320px;
+  }
+`;
+
+const ImageContainer = styled(Link)`
+  ${square};
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .hidden {
+    display: none;
+  }
+
+  width: 400px;
+  max-width: 100%;
+  border-radius: var(--radius-default);
 
   @media (min-width: 1100px) {
     width: 320px;
@@ -81,7 +91,7 @@ const ArtItem = ({
   forwardedRef,
 }) => {
   const location = useLocation();
-  const [, setFileType] = useState('');
+  const [fileType, setFileType] = useState(null);
 
   useEffect(() => {
     if (nft?.metadata?.extra) {
@@ -91,7 +101,7 @@ const ArtItem = ({
     }
   }, [nft]);
 
-  const containerParams = {
+  const imageContainerParams = {
     to: isLink
       ? {
           pathname: `/gem/${nft?.token_id}`,
@@ -118,7 +128,7 @@ const ArtItem = ({
       mediaType &&
       mediaSize &&
       (isFileTypeAnimatedImage(mediaType) || isFileTypeVideo(mediaType)) &&
-      convertKBtoMB(mediaSize) < APP.AN_MEDIA_MAX_SIZE_BEFORE_THUMNAIL_MB
+      convertKBtoMB(mediaSize) < APP.AN_MEDIA_MAX_SIZE_BEFORE_THUMBNAIL_MB
     ) {
       return nft?.metadata?.media || mediaLowRes;
     }
@@ -127,41 +137,42 @@ const ArtItem = ({
   };
 
   return (
-    <StyledContainer className="art-item" {...containerParams} title={nft?.metadata?.title}>
-      <div className="image-container">
+    <Container className="art-item">
+      <ImageContainer className="image-container" {...imageContainerParams} title={nft?.metadata?.title}>
         {isFromIpfs ? (
-          <ImageFromIpfs media={getIpfsHashMedia()} forwardedRef={forwardedRef} alt={nft?.metadata?.title} />
+          <MediaFromIpfs media={getIpfsHashMedia()} forwardedRef={forwardedRef} alt={nft?.metadata?.title} />
         ) : (
-          <Image ref={forwardedRef} src={nft?.metadata?.media} alt={nft?.metadata?.title} />
+          <Media ref={forwardedRef} src={nft?.metadata?.media} alt={nft?.metadata?.title} />
         )}
-      </div>
+      </ImageContainer>
       {buttonText && (
         <Button isPrimary isSmall isDisabled={isButtonDisabled} onClick={onButtonClick}>
           {buttonText}
         </Button>
       )}
-      {isFullScreenEnabled && (
+      {isFullScreenEnabled && nft?.token_id && (
+        <Link
+          to={{
+            pathname: `/gem-original/${nft.token_id}`,
+            prevPathname: location.pathname,
+          }}
+          title="Original"
+        >
+          <FullscreenIcon />
+        </Link>
+      )}
+      {fileType && (isFileTypeAnimatedImage(fileType) || isFileTypeVideo(fileType)) && (
         <Link
           to={{
             pathname: `/gem-original/${nft?.token_id}`,
             prevPathname: location.pathname,
           }}
+          title="Play"
         >
-          <FullscreenIcon />
+          <PlayIcon />
         </Link>
       )}
-      {/* todo: add video icon once its' designs are ready */}
-      {/* {fileType && (isFileTypeAnimatedImage(fileType) || isFileTypeVideo(fileType)) && ( */}
-      {/*  <Link */}
-      {/*    to={{ */}
-      {/*      pathname: `/gem-original/${nft?.token_id}`, */}
-      {/*      prevPathname: location.pathname, */}
-      {/*    }} */}
-      {/*  > */}
-      {/*    <VideoIcon /> */}
-      {/*  </Link> */}
-      {/* )} */}
-    </StyledContainer>
+    </Container>
   );
 };
 

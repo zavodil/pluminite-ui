@@ -1,25 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery as useRQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
-import defaultProfilePicture from '../../../../assets/default-profile-picture.png';
+import defaultProfilePicture from '~/assets/images/default-profile-picture.png';
 
-import { StickedToBottom } from '../../../common/layout';
-import { DotsLoading } from '../../../common/utils';
-import Balance from '../../../NavigationComponents/Balance';
-import Button from '../../../common/Button';
-import { Textarea } from '../../../common/forms';
+import { StickedToBottom } from '~/components/common/layout';
+import { DotsLoading, Balance } from '~/components/common/utils';
+import { Button } from '~/components/common/buttons';
+import { Textarea } from '~/components/common/forms';
 
-import { NearContext, NftContractContext } from '../../../../contexts';
+import { NearContext, NftContractContext } from '~/contexts';
 
-import { useIsUnmounting } from '../../../../hooks';
+import { useIsUnmounting } from '~/hooks';
 
-import { getFileData } from '../../../../apis';
+import { getFileData } from '~/apis';
 
-import { PROFILE, QUERY_KEYS } from '../../../../constants';
+import { PROFILE, QUERY_KEYS } from '~/constants';
 
 const Container = styled('div')`
   .summary {
@@ -102,24 +101,20 @@ function ProfileEditBio({ uploadPhotoLink }) {
   const { user } = useContext(NearContext);
   const { setProfile, getProfile } = useContext(NftContractContext);
 
-  const { data: profile } = useRQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
+  const { data: profile } = useQuery([QUERY_KEYS.GET_PROFILE, user.accountId], () => getProfile(user.accountId), {
     enabled: !!user?.accountId,
     onError() {
       toast.error('Sorry 😢 There was an error getting your profile data.');
     },
   });
 
-  const { data: imageData } = useRQuery(
-    [QUERY_KEYS.GET_IMAGE_DATA, profile?.image],
-    () => getFileData(profile?.image),
-    {
-      retry: 1,
-      enabled: !!profile?.image,
-      onError() {
-        toast.error("Sorry 😢 Can't get your profile image.");
-      },
-    }
-  );
+  const { data: imageData } = useQuery([QUERY_KEYS.GET_IMAGE_DATA, profile?.image], () => getFileData(profile?.image), {
+    retry: 1,
+    enabled: !!profile?.image,
+    onError() {
+      toast.error("Sorry 😢 Can't get your profile image.");
+    },
+  });
 
   const [bioEdited, setBioEdited] = useState(profile?.bio);
   const [isSaving, setIsSaving] = useState(false);

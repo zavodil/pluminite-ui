@@ -2,24 +2,25 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { formatNearAmount, parseNearAmount } from 'near-api-js/lib/utils/format';
+import { parseNearAmount } from 'near-api-js/lib/utils/format';
 
-import { NearContext, NftContractContext } from '../../../../contexts';
+import { NearContext, NftContractContext } from '~/contexts';
 
-import { HeadingText, SmallText } from '../../../common/typography';
-import { Input, InputNear, InputRoyalty, InputSign, Textarea } from '../../../common/forms';
-import ButtonBottom from '../../../common/Button/ButtonBottom';
-import Button from '../../../common/Button';
+import { convertYoctoNearsToNears } from '~/utils/nears';
 
-import RemoveIcon from '../../../../assets/RemoveIcon';
+import { HeadingText, SmallText } from '~/components/common/typography';
+import { Input, InputNear, InputRoyalty, InputSign, Textarea } from '~/components/common/forms';
+import { ButtonBottom, Button } from '~/components/common/buttons';
 
-import { APP, QUERY_KEYS } from '../../../../constants';
+import { RemoveIcon } from '~/components/common/icons';
 
-import { useDebounce } from '../../../../hooks';
+import { APP, QUERY_KEYS } from '~/constants';
 
-import { doesAccountExist } from '../../../../apis';
+import { useDebounce } from '~/hooks';
 
-import { NftTypeRequired } from '../../../../types/NftTypes';
+import { doesAccountExist } from '~/apis';
+
+import { NftTypeRequired } from '~/types/NftTypes';
 
 const Container = styled('div')`
   max-width: 600px;
@@ -37,6 +38,11 @@ const Container = styled('div')`
     .form-group {
       margin-bottom: 0;
     }
+  }
+
+  textarea {
+    max-width: 100%;
+    min-width: 100%;
   }
 
   .collaborator-add {
@@ -144,7 +150,7 @@ const Collaborator = ({ number, collaborator, onRemoveButtonClick, onCollaborato
         name={`collaborator-id-${number}`}
         isSmall
         isError={userIdIsError}
-        onChange={(e) => setUserIdValue(e.target.value)}
+        onChange={(e) => setUserIdValue(e.target.value.toLowerCase())}
         value={userIdValue || ''}
       />
       <RemoveIcon onClick={onRemoveButtonClick} />
@@ -191,9 +197,8 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
 
   const isTooMuchRoyalties = () =>
     collaborators.reduce((acc, cv) => acc + +(cv.royalty || 0), 0) + +userRoyalty > APP.MAX_ROYALTY;
-  const hasEnoughNears = () => Number(formatNearAmount(user.balance)) > APP.MIN_NEARS_TO_MINT;
-  const hasExceededPrepaidMints = () => !isFreeMintAvailable;
-  const isMintForbidden = () => !hasEnoughNears() && hasExceededPrepaidMints();
+  const hasEnoughNears = () => Number(convertYoctoNearsToNears(user.balance)) > APP.MIN_NEARS_TO_MINT;
+  const isMintForbidden = () => !hasEnoughNears() && !isFreeMintAvailable;
   const isDisabled = isMintForbidden();
 
   const addCollaborator = () => {
@@ -216,12 +221,13 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
     ]);
   };
 
-  // todo: add more checks, check length
   const isProceedAllowed = () =>
     nft.title &&
+    nft.title.length <= APP.GEM_TITLE_MAX_LENGTH &&
     nft.description &&
     nft.description.length <= APP.GEM_DESCRIPTION_MAX_LENGTH &&
     nft.conditions?.near !== undefined &&
+    Number(nft.conditions.near) > 0 &&
     nft.collaborators.length < APP.MAX_COLLABORATORS &&
     !isTooMuchRoyalties() &&
     !userRoyaltyIsError;
@@ -245,10 +251,10 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
     <Container>
       <HeadingText>Mint a Gem</HeadingText>
       <div className="freebies">
-        {!hasEnoughNears() && !isDisabled && (
+        {isFreeMintAvailable && !isDisabled && (
           <SmallText>
             We&apos;ll front the cost of your first 3 mints. You&apos;ll need to make a sale to cover your first 3 mints
-            or add funds to your NEAR wallet to continue minting more NFTs.
+            or have enough funds in your NEAR wallet to continue minting more NFTs.
           </SmallText>
         )}
         {isDisabled && (
@@ -261,6 +267,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
       <Input
         name="gem_title"
         labelText="Gem Title"
+        maxLength={APP.GEM_TITLE_MAX_LENGTH}
         isRequired
         isDisabled={isDisabled}
         value={nft.title || ''}
@@ -281,7 +288,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
         labelText="Price"
         isRequired
         isDisabled={isDisabled}
-        nearsInitial={nft?.conditions?.near ? formatNearAmount(nft?.conditions?.near) : ''}
+        nearsInitial={nft?.conditions?.near ? convertYoctoNearsToNears(nft?.conditions?.near) : ''}
         onNearsChange={(value) => setNftField('conditions', { near: parseNearAmount(value) })}
       />
       <div className="user-royalty-input">
@@ -290,7 +297,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
           labelText="Royalty Fee"
           asideText={`@${user.accountId}`}
           isSmall
-          value={userRoyalty}
+          value={String(userRoyalty)}
           onChange={(e) => setUserRoyalty(e.target.value)}
           isDisabled={isDisabled}
           isError={userRoyaltyIsError}
@@ -330,7 +337,7 @@ const MintDescribe = ({ onCompleteLink, nft, setNft, setNftField }) => {
         </Button>
       )}
       <p className="fee-description">
-        Pluminite will take a 5% fee for all sales to continue building the Pluminite community.
+        {APP.NAME} will take a 5% fee for all sales to continue building the {APP.NAME} community.
       </p>
       <ButtonBottom
         link={onCompleteLink}

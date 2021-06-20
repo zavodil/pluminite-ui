@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
-import { hideArrowsForNumberInput } from '../../../styles/mixins';
+import { hideArrowsForNumberInput } from '~/styles/mixins';
 
-import { TextInputType } from '../../../types/InputTypes';
-import { SmallText } from '../typography';
+import { TextInputType } from '~/types/InputTypes';
+import { SmallText } from '~/components/common/typography';
 
 const StyledContainer = styled('div')`
   position: relative;
@@ -52,18 +52,57 @@ const StyledContainer = styled('div')`
     }
   }
 
-  .small-text.required-warning {
+  .max-length {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 11px;
+    line-height: 18px;
+    color: var(--lavendar);
+    user-select: none;
+    cursor: default;
+  }
+
+  .small-text.required-warning,
+  .small-text.length-warning {
     position: absolute;
     bottom: -25px;
     margin: 0;
   }
 `;
 
-const Input = ({ type, name, labelText, isRequired, isSmall, isError, isDisabled, className, autoFocus, ...rest }) => {
+const Input = ({
+  type,
+  name,
+  labelText,
+  maxLength,
+  onChange,
+  value,
+  isRequired,
+  isSmall,
+  isError,
+  isDisabled,
+  className,
+  autoFocus,
+  ...rest
+}) => {
   const [isRequiredAndSkipped, setIsRequiredAndSkipped] = useState(false);
+  const [inputLength, setInputLength] = useState(value?.length ? value.length : 0);
 
-  const onInputBlur = (value) => {
-    if (isRequired && !value) {
+  const processInputChange = (e) => {
+    if (maxLength && e.target.value.length > maxLength) {
+      setIsRequiredAndSkipped(false);
+    }
+
+    setInputLength(e.target.value.length);
+
+    onChange(e);
+  };
+
+  const maxLengthExceeded = () => !!(maxLength && inputLength > maxLength);
+
+  const onInputBlur = (inputValue) => {
+    if (isRequired && !inputValue) {
       setIsRequiredAndSkipped(true);
     } else {
       setIsRequiredAndSkipped(false);
@@ -103,11 +142,23 @@ const Input = ({ type, name, labelText, isRequired, isSmall, isError, isDisabled
         })}
         onBlur={(e) => onInputBlur(e.target.value)}
         disabled={isDisabled}
+        onChange={(e) => processInputChange(e)}
+        value={value}
         ref={(element) => {
           inputElement.current = element;
         }}
         {...rest}
       />
+      {maxLength && (
+        <div className="max-length">
+          {inputLength} / {maxLength}
+        </div>
+      )}
+      {maxLengthExceeded() && (
+        <SmallText isError className="length-warning">
+          Sorry, it looks like you’ve exceeded the character limit
+        </SmallText>
+      )}
       {isRequiredAndSkipped && (
         <SmallText isError className="required-warning">
           Required
@@ -121,6 +172,9 @@ Input.propTypes = {
   type: TextInputType,
   name: PropTypes.string.isRequired,
   labelText: PropTypes.string,
+  maxLength: PropTypes.number,
+  onChange: PropTypes.func,
+  value: PropTypes.string,
   isRequired: PropTypes.bool,
   isSmall: PropTypes.bool,
   isError: PropTypes.bool,
@@ -131,6 +185,7 @@ Input.propTypes = {
 
 Input.defaultProps = {
   type: 'text',
+  onChange: () => {},
 };
 
 export default Input;

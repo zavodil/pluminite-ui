@@ -4,14 +4,14 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import Big from 'big.js';
 
-import { MarketContractContext } from '../../../contexts';
+import { MarketContractContext } from '~/contexts';
 
-import { Page } from '../../../router';
+import { Page } from '~/router';
 import { MintDescribe, MintUpload, MintReview } from './steps';
 
-import NotFound404 from '../not-found-404';
+import NotFound404 from '~/components/pages/not-found-404';
 
-import APP from '../../../constants/app';
+import { APP } from '~/constants';
 
 const Container = styled('div')`
   display: flex;
@@ -22,7 +22,7 @@ const Container = styled('div')`
 
 export default function Mint() {
   const match = useRouteMatch();
-  const [nft, setNft] = useState({ conditions: {} });
+  const [nft, setNft] = useState({ conditions: { near: '1000000000000000000000000' } }); // it's in yoctoNears,  === 1Ⓝ
   const [isMintAllowed, setIsMintAllowed] = useState(null);
   const { getStoragePaid, getSalesSupplyForOwner, marketContract, minStorage } = useContext(MarketContractContext);
 
@@ -84,11 +84,9 @@ export default function Mint() {
       <Switch>
         <Route path={`${match.path}/upload`}>
           <MintUpload
-            onUpload={({ fileDataUrl, thumbnailDataUrl, fileSize, fileType }) => {
-              setNftField('artDataUrl', fileDataUrl);
-              setNftField('artThumbnailDataUrl', thumbnailDataUrl);
-              setNftField('fileSize', fileSize);
-              setNftField('fileType', fileType);
+            onUpload={({ file, thumbnailFile }) => {
+              setNftField('file', file);
+              setNftField('thumbnailFile', thumbnailFile);
             }}
             onCompleteLink={`${match.path}/review`}
             nft={nft}

@@ -1,31 +1,103 @@
-import pinataSDK from '@pinata/sdk';
+import axios from 'axios';
 
-import { APP } from '../constants';
+import { APP } from '~/constants';
+
+let pinataApiKey;
+let pinataApiSecret;
+let pinataHref;
+
+if (process.env.NODE_ENV !== 'production') {
+  pinataApiKey = APP.PINATA_API_KEY;
+  pinataApiSecret = APP.PINATA_API_SECRET;
+  pinataHref = 'https://gateway.pinata.cloud/ipfs';
+} else {
+  pinataApiKey = process.env.PINATA_API_KEY;
+  pinataApiSecret = process.env.PINATA_API_SECRET;
+  pinataHref = 'https://storage.pluminite.com/ipfs';
+}
+
+const pinataApiUrl = 'https://api.pinata.cloud';
+
+const readBlobAsDataUrl = (blob) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+
+const readBlobAsText = (blob) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = reject;
+    reader.readAsText(blob);
+  });
 
 export const getFileData = async (hash) => {
-  return fetch(`https://storage.pluminite.com/ipfs/${hash}`)
-      .then(res => {
-        if (!res.ok)
-          return null;
+  let response;
 
-        return res.text()})
-      .then(res => {
-        const json = res ? JSON.parse(res) : null;
-        return json ? json.file : null;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  try {
+    response = await fetch(`${pinataHref}/${hash}`);
+  } catch (e) {
+    console.error(e);
+
+    return null;
+  }
+
+  try {
+    const blob = await response.blob();
+
+    if (blob.type === 'application/json') {
+      const text = await readBlobAsText(blob);
+
+      return JSON.parse(text)?.file || null;
+    }
+
+    return await readBlobAsDataUrl(blob);
+  } catch (e) {
+    console.error(e);
+  }
+
+  return null;
 };
 
 export const uploadFileData = async (fileData) => {
-  const pinata = pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_API_SECRET);
-  const metadata = {};
   const data = {
     file: fileData,
   };
 
-  const result = await pinata.pinJSONToIPFS(data, metadata);
+  const url = `${pinataApiUrl}/pinning/pinJSONToIPFS`;
 
-  return result.IpfsHash;
+  const response = await axios.post(url, data, {
+    headers: {
+      pinata_api_key: pinataApiKey,
+      pinata_secret_api_key: pinataApiSecret,
+    },
+  });
+
+  return response.data.IpfsHash;
+};
+
+export const uploadFile = async (file) => {
+  const url = `${pinataApiUrl}/pinning/pinFileToIPFS`;
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await axios.post(url, formData, {
+    maxBodyLength: 'Infinity', // this is needed to prevent axios from erroring out with large files
+    headers: {
+      // eslint-disable-next-line no-underscore-dangle
+      'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
+      pinata_api_key: pinataApiKey,
+      pinata_secret_api_key: pinataApiSecret,
+    },
+  });
+
+  return response.data.IpfsHash;
 };

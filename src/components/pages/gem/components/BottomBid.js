@@ -5,15 +5,15 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { formatNearAmount } from 'near-api-js/lib/utils/format';
 
-import { MarketContractContext, NearContext } from '../../../../contexts';
+import { MarketContractContext, NearContext } from '~/contexts';
 
-import { withUSDs } from '../../../../hooks';
+import { useConvertNearsToUSDs } from '~/hooks';
 
-import { getNextBidNearsFormatted } from '../../../../utils/nears';
-import { round } from '../../../../utils/numbers';
+import { convertYoctoNearsToNears, getNextBidNears, getNextBidNearsFormatted } from '~/utils/nears';
+import { round } from '~/utils/numbers';
 
-import Button from '../../../common/Button';
-import { StickedToBottom } from '../../../common/layout';
+import { Button } from '~/components/common/buttons';
+import { StickedToBottom } from '~/components/common/layout';
 
 const Container = styled('div')`
   width: 100%;
@@ -80,7 +80,7 @@ const BottomBid = ({ gem, gemOnSale }) => {
   const [previousPriceUser, setPreviousPriceUser] = useState('');
   const [previousPrice, setPreviousPrice] = useState('0');
 
-  const previousPriceUSDs = withUSDs(formatNearAmount(previousPrice));
+  const previousPriceUSDs = useConvertNearsToUSDs(convertYoctoNearsToNears(previousPrice));
 
   const hasBids = () => !!gemOnSale?.bids?.near?.owner_id;
 
@@ -109,13 +109,14 @@ const BottomBid = ({ gem, gemOnSale }) => {
     }
 
     try {
-      await offer(gemOnSale.token_id, getNextBidNearsFormatted(gemOnSale));
+      await offer(gemOnSale.token_id, getNextBidNears(gemOnSale));
     } catch (error) {
       console.error(error);
       toast.error('Sorry 😢 There was an error in processing your offer. Please, try again later.');
     }
 
-    // todo: execute commands below once the bid is accepted
+    // todo: do we show a toast with the link to the profile page (there are designs for that)
+    //  or do we redirect to profile page on success
     // toast.success('You own a new gem!', { position: 'top-right' });
     // history.push(`/profile?gem-id=${gem?.token_id}`);
   };
