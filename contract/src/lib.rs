@@ -6,7 +6,7 @@ use near_sdk::collections::{LazyOption, LookupMap, UnorderedMap, UnorderedSet};
 use near_sdk::json_types::{Base64VecU8, ValidAccountId, U64, U128};
 use near_sdk::serde::{Deserialize, Serialize};
 use near_sdk::{
-    env, near_bindgen, AccountId, Balance, CryptoHash, PanicOnDefault, Promise, StorageUsage,
+    env, near_bindgen, AccountId, Balance, CryptoHash, PanicOnDefault, Promise, StorageUsage, log
 };
 
 use crate::internal::*;
@@ -172,6 +172,377 @@ impl Contract {
             free_mints: 3,
             version: migration_version,
         }
+    }
+
+    pub fn migrate_state_2(&mut self)  {
+        assert_eq!(env::predecessor_account_id(), env::current_account_id(), "Private function");
+
+        self.version = 2;
+
+        self.update_media(
+            "token-1622717738502".to_string(),
+            "QmaU6GjLxthqVmi8njSGxwMXUZFsbzg7jx38sXYUA7FDgx".to_string(),
+            "{\"media_lowres\":\"QmaU6GjLxthqVmi8njSGxwMXUZFsbzg7jx38sXYUA7FDgx\",\"creator_id\":\"rucommunity.near\",\"media_size\":90182,\"media_type\":\"image/png\"}".to_string()
+        );
+
+        self.update_media(
+            "token-1622726365839".to_string(),
+            "QmQ6XE8byf5zQo54kDRkzbKtqVojfE4ShKfrAxEah7du6e".to_string(),
+            "{\"media_lowres\":\"QmeWvZGajwHz9pCgWwuUsyPYrebvf5JGaNy3S9nao5VFz8\",\"creator_id\":\"rucommunity.near\",\"media_size\":408914,\"media_type\":\"image/png\"}".to_string()
+        );
+
+        self.update_media(
+            "token-1622732252389".to_string(),
+            "QmTtshD6pyL6jRb6BtjwFedTzebZiaUShUvMpFuJnDqw56".to_string(),
+            "{\"media_lowres\":\"QmPsAZ3a6CR8x2JbMH8rfhHcSToK8C1QbfMxPCwDZozfZN\",\"creator_id\":\"mattlock.near\",\"media_size\":157094,\"media_type\":\"image/png\"}".to_string()
+        );
+
+        self.update_media(
+            "token-1622734908032".to_string(),
+            "QmWRK2Qt1Ho2yWbaSMsSVPmbUsJAvJPJhQeJ2sAdjZAGbe".to_string(),
+            "{\"media_lowres\":\"QmUMauiYyiWokEPSwkybEcG2XSHcwdB8emnTQ7zrs9YVGJ\",\"creator_id\":\"hear.near\",\"media_size\":2490742,\"media_type\":\"image/png\"}".to_string()
+        );
+
+        self.update_media(
+            "token-1622734858519".to_string(),
+            "QmZpzMGPh7oZUwQNnL68rFy5RsgwRCwaD5DnMjTX3Lnbwp".to_string(),
+            "{\"media_lowres\":\"QmXYAWqDBcvBf3fYQyDjYgyupYVB63SaN2MZmXpmPqsJU7\",\"creator_id\":\"cats.near\",\"media_size\":129858,\"media_type\":\"image/png\"}".to_string()
+        );
+
+        self.update_media(
+            "token-1622737257393".to_string(),
+            "QmaAZNBWtYdUifi7BqFduNKJ3iHg18NMzBrSxnb7Nwwqcw".to_string(),
+            "{\"media_lowres\":\"QmZWqdyvbgmFjjy1aydCXbQirAQUYuwkvkdXCQdqaD6nN4\",\"creator_id\":\"starpause.near\",\"media_size\":1233169,\"media_type\":\"image/gif\"}".to_string()
+        );
+        self.update_media(
+            "token-1622737525868".to_string(),
+            "QmUVV7rjwquW8qjyRLKMuktL6QzgGzXizudKCDZfabJed6".to_string(),
+            "{\"media_lowres\":\"Qmem2vqPyNn9G9EnBRmYSFTpiggcbDQQgnkA1X3qohsACB\",\"creator_id\":\"blaze.near\",\"media_size\":5093,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622745019086".to_string(),
+            "QmTU9MzXf72Cvcx8bxp2iUPncysv9HGj3S1fwgxviWEc45".to_string(),
+            "{\"media_lowres\":\"QmUVaUbb9QtwAbxh876CSn7Ad6AwvucDuHrvgkFnRLbzkp\",\"creator_id\":\"zavodil.near\",\"media_size\":405447,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622745898027".to_string(),
+            "QmfV9MSKhpkQygdbnRidpM8uNKtQMLvMGyGmcdZtoZo4u6".to_string(),
+            "{\"media_lowres\":\"QmQ9LDr8zkeuSRggpymiqRPLk5x1CPXicYd2sqytVYYZ29\",\"creator_id\":\"cryptogarik.near\",\"media_size\":201856,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622747622933".to_string(),
+            "QmPKGChPb7rH3DYb6gG4iAcGmq5jMctBRqMmE3AmDTzoVK".to_string(),
+            "{\"media_lowres\":\"QmakcJ9pqwidbw7G2rAyU8ysMzWCatG3HUztbPGEUyuHTk\",\"creator_id\":\"dantochoicoin.near\",\"media_size\":25056,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622746458013".to_string(),
+            "QmRKQzQbPMhXbYgG6ER8ywBSj516Z29mW89t23scZ83ibC".to_string(),
+            "{\"media_lowres\":\"QmQrygMGYxGvfyEnCNPjP8Z9SpAExwikzEcLHAsKTiD7Rs\",\"creator_id\":\"profit.near\",\"media_size\":278215,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622747945083".to_string(),
+            "QmfMnkPT5NcEDrG5xbwyc9CmN5GMV9VnCALZnQE6nXRWgR".to_string(),
+            "{\"media_lowres\":\"QmQoRVHbgqVRUiVdwEEBjxNpp3KDKqWBBo4Pb7vDYCRDXX\",\"creator_id\":\"vlad.near\",\"media_size\":1488866,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622749382438".to_string(),
+            "QmUSHPdLPF7uGZuthWn2PwRjrDibS4Y8CCGKdZMEBHWQJ8".to_string(),
+            "{\"media_lowres\":\"QmR2nFNk4LmvvMUUqxg8AdprEjZxVcEGg3cXuCfCPAr4zU\",\"creator_id\":\"starpause.near\",\"media_size\":4002723,\"media_type\":\"image/gif\"}".to_string()
+        );
+        self.update_media(
+            "token-1622749956102".to_string(),
+            "QmQViAhtZX5Eci4aRPStT9Fr76kCbuJFfzqPUQasR1B8ZH".to_string(),
+            "{\"media_lowres\":\"QmbRARTrTwB3C8p2jYYKQKuMCsr6BFY2LBCFF4ndChwwpR\",\"creator_id\":\"starpause.near\",\"media_size\":1886062,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622750305496".to_string(),
+            "QmVVjDAA85hicsQaRokow353oMNPUJH8MfzmRSKCxbGSTn".to_string(),
+            "{\"media_lowres\":\"QmRbAWRvnnVVewfP5wmNBjWZxiunE8FTDtpxfzNCMvYZe2\",\"creator_id\":\"p0k.near\",\"media_size\":143121,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622752153673".to_string(),
+            "QmQC52G46GLGtX5jkQMP1E7CP3KYJCQheRt9gePyuxe28d".to_string(),
+            "{\"media_lowres\":\"QmdVW7PdMnS3EzuJGrfo3obAVJ42hr5Gn2TnaFvraJYwcY\",\"creator_id\":\"deus.near\",\"media_size\":1948176,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622754049292".to_string(),
+            "QmNUhRaEQkoSTGDr3ZXvtS5TbFHWfBCD3oAZsumDTb8xSv".to_string(),
+            "{\"media_lowres\":\"QmTqBZ9hiRMBAk3kk1FioBxFbeu5Qk68ea6gLxk9P1Qcou\",\"creator_id\":\"tradewife.near\",\"media_size\":936262,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622755023242".to_string(),
+            "QmZFf8CnjfGDmZVF1fkSAW68V9WKYL6rLiinSND9JLPee5".to_string(),
+            "{\"media_lowres\":\"QmeAzuqrY2oiXDwQNnF7PE7nPp2eh8KqZhjwDmCZnEvCgc\",\"creator_id\":\"futured.near\",\"media_size\":3569,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622759948744".to_string(),
+            "QmRLhW4o7mgWK4AMfCftz6Ysnrd1sFk4ZADSuLreapwtBX".to_string(),
+            "{\"media_lowres\":\"QmSWnaL95pnUnDTceb5THRHK1qy8UrNgiHRPmd5CipLHaW\",\"creator_id\":\"heliko.near\",\"media_size\":6390938,\"media_type\":\"image/gif\"}".to_string()
+        );
+        self.update_media(
+            "token-1622760404851".to_string(),
+            "QmRhrWVjseCnT6ydbWQR45mKXkA61jsLg2XijynfLkiU5r".to_string(),
+            "{\"media_lowres\":\"QmdN5m49rB3BGmZMrTSdtGBuWaYXqrSJR3SVC1MvrTkc3Y\",\"creator_id\":\"infinitynft.near\",\"media_size\":22211,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622762711356".to_string(),
+            "QmXAEqvwvXYsfkifFYBgpBERtLYQG913CyLVYLnvV2dAQD".to_string(),
+            "{\"media_lowres\":\"QmTGszwagKNvqT3eTiNu4Gfp2X2AmCtDQC5BmtzaYAGiCC\",\"creator_id\":\"infinitynft.near\",\"media_size\":93374,\"media_type\":\"image/gif\"}".to_string()
+        );
+        self.update_media(
+            "token-1622768714384".to_string(),
+            "QmfPoYsEMu92shQzb5BmucNtM5grBbdpxCabPDf7rugTtP".to_string(),
+            "{\"media_lowres\":\"QmPcfjA9KojxwvQd2vtepTTz9sNj5Vs77GThq33f7Zncwa\",\"creator_id\":\"whendacha.near\",\"media_size\":138367,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622772217361".to_string(),
+            "QmevAmH5KsrAD4Zrnm1yP95fPk9rtMw47K2upZqcNdaMFj".to_string(),
+            "{\"media_lowres\":\"QmW3sHqRVFEK48sRsdCbjWrAUbosQR1qUfbxPoCNQ73yfP\",\"creator_id\":\"icebear.near\",\"media_size\":44042,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622773609641".to_string(),
+            "QmTA2zP4NF2qHDX2WmJt6r8aBT7t3fbDSZt8cMHzMvFsiN".to_string(),
+            "{\"media_lowres\":\"QmTA2zP4NF2qHDX2WmJt6r8aBT7t3fbDSZt8cMHzMvFsiN\",\"creator_id\":\"kotleta.near\",\"media_size\":1087129,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622775224708".to_string(),
+            "QmRsDZQdNr7WEnwy8EKn7ny5u3jEtnBCymKRdTxdxtCzrR".to_string(),
+            "{\"media_lowres\":\"QmRsDZQdNr7WEnwy8EKn7ny5u3jEtnBCymKRdTxdxtCzrR\",\"creator_id\":\"icebear.near\",\"media_size\":48586,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622801932684".to_string(),
+            "Qmc7cpPKXGFuiEbP77JhA4TTLaVH8bST1yo3pQt9sxvLX9".to_string(),
+            "{\"media_lowres\":\"QmcHgdxjQfB5QKDTEny3cA3tzMhtMfuKgnmMVPiD78Fp75\",\"creator_id\":\"jiangjingwei.near\",\"media_size\":370588,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622813897310".to_string(),
+            "QmdrP9cPg4VZ39JXVXcL3Yhwpahu5wKZtvv9kK26AVA9SA".to_string(),
+            "{\"media_lowres\":\"QmdrP9cPg4VZ39JXVXcL3Yhwpahu5wKZtvv9kK26AVA9SA\",\"creator_id\":\"juter.near\",\"media_size\":35514,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622833149704".to_string(),
+            "QmfEDR6w8mLD61EKZUcx5xdeuV7UHRSfGE4gBoTJbZ3Gsp".to_string(),
+            "{\"media_lowres\":\"QmUVqZ3sVcEuCb8NwZ6tMcpH2dnRY57zLxhDLccXZNwLGG\",\"creator_id\":\"crasskitty.near\",\"media_size\":252460,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622836898356".to_string(),
+            "QmPtM7WVf9RnLqZg7x4n3b4cZDtYhbvFtYcqN9VA6T2DB3".to_string(),
+            "{\"media_lowres\":\"QmVK3sNNkhb3gVaxpjqTeMqDsQLRoaNvFXF7KZgoyPvkko\",\"creator_id\":\"lauter.near\",\"media_size\":1105576,\"media_type\":\"image/gif\"}".to_string()
+        );
+        self.update_media(
+            "token-1622841390824".to_string(),
+            "QmTSDyJaHtMB6HL23RVyYeFCjhQqKYgRxaH5AXXMQeeTZ4".to_string(),
+            "{\"media_lowres\":\"QmWtdUWsVxi4thabQ715epsJBxT5DGYXNyJwdRKKRDMp2Y\",\"creator_id\":\"nfthub.near\",\"media_size\":1080876,\"media_type\":\"image/gif\"}".to_string()
+        );
+        self.update_media(
+            "token-1622841845535".to_string(),
+            "QmRLm5b7mqTw6ciTdJG8HFHT4QmV3PBQpVuBKY4Mhebwvf".to_string(),
+            "{\"media_lowres\":\"QmRLm5b7mqTw6ciTdJG8HFHT4QmV3PBQpVuBKY4Mhebwvf\",\"creator_id\":\"blaze.near\",\"media_size\":90587,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622855341177".to_string(),
+            "QmXg3JUSZ4qJ8LWhPYHdavtmLYQMyhfVY3n3Ge2gcpxp6X".to_string(),
+            "{\"media_lowres\":\"QmXg3JUSZ4qJ8LWhPYHdavtmLYQMyhfVY3n3Ge2gcpxp6X\",\"creator_id\":\"idena.near\",\"media_size\":2359346,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622855611781".to_string(),
+            "QmQ1EB6dnv89Ae4ALuLsAN9tnaKH7M2amX5tFUiBeWAjQK".to_string(),
+            "{\"media_lowres\":\"QmTq4mXkgJY1apPxPDhDMyWRQrUy9me6Gz5DmZJe4E5MLn\",\"creator_id\":\"idena.near\",\"media_size\":3220531,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622855697018".to_string(),
+            "Qmb48BxuviTzxghnmvnEWQfBthmf8SjWeB4YTE3ZzXNQGb".to_string(),
+            "{\"media_lowres\":\"QmbD2PA263epLmDs4rjVtcPuboYG9vc5Lb23U9ZHPyxhQs\",\"creator_id\":\"idena.near\",\"media_size\":2494726,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622855781155".to_string(),
+            "QmVQawAyWeLAmJcK8pr4o3o6Qzu5NmoEuJB1vb2u32DaMm".to_string(),
+            "{\"media_lowres\":\"QmRvi5WwyE4kWBDR91FbVkGTFZ5qBoEg9FRzCvwR8XzMjW\",\"creator_id\":\"idena.near\",\"media_size\":1610887,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622855857590".to_string(),
+            "QmXrtyVFBwDdfkCx12mpnX8HL692PZXtJQQwSJwygA3yrG".to_string(),
+            "{\"media_lowres\":\"QmbmCS2N5ijU8YGc7zpaMhhqXacs77tNzrMPfC8edzdk6J\",\"creator_id\":\"idena.near\",\"media_size\":1861351,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622855909743".to_string(),
+            "Qmcgt6kEwfrmeqZzkBak672X3UWewTcYjbhyx92HBAVX1L".to_string(),
+            "{\"media_lowres\":\"QmS81pJN7vtK3eCjuKewZes1KpFqd1qmDrhMLBxR6ZxHq5\",\"creator_id\":\"idena.near\",\"media_size\":2932146,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622855965927".to_string(),
+            "QmWpDZ4WRqbsSfPxmAkN3QDAAdRhnkpTH7cteC255af8aP".to_string(),
+            "{\"media_lowres\":\"QmRqxd331oQxaXTVSuTGooeDiN3gxnezC8QjrRRN6W7jWD\",\"creator_id\":\"idena.near\",\"media_size\":2967167,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622856031935".to_string(),
+            "QmTY4dDJhaN9PDieab8BUDrho7RwKdem2c4KjSU3H7N5JK".to_string(),
+            "{\"media_lowres\":\"QmcBYmfLxk6Jhn3ZjJnPHkarHJ9s1tJgc2rbPHF8868bhY\",\"creator_id\":\"idena.near\",\"media_size\":2554534,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622856179813".to_string(),
+            "QmNT87yfaResVm8oQ38xzyhc2Nfk6tfUKw8eipYYzdin5A".to_string(),
+            "{\"media_lowres\":\"QmaFDUnjhRqP2QBmnf478AFoudFJ2feFpP3vWcQYoyPBMo\",\"creator_id\":\"idena.near\",\"media_size\":3056138,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1622869963611".to_string(),
+            "QmeYEcRPGf2erSRgKTTfrVBNKeDKUoHvf6qo4vwYLhrSCm".to_string(),
+            "{\"media_lowres\":\"QmWRWM4mKz7Nct4hsGdZZaq3njytie6DdELDCjH28Nr4FU\",\"creator_id\":\"starpause.near\",\"media_size\":339477,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622870265685".to_string(),
+            "QmRw81SDBEZxy4Q8KqTkh1qkjA5YELYLRMcamBjMP3U8rb".to_string(),
+            "{\"media_lowres\":\"QmWXPKhd6wpXtPYGnydcnYN3jWPA1MLPT5ok81JqwHirG8\",\"creator_id\":\"vlad.near\",\"media_size\":1527390,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622871699947".to_string(),
+            "QmZiy8nCR5E9hsnbfHsms2xxisTT4hnzBbsQHtjvswUDDN".to_string(),
+            "{\"media_lowres\":\"Qmeou337T5d9J9awD7M4dYrT1MQEboz1QjgHjPShsZ5pDE\",\"creator_id\":\"starpause.near\",\"media_size\":2706753,\"media_type\":\"image/gif\"}".to_string()
+        );
+        self.update_media(
+            "token-1622925576301".to_string(),
+            "QmdMMFf62Aad4ksScwrUNJtKNNyrA5xwZyPdpjxYouaCbh".to_string(),
+            "{\"media_lowres\":\"QmfXqyPrWXBjZAVDPdypRgWdVrN63XqKfzTV9zjVggjWdH\",\"creator_id\":\"lrojas.near\",\"media_size\":1299087,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622928399945".to_string(),
+            "QmQctpqHBVSUwC1UZT12CSD2cLkLwpYJYQe81PJxtzP2dm".to_string(),
+            "{\"media_lowres\":\"QmQy2GTqkA9demvDCmiCeHbuyUjfHweiZvtEG9QTCYemkE\",\"creator_id\":\"mob.near\",\"media_size\":174486,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622940701852".to_string(),
+            "QmUqye7JmZEHvA978wALubaGidS3xx3hifosJ6BbsYUYUQ".to_string(),
+            "{\"media_lowres\":\"QmRLxkheLLpZLVxFjsJTTAT9NVR4w3xCPHziH6EpYqpznA\",\"creator_id\":\"mob.near\",\"media_size\":2519659,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1622958247904".to_string(),
+            "QmUVHkf2HgE3Lb7BUf6P3sr2dQeBGgaScBnfu12ugH82sw".to_string(),
+            "{\"media_lowres\":\"QmUqdtk2LUVTWbeK3peYBcVzGibmj9h3zW8C3tK7pooBcd\",\"creator_id\":\"nagapickle.near\",\"media_size\":3217687,\"media_type\":\"video/quicktime\"}".to_string()
+        );
+        self.update_media(
+            "token-1622970167567".to_string(),
+            "QmZw6NVjqG88TF8eWmnwBdsFbDQmiLtfh7NDjhJnH5Fu3u".to_string(),
+            "{\"media_lowres\":\"QmZw6NVjqG88TF8eWmnwBdsFbDQmiLtfh7NDjhJnH5Fu3u\",\"creator_id\":\"hungaus811.near\",\"media_size\":390151,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1623002729572".to_string(),
+            "QmVxqBwGA5F9hMi5cDFhPZTpq7dRqKv5aim8PrpJJV5KXF".to_string(),
+            "{\"media_lowres\":\"QmUTbHiCtb7jZ6dLdbKJkbfo21UjGAYCyzrFuGAZxvnTaq\",\"creator_id\":\"anftimatter.near\",\"media_size\":2989842,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1623004767880".to_string(),
+            "QmUTbHiCtb7jZ6dLdbKJkbfo21UjGAYCyzrFuGAZxvnTaq".to_string(),
+            "{\"media_lowres\":\"QmTorYkCSX2Szn9gwJvjNi54JTYsjrfNsKgodtaqiuxU2c\",\"creator_id\":\"anftimatter.near\",\"media_size\":3057663,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1623033153061".to_string(),
+            "QmT11Bx7s5JdQJ1k51eqEy22X9CUwNwzT5A2FBHL1qZ5tS".to_string(),
+            "{\"media_lowres\":\"QmasCxDKF2fNoJzTJoJVZC4iFTn1zbj82jP9ZdiZR4c34N\",\"creator_id\":\"infinitynft.near\",\"media_size\":4469756,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1623081844632".to_string(),
+            "Qme8mtU4k3vM69tnf7xNRHQqqMVvspKD8TbaxuCXDcnLbf".to_string(),
+            "{\"media_lowres\":\"Qmb7hAqKFkEM8N1rLWnXaEgmHHdirwjC3Cs4wLVveRTUvy\",\"creator_id\":\"lrojas.near\",\"media_size\":9143605,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1623116088460".to_string(),
+            "QmPH2TgLSja3kqCh6RBrrtWd4f7kAnTcwJNfVUrFWJ1VPD".to_string(),
+            "{\"media_lowres\":\"QmPH2TgLSja3kqCh6RBrrtWd4f7kAnTcwJNfVUrFWJ1VPD\",\"creator_id\":\"vlad.near\",\"media_size\":27800,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1623116422026".to_string(),
+            "QmSS8Dwhds2xt3m7rA1AVyaTfyDZ2HX27CHD8tNvGoh1xw".to_string(),
+            "{\"media_lowres\":\"Qmf6AHKjsDUxU6VTtdrFSdE6Dyhmd4dUWBnoFNBc3cTRUY\",\"creator_id\":\"boomerang.near\",\"media_size\":25880,\"media_type\":\"image/webp\"}".to_string()
+        );
+        self.update_media(
+            "token-1623122251881".to_string(),
+            "QmfCqrKNi4woEX2QW22191N249YTimAiTuUFymUNvz5gwB".to_string(),
+            "{\"media_lowres\":\"QmfCqrKNi4woEX2QW22191N249YTimAiTuUFymUNvz5gwB\",\"creator_id\":\"chenjuan.near\",\"media_size\":7211,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1623140564255".to_string(),
+            "QmaYjLbYcb5noBdfCtwJX2aNPaRxAzJrYezVyp5G8j395P".to_string(),
+            "{\"media_lowres\":\"QmQBaDWiDBNvrJevGRk4aBv3mZPnuRncxUvcVZ89jKsoPd\",\"creator_id\":\"kop0211.near\",\"media_size\":1401975,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1623143959522".to_string(),
+            "QmYP4j4QT1wMEZvQQzsjHttRe59Wtvo6utyPmfhdxUbVSo".to_string(),
+            "{\"media_lowres\":\"QmR1NDPnJ9TZHNrNhh3DsrGMBSMGyfUt9xUgVqHyMnWZLp\",\"creator_id\":\"14b541d0a0f861ecdf8e70d7dc8323f9b7cbb906a637fd37ef4553b3442a9c11\",\"media_size\":377488,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1623144461320".to_string(),
+            "QmQdNovuoJ3C6zoRBapYtDCrsWZWqaSfCjcCqJAVDj5gGC".to_string(),
+            "{\"media_lowres\":\"QmSkFzUvP6sSiTf7VBcWUViWMVj7ZPteAtAL69BQLNvWHC\",\"creator_id\":\"saturdayvx.near\",\"media_size\":102855,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1623144812778".to_string(),
+            "QmQc7c9j2zg4wNNSeQp6kdvWKTKZdY6GiXZgd3TNr1qi8e".to_string(),
+            "{\"media_lowres\":\"QmY1XsC2fS8HqKHjJc2tZJqsYYyJWDhndD4aTcMV1Gip4u\",\"creator_id\":\"saturdayvx.near\",\"media_size\":504758,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1623144906988".to_string(),
+            "QmfBvpS8FGumSfhdXqdGkTCtZgkGHAnRAbbF1LM5GsHTZt".to_string(),
+            "{\"media_lowres\":\"QmV8kvMfE3iqQQdZMPnqxcGeyvoJGk6kJb6shnjjT38HeK\",\"creator_id\":\"saturdayvx.near\",\"media_size\":412083,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1623144992207".to_string(),
+            "QmRrnHbVMAAvbfnxz3EqjAiGDjwLEc3jJQ5zJcbVC4dZY9".to_string(),
+            "{\"media_lowres\":\"QmUKbXzGMJ96k9Nj24Qi3eDuLHXzje3wo4TVQuDeWGC3dt\",\"creator_id\":\"saturdayvx.near\",\"media_size\":499016,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1623145052174".to_string(),
+            "QmSDiC6YrmVx26MmwyUN7DJvw9rGU5Vmod7WCGbxuKzHU3".to_string(),
+            "{\"media_lowres\":\"Qmbm6ZNm9oNBfTS8phunVZDcEPKR86XirHqZaifdV7EdBn\",\"creator_id\":\"saturdayvx.near\",\"media_size\":404165,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1623145131444".to_string(),
+            "Qmc19J8r1vzVWAJ18yB5Uxek3mJRYVds9o9vGgmC1RYnLV".to_string(),
+            "{\"media_lowres\":\"QmPAUiAYg8uLwjZWCuW4hZFsAQD8Ury1obW9J4K1fe3Q5V\",\"creator_id\":\"saturdayvx.near\",\"media_size\":68496,\"media_type\":\"image/jpeg\"}".to_string()
+        );
+        self.update_media(
+            "token-1623159768550".to_string(),
+            "QmYkd6q5XQgy7LSvbghc59fLRaZn6eRj9oeERRdUGjeaTQ".to_string(),
+            "{\"media_lowres\":\"QmSvegLsm7haDG2keFYjiLwkZ2pQhQTkcJyS7bPA1qHfi9\",\"creator_id\":\"lrojas.near\",\"media_size\":6626311,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1623160702324".to_string(),
+            "QmVmLoGTuBVvptD7RMMNobyJhNey8ww4dYJ8RzBceXh6kU".to_string(),
+            "{\"media_lowres\":\"QmSd7QgKxA18WZZEam6rynHb5zJAcVY4AMo93ktPiRzDGc\",\"creator_id\":\"lrojas.near\",\"media_size\":8632258,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1623160815776".to_string(),
+            "QmWXV5bRouKRkfBKTW41w9wpTfPAhxRSVfTHGWBvzyHTfW".to_string(),
+            "{\"media_lowres\":\"QmXPQR6MyqJF95ScMQUmN3GeByodZ4RiuUDVLPVrkctfXL\",\"creator_id\":\"lrojas.near\",\"media_size\":7870700,\"media_type\":\"image/png\"}".to_string()
+        );
+        self.update_media(
+            "token-1623179119903".to_string(),
+            "QmawHxp89hWGTQCGvgmnf2zu2Btr5tP6aa9jyf6HVKgg9B".to_string(),
+            "{\"media_lowres\":\"QmTtzWFk7vZhQUmKKLNm631rGBCvjjr1sScGNNfZEMFQkA\",\"creator_id\":\"hansson.near\",\"media_size\":2219135,\"media_type\":\"image/png\"}".to_string()
+        );
+    }
+
+    pub fn migrate_state_2_1(&mut self) {
+        assert_eq!(env::predecessor_account_id(), env::current_account_id(), "Private function");
+
+        self.update_media(
+            "token-1622809123722".to_string(),
+            "QmdcZepFWh65VBmDUVDsPmamzY5ysApZ9RmFMkjrkSPnU6".to_string(),
+            "{\"media_lowres\":\"QmdQjs9LUEwFVrYsAqa2zwifmPQCoxAEcXfCa7iNiSc8WJ\",\"creator_id\":\"rucommunity.near\",\"media_size\":750926,\"media_type\":\"image/gif\"}".to_string()
+        );
+    }
+
+    pub fn get_version(&self) -> u16 {
+        self.version
+    }
+
+    pub(crate) fn update_media(&mut self, token_id: TokenId, high_res: String, extra: String){
+        let mut metadata = self.token_metadata_by_id.get(&token_id).unwrap();
+
+        metadata.media = Some(high_res);
+        metadata.extra = Some(extra);
+        self.token_metadata_by_id.insert(&token_id, &metadata);
+
+        log!("{}", token_id);
     }
 
     pub fn set_use_storage_fees(&mut self, use_storage_fees: bool) {
