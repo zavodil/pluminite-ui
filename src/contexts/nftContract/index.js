@@ -28,7 +28,7 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
       return nftContract.nft_tokens_for_owner({
         account_id: accountId,
         from_index: fromIndex,
-        limit,
+        limit: Number(limit),
       });
     },
     [nftContract]
@@ -39,7 +39,7 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
       return nftContract.nft_tokens_for_creator({
         account_id: accountId,
         from_index: fromIndex,
-        limit,
+        limit: Number(limit),
       });
     },
     [nftContract]

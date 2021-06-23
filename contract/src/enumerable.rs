@@ -91,7 +91,7 @@ impl Contract {
         &self,
         account_id: AccountId,
         from_index: U64,
-        limit: U64,
+        limit: u16,
     ) -> Vec<JsonToken> {
         let mut tmp = vec![];
         let tokens_owner = self.tokens_per_owner.get(&account_id);
@@ -113,7 +113,7 @@ impl Contract {
         &self,
         account_id: AccountId,
         from_index: U64,
-        limit: U64,
+        limit: u16,
     ) -> Vec<JsonToken> {
         let mut tmp = vec![];
         let tokens_creator = self.tokens_per_creator.get(&account_id);
