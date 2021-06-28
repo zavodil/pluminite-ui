@@ -97,7 +97,6 @@ export default function Terms() {
                 <li>audio files;</li>
                 <li>collectibles;</li>
                 <li>memorabilia;</li>
-                <li>memorabilia;</li>
                 <li>game assets.</li>
               </ol>
             </p>
