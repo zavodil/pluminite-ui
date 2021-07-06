@@ -13,8 +13,7 @@ if (process.env.NODE_ENV !== 'production') {
 } else {
   pinataApiKey = process.env.PINATA_API_KEY;
   pinataApiSecret = process.env.PINATA_API_SECRET;
-  //pinataHref = 'https://storage.pluminite.com/ipfs';
-  pinataHref = 'https://gateway.pinata.cloud/ipfs';
+  pinataHref = 'https://storage.pluminite.com/ipfs';
 }
 
 const pinataApiUrl = 'https://api.pinata.cloud';
