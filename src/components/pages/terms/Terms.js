@@ -37,8 +37,8 @@ export default function Terms() {
       <HeadingText>Pluminite Terms and Conditions</HeadingText>
       <p className="intro">These “Terms and Conditions” last material update was made on: 20th May, 2021.</p>
       <p className="intro">
-        The Open Web Services AG ( “Pluminite ) allows you to participate, by creating, displaying, buying and selling
-        non-fungible tokens (“NFTs”) and is made available to you by Open Web Services AG (“Company”).
+        Pluminite allows you to participate, by creating, displaying, buying and selling
+        non-fungible tokens (“NFTs”) and is made available to you by Pluminite.
       </p>
       <ol>
         <li className="point">
