@@ -18,6 +18,32 @@ impl Contract {
         tmp
     }
 
+    pub fn nft_tokens_from_end(
+        &self,
+        from_index: U64,
+        limit: U64,
+    ) -> Vec<JsonToken> {
+        let mut tmp = vec![];
+        let keys = self.token_metadata_by_id.keys_as_vector();
+        let total_keys = keys.len();
+        let from_index_prepared = u64::from(from_index);
+        let mut limit_prepared = u64::from(limit);
+
+        assert!(total_keys > from_index_prepared, "Illegal from_index");
+
+        if total_keys - from_index_prepared < limit_prepared{
+            limit_prepared = total_keys - from_index_prepared;
+        }
+
+        let start = total_keys - from_index_prepared - limit_prepared;
+        let end = start + limit_prepared;
+        
+        for i in (start..end).rev() {
+            tmp.push(self.nft_token(keys.get(i).unwrap()).unwrap());
+        }
+        tmp
+    }
+
     pub fn nft_tokens_batch(
         &self,
         token_ids: Vec<String>,

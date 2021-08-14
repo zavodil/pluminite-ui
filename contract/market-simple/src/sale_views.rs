@@ -78,6 +78,41 @@ impl Contract {
         tmp
     }
 
+    pub fn get_sales_by_nft_contract_id_from_end(
+        &self,
+        nft_contract_id: AccountId,
+        from_index: U64,
+        limit: U64,
+    ) -> Vec<Sale> {
+        let mut tmp = vec![];
+        let by_nft_contract_id = self.by_nft_contract_id.get(&nft_contract_id);
+        let sales = if let Some(by_nft_contract_id) = by_nft_contract_id {
+            by_nft_contract_id
+        } else {
+            return vec![];
+        };
+
+        let keys = sales.as_vector();
+
+        let total_keys = keys.len();
+        let from_index_prepared = u64::from(from_index);
+        let mut limit_prepared = u64::from(limit);
+
+        assert!(total_keys > from_index_prepared, "Illegal from_index");
+
+        if total_keys - from_index_prepared < limit_prepared{
+            limit_prepared = total_keys - from_index_prepared;
+        }
+
+        let start = total_keys - from_index_prepared - limit_prepared;
+        let end = start + limit_prepared;
+
+        for i in (start..end).rev() {
+            tmp.push(self.sales.get(&format!("{}{}{}", &nft_contract_id, DELIMETER, &keys.get(i).unwrap())).unwrap());
+        }
+        tmp
+    }
+
     pub fn get_supply_by_nft_token_type(
         &self,
         token_type: String,

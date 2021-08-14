@@ -16,7 +16,7 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
 
   const getGems = useCallback(
     async (fromIndex, limit) =>
-      nftContract.nft_tokens({
+      nftContract.nft_tokens_from_end({
         from_index: fromIndex,
         limit,
       }),

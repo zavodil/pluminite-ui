@@ -33,7 +33,7 @@ export const MarketContractContextProvider = ({ marketContract, children }) => {
 
   const getSales = useCallback(
     async (fromIndex, limit) =>
-      marketContract.get_sales_by_nft_contract_id({
+      marketContract.get_sales_by_nft_contract_id_from_end({
         nft_contract_id: nftContract.contractId,
         from_index: fromIndex,
         limit,
