@@ -6,6 +6,7 @@ import Profile from './profile';
 import ProfileEdit from './profile-edit';
 import Gem from './gem';
 import GemOriginal from './gem-orirginal';
+import TransferGem from './transfer-gem';
 import NotFound404 from './not-found-404';
 import MintNotAllowed from './mint-not-allowed';
 import Faq from './faq';
@@ -21,6 +22,7 @@ export {
   ProfileEdit,
   Gem,
   GemOriginal,
+  TransferGem,
   NotFound404,
   MintNotAllowed,
   Faq,

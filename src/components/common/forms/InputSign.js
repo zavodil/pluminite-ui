@@ -27,9 +27,9 @@ const StyledContainer = styled('div')`
   }
 `;
 
-const InputSign = ({ sign, placement, isSmall, ...rest }) => {
+const InputSign = ({ sign, placement, isSmall, marginbottom, ...rest }) => {
   return (
-    <StyledContainer isSmall={isSmall} className="form-group" placement={placement}>
+    <StyledContainer isSmall={isSmall} className="form-group" placement={placement} style={{marginBottom: marginbottom || "50px"}}>
       <Input autoComplete="off" isSmall={isSmall} {...rest} />
       <div className="sign">{sign}</div>
     </StyledContainer>

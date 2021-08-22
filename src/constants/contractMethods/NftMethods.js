@@ -10,7 +10,7 @@ const NftMethods = {
     'nft_supply_for_creator',
     'is_free_mint_available',
   ],
-  changeMethods: ['nft_approve', 'nft_mint', 'set_profile'],
+  changeMethods: ['nft_approve', 'nft_mint', 'set_profile', 'nft_transfer'],
 };
 
 export default NftMethods;

@@ -13,7 +13,18 @@ const ArtItemSellable = ({ forwardedRef, nft, ...props }) => {
     history.push(`/gem/${nft.token_id}`);
   };
 
-  return <ArtItem ref={forwardedRef} nft={nft} buttonText="Sell" onButtonClick={onSellButtonClick} {...props} />;
+  const onTransferButtonClick = (e) => {
+    e.preventDefault();
+
+    history.push(`/transfer-gem/${nft.token_id}`);
+  };
+
+  return <ArtItem ref={forwardedRef} nft={nft} 
+    buttonText="Sell" 
+    onButtonClick={onSellButtonClick}
+    transferButtonText = "Transfer" 
+    onTransferButtonClick={onTransferButtonClick}
+    {...props} />;
 };
 
 ArtItemSellable.propTypes = {

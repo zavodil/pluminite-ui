@@ -26,6 +26,11 @@ const Container = styled('div')`
     transform: scale(1.01);
   }
 
+  .left-align{
+    text-align: left;
+    left: 20px;
+  }
+
   .fullscreen-icon {
     position: absolute;
     bottom: 0;
@@ -88,6 +93,8 @@ const ArtItem = ({
   isFromIpfs,
   isFullScreenEnabled,
   onButtonClick,
+  onTransferButtonClick,
+  transferButtonText,
   forwardedRef,
 }) => {
   const location = useLocation();
@@ -148,6 +155,11 @@ const ArtItem = ({
       {buttonText && (
         <Button isPrimary isSmall isDisabled={isButtonDisabled} onClick={onButtonClick}>
           {buttonText}
+        </Button>
+      )}
+      {transferButtonText && (
+        <Button className="left-align" isSecondary isSmall isDisabled={isButtonDisabled} onClick={onTransferButtonClick}>
+          {transferButtonText}
         </Button>
       )}
       {isFullScreenEnabled && nft?.token_id && (

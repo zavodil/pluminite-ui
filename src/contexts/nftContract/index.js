@@ -62,6 +62,22 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     [nftContract]
   );
 
+  const nftTransfer = useCallback(
+    async (nftId, receiverId) => {
+      localStorage.setItem(STORAGE.PAYABLE_METHOD_ITEM_NAME, PAYABLE_METHODS.NFT_TRANSFER);
+
+      await nftContract.nft_transfer(
+        {
+          token_id: nftId,
+          receiver_id: receiverId
+        },
+        APP.PREPAID_GAS_LIMIT,
+        1
+      );
+    },
+    [nftContract]
+  );
+
   const listForSale = useCallback(
     async (nftId, price) => {
       localStorage.setItem(STORAGE.PAYABLE_METHOD_ITEM_NAME, PAYABLE_METHODS.LIST);
@@ -126,6 +142,7 @@ export const NftContractContextProvider = ({ nftContract, children }) => {
     getGemsForOwner,
     getGemsForCreator,
     getGemsBatch,
+    nftTransfer,
     listForSale,
     setProfile,
     getProfile,
@@ -152,6 +169,7 @@ NftContractContextProvider.propTypes = {
     get_profile: PropTypes.func.isRequired,
     nft_supply_for_creator: PropTypes.func.isRequired,
     is_free_mint_available: PropTypes.func.isRequired,
+    nft_transfer: PropTypes.func.isRequired,
   }).isRequired,
   children: ReactChildrenTypeRequired,
 };

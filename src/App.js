@@ -24,6 +24,7 @@ import {
   ProfileEdit,
   Gem,
   GemOriginal,
+  TransferGem,
   NotFound404,
   MintNotAllowed,
   Faq,
@@ -108,6 +109,12 @@ export default function App() {
                 <Page
                   path="/gem-original/:gemId"
                   component={GemOriginal}
+                  isAuthenticated={isAuthenticated}
+                  isLoading={isLoading}
+                />
+                <Page
+                  path="/transfer-gem/:gemId"
+                  component={TransferGem}
                   isAuthenticated={isAuthenticated}
                   isLoading={isLoading}
                 />

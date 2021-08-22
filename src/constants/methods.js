@@ -7,6 +7,7 @@ export const PAYABLE_METHODS = {
   OFFER: 'OFFER',
   PAY_STORAGE: 'PAY_STORAGE',
   LIST: 'LIST',
+  NFT_TRANSFER: 'NFT_TRANSFER'
 };
 
 export const PAYABLE_METHODS_DESCRIPTIONS = {
@@ -15,6 +16,7 @@ export const PAYABLE_METHODS_DESCRIPTIONS = {
   [PAYABLE_METHODS.OFFER]: 'buying a gem',
   [PAYABLE_METHODS.PAY_STORAGE]: 'paying storage fee',
   [PAYABLE_METHODS.LIST]: 'listing a gem on the market',
+  [PAYABLE_METHODS.NFT_TRANSFER]: 'transfer a gem',
 };
 
 export const PAYABLE_METHODS_SUCCESS_MESSAGES = {
@@ -23,4 +25,5 @@ export const PAYABLE_METHODS_SUCCESS_MESSAGES = {
   [PAYABLE_METHODS.OFFER]: <BuySuccessMessage />,
   [PAYABLE_METHODS.PAY_STORAGE]: 'Thank you! Storage fee has been paid!',
   [PAYABLE_METHODS.LIST]: 'Your gem has been listed on the market!',
+  [PAYABLE_METHODS.NFT_TRANSFER]: 'Your gem has been transfered!',
 };

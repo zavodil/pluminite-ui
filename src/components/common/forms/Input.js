@@ -12,7 +12,6 @@ const StyledContainer = styled('div')`
   position: relative;
   display: flex;
   flex-direction: column;
-  margin-bottom: 50px;
 
   label {
     line-height: 24px;
