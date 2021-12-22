@@ -1,3 +1,7 @@
+# WARNING
+
+This repository is **not** up-to-date with the current NFT [standards](https://nomicon.io/Standards/NonFungibleToken/README.html). For an example repository that is currently being maintained and is up-to-date see the [nft-tutorial](https://github.com/near-examples/nft-tutorial) repository.
+
 [Pluminite is online](https://pluminite.com/)
 ==================
 
