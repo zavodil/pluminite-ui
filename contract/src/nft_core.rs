@@ -80,8 +80,8 @@ trait NonFungibleTokenResolver {
         &mut self,
         owner_id: AccountId,
         receiver_id: AccountId,
-        approved_account_ids: HashMap<AccountId, U64>,
         token_id: TokenId,
+        approved_account_ids: HashMap<AccountId, U64>,
     ) -> bool;
 }
 
@@ -90,8 +90,8 @@ trait NonFungibleTokenResolver {
         &mut self,
         owner_id: AccountId,
         receiver_id: AccountId,
-        approved_account_ids: HashMap<AccountId, U64>,
         token_id: TokenId,
+        approved_account_ids: HashMap<AccountId, U64>,
     ) -> bool;
 }
 
@@ -257,8 +257,8 @@ impl NonFungibleTokenCore for Contract {
             .then(ext_self::nft_resolve_transfer(
                 previous_token.owner_id,
                 receiver_id.into(),
-                previous_token.approved_account_ids,
                 token_id,
+                previous_token.approved_account_ids,
                 &env::current_account_id(),
                 NO_DEPOSIT,
                 GAS_FOR_RESOLVE_TRANSFER,
@@ -389,8 +389,8 @@ impl NonFungibleTokenResolver for Contract {
         &mut self,
         owner_id: AccountId,
         receiver_id: AccountId,
-        approved_account_ids: HashMap<AccountId, U64>,
         token_id: TokenId,
+        approved_account_ids: HashMap<AccountId, U64>,
     ) -> bool {
         // Whether receiver wants to return token back to the sender, based on `nft_on_transfer`
         // call result.
