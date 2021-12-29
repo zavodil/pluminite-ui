@@ -40,6 +40,13 @@ pub trait NonFungibleTokenCore {
 
     fn nft_approve(&mut self, token_id: TokenId, account_id: ValidAccountId, msg: Option<String>);
 
+    fn nft_is_approved(
+        &self,
+        token_id: TokenId,
+        approved_account_id: AccountId,
+        approval_id: Option<u64>,
+    ) -> bool;
+
     fn nft_revoke(&mut self, token_id: TokenId, account_id: ValidAccountId);
 
     fn nft_revoke_all(&mut self, token_id: TokenId);
@@ -344,6 +351,25 @@ impl NonFungibleTokenCore for Contract {
             }
             self.tokens_by_id.insert(&token_id, &token);
         }
+    }
+
+    fn nft_is_approved(
+        &self,
+        token_id: TokenId,
+        approved_account_id: AccountId,
+        approval_id: Option<u64>,
+    ) -> bool {
+        let token = self.tokens_by_id.get(&token_id).expect("No token");
+		let approval = token.approved_account_ids.get(&approved_account_id);
+		if let Some(approval) = approval {
+			if let Some(approval_id) = approval_id {
+				approval_id == u64::from(*approval)
+			} else {
+				false
+			}
+		} else {
+			false
+		}
     }
 
     #[payable]
