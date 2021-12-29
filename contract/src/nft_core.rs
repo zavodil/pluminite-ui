@@ -51,7 +51,7 @@ pub trait NonFungibleTokenCore {
 
     fn nft_revoke_all(&mut self, token_id: TokenId);
 
-    fn nft_total_supply(&self) -> U64;
+    fn nft_total_supply(&self) -> U128;
 
     fn nft_token(&self, token_id: TokenId) -> Option<JsonToken>;
 }
@@ -387,8 +387,8 @@ impl NonFungibleTokenCore for Contract {
         }
     }
 
-    fn nft_total_supply(&self) -> U64 {
-        self.token_metadata_by_id.len().into()
+    fn nft_total_supply(&self) -> U128 {
+        U128(self.token_metadata_by_id.len() as u128)
     }
 
     fn nft_token(&self, token_id: TokenId) -> Option<JsonToken> {
