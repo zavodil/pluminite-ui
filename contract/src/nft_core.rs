@@ -12,7 +12,7 @@ pub trait NonFungibleTokenCore {
         &mut self,
         receiver_id: ValidAccountId,
         token_id: TokenId,
-        approval_id: Option<U64>,
+        approval_id: Option<u64>,
         memo: Option<String>,
     );
 
@@ -20,7 +20,7 @@ pub trait NonFungibleTokenCore {
         &mut self,
         receiver_id: ValidAccountId,
         token_id: TokenId,
-        approval_id: Option<U64>,
+        approval_id: Option<u64>,
         memo: Option<String>,
         balance: Option<U128>,
         max_len_payout: Option<u32>,
@@ -31,7 +31,7 @@ pub trait NonFungibleTokenCore {
         &mut self,
         receiver_id: ValidAccountId,
         token_id: TokenId,
-        approval_id: Option<U64>,
+        approval_id: Option<u64>,
         memo: Option<String>,
         msg: String,
     ) -> Promise;
@@ -65,7 +65,7 @@ trait NonFungibleTokenApprovalsReceiver {
         &mut self,
         token_id: TokenId,
         owner_id: AccountId,
-        approval_id: U64,
+        approval_id: u64,
         msg: String,
     );
 }
@@ -100,7 +100,7 @@ impl NonFungibleTokenCore for Contract {
         &mut self,
         receiver_id: ValidAccountId,
         token_id: TokenId,
-        approval_id: Option<U64>,
+        approval_id: Option<u64>,
         memo: Option<String>,
     ) {
         assert_one_yocto();
@@ -132,7 +132,7 @@ impl NonFungibleTokenCore for Contract {
         &mut self,
         receiver_id: ValidAccountId,
         token_id: TokenId,
-        approval_id: Option<U64>,
+        approval_id: Option<u64>,
         memo: Option<String>,
         balance: Option<U128>,
         max_len_payout: Option<u32>,
@@ -196,7 +196,7 @@ impl NonFungibleTokenCore for Contract {
         &mut self,
         receiver_id: ValidAccountId,
         token_id: TokenId,
-        approval_id: Option<U64>,
+        approval_id: Option<u64>,
         memo: Option<String>,
         msg: String,
     ) -> Promise {
@@ -248,10 +248,10 @@ impl NonFungibleTokenCore for Contract {
             "Predecessor must be the token owner."
         );
 
-        let approval_id: U64 = token.next_approval_id.into();
+        let approval_id: u64 = token.next_approval_id;
         let is_new_approval = token
             .approved_account_ids
-            .insert(account_id.clone(), approval_id)
+            .insert(account_id.clone(), approval_id.into())
             .is_none();
 
         if self.use_storage_fees {
