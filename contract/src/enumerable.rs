@@ -92,12 +92,12 @@ impl Contract {
     pub fn nft_supply_for_owner(
         &self,
         account_id: AccountId,
-    ) -> U64 {
+    ) -> U128 {
         let tokens_owner = self.tokens_per_owner.get(&account_id);
         if let Some(tokens_owner) = tokens_owner {
-            U64(tokens_owner.len())
+            U128(tokens_owner.len() as u128)
         } else {
-            U64(0)
+            U128(0)
         }
     }
 
