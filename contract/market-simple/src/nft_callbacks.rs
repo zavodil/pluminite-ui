@@ -16,7 +16,7 @@ trait NonFungibleTokenApprovalsReceiver {
         &mut self,
         token_id: TokenId,
         owner_id: ValidAccountId,
-        approval_id: U64,
+        approval_id: u64,
         msg: String,
     );
 }
@@ -29,7 +29,7 @@ impl NonFungibleTokenApprovalsReceiver for Contract {
         &mut self,
         token_id: TokenId,
         owner_id: ValidAccountId,
-        approval_id: U64,
+        approval_id: u64,
         msg: String,
     ) {
 

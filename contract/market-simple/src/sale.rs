@@ -18,7 +18,7 @@ pub struct Bid {
 #[serde(crate = "near_sdk::serde")]
 pub struct Sale {
     pub owner_id: AccountId,
-    pub approval_id: U64,
+    pub approval_id: u64,
     pub nft_contract_id: String,
     pub token_id: String,
     pub token_type: Option<String>,
@@ -108,8 +108,8 @@ impl Contract {
         } else {
             self.add_bid(
                 contract_and_token_id,
-                price,
-                deposit,
+                U128::from(price),
+                U128::from(deposit),
                 ft_token_id,
                 buyer_id,
                 &mut sale,
@@ -121,12 +121,14 @@ impl Contract {
     pub fn add_bid(
         &mut self,
         contract_and_token_id: ContractAndTokenId,
-        price: Balance,
-        amount: Balance,
+        price: U128,
+        amount: U128,
         ft_token_id: AccountId,
         buyer_id: AccountId,
         sale: &mut Sale,
     ) {
+        let price = Balance::from(price);
+        let amount = Balance::from(amount);
         assert!(price == 0 || amount < price, "Paid more {} than price {}", amount, price);
         // store a bid and refund any current bid lower
         let new_bid = Bid {
