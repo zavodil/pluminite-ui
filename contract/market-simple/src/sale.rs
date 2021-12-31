@@ -191,6 +191,7 @@ impl Contract {
             sale.approval_id,
             None,
             price,
+            10,
             &nft_contract_id,
             1,
             GAS_FOR_NFT_TRANSFER,
