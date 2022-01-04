@@ -24,7 +24,7 @@ pub trait NonFungibleTokenCore {
         approval_id: Option<u64>,
         memo: Option<String>,
         msg: String,
-    ) -> Promise;
+    ) -> PromiseOrValue<bool>;
 
     fn nft_token(&self, token_id: TokenId) -> Option<JsonToken>;
 }
@@ -71,7 +71,7 @@ trait NonFungibleTokenReceiver {
         previous_owner_id: AccountId,
         token_id: TokenId,
         msg: String,
-    ) -> Promise;
+    ) -> PromiseOrValue<bool>;
 }
 
 #[ext_contract(ext_non_fungible_approval_receiver)]
@@ -149,7 +149,7 @@ impl NonFungibleTokenCore for Contract {
         approval_id: Option<u64>,
         memo: Option<String>,
         msg: String,
-    ) -> Promise {
+    ) -> PromiseOrValue<bool> {
         assert_one_yocto();
         let sender_id = env::predecessor_account_id();
         let previous_token = self.internal_transfer(
@@ -177,7 +177,7 @@ impl NonFungibleTokenCore for Contract {
                 &env::current_account_id(),
                 NO_DEPOSIT,
                 GAS_FOR_RESOLVE_TRANSFER,
-            ))
+            )).into()
     }
 
     fn nft_token(&self, token_id: TokenId) -> Option<JsonToken> {
