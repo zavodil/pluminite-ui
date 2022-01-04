@@ -108,8 +108,8 @@ impl Contract {
         } else {
             self.add_bid(
                 contract_and_token_id,
-                U128::from(price),
-                U128::from(deposit),
+                price,
+                deposit,
                 ft_token_id,
                 buyer_id,
                 &mut sale,
@@ -121,14 +121,12 @@ impl Contract {
     pub fn add_bid(
         &mut self,
         contract_and_token_id: ContractAndTokenId,
-        price: U128,
-        amount: U128,
+        price: Balance,
+        amount: Balance,
         ft_token_id: AccountId,
         buyer_id: AccountId,
         sale: &mut Sale,
     ) {
-        let price = Balance::from(price);
-        let amount = Balance::from(amount);
         assert!(price == 0 || amount < price, "Paid more {} than price {}", amount, price);
         // store a bid and refund any current bid lower
         let new_bid = Bid {

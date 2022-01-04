@@ -41,8 +41,8 @@ impl FungibleTokenReceiver for Contract {
         } else {
             self.add_bid(
                 contract_and_token_id,
-                price,
-                amount,
+                price.0,
+                amount.0,
                 ft_token_id,
                 sender_id,
                 &mut sale,
