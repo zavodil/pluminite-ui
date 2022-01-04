@@ -59,6 +59,21 @@ pub trait NonFungibleTokenPayouts {
 
 pub trait NonFungibleTokenEnumeration {
     fn nft_total_supply(&self) -> U128;
+
+    fn nft_tokens(
+        &self,
+        from_index: Option<U128>,
+        limit: Option<u64>,
+    ) -> Vec<JsonToken>;
+
+    fn nft_supply_for_owner(&self, account_id: AccountId) -> U128;
+
+    fn nft_tokens_for_owner(
+        &self,
+        account_id: AccountId,
+        from_index: Option<U128>,
+        limit: Option<u64>,
+    ) -> Vec<JsonToken>;
 }
 
 #[ext_contract(ext_non_fungible_token_receiver)]
@@ -405,13 +420,6 @@ impl NonFungibleTokenPayouts for Contract {
 		payout.insert(owner_id, royalty_to_payout(10000 - total_perpetual, balance_u128));
 
         payout
-    }
-}
-
-#[near_bindgen]
-impl NonFungibleTokenEnumeration for Contract {
-    fn nft_total_supply(&self) -> U128 {
-        U128(self.token_metadata_by_id.len() as u128)
     }
 }
 
