@@ -1,5 +1,5 @@
 use crate::*;
-use near_sdk::json_types::{ValidAccountId, U64};
+use near_sdk::json_types::{ValidAccountId};
 use near_sdk::{ext_contract, log, Gas, PromiseResult};
 
 const GAS_FOR_NFT_APPROVE: Gas = 25_000_000_000_000;
@@ -108,7 +108,7 @@ trait NonFungibleTokenResolver {
         owner_id: AccountId,
         receiver_id: AccountId,
         token_id: TokenId,
-        approved_account_ids: HashMap<AccountId, U64>,
+        approved_account_ids: Option<HashMap<AccountId, u64>>,
     ) -> bool;
 }
 
@@ -118,7 +118,7 @@ trait NonFungibleTokenResolver {
         owner_id: AccountId,
         receiver_id: AccountId,
         token_id: TokenId,
-        approved_account_ids: HashMap<AccountId, U64>,
+        approved_account_ids: Option<HashMap<AccountId, u64>>,
     ) -> bool;
 }
 
@@ -187,7 +187,7 @@ impl NonFungibleTokenCore for Contract {
                 previous_token.owner_id,
                 receiver_id.into(),
                 token_id,
-                previous_token.approved_account_ids,
+                Some(previous_token.approved_account_ids),
                 &env::current_account_id(),
                 NO_DEPOSIT,
                 GAS_FOR_RESOLVE_TRANSFER,
@@ -431,8 +431,9 @@ impl NonFungibleTokenResolver for Contract {
         owner_id: AccountId,
         receiver_id: AccountId,
         token_id: TokenId,
-        approved_account_ids: HashMap<AccountId, U64>,
+        approved_account_ids: Option<HashMap<AccountId, u64>>,
     ) -> bool {
+        let approved_account_ids = approved_account_ids.unwrap();
         // Whether receiver wants to return token back to the sender, based on `nft_on_transfer`
         // call result.
         if let PromiseResult::Successful(value) = env::promise_result(0) {

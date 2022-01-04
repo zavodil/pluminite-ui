@@ -64,7 +64,7 @@ where
 
 pub(crate) fn refund_approved_account_ids(
     account_id: AccountId,
-    approved_account_ids: &HashMap<AccountId, U64>,
+    approved_account_ids: &HashMap<AccountId, u64>,
 ) -> Promise {
     refund_approved_account_ids_iter(account_id, approved_account_ids.keys())
 }
@@ -139,9 +139,9 @@ impl Contract {
                 .get(sender_id)
                 .expect("Sender is not approved account");
             assert_eq!(
-                actual_approval_id.0, enforced_approval_id,
+                *actual_approval_id, enforced_approval_id,
                 "The actual approval_id {} is different from the given approval_id {}",
-                actual_approval_id.0, enforced_approval_id,
+                *actual_approval_id, enforced_approval_id,
             );
         }
 
