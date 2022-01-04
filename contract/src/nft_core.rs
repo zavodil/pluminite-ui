@@ -51,8 +51,7 @@ pub trait NonFungibleTokenPayouts {
         &mut self,
         receiver_id: ValidAccountId,
         token_id: TokenId,
-        approval_id: Option<u64>,
-        memo: String,
+        approval_id: u64,
         balance: U128,
         max_len_payout: u32,
     ) -> Payout;
@@ -357,8 +356,7 @@ impl NonFungibleTokenPayouts for Contract {
         &mut self,
         receiver_id: ValidAccountId,
         token_id: TokenId,
-        approval_id: Option<u64>,
-        memo: String,
+        approval_id: u64,
         balance: U128,
         max_len_payout: u32,
     ) -> Payout {
@@ -368,8 +366,8 @@ impl NonFungibleTokenPayouts for Contract {
             &sender_id,
             receiver_id.as_ref(),
             &token_id,
-            approval_id,
-            Some(memo),
+            Some(approval_id),
+            None,
         );
         if self.use_storage_fees {
             refund_approved_account_ids(
