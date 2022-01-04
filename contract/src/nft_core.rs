@@ -30,7 +30,7 @@ pub trait NonFungibleTokenCore {
 }
 
 pub trait NonFungibleTokenApproval {
-    fn nft_approve(&mut self, token_id: TokenId, account_id: ValidAccountId, msg: Option<String>);
+    fn nft_approve(&mut self, token_id: TokenId, account_id: ValidAccountId, msg: Option<String>) -> Option<Promise>;
 
     fn nft_is_approved(
         &self,
@@ -200,7 +200,7 @@ impl NonFungibleTokenCore for Contract {
 #[near_bindgen]
 impl NonFungibleTokenApproval for Contract {
     #[payable]
-    fn nft_approve(&mut self, token_id: TokenId, account_id: ValidAccountId, msg: Option<String>) {
+    fn nft_approve(&mut self, token_id: TokenId, account_id: ValidAccountId, msg: Option<String>) -> Option<Promise> {
         if self.use_storage_fees {
             assert_at_least_one_yocto();
         } else {
@@ -249,7 +249,7 @@ impl NonFungibleTokenApproval for Contract {
                 final_msg.insert_str(final_msg.len() - 1, &format!(",\"token_type\":\"{}\"", token_type));
             }
 
-            ext_non_fungible_approval_receiver::nft_on_approve(
+            Some(ext_non_fungible_approval_receiver::nft_on_approve(
                 token_id,
                 token.owner_id,
                 approval_id,
@@ -257,8 +257,9 @@ impl NonFungibleTokenApproval for Contract {
                 &account_id,
                 NO_DEPOSIT,
                 env::prepaid_gas() - GAS_FOR_NFT_APPROVE,
-            )
-                .as_return(); // Returning this promise
+            )) // Returning this promise
+        } else {
+            None
         }
     }
 
