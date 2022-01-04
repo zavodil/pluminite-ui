@@ -5,29 +5,28 @@ impl Contract {
 
     pub fn nft_tokens(
         &self,
-        from_index: U64,
-        limit: U64,
+        from_index: Option<U128>,
+        limit: Option<u64>
     ) -> Vec<JsonToken> {
-        let mut tmp = vec![];
         let keys = self.token_metadata_by_id.keys_as_vector();
-        let start = u64::from(from_index);
-        let end = min(start + u64::from(limit), keys.len());
-        for i in start..end {
-            tmp.push(self.nft_token(keys.get(i).unwrap()).unwrap());
-        }
-        tmp
+        let start = u128::from(from_index.unwrap_or(U128(0)));
+        keys.iter()
+           .skip(start as usize)
+           .take(limit.unwrap_or(0) as usize)
+           .map(|token_id| self.nft_token(token_id.clone()).unwrap())
+           .collect()
     }
 
     pub fn nft_tokens_from_end(
         &self,
-        from_index: U64,
-        limit: U64,
+        from_index: Option<U128>,
+        limit: Option<u128>
     ) -> Vec<JsonToken> {
         let mut tmp = vec![];
         let keys = self.token_metadata_by_id.keys_as_vector();
-        let total_keys = keys.len();
-        let from_index_prepared = u64::from(from_index);
-        let mut limit_prepared = u64::from(limit);
+        let total_keys = keys.len() as u128;
+        let from_index_prepared = u128::from(from_index.unwrap_or(U128(0)));
+        let mut limit_prepared = u128::from(limit.unwrap_or(total_keys as u128));
 
         assert!(total_keys > from_index_prepared, "Illegal from_index");
 
@@ -35,11 +34,11 @@ impl Contract {
             limit_prepared = total_keys - from_index_prepared;
         }
 
-        let start = total_keys - from_index_prepared - limit_prepared;
-        let end = start + limit_prepared;
-        
+        let start: u128 = total_keys - from_index_prepared - limit_prepared;
+        let end: u128 = start + limit_prepared;
+
         for i in (start..end).rev() {
-            tmp.push(self.nft_token(keys.get(i).unwrap()).unwrap());
+            tmp.push(self.nft_token(keys.get(u128::from(i)).unwrap()).unwrap());
         }
         tmp
     }
@@ -54,7 +53,7 @@ impl Contract {
         }
         tmp
     }
-    
+
     pub fn nft_supply_for_type(
         &self,
         token_type: &String,
@@ -71,7 +70,7 @@ impl Contract {
         &self,
         token_type: String,
         from_index: U64,
-        limit: U64,
+        limit: u64,
     ) -> Vec<JsonToken> {
         let mut tmp = vec![];
         let tokens_per_type = self.tokens_per_type.get(&token_type);
@@ -82,44 +81,43 @@ impl Contract {
         };
         let keys = tokens.as_vector();
         let start = u64::from(from_index);
-        let end = min(start + u64::from(limit), keys.len());
+        let end = min(start + limit, keys.len());
         for i in start..end {
             tmp.push(self.nft_token(keys.get(i).unwrap()).unwrap());
         }
         tmp
     }
-    
+
     pub fn nft_supply_for_owner(
         &self,
         account_id: AccountId,
-    ) -> U64 {
+    ) -> U128 {
         let tokens_owner = self.tokens_per_owner.get(&account_id);
         if let Some(tokens_owner) = tokens_owner {
-            U64(tokens_owner.len())
+            U128(tokens_owner.len() as u128)
         } else {
-            U64(0)
+            U128(0)
         }
     }
 
     pub fn nft_supply_for_creator(
         &self,
         account_id: AccountId,
-    ) -> U64 {
+    ) -> U128 {
         let tokens_creator = self.tokens_per_creator.get(&account_id);
         if let Some(tokens_creator) = tokens_creator {
-            U64(tokens_creator.len())
+            U128(tokens_creator.len() as u128)
         } else {
-            U64(0)
+            U128(0)
         }
     }
 
     pub fn nft_tokens_for_owner(
         &self,
         account_id: AccountId,
-        from_index: U64,
-        limit: u16,
+        from_index: Option<U128>,
+        limit: Option<u64>,
     ) -> Vec<JsonToken> {
-        let mut tmp = vec![];
         let tokens_owner = self.tokens_per_owner.get(&account_id);
         let tokens = if let Some(tokens_owner) = tokens_owner {
             tokens_owner
@@ -127,19 +125,19 @@ impl Contract {
             return vec![];
         };
         let keys = tokens.as_vector();
-        let start = u64::from(from_index);
-        let end = min(start + u64::from(limit), keys.len());
-        for i in start..end {
-            tmp.push(self.nft_token(keys.get(i).unwrap()).unwrap());
-        }
-        tmp
+        let start = u128::from(from_index.unwrap_or(U128(0)));
+        keys.iter()
+           .skip(start as usize)
+           .take(limit.unwrap_or(0) as usize)
+           .map(|token_id| self.nft_token(token_id.clone()).unwrap())
+           .collect()
     }
 
     pub fn nft_tokens_for_creator(
         &self,
         account_id: AccountId,
         from_index: U64,
-        limit: u16,
+        limit: u64,
     ) -> Vec<JsonToken> {
         let mut tmp = vec![];
         let tokens_creator = self.tokens_per_creator.get(&account_id);

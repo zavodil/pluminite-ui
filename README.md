@@ -1,10 +1,20 @@
-[Pluminite is online](https://pluminite.com/)
+# WARNING
+
+Contract in the `contract-pluminite` folder has additional features and is **NOT** up-to-date with the current NFT [standards](https://nomicon.io/Standards/NonFungibleToken/README.html). For an example repository that is currently being maintained and is up-to-date see the [nft-tutorial](https://github.com/near-examples/nft-tutorial) repository.
+
+Contract in the `contract` folder repeats current NFT standard.
+
+
+DEMO
 ==================
+
+[Pluminite is online](https://pluminite.com/): https://pluminite.com/
+
 
 Project description
 ==================
 
-Coming soon
+Simple NFT mint, trade and store on IPFS.
 
 
 How to install pluminite-ui
