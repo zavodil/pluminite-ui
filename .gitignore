@@ -28,7 +28,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Cargo's dependencies
-/contract/**/target/
+/contract-standard/**/target/
 
 # Idea
 /.idea/
